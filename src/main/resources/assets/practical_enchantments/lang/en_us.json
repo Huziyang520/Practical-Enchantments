@@ -1,0 +1,22 @@
+{
+  "enchantment.practical_enchantments.chinese": "Chinese",
+  "enchantment.practical_enchantments.chinese.desc": "The Chinese Can Fly~The Chinese Can Fly~Unlocks creative flight;  3x durability consumption when hit in air",
+  
+  "enchantment.practical_enchantments.lumberjack": "Lumberjack",
+  "enchantment.practical_enchantments.lumberjack.desc": "Recursively breaks entire connected trees and leaves when chopping logs",
+  
+  "enchantment.practical_enchantments.powerful": "Powerful",
+  "enchantment.practical_enchantments.powerful.desc": "Crossbow-exclusive ranged damage boost; +25% arrow damage per level",
+  
+  "enchantment.practical_enchantments.bright": "Bright",
+  "enchantment.practical_enchantments.bright.desc": "Grants constant Night Vision I; 2x durability consumption during nighttime",
+  
+  "enchantment.practical_enchantments.destruction": "Destruction",
+  "enchantment.practical_enchantments.destruction.desc": "Blocks drop no items, only experience; base 2 XP, ores give 5 XP",
+  
+  "enchantment.practical_enchantments.incinerate": "Incinerate",
+  "enchantment.practical_enchantments.incinerate.desc": "Killed mobs drop no loot; experience doubled; ineffective against players",
+  
+  "enchantment.practical_enchantments.aerial_haste": "Aerial Haste",
+  "enchantment.practical_enchantments.aerial_haste.desc": "Eliminates aerial mining speed penalty; mining speed in air equals ground speed"
+}

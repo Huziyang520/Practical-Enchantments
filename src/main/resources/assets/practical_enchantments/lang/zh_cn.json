@@ -1,0 +1,22 @@
+{
+  "enchantment.practical_enchantments.chinese": "中国人",
+  "enchantment.practical_enchantments.chinese.desc": "中国人能飞~中国人能飞~装备后解锁创造飞行；空中受击时耐久消耗 ×3",
+  
+  "enchantment.practical_enchantments.lumberjack": "伐木工",
+  "enchantment.practical_enchantments.lumberjack.desc": "砍伐原木时递归破坏整棵相连树木及树叶",
+
+  "enchantment.practical_enchantments.powerful": "强劲",
+  "enchantment.practical_enchantments.powerful.desc": "弩专属远程伤害增幅，每级 +25% 箭矢伤害",
+  
+  "enchantment.practical_enchantments.bright": "明朗",
+  "enchantment.practical_enchantments.bright.desc": "持续提供夜视 I 效果；夜间装备耐久消耗 ×2",
+  
+  "enchantment.practical_enchantments.destruction": "毁灭",
+  "enchantment.practical_enchantments.destruction.desc": "挖掘方块不产出物品掉落，改为掉落经验；基础 2 点，矿石类 5 点",
+  
+  "enchantment.practical_enchantments.incinerate": "焚灭",
+  "enchantment.practical_enchantments.incinerate.desc": "击杀生物无战利品掉落，经验值 ×2；仅对有生命值的实体生效，对玩家无效",
+  
+  "enchantment.practical_enchantments.aerial_haste": "浮空速掘",
+  "enchantment.practical_enchantments.aerial_haste.desc": "消除空中挖掘速度惩罚；装备后空中挖掘速度等于地面速度"
+}
