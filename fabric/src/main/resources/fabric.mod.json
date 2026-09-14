@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "id": "${mod_id}",
+  "version": "${version}",
+  "name": "${mod_name}",
+  "description": "${description}",
+  "authors": [
+    "${mod_author}"
+  ],
+  "license": "${license}",
+  "icon": "icon.png",
+  "contact": {
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/practical-enchantments",
+    "issues": "https://github.com/Huziyang520/Practical-Enchantments/issues"
+  },
+  "environment": "*",
+  "depends": {
+    "fabricloader": ">=${fabric_loader_version}",
+    "fabric-api": "*",
+    "minecraft": "~${minecraft_version}",
+    "java": ">=${java_version}",
+    "enchantlib": ">=1.2.2"
+  },
+  "entrypoints": {
+    "main": [
+      "com.practicalenchantments.fabric.PracticalEnchantmentsFabric"
+    ],
+    "enchantlib:enchantments": [
+      "com.practicalenchantments.PracticalEnchantments"
+    ]
+  },
+  "mixins": [
+    "practical_enchantments.mixins.json"
+  ]
+}

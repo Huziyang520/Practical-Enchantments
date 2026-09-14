@@ -1,0 +1,11 @@
+{
+  "required": true,
+  "package": "com.practicalenchantments.mixin",
+  "compatibilityLevel": "JAVA_25",
+  "mixins": [
+    "PlayerGetDestroySpeedMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

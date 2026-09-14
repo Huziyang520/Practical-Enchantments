@@ -1,0 +1,100 @@
+plugins {
+	id 'multiloader-loader'
+	id 'net.neoforged.moddev'
+	id 'de.maxhenkel.cursegradle' version '1.5.2'
+}
+
+neoForge {
+	version = neoforge_version
+	// Automatically enable neoforge AccessTransformers if the file exists
+	def at = project(':common').file('src/main/resources/META-INF/accesstransformer.cfg')
+	if (at.exists()) {
+		accessTransformers.from(at.absolutePath)
+	}
+	runs {
+		configureEach {
+			systemProperty('neoforge.enabledGameTestNamespaces', mod_id)
+			ideName = "NeoForge ${it.name.capitalize()} (${project.path})"
+		}
+		client {
+			client()
+			gameDirectory = this.mkdir(this.file('runs/client'))
+		}
+		data {
+			clientData()
+			gameDirectory = this.mkdir(this.file('runs/data'))
+			programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
+		}
+		server {
+			server()
+			this.file('runs/server').createParentDirectories()
+			gameDirectory = this.mkdir(this.file('runs/server'))
+		}
+	}
+	mods {
+		"${mod_id}" {
+			sourceSet sourceSets.main
+		}
+	}
+}
+
+sourceSets.main.resources { srcDir 'src/generated/resources' }
+
+dependencies {
+	// EnchantLib NeoForge
+	implementation "com.enchantlib:enchantlib-neoforge-${minecraft_version}:${enchantlib_version}"
+}
+
+// Implement mcgradleconventions loader attribute
+def loaderAttribute = Attribute.of('io.github.mcgradleconventions.loader', String)
+['apiElements', 'runtimeElements', 'sourcesElements', 'javadocElements'].each { variant ->
+	configurations.matching { it.name == variant }.configureEach {
+		attributes {
+			attribute(loaderAttribute, 'neoforge')
+		}
+	}
+}
+
+sourceSets.configureEach {
+	[it.compileClasspathConfigurationName, it.runtimeClasspathConfigurationName, it.getTaskName(null, 'jarJar')].each { variant ->
+		configurations.matching { it.name == variant }.configureEach {
+			attributes {
+				attribute(loaderAttribute, 'neoforge')
+			}
+		}
+	}
+}
+
+tasks.withType(JavaCompile).configureEach {
+	options.encoding = 'UTF-8'
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CurseForge 一键推送（CurseGradle 1.5.2；插件不在 Gradle 门户，源见 settings.gradle）
+// 【铁律】必须等用户实机测试通过并主动发指令后才允许执行，AI 不得自行上传。
+// 执行（在本 26.2 目录）：gradlew :neoforge:curseforge -Pcurse_release_type=<release|beta|alpha>
+// releaseType 必须随版本号变更逐模组询问用户，再用 -Pcurse_release_type 传入；缺省 beta 仅兜底。
+// API key 读 Gradle 属性 curseforge_api_key（用户全局配置；禁止写入仓库、禁止读取/打印该文件）。
+curseforge {
+	apiKey = project.findProperty('curseforge_api_key') ?: ''
+	project {
+		id = '1689525'
+		changelogType = 'markdown'
+		changelog = rootProject.file('curseforge-changelog.md')
+		releaseType = project.findProperty('curse_release_type') ?: 'beta'
+		// ModDevGradle 的 jar 已是可发布产物（不像 Loom 需要 remapJar）
+		mainArtifact(tasks.named('jar').get()) {
+			displayName = "${mod_name} ${version} (NeoForge) for Minecraft ${minecraft_version}"
+		}
+		addGameVersion minecraft_version
+		addGameVersion 'NeoForge'
+		addGameVersion 'Client'
+		addGameVersion 'Server'
+	}
+	options {
+		javaIntegration = false
+		forgeGradleIntegration = false
+	}
+}
+// CurseGradle 不会自动为主产物挂任务依赖，上传前必须先构建
+tasks.named('curseforge') { dependsOn 'jar' }
