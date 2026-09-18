@@ -79,7 +79,7 @@ curseforge {
 		}
 		addGameVersion minecraft_version
 		addGameVersion 'Fabric'
-		addGameVersion 'Client'
+		// 纯服务端模组：仅声明 Server（第一次发布时的状态，后续不得随意更改）
 		addGameVersion 'Server'
 	}
 	options {

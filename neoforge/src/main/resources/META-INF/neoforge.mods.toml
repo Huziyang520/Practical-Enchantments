@@ -7,7 +7,11 @@ modId="${mod_id}"
 version="${version}"
 displayName="${mod_name}"
 authors="${mod_author}"
-logoFile="icon.png"
+# NeoForge（26.2 起即是）模组列表把方形图标与宽横幅拆开：列表里的方形小图标读 `iconFile`，
+# 详情面板的宽横幅读 `bannerFile`（两者都缺才回退 `logoFile`，且用 logoFile 会记一条
+# "deprecated property" 加载警告）。本模组只有 128×128 方形图标、没有宽横幅，
+# 故只声明 iconFile，让图标显示在左侧列表而不是详情大图。
+iconFile="icon.png"
 displayURL="https://www.curseforge.com/minecraft/mc-mods/practical-enchantments"
 issueTrackerURL="https://github.com/Huziyang520/Practical-Enchantments/issues"
 description='''${description}'''

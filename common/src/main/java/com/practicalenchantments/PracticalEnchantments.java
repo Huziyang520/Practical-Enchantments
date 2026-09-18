@@ -45,6 +45,7 @@ public final class PracticalEnchantments implements EnchantmentEntrypoint {
 
 	@Override
 	public void onRegisterEnchantments(EnchantmentRegistrar registrar) {
+		// 第一批
 		ChineseEnchantment.register(registrar);
 		LumberjackEnchantment.register(registrar);
 		PowerfulEnchantment.register(registrar);
@@ -52,6 +53,19 @@ public final class PracticalEnchantments implements EnchantmentEntrypoint {
 		DestructionEnchantment.register(registrar);
 		IncinerateEnchantment.register(registrar);
 		AerialHasteEnchantment.register(registrar);
+		// 第二批
+		BeheadingEnchantment.register(registrar);
+		LifeStealEnchantment.register(registrar);
+		VenomEnchantment.register(registrar);
+		WitherAspectEnchantment.register(registrar);
+		FrenzyEnchantment.register(registrar);
+		DemonicPactEnchantment.register(registrar);
+		UndyingDropEnchantment.register(registrar);
+		GentleDescentEnchantment.register(registrar);
+		ExecuteEnchantment.register(registrar);
+		SoulSiphonEnchantment.register(registrar);
+		PenetrationEnchantment.register(registrar);
+		SmashingEnchantment.register(registrar);
 	}
 
 	/**
@@ -74,6 +88,25 @@ public final class PracticalEnchantments implements EnchantmentEntrypoint {
 		registrar.register(ExclusiveGroupBuilder.create(MOD_ID, IncinerateEnchantment.GROUP_NAME)
 			.add(IncinerateEnchantment.ID)
 			.add("minecraft:looting"));
+
+		// 第二批互斥组
+		// 淬毒 / 枯萎 / 火焰附加（三向互斥，组标签在 VenomEnchantment 派生）
+		registrar.register(ExclusiveGroupBuilder.create(MOD_ID, "blade_effect")
+			.add(VenomEnchantment.ID)
+			.add(WitherAspectEnchantment.ID)
+			.add("minecraft:fire_aspect"));
+		// 恶魔交易 / 掉落不死亡
+		registrar.register(ExclusiveGroupBuilder.create(MOD_ID, "death_save")
+			.add(DemonicPactEnchantment.ID)
+			.add(UndyingDropEnchantment.ID));
+		// 羽落 / 摔落缓冲
+		registrar.register(ExclusiveGroupBuilder.create(MOD_ID, "slow_fall")
+			.add(GentleDescentEnchantment.ID)
+			.add("minecraft:feather_falling"));
+		// 贯穿 / 激流
+		registrar.register(ExclusiveGroupBuilder.create(MOD_ID, "trident_riptide")
+			.add(PenetrationEnchantment.ID)
+			.add("minecraft:riptide"));
 	}
 
 	/**
@@ -122,6 +155,46 @@ public final class PracticalEnchantments implements EnchantmentEntrypoint {
 		registerLoot(registrar, QUALITY_RARE, 0.20F, LootTables.SHIPWRECK_TREASURE, AerialHasteEnchantment.ID);
 		registerLoot(registrar, QUALITY_RARE, 0.10F, LootTables.END_CITY_TREASURE, AerialHasteEnchantment.ID);
 		registerLoot(registrar, QUALITY_RARE, 0.08F, LootTables.ANCIENT_CITY, AerialHasteEnchantment.ID);
+
+		// ===== 第二批（权重按文档 §3；chance 按稀有度安排，详见仓库 README 百科）=====
+		// 夺首 —— 宝藏：林地府邸 12% / 掠夺者前哨站 8%
+		registerLoot(registrar, QUALITY_TREASURE, 0.12F, 5, LootTables.WOODLAND_MANSION, BeheadingEnchantment.ID);
+		registerLoot(registrar, QUALITY_TREASURE, 0.08F, 3, LootTables.PILLAGER_OUTPOST, BeheadingEnchantment.ID);
+
+		// 枯萎 —— 宝藏：下界要塞 22% / 堡垒遗迹 15% / 远古城市 12%
+		registerLoot(registrar, QUALITY_TREASURE, 0.22F, 4, LootTables.NETHER_BRIDGE, WitherAspectEnchantment.ID);
+		registerLoot(registrar, QUALITY_TREASURE, 0.15F, 3, LootTables.BASTION_TREASURE, WitherAspectEnchantment.ID);
+		registerLoot(registrar, QUALITY_TREASURE, 0.12F, 2, LootTables.ANCIENT_CITY, WitherAspectEnchantment.ID);
+
+		// 狂暴 —— 宝藏：林地府邸 18% / 掠夺者前哨站 14%
+		registerLoot(registrar, QUALITY_TREASURE, 0.18F, 4, LootTables.WOODLAND_MANSION, FrenzyEnchantment.ID);
+		registerLoot(registrar, QUALITY_TREASURE, 0.14F, 3, LootTables.PILLAGER_OUTPOST, FrenzyEnchantment.ID);
+
+		// 残杀 —— 宝藏：远古城市 20% / 末地城 15% / 林地府邸 10%
+		registerLoot(registrar, QUALITY_TREASURE, 0.20F, 3, LootTables.ANCIENT_CITY, ExecuteEnchantment.ID);
+		registerLoot(registrar, QUALITY_TREASURE, 0.15F, 2, LootTables.END_CITY_TREASURE, ExecuteEnchantment.ID);
+		registerLoot(registrar, QUALITY_TREASURE, 0.10F, 2, LootTables.WOODLAND_MANSION, ExecuteEnchantment.ID);
+
+		// 恶魔交易 —— 宝藏：远古城市 14% / 埋藏的宝藏 10%
+		registerLoot(registrar, QUALITY_TREASURE, 0.14F, 2, LootTables.ANCIENT_CITY, DemonicPactEnchantment.ID);
+		registerLoot(registrar, QUALITY_TREASURE, 0.10F, 2, LootTables.BURIED_TREASURE, DemonicPactEnchantment.ID);
+
+		// 吸血 —— 常见：要塞图书馆 18%
+		registerLoot(registrar, QUALITY_COMMON, 0.18F, 2, LootTables.STRONGHOLD_LIBRARY, LifeStealEnchantment.ID);
+		// 汲灵 —— 常见：要塞图书馆 24%
+		registerLoot(registrar, QUALITY_COMMON, 0.24F, 3, LootTables.STRONGHOLD_LIBRARY, SoulSiphonEnchantment.ID);
+
+		// 淬毒 —— 稀有：丛林神庙 28% / 沉船宝藏 16%
+		registerLoot(registrar, QUALITY_RARE, 0.28F, 5, LootTables.JUNGLE_TEMPLE, VenomEnchantment.ID);
+		registerLoot(registrar, QUALITY_RARE, 0.16F, 3, LootTables.SHIPWRECK_TREASURE, VenomEnchantment.ID);
+
+		// 贯穿 —— 稀有：沉船宝藏 22%（原计划的海底神殿无宝箱表，已按用户决策删除）
+		registerLoot(registrar, QUALITY_RARE, 0.22F, 4, LootTables.SHIPWRECK_TREASURE, PenetrationEnchantment.ID);
+
+		// 粉碎 —— 常见：大型海底废墟 20% / 沉船宝藏 14% / 废弃矿井 12%
+		registerLoot(registrar, QUALITY_COMMON, 0.20F, 3, LootTables.UNDERWATER_RUIN_BIG, SmashingEnchantment.ID);
+		registerLoot(registrar, QUALITY_COMMON, 0.14F, 2, LootTables.SHIPWRECK_TREASURE, SmashingEnchantment.ID);
+		registerLoot(registrar, QUALITY_COMMON, 0.12F, 2, LootTables.ABANDONED_MINESHAFT, SmashingEnchantment.ID);
 	}
 
 	/**
@@ -140,7 +213,14 @@ public final class PracticalEnchantments implements EnchantmentEntrypoint {
 				BrightEnchantment.ID,
 				DestructionEnchantment.ID,
 				IncinerateEnchantment.ID,
-				AerialHasteEnchantment.ID));
+				AerialHasteEnchantment.ID,
+				// 第二批可交易（6 个）
+				LifeStealEnchantment.ID,
+				VenomEnchantment.ID,
+				SoulSiphonEnchantment.ID,
+				BeheadingEnchantment.ID,
+				WitherAspectEnchantment.ID,
+				FrenzyEnchantment.ID));
 
 		// 盔甲商：附魔「明朗」的钻石头盔
 		registrar.registerTrade(VillagerTradeBuilder
@@ -166,17 +246,34 @@ public final class PracticalEnchantments implements EnchantmentEntrypoint {
 		DestructionEnchantment.registerCallbacks(registrar, registries);
 		IncinerateEnchantment.registerCallbacks(registrar, registries);
 		AerialHasteEnchantment.registerCallbacks(registrar, registries);
+		// 第二批事件回调
+		// 注：LifeSteal 走两加载器 AFTER_DAMAGE 桥接（在 fabric/neoforge 入口注册）；
+		// Smashing 与免死两附魔走本模组 Mixin；DemonicPact/UndyingDrop 无事件回调
+		BeheadingEnchantment.registerCallbacks(registrar, registries);
+		VenomEnchantment.registerCallbacks(registrar, registries);
+		WitherAspectEnchantment.registerCallbacks(registrar, registries);
+		FrenzyEnchantment.registerCallbacks(registrar, registries);
+		GentleDescentEnchantment.registerCallbacks(registrar, registries);
+		ExecuteEnchantment.registerCallbacks(registrar, registries);
+		SoulSiphonEnchantment.registerCallbacks(registrar, registries);
+		PenetrationEnchantment.registerCallbacks(registrar, registries);
 	}
 
-	/** 单条战利品注入：一张表、一个附魔、一个百分比，以附魔书形式注入。 */
+	/** 单条战利品注入：一张表、一个附魔、一个百分比，以附魔书形式注入，权重 1。 */
 	private static void registerLoot(LootInjectionRegistrar registrar, int quality, float chance,
+									 String lootTable, String enchantmentId) {
+		registerLoot(registrar, quality, chance, 1, lootTable, enchantmentId);
+	}
+
+	/** 单条战利品注入（带权重）：一张表、一个附魔、一个百分比、一个权重，以附魔书形式注入。 */
+	private static void registerLoot(LootInjectionRegistrar registrar, int quality, float chance, int weight,
 									 String lootTable, String enchantmentId) {
 		registrar.register(LootInjectionBuilder.create()
 			.toTables(lootTable)
 			.asBook()
 			.withEnchantments(enchantmentId)
 			.chance(chance)
-			.weight(1)
+			.weight(weight)
 			.quality(quality));
 	}
 

@@ -3,7 +3,10 @@
   "package": "com.practicalenchantments.mixin",
   "compatibilityLevel": "JAVA_25",
   "mixins": [
-    "PlayerGetDestroySpeedMixin"
+    "PlayerGetDestroySpeedMixin",
+    "DeathSaveMixin",
+    "TridentSmashMixin",
+    "TridentPullMixin"
   ],
   "injectors": {
     "defaultRequire": 1

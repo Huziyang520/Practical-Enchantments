@@ -18,5 +18,41 @@
   "enchantment.practical_enchantments.incinerate.desc": "Killed mobs drop no loot; experience doubled; ineffective against players",
   
   "enchantment.practical_enchantments.aerial_haste": "Aerial Haste",
-  "enchantment.practical_enchantments.aerial_haste.desc": "Eliminates aerial mining speed penalty; mining speed in air equals ground speed"
+  "enchantment.practical_enchantments.aerial_haste.desc": "Eliminates aerial mining speed penalty; mining speed in air equals ground speed",
+
+  "enchantment.practical_enchantments.beheading": "Beheading",
+  "enchantment.practical_enchantments.beheading.desc": "Killing zombies, skeletons, creepers, wither skeletons or piglins adds +2.5% head drop chance per level",
+
+  "enchantment.practical_enchantments.life_steal": "Life Steal",
+  "enchantment.practical_enchantments.life_steal.desc": "Heals for 4% per level of the target's actual health lost on hit",
+
+  "enchantment.practical_enchantments.venom": "Venom",
+  "enchantment.practical_enchantments.venom.desc": "Attacks inflict Poison: 6s at I, 12s at II; mutually exclusive with Fire Aspect and Wither",
+
+  "enchantment.practical_enchantments.wither_aspect": "Wither Aspect",
+  "enchantment.practical_enchantments.wither_aspect.desc": "Attacks inflict Wither for 6s at I and 12s at II (works on undead); reduces weapon damage",
+
+  "enchantment.practical_enchantments.frenzy": "Frenzy",
+  "enchantment.practical_enchantments.frenzy.desc": "Gain Speed after a kill: 6s at I, 8s at II; duration doubled on axes",
+
+  "enchantment.practical_enchantments.demonic_pact": "Demonic Pact",
+  "enchantment.practical_enchantments.demonic_pact.desc": "Cheat death at the cost of emeralds (64/56/48) plus Darkness; 60s cooldown; mutually exclusive with Undying Drop",
+
+  "enchantment.practical_enchantments.undying_drop": "Drop Inventory",
+  "enchantment.practical_enchantments.undying_drop.desc": "Cheat death, but the enchanted item is destroyed and all your items drop; fun-only enchantment, creative only",
+
+  "enchantment.practical_enchantments.gentle_descent": "Gentle Descent",
+  "enchantment.practical_enchantments.gentle_descent.desc": "Constant Slow Falling and fall damage immunity; disabled while sneaking; mutually exclusive with Feather Falling",
+
+  "enchantment.practical_enchantments.execute": "Execute",
+  "enchantment.practical_enchantments.execute.desc": "Bonus multiplier on low-health targets: x1.5 (axe x2) below 35%, x3 (axe x4) below 10%",
+
+  "enchantment.practical_enchantments.soul_siphon": "Soul Siphon",
+  "enchantment.practical_enchantments.soul_siphon.desc": "Hits spawn XP orbs from raw damage: coefficient 0.2 per level, capped at 2 XP per level per hit",
+
+  "enchantment.practical_enchantments.penetration": "Penetration",
+  "enchantment.practical_enchantments.penetration.desc": "Thrown tridents deal 1.5 + 0.5 x (level-1) extra damage; with Loyalty, pulls hit targets in; mutually exclusive with Riptide",
+
+  "enchantment.practical_enchantments.smashing": "Smashing",
+  "enchantment.practical_enchantments.smashing.desc": "Thrown tridents instantly break hit blocks; level maps to pickaxe tier - below the tier, blocks break without drops"
 }
