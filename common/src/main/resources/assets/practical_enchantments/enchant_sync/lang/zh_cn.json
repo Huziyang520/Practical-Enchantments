@@ -1,0 +1,58 @@
+{
+  "enchantment.practical_enchantments.chinese": "中国人",
+  "enchantment.practical_enchantments.chinese.desc": "中国人能飞~中国人能飞~装备后解锁创造飞行；空中受击时耐久消耗 ×3",
+  
+  "enchantment.practical_enchantments.lumberjack": "伐木工",
+  "enchantment.practical_enchantments.lumberjack.desc": "砍伐原木时递归破坏整棵相连树木及树叶",
+
+  "enchantment.practical_enchantments.powerful": "强劲",
+  "enchantment.practical_enchantments.powerful.desc": "弩专属远程伤害增幅，每级 +25% 箭矢伤害",
+  
+  "enchantment.practical_enchantments.bright": "明朗",
+  "enchantment.practical_enchantments.bright.desc": "持续提供夜视 I 效果；夜间（13000~23000 刻）每秒扣除 1 点耐久，白天恢复正常",
+  
+  "enchantment.practical_enchantments.destruction": "毁灭",
+  "enchantment.practical_enchantments.destruction.desc": "挖掘方块不产出物品掉落，改为掉落经验；基础 2 点，矿石类 5 点",
+  
+  "enchantment.practical_enchantments.incinerate": "焚灭",
+  "enchantment.practical_enchantments.incinerate.desc": "击杀生物无战利品掉落，经验值 ×2；仅对有生命值的实体生效，对玩家无效",
+  
+  "enchantment.practical_enchantments.aerial_haste": "浮空速掘",
+  "enchantment.practical_enchantments.aerial_haste.desc": "消除空中挖掘速度惩罚；装备后空中挖掘速度等于地面速度",
+
+  "enchantment.practical_enchantments.beheading": "夺首",
+  "enchantment.practical_enchantments.beheading.desc": "击杀僵尸、骷髅、苦力怕、凋灵骷髅、猪灵时，头颅掉落概率每级 +2.5%",
+
+  "enchantment.practical_enchantments.life_steal": "吸血",
+  "enchantment.practical_enchantments.life_steal.desc": "命中后按目标实际损失的生命值回复生命，每级回复 4%",
+
+  "enchantment.practical_enchantments.venom": "淬毒",
+  "enchantment.practical_enchantments.venom.desc": "命中时附加中毒：Ⅰ 级 6 秒，Ⅱ 级 12 秒；与火焰附加、枯萎互斥",
+
+  "enchantment.practical_enchantments.wither_aspect": "枯萎",
+  "enchantment.practical_enchantments.wither_aspect.desc": "命中时附加凋零：Ⅰ 级 6 秒，Ⅱ 级 12 秒，可对亡灵生效；武器伤害降低",
+
+  "enchantment.practical_enchantments.frenzy": "狂暴",
+  "enchantment.practical_enchantments.frenzy.desc": "击杀后获得速度：Ⅰ 级 6 秒，Ⅱ 级 8 秒；附在斧上持续时间翻倍",
+
+  "enchantment.practical_enchantments.demonic_pact": "恶魔交易",
+  "enchantment.practical_enchantments.demonic_pact.desc": "致命伤害时消耗绿宝石免死（64/56/48 个）并获得黑暗，60 秒冷却；与掉落不死亡互斥",
+
+  "enchantment.practical_enchantments.undying_drop": "掉落不死亡",
+  "enchantment.practical_enchantments.undying_drop.desc": "致命伤害时免死，但摧毁附魔装备并掉落全身物品；娱乐附魔，仅创造获取",
+
+  "enchantment.practical_enchantments.gentle_descent": "羽落",
+  "enchantment.practical_enchantments.gentle_descent.desc": "持续获得缓降并免疫摔落伤害；潜行时缓降失效；与摔落缓冲互斥",
+
+  "enchantment.practical_enchantments.execute": "残杀",
+  "enchantment.practical_enchantments.execute.desc": "目标血量低于 35% 时增伤：10%~35% 区间 ×1.5（斧 ×2），低于 10% ×3（斧 ×4）",
+
+  "enchantment.practical_enchantments.soul_siphon": "汲灵",
+  "enchantment.practical_enchantments.soul_siphon.desc": "命中时按原始伤害产出经验球：每级系数 0.2，单次经验上限为 2×等级",
+
+  "enchantment.practical_enchantments.penetration": "贯穿",
+  "enchantment.practical_enchantments.penetration.desc": "三叉戟投掷额外造成 1.5+0.5×(等级-1) 伤害；搭配忠诚时牵引命中目标；与激流互斥",
+
+  "enchantment.practical_enchantments.smashing": "粉碎",
+  "enchantment.practical_enchantments.smashing.desc": "三叉戟击中方块时瞬间破坏，等级对应镐的挖掘等级；等级不足时只破坏不掉落"
+}
