@@ -1,7 +1,6 @@
-### 1.2.2 (2026-09-18)
+### 1.2.3 (2026-09-24)
 
-- Fix Penetration: thrown tridents now really deal the extra `1.5 + 0.5 x (level - 1)` damage. The target's damage cooldown was discarding the bonus hit entirely.
-- Fix Drop Inventory (undying_drop): the dropped inventory now scatters around the player like a vanilla death drop instead of piling up in a single block.
-- Add the 9 enchantment-table enchantments to `#minecraft:in_enchanting_table`, so they can actually be offered by the enchanting table.
-- NeoForge: declare `iconFile` instead of the deprecated `logoFile`, so the 128x128 square icon is shown in the mod list instead of being stretched into the wide banner slot.
-- Includes the upstream EnchantLib fix for the "world uses experimental settings" warning shown on every world open.
+- Fix Bright: the enchantment no longer overwrites or deletes night vision the player obtained from other sources (potions, `/effect give`, beacons, other mods). It now only refreshes and revokes the night vision instance it granted itself.
+- Bright now grants night vision with a finite duration (20 s, refreshed once per second) instead of an infinite one, so the effect always expires cleanly and can never get stuck on the player.
+- Fix Gentle Descent: same class of bug - slow falling from potions, commands or other mods is no longer overwritten or removed. Only the instance granted by the enchantment itself is refreshed while worn and revoked when sneaking or taking the boots off.
+- Gentle Descent also switched to a finite, periodically refreshed duration for the same reason.
