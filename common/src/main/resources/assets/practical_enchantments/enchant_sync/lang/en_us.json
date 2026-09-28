@@ -54,5 +54,7 @@
   "enchantment.practical_enchantments.penetration.desc": "Thrown tridents deal 1.5 + 0.5 x (level-1) extra damage; with Loyalty, pulls hit targets in; mutually exclusive with Riptide",
 
   "enchantment.practical_enchantments.smashing": "Smashing",
-  "enchantment.practical_enchantments.smashing.desc": "Thrown tridents instantly break hit blocks; level maps to pickaxe tier - below the tier, blocks break without drops"
+  "enchantment.practical_enchantments.smashing.desc": "Thrown tridents instantly break hit blocks; level maps to pickaxe tier - below the tier, blocks break without drops",
+
+  "practical_enchantments.notice.merlinlib": "Practical Enchantments: Starting with version 1.3.0, this mod will switch its dependency to MerlinLib and become a client + server mod, no longer requiring EnchantLib. Development will prioritise the 26.3 version, while the 26.2 and other ports will be put on hold (for a while). This notice can be disabled in the config file."
 }
