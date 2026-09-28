@@ -76,6 +76,18 @@ public final class ChineseEnchantment {
 			// 原版创造/旁观模式以及其他模组授予的 mayfly 一律不碰。
 			EntityCounter.set(player, FLY_GRANTED, 0);
 			abilities.mayfly = false;
+			// ⚠️ 必须把 flying 一并收回，否则 Fabric 端会卡在半空中飞下不来：
+			// ① 原版 ServerPlayer 从不写 abilities.flying（javap 实证：整个类只读不写），
+			//    收回 mayfly 后 flying 仍是 true；
+			// ② 客户端 LocalPlayer#aiStep 里"双击取消飞行 / 收飞行状态"整段逻辑被
+			//    `if (abilities.mayfly)` 包住（javap 实证：mayfly 为 false 时 ifeq 直接跳过整块），
+			//    于是玩家既保持飞行、又再也没法用双击把飞行关掉。
+			// NeoForge 之所以"看起来正常"，是它给 ServerPlayer#tick() 打了兜底补丁
+			// （neoforge-<ver>-userdev.jar → patches/net/minecraft/server/level/ServerPlayer.java.patch）：
+			//     if (this.getAbilities().flying && !this.mayFly()) {
+			//         this.getAbilities().flying = false; this.onUpdateAbilities(); }
+			// 原版 / Fabric 没有这道兜底，所以由模组在撤销时自己清干净。
+			abilities.flying = false;
 			player.onUpdateAbilities();
 		}
 	}

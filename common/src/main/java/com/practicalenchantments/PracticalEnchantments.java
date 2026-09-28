@@ -12,7 +12,9 @@ import com.enchantlib.api.VillagerTradeBuilder;
 import com.enchantlib.api.VillagerTradeRegistrar;
 import com.enchantlib.api.VillagerTrades;
 import com.enchantlib.event.EnchantmentEventRegistrar;
+import com.practicalenchantments.config.PracticalConfig;
 import com.practicalenchantments.enchantment.*;
+import com.practicalenchantments.notice.MerlinLibNotice;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
@@ -239,6 +241,11 @@ public final class PracticalEnchantments implements EnchantmentEntrypoint {
 	@Override
 	public void onRegisterEventCallbacks(EnchantmentEventRegistrar registrar,
 										 HolderLookup.Provider registries) {
+		// 服务端通用配置（config/practical_enchantments/common.properties，首次运行自动生成）
+		PracticalConfig.load();
+		// 进服预告：前置将由 EnchantLib 更换为 MerlinLib（受配置项 notice.merlinlib 控制）
+		MerlinLibNotice.register();
+
 		ChineseEnchantment.registerCallbacks(registrar, registries);
 		LumberjackEnchantment.registerCallbacks(registrar, registries);
 		PowerfulEnchantment.registerCallbacks(registrar, registries);
