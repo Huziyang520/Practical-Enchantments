@@ -1,0 +1,15 @@
+{
+  "description": {
+    "translate": "enchantment.practical_enchantments.wither_aspect",
+    "fallback": "枯萎"
+  },
+  "supported_items": "#minecraft:swords",
+  "exclusive_set": "#practical_enchantments:exclusive_set/blade_effect",
+  "weight": 1,
+  "max_level": 2,
+  "min_cost": { "base": 0, "per_level_above_first": 0 },
+  "max_cost": { "base": 0, "per_level_above_first": 0 },
+  "anvil_cost": 4,
+  "slots": ["mainhand"],
+  "effects": {}
+}

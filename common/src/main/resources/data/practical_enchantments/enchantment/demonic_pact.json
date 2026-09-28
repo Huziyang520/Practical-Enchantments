@@ -1,0 +1,15 @@
+{
+  "description": {
+    "translate": "enchantment.practical_enchantments.demonic_pact",
+    "fallback": "恶魔交易"
+  },
+  "supported_items": "#minecraft:enchantable/chest_armor",
+  "exclusive_set": "#practical_enchantments:exclusive_set/death_save",
+  "weight": 1,
+  "max_level": 3,
+  "min_cost": { "base": 0, "per_level_above_first": 0 },
+  "max_cost": { "base": 0, "per_level_above_first": 0 },
+  "anvil_cost": 6,
+  "slots": ["chest"],
+  "effects": {}
+}

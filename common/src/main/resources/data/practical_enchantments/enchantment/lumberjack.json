@@ -1,0 +1,15 @@
+{
+  "description": {
+    "translate": "enchantment.practical_enchantments.lumberjack",
+    "fallback": "伐木工"
+  },
+  "supported_items": "#minecraft:enchantable/sharp_weapon",
+  "exclusive_set": "#minecraft:exclusive_set/mining",
+  "weight": 4,
+  "max_level": 1,
+  "min_cost": { "base": 8, "per_level_above_first": 0 },
+  "max_cost": { "base": 25, "per_level_above_first": 0 },
+  "anvil_cost": 2,
+  "slots": ["mainhand"],
+  "effects": {}
+}

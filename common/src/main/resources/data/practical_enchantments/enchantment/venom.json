@@ -1,0 +1,15 @@
+{
+  "description": {
+    "translate": "enchantment.practical_enchantments.venom",
+    "fallback": "淬毒"
+  },
+  "supported_items": "#minecraft:swords",
+  "exclusive_set": "#practical_enchantments:exclusive_set/blade_effect",
+  "weight": 6,
+  "max_level": 2,
+  "min_cost": { "base": 8, "per_level_above_first": 8 },
+  "max_cost": { "base": 28, "per_level_above_first": 8 },
+  "anvil_cost": 3,
+  "slots": ["mainhand"],
+  "effects": {}
+}

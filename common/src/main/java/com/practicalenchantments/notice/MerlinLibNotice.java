@@ -5,8 +5,6 @@ import com.practicalenchantments.config.PracticalConfig;
 import net.minecraft.network.chat.Component;
 
 /**
- * 进服预告：本模组将于 1.3.0 起把前置由 EnchantLib 更换为 MerlinLib，并改为「客户端 + 服务端」模组。
- *
  * <h2>要改这段文案，改这三处（其他地方不用动）</h2>
  * <ol>
  *   <li>{@code assets/practical_enchantments/lang/zh_cn.json} → 键 {@value #KEY}</li>
@@ -27,7 +25,7 @@ public final class MerlinLibNotice {
 
 	/** 兜底文本：客户端没有本模组时显示这条，与 lang/zh_cn.json 逐字一致 */
 	public static final String FALLBACK =
-		"Practical Enchantments:本模组将于1.3.0版本开始将前置更换为MerlinLib并改为客户端+服务端模组，不再依赖EnchantLib，并且将优先开发26.3版本，26.2版本和其他版本的移植将被搁置（一段时间）。该提示可在配置文件中关闭";
+		"Practical Enchantments:本模组将于1.3.0版本开始将前置更换为MerlinLib并改为客户端+服务端模组，不再依赖EnchantLib，并且将优先开发26.3版本，26.2版本和其他版本的移植将被搁置一段时间。该提示可在配置文件中关闭。如果你有好的新附魔想法，欢迎在GitHub或着CurseForge上提交。";
 
 	/** 监听器只注册一次（服务器每次启动都会走到 register()，重复注册会导致重复提示） */
 	private static boolean registered = false;

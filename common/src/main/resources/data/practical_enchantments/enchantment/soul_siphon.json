@@ -1,0 +1,14 @@
+{
+  "description": {
+    "translate": "enchantment.practical_enchantments.soul_siphon",
+    "fallback": "汲灵"
+  },
+  "supported_items": "#minecraft:enchantable/sharp_weapon",
+  "weight": 7,
+  "max_level": 5,
+  "min_cost": { "base": 5, "per_level_above_first": 7 },
+  "max_cost": { "base": 25, "per_level_above_first": 7 },
+  "anvil_cost": 2,
+  "slots": ["mainhand"],
+  "effects": {}
+}
