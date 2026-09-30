@@ -1,14 +1,11 @@
 package com.practicalenchantments.enchantment;
 
-import com.enchantlib.api.EnchantmentBuilder;
-import com.enchantlib.api.EnchantmentEffectsBuilder;
-import com.enchantlib.api.EnchantmentRegistrar;
-import com.enchantlib.api.EntityCounter;
-import com.enchantlib.event.BuiltInEvents;
-import com.enchantlib.event.EnchantmentContext;
-import com.enchantlib.event.EnchantmentEventRegistrar;
-import com.enchantlib.event.EnchantLibEvents;
-import com.enchantlib.event.LivingEntityTickEvent;
+import com.huziyang520.merlinlib.api.EntityCounter;
+import com.huziyang520.merlinlib.event.BuiltInEvents;
+import com.huziyang520.merlinlib.event.EnchantmentContext;
+import com.huziyang520.merlinlib.event.EnchantmentEventRegistrar;
+import com.huziyang520.merlinlib.event.GlobalEvents;
+import com.huziyang520.merlinlib.event.LivingEntityTickEvent;
 import com.practicalenchantments.PracticalEnchantments;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
@@ -33,26 +30,14 @@ public final class ChineseEnchantment {
 	/** 本附魔的 Holder（注册回调时解析） */
 	private static Holder<Enchantment> HOLDER;
 
-	public static void register(EnchantmentRegistrar registrar) {
-		registrar.register(EnchantmentBuilder.create(ID)
-			.description("中国人")
-			.supportedItems("#minecraft:enchantable/chest_armor")
-			.weight(1) // 宝藏附魔，不可通过附魔台获得（weight 最小必须为 1）
-			.maxLevel(1)
-			.minCost(0, 0)
-			.maxCost(0, 0)
-			.anvilCost(0)
-			.slots("chest")
-			.effects(EnchantmentEffectsBuilder.create().build()));
-	}
 
 	public static void registerCallbacks(EnchantmentEventRegistrar registrar, HolderLookup.Provider registries) {
 		HOLDER = PracticalEnchantments.resolveEnchantment(registries, ID);
 
 		// 飞行解锁/撤销：使用全局 LIVING_ENTITY_TICK，拿下胸甲时（即便身上无其他附魔装备）
 		// 也能可靠地撤销飞行，避免"永久飞行"。
-		EnchantLibEvents.enableLivingEntityTick();
-		EnchantLibEvents.LIVING_ENTITY_TICK.register(ChineseEnchantment::onLivingTick);
+		GlobalEvents.enableLivingEntityTick();
+		GlobalEvents.LIVING_ENTITY_TICK.register(ChineseEnchantment::onLivingTick);
 
 		// 空中受击耐久 ×3
 		registrar.register(HOLDER, BuiltInEvents.POST_HURT, ChineseEnchantment::onPostHurt);

@@ -1,12 +1,8 @@
 package com.practicalenchantments.enchantment;
 
-import com.enchantlib.api.EnchantmentBuilder;
-import com.enchantlib.api.EnchantmentEffectsBuilder;
-import com.enchantlib.api.EnchantmentRegistrar;
-import com.enchantlib.api.ExclusiveSets;
-import com.enchantlib.event.BuiltInEvents;
-import com.enchantlib.event.EnchantmentContext;
-import com.enchantlib.event.EnchantmentEventRegistrar;
+import com.huziyang520.merlinlib.event.BuiltInEvents;
+import com.huziyang520.merlinlib.event.EnchantmentContext;
+import com.huziyang520.merlinlib.event.EnchantmentEventRegistrar;
 import com.practicalenchantments.PracticalEnchantments;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
@@ -29,20 +25,6 @@ public final class DestructionEnchantment {
 	// MC 26.2 中使用 TagKey 直接引用矿石标签
 	private static final TagKey<Block> ORES_TAG = TagKey.create(Registries.BLOCK, Identifier.parse("minecraft:ores"));
 
-	public static void register(EnchantmentRegistrar registrar) {
-		registrar.register(EnchantmentBuilder.create(ID)
-			.description("毁灭")
-			.supportedItems("#minecraft:enchantable/mining")
-			.weight(1) // 宝藏附魔（weight 最小必须为 1）
-			.maxLevel(1)
-			.minCost(0, 0)
-			.maxCost(0, 0)
-			.anvilCost(0)
-			// 与时运、精准采集互斥（掉落转经验与二者不兼容）
-			.exclusiveSet(ExclusiveSets.MINING)
-			.slots("mainhand")
-			.effects(EnchantmentEffectsBuilder.create().build()));
-	}
 
 	public static void registerCallbacks(EnchantmentEventRegistrar registrar, HolderLookup.Provider registries) {
 		Holder<Enchantment> holder = PracticalEnchantments.resolveEnchantment(registries, ID);

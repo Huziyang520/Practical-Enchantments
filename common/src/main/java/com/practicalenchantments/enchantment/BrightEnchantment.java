@@ -1,12 +1,9 @@
 package com.practicalenchantments.enchantment;
 
-import com.enchantlib.api.EnchantmentBuilder;
-import com.enchantlib.api.EnchantmentEffectsBuilder;
-import com.enchantlib.api.EnchantmentRegistrar;
-import com.enchantlib.api.EntityCounter;
-import com.enchantlib.event.EnchantmentEventRegistrar;
-import com.enchantlib.event.EnchantLibEvents;
-import com.enchantlib.event.LivingEntityTickEvent;
+import com.huziyang520.merlinlib.api.EntityCounter;
+import com.huziyang520.merlinlib.event.EnchantmentEventRegistrar;
+import com.huziyang520.merlinlib.event.GlobalEvents;
+import com.huziyang520.merlinlib.event.LivingEntityTickEvent;
 import com.practicalenchantments.PracticalEnchantments;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
@@ -46,24 +43,12 @@ public final class BrightEnchantment {
 	private static final Identifier NV_GRANTED =
 		Identifier.fromNamespaceAndPath(PracticalEnchantments.MOD_ID, "bright_nv_granted");
 
-	public static void register(EnchantmentRegistrar registrar) {
-		registrar.register(EnchantmentBuilder.create(ID)
-			.description("明朗")
-			.supportedItems("#minecraft:enchantable/head_armor")
-			.weight(10) // 常见
-			.maxLevel(1)
-			.minCost(10, 0)
-			.maxCost(25, 0)
-			.anvilCost(2)
-			.slots("head")
-			.effects(EnchantmentEffectsBuilder.create().build()));
-	}
 
 	public static void registerCallbacks(EnchantmentEventRegistrar registrar, HolderLookup.Provider registries) {
 		HOLDER = PracticalEnchantments.resolveEnchantment(registries, ID);
 		// 使用全局 LIVING_ENTITY_TICK：脱下头盔（即便身上无其他附魔装备）也能移除夜视
-		EnchantLibEvents.enableLivingEntityTick();
-		EnchantLibEvents.LIVING_ENTITY_TICK.register(BrightEnchantment::onLivingTick);
+		GlobalEvents.enableLivingEntityTick();
+		GlobalEvents.LIVING_ENTITY_TICK.register(BrightEnchantment::onLivingTick);
 	}
 
 	private static void onLivingTick(LivingEntityTickEvent event) {

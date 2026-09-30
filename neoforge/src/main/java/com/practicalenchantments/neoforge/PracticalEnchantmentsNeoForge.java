@@ -1,6 +1,5 @@
 package com.practicalenchantments.neoforge;
 
-import com.enchantlib.api.EnchantmentApi;
 import com.practicalenchantments.PracticalEnchantments;
 import com.practicalenchantments.enchantment.LifeStealEnchantment;
 import net.neoforged.bus.api.IEventBus;
@@ -24,8 +23,9 @@ import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 public final class PracticalEnchantmentsNeoForge {
 
 	public PracticalEnchantmentsNeoForge(IEventBus modEventBus) {
-		// 显式注册附魔入口（NeoForge 无 entrypoint 自动扫描）
-		EnchantmentApi.register(new PracticalEnchantments());
+		// 附魔定义/互斥组/tradeable/村民交易都已是数据包资源，这里只启动 common 侧的三件事：
+		// 战利品注入、事件回调、配置与进服预告（由 MerlinLib 的服务器生命周期驱动）。
+		PracticalEnchantments.bootstrap();
 
 		// LivingDamageEvent.Post → AFTER_DAMAGE 桥接（吸血）
 		NeoForge.EVENT_BUS.addListener(LivingDamageEvent.Post.class, event ->

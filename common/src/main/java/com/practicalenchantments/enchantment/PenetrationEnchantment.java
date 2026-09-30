@@ -1,11 +1,8 @@
 package com.practicalenchantments.enchantment;
 
-import com.enchantlib.api.EnchantmentBuilder;
-import com.enchantlib.api.EnchantmentRegistrar;
-import com.enchantlib.api.ExclusiveGroupBuilder;
-import com.enchantlib.event.BuiltInEvents;
-import com.enchantlib.event.EnchantmentContext;
-import com.enchantlib.event.EnchantmentEventRegistrar;
+import com.huziyang520.merlinlib.event.BuiltInEvents;
+import com.huziyang520.merlinlib.event.EnchantmentContext;
+import com.huziyang520.merlinlib.event.EnchantmentEventRegistrar;
 import com.practicalenchantments.PracticalEnchantments;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
@@ -24,25 +21,10 @@ public final class PenetrationEnchantment {
 
 	public static final String ID = PracticalEnchantments.MOD_ID + ":penetration";
 
-	public static final String EXCLUSIVE_SET = ExclusiveGroupBuilder
-		.create(PracticalEnchantments.MOD_ID, "trident_riptide")
-		.getTagReference();
 
 	private PenetrationEnchantment() {
 	}
 
-	public static void register(EnchantmentRegistrar registrar) {
-		registrar.register(EnchantmentBuilder.create(ID)
-			.description("贯穿")
-			.supportedItems("#minecraft:enchantable/trident")
-			.weight(6)
-			.maxLevel(5)
-			.minCost(6, 8)
-			.maxCost(28, 8)
-			.anvilCost(3)
-			.exclusiveSet(EXCLUSIVE_SET)
-			.slots("mainhand"));
-	}
 
 	public static void registerCallbacks(EnchantmentEventRegistrar registrar, HolderLookup.Provider registries) {
 		Holder<Enchantment> holder = PracticalEnchantments.resolveEnchantment(registries, ID);

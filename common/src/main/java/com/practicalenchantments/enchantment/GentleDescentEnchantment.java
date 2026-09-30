@@ -1,12 +1,9 @@
 package com.practicalenchantments.enchantment;
 
-import com.enchantlib.api.EnchantmentBuilder;
-import com.enchantlib.api.EnchantmentRegistrar;
-import com.enchantlib.api.EntityCounter;
-import com.enchantlib.api.ExclusiveGroupBuilder;
-import com.enchantlib.event.EnchantLibEvents;
-import com.enchantlib.event.EnchantmentEventRegistrar;
-import com.enchantlib.event.LivingEntityTickEvent;
+import com.huziyang520.merlinlib.api.EntityCounter;
+import com.huziyang520.merlinlib.event.GlobalEvents;
+import com.huziyang520.merlinlib.event.EnchantmentEventRegistrar;
+import com.huziyang520.merlinlib.event.LivingEntityTickEvent;
 import com.practicalenchantments.PracticalEnchantments;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
@@ -35,9 +32,6 @@ public final class GentleDescentEnchantment {
 
 	public static final String ID = PracticalEnchantments.MOD_ID + ":gentle_descent";
 
-	public static final String EXCLUSIVE_SET = ExclusiveGroupBuilder
-		.create(PracticalEnchantments.MOD_ID, "slow_fall")
-		.getTagReference();
 
 	private static Holder<Enchantment> HOLDER;
 
@@ -54,23 +48,11 @@ public final class GentleDescentEnchantment {
 	private GentleDescentEnchantment() {
 	}
 
-	public static void register(EnchantmentRegistrar registrar) {
-		registrar.register(EnchantmentBuilder.create(ID)
-			.description("羽落")
-			.supportedItems("#minecraft:enchantable/foot_armor")
-			.weight(1)
-			.maxLevel(1)
-			.minCost(0, 0)
-			.maxCost(0, 0)
-			.anvilCost(2)
-			.exclusiveSet(EXCLUSIVE_SET)
-			.slots("feet"));
-	}
 
 	public static void registerCallbacks(EnchantmentEventRegistrar registrar, HolderLookup.Provider registries) {
 		HOLDER = PracticalEnchantments.resolveEnchantment(registries, ID);
-		EnchantLibEvents.enableLivingEntityTick();
-		EnchantLibEvents.LIVING_ENTITY_TICK.register(GentleDescentEnchantment::onLivingTick);
+		GlobalEvents.enableLivingEntityTick();
+		GlobalEvents.LIVING_ENTITY_TICK.register(GentleDescentEnchantment::onLivingTick);
 	}
 
 	private static void onLivingTick(LivingEntityTickEvent event) {

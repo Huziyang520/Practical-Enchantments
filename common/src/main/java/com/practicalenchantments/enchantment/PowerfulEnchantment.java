@@ -1,12 +1,8 @@
 package com.practicalenchantments.enchantment;
 
-import com.enchantlib.api.EnchantmentBuilder;
-import com.enchantlib.api.EnchantmentEffectsBuilder;
-import com.enchantlib.api.EnchantmentRegistrar;
-import com.enchantlib.api.ExclusiveGroupBuilder;
-import com.enchantlib.event.BuiltInEvents;
-import com.enchantlib.event.EnchantmentContext;
-import com.enchantlib.event.EnchantmentEventRegistrar;
+import com.huziyang520.merlinlib.event.BuiltInEvents;
+import com.huziyang520.merlinlib.event.EnchantmentContext;
+import com.huziyang520.merlinlib.event.EnchantmentEventRegistrar;
 import com.practicalenchantments.PracticalEnchantments;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
@@ -25,34 +21,17 @@ public final class PowerfulEnchantment {
 
 	public static final String ID = PracticalEnchantments.MOD_ID + ":powerful";
 
-	/** 互斥组名（与 {@code PracticalEnchantments#onRegisterExclusiveGroups} 中注册的组名一致） */
+	/** 互斥组名（对应数据包标签 {@code practical_enchantments:exclusive_set/crossbow}） */
 	public static final String GROUP_NAME = "crossbow";
 
 	/**
-	 * 互斥组标签引用（由 {@link ExclusiveGroupBuilder} 派生，保证与注册的组名一致）。
+	 * 互斥组标签引用（见 {@code data/practical_enchantments/tags/enchantment/exclusive_set/crossbow.json}）。
 	 *
-	 * <p>为什么不直接用 {@link com.enchantlib.api.ExclusiveSets#CROSSBOW}：原版
+	 * <p>为什么不直接用原版的 crossbow 互斥标签：原版
 	 * {@code #minecraft:exclusive_set/crossbow} 同时含多重射击与穿透，而本附魔按设计要求
 	 * <b>可与穿透叠加</b>，只与多重射击互斥，故自建只含多重射击的互斥组。</p>
 	 */
-	public static final String EXCLUSIVE_SET = ExclusiveGroupBuilder
-		.create(PracticalEnchantments.MOD_ID, GROUP_NAME)
-		.getTagReference();
 
-	public static void register(EnchantmentRegistrar registrar) {
-		registrar.register(EnchantmentBuilder.create(ID)
-			.description("强劲")
-			.supportedItems("minecraft:crossbow")
-			.weight(10) // 常见
-			.maxLevel(5)
-			.minCost(1, 10)
-			.maxCost(15, 10)
-			.anvilCost(2)
-			// 仅与多重射击互斥
-			.exclusiveSet(EXCLUSIVE_SET)
-			.slots("mainhand")
-			.effects(EnchantmentEffectsBuilder.create().build()));
-	}
 
 	public static void registerCallbacks(EnchantmentEventRegistrar registrar, HolderLookup.Provider registries) {
 		Holder<Enchantment> holder = PracticalEnchantments.resolveEnchantment(registries, ID);

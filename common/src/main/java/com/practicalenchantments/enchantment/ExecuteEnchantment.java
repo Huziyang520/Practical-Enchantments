@@ -1,10 +1,8 @@
 package com.practicalenchantments.enchantment;
 
-import com.enchantlib.api.EnchantmentBuilder;
-import com.enchantlib.api.EnchantmentRegistrar;
-import com.enchantlib.event.BuiltInEvents;
-import com.enchantlib.event.EnchantmentContext;
-import com.enchantlib.event.EnchantmentEventRegistrar;
+import com.huziyang520.merlinlib.event.BuiltInEvents;
+import com.huziyang520.merlinlib.event.EnchantmentContext;
+import com.huziyang520.merlinlib.event.EnchantmentEventRegistrar;
 import com.practicalenchantments.PracticalEnchantments;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
@@ -34,17 +32,6 @@ public final class ExecuteEnchantment {
 	private ExecuteEnchantment() {
 	}
 
-	public static void register(EnchantmentRegistrar registrar) {
-		registrar.register(EnchantmentBuilder.create(ID)
-			.description("残杀")
-			.supportedItems("#minecraft:enchantable/sharp_weapon")
-			.weight(1)
-			.maxLevel(1)
-			.minCost(0, 0)
-			.maxCost(0, 0)
-			.anvilCost(5)
-			.slots("mainhand"));
-	}
 
 	public static void registerCallbacks(EnchantmentEventRegistrar registrar, HolderLookup.Provider registries) {
 		Holder<Enchantment> holder = PracticalEnchantments.resolveEnchantment(registries, ID);

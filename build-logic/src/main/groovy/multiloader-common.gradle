@@ -63,6 +63,9 @@ processResources {
 		'license'                       : license,
 		'description'                   : project.description,
 		'neoforge_version'              : neoforge_version,
+		// 只有依赖 MerlinLib 的工程才定义这个属性；复合构建里同一份 convention 也会服务 MerlinLib
+		// 自己的模块，所以缺省取空串而不是直接引用（否则报 Unknown property）。
+		'merlinlib_version'             : (project.findProperty('merlinlib_version') ?: ''),
 		'credits'                       : credits,
 		'java_version'                  : java_version
 	]

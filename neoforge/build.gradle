@@ -41,8 +41,8 @@ neoForge {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
-	// EnchantLib NeoForge
-	implementation "com.enchantlib:enchantlib-neoforge-${minecraft_version}:${enchantlib_version}"
+	// MerlinLib NeoForge
+	implementation "com.huziyang520.merlinlib:merlinlib-neoforge-26.3:${merlinlib_version}"
 }
 
 // Implement mcgradleconventions loader attribute

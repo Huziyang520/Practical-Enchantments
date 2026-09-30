@@ -33,6 +33,15 @@ plugins {
 }
 rootProject.name = 'practical-enchantments-multiloader'
 includeBuild('build-logic')
+// MerlinLib 以源码工程参与构建（复合构建）：库改完立即生效，不必先发布本地 maven。
+// 依赖坐标里的版本号只用于匹配，实现由下面的 substitution 指向 MerlinLib 源码工程。
+includeBuild('../../MerlinLib/26.3') {
+	dependencySubstitution {
+		substitute module('com.huziyang520.merlinlib:merlinlib-common-26.3') using project(':common')
+		substitute module('com.huziyang520.merlinlib:merlinlib-fabric-26.3') using project(':fabric')
+		substitute module('com.huziyang520.merlinlib:merlinlib-neoforge-26.3') using project(':neoforge')
+	}
+}
 include('common')
 include('fabric')
 include('neoforge')

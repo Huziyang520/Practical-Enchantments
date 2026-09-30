@@ -19,14 +19,11 @@
     "fabric-api": "*",
     "minecraft": "~${minecraft_version}",
     "java": ">=${java_version}",
-    "enchantlib": ">=1.2.2"
+    "merlinlib": ">=${merlinlib_version}"
   },
   "entrypoints": {
     "main": [
       "com.practicalenchantments.fabric.PracticalEnchantmentsFabric"
-    ],
-    "enchantlib:enchantments": [
-      "com.practicalenchantments.PracticalEnchantments"
     ]
   },
   "mixins": [

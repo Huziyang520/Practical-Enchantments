@@ -1,9 +1,6 @@
 package com.practicalenchantments.enchantment;
 
-import com.enchantlib.api.EnchantmentBuilder;
-import com.enchantlib.api.EnchantmentEffectsBuilder;
-import com.enchantlib.api.EnchantmentRegistrar;
-import com.enchantlib.event.EnchantmentEventRegistrar;
+import com.huziyang520.merlinlib.event.EnchantmentEventRegistrar;
 import com.practicalenchantments.PracticalEnchantments;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
@@ -20,18 +17,6 @@ public final class AerialHasteEnchantment {
 	/** 本附魔的 Holder（供 Mixin 判断头盔是否佩戴本附魔） */
 	public static volatile Holder<Enchantment> HOLDER;
 
-	public static void register(EnchantmentRegistrar registrar) {
-		registrar.register(EnchantmentBuilder.create(ID)
-			.description("浮空速掘")
-			.supportedItems("#minecraft:enchantable/head_armor")
-			.weight(4) // 稀有
-			.maxLevel(1)
-			.minCost(8, 0)
-			.maxCost(25, 0)
-			.anvilCost(2)
-			.slots("head")
-			.effects(EnchantmentEffectsBuilder.create().build()));
-	}
 
 	public static void registerCallbacks(EnchantmentEventRegistrar registrar, HolderLookup.Provider registries) {
 		HOLDER = PracticalEnchantments.resolveEnchantment(registries, ID);

@@ -1,7 +1,5 @@
 package com.practicalenchantments.enchantment;
 
-import com.enchantlib.api.EnchantmentBuilder;
-import com.enchantlib.api.EnchantmentRegistrar;
 import com.practicalenchantments.PracticalEnchantments;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.DamageTypeTags;
@@ -23,18 +21,6 @@ public final class UndyingDropEnchantment {
 	private UndyingDropEnchantment() {
 	}
 
-	public static void register(EnchantmentRegistrar registrar) {
-		registrar.register(EnchantmentBuilder.create(ID)
-			.description("掉落不死亡")
-			.supportedItems("#minecraft:enchantable/armor")
-			.weight(1)
-			.maxLevel(3)
-			.minCost(0, 0)
-			.maxCost(0, 0)
-			.anvilCost(3)
-			.exclusiveSet(DemonicPactEnchantment.EXCLUSIVE_SET)
-			.slots("head", "chest", "legs", "feet"));
-	}
 
 	/**
 	 * 尝试触发掉落不死亡。

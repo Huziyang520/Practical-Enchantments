@@ -1,8 +1,5 @@
 package com.practicalenchantments.enchantment;
 
-import com.enchantlib.api.EnchantmentBuilder;
-import com.enchantlib.api.EnchantmentRegistrar;
-import com.enchantlib.api.ExclusiveGroupBuilder;
 import com.practicalenchantments.PracticalEnchantments;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -27,9 +24,6 @@ public final class DemonicPactEnchantment {
 	public static final String ID = PracticalEnchantments.MOD_ID + ":demonic_pact";
 
 	/** 互斥组：恶魔交易 ↔ 掉落不死亡 */
-	public static final String EXCLUSIVE_SET = ExclusiveGroupBuilder
-		.create(PracticalEnchantments.MOD_ID, "death_save")
-		.getTagReference();
 
 	/** 冷却（tick） */
 	private static final long COOLDOWN_TICKS = 1200L;
@@ -40,18 +34,6 @@ public final class DemonicPactEnchantment {
 	private DemonicPactEnchantment() {
 	}
 
-	public static void register(EnchantmentRegistrar registrar) {
-		registrar.register(EnchantmentBuilder.create(ID)
-			.description("恶魔交易")
-			.supportedItems("#minecraft:enchantable/chest_armor")
-			.weight(1)
-			.maxLevel(3)
-			.minCost(0, 0)
-			.maxCost(0, 0)
-			.anvilCost(6)
-			.exclusiveSet(EXCLUSIVE_SET)
-			.slots("chest"));
-	}
 
 	/**
 	 * 尝试触发恶魔交易。

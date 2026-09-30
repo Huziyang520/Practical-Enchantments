@@ -1,7 +1,5 @@
 package com.practicalenchantments.enchantment;
 
-import com.enchantlib.api.EnchantmentBuilder;
-import com.enchantlib.api.EnchantmentRegistrar;
 import com.practicalenchantments.PracticalEnchantments;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
@@ -26,17 +24,6 @@ public final class LifeStealEnchantment {
 	private LifeStealEnchantment() {
 	}
 
-	public static void register(EnchantmentRegistrar registrar) {
-		registrar.register(EnchantmentBuilder.create(ID)
-			.description("吸血")
-			.supportedItems("#minecraft:enchantable/sharp_weapon")
-			.weight(8)
-			.maxLevel(5)
-			.minCost(4, 8)
-			.maxCost(24, 8)
-			.anvilCost(2)
-			.slots("mainhand"));
-	}
 
 	/**
 	 * AFTER_DAMAGE 桥接：被打的是 target，攻击者持吸血武器时给攻击者回血。

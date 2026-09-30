@@ -1,6 +1,5 @@
 package com.practicalenchantments.config;
 
-import com.enchantlib.platform.Services;
 import com.practicalenchantments.PracticalEnchantments;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -72,13 +71,9 @@ public final class PracticalConfig {
 	 * 读取配置：文件不存在则先按模板生成，再解析。服务器每次启动时调用一次。
 	 */
 	public static void load() {
-		Path configDir = Services.PLATFORM.getConfigDir();
-		if (configDir == null) {
-			LOGGER.warn("[PracticalEnchantments] 平台未提供配置目录，沿用默认配置（notice.merlinlib=true）");
-			return;
-		}
-
-		Path file = configDir.resolve(DIR_NAME).resolve(FILE_NAME);
+		// 与 MerlinLib 自己的配置文件同一套约定：相对路径（由游戏目录解析）两端一致，不需要平台服务。
+		// 最终路径：config/practical_enchantments/common.properties
+		Path file = Path.of("config", DIR_NAME, FILE_NAME);
 		try {
 			if (!Files.isRegularFile(file)) {
 				Files.createDirectories(file.getParent());

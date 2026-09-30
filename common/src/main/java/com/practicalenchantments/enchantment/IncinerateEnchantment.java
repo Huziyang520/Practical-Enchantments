@@ -1,12 +1,8 @@
 package com.practicalenchantments.enchantment;
 
-import com.enchantlib.api.EnchantmentBuilder;
-import com.enchantlib.api.EnchantmentEffectsBuilder;
-import com.enchantlib.api.EnchantmentRegistrar;
-import com.enchantlib.api.ExclusiveGroupBuilder;
-import com.enchantlib.event.BuiltInEvents;
-import com.enchantlib.event.EnchantmentContext;
-import com.enchantlib.event.EnchantmentEventRegistrar;
+import com.huziyang520.merlinlib.event.BuiltInEvents;
+import com.huziyang520.merlinlib.event.EnchantmentContext;
+import com.huziyang520.merlinlib.event.EnchantmentEventRegistrar;
 import com.practicalenchantments.PracticalEnchantments;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
@@ -23,28 +19,11 @@ public final class IncinerateEnchantment {
 
 	public static final String ID = PracticalEnchantments.MOD_ID + ":incinerate";
 
-	/** 互斥组名（与 {@code PracticalEnchantments#onRegisterExclusiveGroups} 中注册的组名一致） */
+	/** 互斥组名（对应数据包标签 {@code practical_enchantments:exclusive_set/looting}） */
 	public static final String GROUP_NAME = "looting";
 
-	/** 互斥组标签引用（由 {@link ExclusiveGroupBuilder} 派生）：与原版抢夺互斥（无掉落 + 掉落加成互相冲突） */
-	public static final String EXCLUSIVE_SET = ExclusiveGroupBuilder
-		.create(PracticalEnchantments.MOD_ID, GROUP_NAME)
-		.getTagReference();
+	/** 互斥组标签引用（见 {@code data/practical_enchantments/tags/enchantment/exclusive_set/looting.json}）：与原版抢夺互斥 */
 
-	public static void register(EnchantmentRegistrar registrar) {
-		registrar.register(EnchantmentBuilder.create(ID)
-			.description("焚灭")
-			.supportedItems("#minecraft:enchantable/sharp_weapon")
-			.weight(1) // 宝藏附魔（weight 最小必须为 1）
-			.maxLevel(1)
-			.minCost(0, 0)
-			.maxCost(0, 0)
-			.anvilCost(0)
-			// 与抢夺互斥
-			.exclusiveSet(EXCLUSIVE_SET)
-			.slots("mainhand")
-			.effects(EnchantmentEffectsBuilder.create().build()));
-	}
 
 	public static void registerCallbacks(EnchantmentEventRegistrar registrar, HolderLookup.Provider registries) {
 		Holder<Enchantment> holder = PracticalEnchantments.resolveEnchantment(registries, ID);

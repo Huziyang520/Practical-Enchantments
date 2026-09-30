@@ -8,8 +8,8 @@ dependencies {
 	minecraft("com.mojang:minecraft:${minecraft_version}")
 	implementation("net.fabricmc:fabric-loader:${fabric_loader_version}")
 	implementation("net.fabricmc.fabric-api:fabric-api:${fabric_version}")
-	// EnchantLib Fabric
-	implementation "com.enchantlib:enchantlib-fabric-${minecraft_version}:${enchantlib_version}"
+	// MerlinLib Fabric
+	implementation "com.huziyang520.merlinlib:merlinlib-fabric-26.3:${merlinlib_version}"
 }
 
 loom {

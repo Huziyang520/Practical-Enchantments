@@ -1,12 +1,8 @@
 package com.practicalenchantments.enchantment;
 
-import com.enchantlib.api.EnchantmentBuilder;
-import com.enchantlib.api.EnchantmentEffectsBuilder;
-import com.enchantlib.api.EnchantmentRegistrar;
-import com.enchantlib.api.ExclusiveSets;
-import com.enchantlib.event.BuiltInEvents;
-import com.enchantlib.event.EnchantmentContext;
-import com.enchantlib.event.EnchantmentEventRegistrar;
+import com.huziyang520.merlinlib.event.BuiltInEvents;
+import com.huziyang520.merlinlib.event.EnchantmentContext;
+import com.huziyang520.merlinlib.event.EnchantmentEventRegistrar;
 import com.practicalenchantments.PracticalEnchantments;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -32,20 +28,6 @@ public final class LumberjackEnchantment {
 	// 防止事件重入导致无限递归
 	private static final ThreadLocal<Boolean> PROCESSING = ThreadLocal.withInitial(() -> Boolean.FALSE);
 
-	public static void register(EnchantmentRegistrar registrar) {
-		registrar.register(EnchantmentBuilder.create(ID)
-			.description("伐木工")
-			.supportedItems("#minecraft:enchantable/sharp_weapon")
-			.weight(4) // 稀有
-			.maxLevel(1)
-			.minCost(8, 0)
-			.maxCost(25, 0)
-			.anvilCost(2)
-			// 与时运、精准采集互斥（整树破坏与二者不兼容）
-			.exclusiveSet(ExclusiveSets.MINING)
-			.slots("mainhand")
-			.effects(EnchantmentEffectsBuilder.create().build()));
-	}
 
 	public static void registerCallbacks(EnchantmentEventRegistrar registrar, HolderLookup.Provider registries) {
 		Holder<Enchantment> holder = PracticalEnchantments.resolveEnchantment(registries, ID);

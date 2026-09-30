@@ -1,6 +1,6 @@
 package com.practicalenchantments.notice;
 
-import com.enchantlib.platform.Services;
+import com.huziyang520.merlinlib.api.MerlinApi;
 import com.practicalenchantments.config.PracticalConfig;
 import net.minecraft.network.chat.Component;
 
@@ -41,7 +41,7 @@ public final class MerlinLibNotice {
 			return;
 		}
 		registered = true;
-		Services.EVENTS.onPlayerJoin(player -> {
+		MerlinApi.lifecycle().onPlayerJoin(player -> {
 			if (!PracticalConfig.isMerlinLibNoticeEnabled()) {
 				return;
 			}

@@ -1,7 +1,5 @@
 package com.practicalenchantments.enchantment;
 
-import com.enchantlib.api.EnchantmentBuilder;
-import com.enchantlib.api.EnchantmentRegistrar;
 import com.practicalenchantments.PracticalEnchantments;
 
 /**
@@ -25,15 +23,4 @@ public final class SmashingEnchantment {
 	private SmashingEnchantment() {
 	}
 
-	public static void register(EnchantmentRegistrar registrar) {
-		registrar.register(EnchantmentBuilder.create(ID)
-			.description("粉碎")
-			.supportedItems("#minecraft:enchantable/trident")
-			.weight(6)
-			.maxLevel(5)
-			.minCost(5, 8)
-			.maxCost(28, 8)
-			.anvilCost(3)
-			.slots("mainhand"));
-	}
 }
