@@ -1,4 +1,7 @@
 {
   "replace": false,
-  "values": ["practical_enchantments:gentle_descent minecraft:feather_falling"]
+  "values": [
+    "practical_enchantments:gentle_descent",
+    "minecraft:feather_falling"
+  ]
 }

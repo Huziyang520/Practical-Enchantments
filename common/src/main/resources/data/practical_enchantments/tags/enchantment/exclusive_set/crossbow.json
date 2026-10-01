@@ -1,4 +1,7 @@
 {
   "replace": false,
-  "values": ["practical_enchantments:powerful minecraft:multishot"]
+  "values": [
+    "practical_enchantments:powerful",
+    "minecraft:multishot"
+  ]
 }

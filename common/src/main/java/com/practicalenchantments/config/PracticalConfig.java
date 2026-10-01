@@ -49,6 +49,9 @@ public final class PracticalConfig {
 		#   assets/practical_enchantments/lang/zh_cn.json
 		#   assets/practical_enchantments/lang/en_us.json
 		#   （assets/practical_enchantments/enchant_sync/lang/ 下的同名键是资源包推送链路的镜像）
+		#
+		# 本项现在代表「默认值」：提示由 MerlinLib 的进服通知功能发送，还可在
+		# MerlinLib 设置界面「通用 → 编辑各模组聊天栏提示」里按模组覆盖它。
 		notice.merlinlib=true
 		""";
 

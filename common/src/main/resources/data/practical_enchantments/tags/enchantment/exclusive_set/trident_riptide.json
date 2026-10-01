@@ -1,4 +1,7 @@
 {
   "replace": false,
-  "values": ["practical_enchantments:penetration minecraft:riptide"]
+  "values": [
+    "practical_enchantments:penetration",
+    "minecraft:riptide"
+  ]
 }
