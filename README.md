@@ -1,102 +1,97 @@
-# Practical Enchantments 实用附魔百科
+# Practical Enchantments
 
-> 适用于 Minecraft **26.2**（Fabric / NeoForge 双端），运行需前置 **EnchantLib**。
-> 目前共 **19 个附魔**：第一批 7 个 + 第二批 12 个。
-
-## 前置与安装
-
-- **前置：MerlinLib**（客户端 + 服务端都要装）。自 1.3.0 起本模组不再依赖 EnchantLib，也是客户端 + 服务端模组。
-- 附魔定义、互斥组、村民交易全部是**数据包资源**，`/reload` 即生效；不再有"服务端向客户端推送语言资源包"这条链路。
-- 进服公告的开关：`config/practical_enchantments/common.properties` 的 `notice.merlinlib`（默认开），也可在
-  **MerlinLib 设置 → 通用 → 编辑各模组聊天栏提示** 里按模组覆盖。
-- 查看/发放附魔走 MerlinLib：`/merlinlib` 子命令或它的物品编辑器；附魔 id 形如 `practical_enchantments:smashing`。
-
-## 获取途径说明
-
-| 途径 | 说明 |
-|------|------|
-| 附魔台 | 附魔台可正常刷出 |
-| 图书管理员 | 加入 `#minecraft:tradeable`，由原版图书管理员按附魔稀有度自动出售（老手/专家/大师） |
-| 结构宝箱 | 以附魔书形式注入原版结构箱子，权重/概率见每个附魔与文末附表 |
-| 仅创造 | 只能通过创造模式物品栏或 `/enchantlib give` 获取 |
-
-互斥规则遵循铁砧/附魔台原版口径；附魔描述需安装 EnchantmentDescriptions（附魔描述）类模组显示。
+[English](#english) | [中文](#中文)
 
 ---
 
-## 附魔总览
+## English
 
-> 本节不再按批次划分：下面是当前全部附魔，按用途分组。
+**Practical Enchantments** adds a growing set of enchantments that do something you can feel in play - combat, mining, defence, tridents, and interacting with mobs - instead of only moving numbers around. Every enchantment is built on **MerlinLib**, which is what registers it, wires its behaviour and provides the in-game tools for looking at it.
 
-| 附魔 | 等级 | 适用 | 获取 | 简介 |
-|------|------|------|------|------|
-| 中国人 | Ⅰ | 头盔 | 远古城市宝箱（10%） | 装备后解锁创造飞行；空中受击耐久消耗 ×3 |
-| 伐木工 | Ⅰ | 斧 | 多结构宝箱 4%~8% | 砍原木递归破坏整棵树及树叶 |
-| 强劲 | Ⅰ | 弩 | 前哨站/村庄等 5%~12% | 弩专属伤害增幅 |
-| 明朗 | Ⅰ | 头盔 | 矿井/地牢/沉船等 6%~10% + 盔甲商钻石头盔 | 常驻夜视；夜间每秒耗 1 耐久 |
-| 毁灭 | Ⅰ | 挖掘工具 | 下界要塞/林地府邸等 10%~20% | 方块不掉物品改掉经验（基础 2、矿石 5） |
-| 焚灭 | Ⅰ | 剑/斧/矛 | 丛林/沙漠神殿等 10%~35% | 击杀不掉战利品、经验 ×2，与抢夺互斥 |
-| 浮空速掘 | Ⅰ | 头盔 | 废弃传送门等 8%~30% | 消除空中挖掘减速 |
+### What it adds
 
-## 附魔总览（续）
+- Enchantments for **weapons, tools, armour and tridents**, each with its own effect rather than a plain damage bonus.
+- **Mutual exclusions** between enchantments where they would overlap, following the vanilla anvil and enchanting table rules.
+- **Ways to obtain them** that follow vanilla progression: the enchanting table, librarian trades, and enchanted books in structure loot.
+- **Enchantments that interact with mobs** - some are about how mobs react to you rather than about damage.
 
-### 武器 · 攻击向
+### Requirements
 
-| 附魔 | 等级 | 适用 | 附魔台 | 交易 | 宝箱 | 简介 |
-|------|------|------|:------:|:----:|------|------|
-| 夺首 | Ⅰ–Ⅲ | 剑/斧/矛 | ✗ | 大师 | 林地府邸 12%（权重 5）、前哨站 8%（权重 3） | 击杀僵尸/骷髅/苦力怕/凋灵骷髅/猪灵，掉头率每级 +2.5% |
-| 吸血 | Ⅰ–Ⅴ | 剑/斧/矛 | ✓ | 老手 | 要塞图书馆 18%（权重 2） | 按目标实际损血回血，每级 4% |
-| 淬毒 | Ⅰ–Ⅱ | 剑 | ✓ | 专家 | 丛林神庙 28%（权重 5）、沉船宝藏 16%（权重 3） | 命中附中毒 6s/12s；与火焰附加、枯萎三向互斥 |
-| 枯萎 | Ⅰ–Ⅱ | 剑 | ✗ | 专家 | 下界要塞 22%（权重 4）、堡垒 15%（权重 3）、古城 12%（权重 2） | 命中附凋零 6s/12s（可对亡灵）；武器伤害 -1/-0.5 |
-| 狂暴 | Ⅰ–Ⅱ | 剑/斧/矛 | ✗ | 大师 | 林地府邸 18%（权重 4）、前哨站 14%（权重 3） | 击杀得速度 II 6s / III 8s；斧上时长翻倍 |
-| 残杀 | Ⅰ | 剑/斧/矛 | ✗ | ✗ | 古城 20%（权重 3）、末地城 15%（权重 2）、林地府邸 10%（权重 2） | 残血增伤：10%~35% ×1.5（斧 ×2），<10% ×3（斧 ×4） |
-| 汲灵 | Ⅰ–Ⅴ | 剑/斧/矛 | ✓ | 老手 | 要塞图书馆 24%（权重 3） | 命中产经验球：原始伤害×0.2×等级，单次上限 2×等级 |
+- **MerlinLib**, installed on **both** the client and the server. It is required, not optional.
+- Both loaders are supported natively: **Fabric** and **NeoForge**.
+- This is a **client and server** mod: install it on both sides.
 
-### 防御 · 生存向
+### Installing
 
-| 附魔 | 等级 | 适用 | 附魔台 | 交易 | 宝箱 | 简介 |
-|------|------|------|:------:|:----:|------|------|
-| 恶魔交易 | Ⅰ–Ⅲ | 胸甲 | ✗ | ✗ | 古城 14%（权重 2）、埋藏的宝藏 10%（权重 2） | 致命伤消耗 64/56/48 绿宝石免死 + 黑暗 20/16/12s，60 秒冷却 |
-| 掉落不死亡 | Ⅰ–Ⅲ | 任意护甲 | ✗ | ✗ | 无（仅创造） | 免死但摧毁该装备、掉落全身物品，附黑暗 20/16/12s |
-| 羽落 | Ⅰ | 靴子 | ✗ | ✗ | 无（仅创造） | 常驻缓降、免疫摔伤；潜行失效；与摔落缓冲互斥 |
+1. Install MerlinLib for your loader.
+2. Drop the Practical Enchantments jar for your loader into `mods/`.
+3. Client and server both need both jars.
 
-> 恶魔交易与掉落不死亡互斥；虚空伤害与 `/kill` 无法免死（与不死图腾一致）。
+### Finding and giving enchantments in game
 
-### 三叉戟向
+MerlinLib provides the tooling, so this mod ships no commands of its own:
 
-| 附魔 | 等级 | 适用 | 附魔台 | 交易 | 宝箱 | 简介 |
-|------|------|------|:------:|:----:|------|------|
-| 贯穿 | Ⅰ–Ⅴ | 三叉戟 | ✓ | ✗ | 沉船宝藏 22%（权重 4） | 投掷额外伤害 1.5+0.5×(等级-1)；配忠诚时把命中目标物理拉回；与激流互斥；末影龙、凋灵免疫牵引 |
-| 粉碎 | Ⅰ–Ⅴ | 三叉戟 | ✓ | ✗ | 海底废墟 20%（权重 3）、沉船宝藏 14%（权重 2）、废弃矿井 12%（权重 2） | 投中方块瞬间破坏，等级对应镐级；配贯穿+忠诚时掉落物会被拉回身边 |
+- `/merlinlib list` - every non-vanilla enchantment in the registry, including all of this mod's.
+- `/merlinlib info <id>` - one enchantment: whether it is in the registry, its maximum level and weight.
+- `/merlinlib book <id> [level]` - hands out the enchanted book (operators).
+- Enchantment ids look like `practical_enchantments:<name>`, usable in commands, data packs and the item editor.
 
-**粉碎挖掘等级对照**：Ⅰ 木/金镐 → Ⅱ 石镐 → Ⅲ 铁镐 → Ⅳ 钻石镐 → Ⅴ 下界合金镐。等级达不到方块要求时只破坏、不掉落（与错用工具一致）。
+Enchantment **descriptions** in the tooltip come from an enchantment description mod (such as EnchantmentDescriptions); this mod does not draw them itself.
 
-### 生物互动向
+### Settings
 
-| 附魔 | 等级 | 适用 | 附魔台/战利品 | 可交易 | 获取途径 |
-|---|---|---|---|---|---|
-| 伪装 | 无等级 | 头颅（头槽） | ✗ | ✓ | 图书管理员 3 级（附魔书，24 绿宝石）；林间府邸 12%、堡垒遗迹宝藏 10%、要塞图书馆 10%、末地城 8%、掠夺者前哨 8% |
-| 猫咪护符 | 无等级 | 头盔 | ✗ | ✗ | 丛林神庙 10%、沉船宝藏 10%、沙漠神殿 8%、地牢 6% |
-| 吸猫体质 | 无等级 | 护腿 | ✗ | ✗ | 雪屋 10%、沉船补给 10%、地牢 6%、废弃矿井 6% |
+- Enchantment definitions, exclusion groups and villager trades are data pack resources, so `/reload` picks up changes without restarting.
+- The join message in chat: its text lives in `assets/practical_enchantments/lang/`, and its switch is `notice.merlinlib` in `config/practical_enchantments/common.properties`. It can also be overridden per mod from **MerlinLib config → General → Edit each mod's join notices**.
 
-> "可交易"＝**与图书管理员交易**（附魔书）；本轮只给伪装配了这条交易。三种附魔都能从上述箱子开出。
+### Links
 
-- **伪装**：戴上某生物的头颅，该生物族就不再**主动**仇恨你（骷髅头对骷髅族、凋灵骷髅头对凋灵骷髅——**对凋灵无效**、僵尸头对僵尸族、苦力怕头对苦力怕、猪灵头对猪灵**与蛮兵**；末影龙头与玩家头不对应任何生物）。你主动攻击过的生物照常还手。
-- **猫咪护符**：幻翼与苦力怕不仅不再仇恨你，还会主动绕开并保持距离。
-- **吸猫体质**：猫不再逃离你（它自己的躲避行为被取消）。
-
-三者都由 MerlinLib 的通用生物行为挂钩（`MerlinApi.ai()`）实现，本模组只登记规则，不自己写 mixin。
+- Repository and issues: <https://github.com/Huziyang520/Practical-Enchantments>
+- Also on CurseForge, under the same name.
 
 ---
 
-## 安装
+## 中文
 
-- **前置：MerlinLib**（本模组 1.3.0 起不再依赖 EnchantLib）。客户端与服务端**都要装** MerlinLib + Practical Enchantments。
-- 附魔定义、互斥组与村民交易全部是数据包资源，`/reload` 即可生效，不再需要资源包推送链路。
-- 进服时的公告文案与开关：文案在 `assets/practical_enchantments/lang/{zh_cn,en_us}.json`，开关在
-  `config/practical_enchantments/common.properties` 的 `notice.merlinlib`，也可以在 **MerlinLib 设置 → 通用 → 编辑各模组聊天栏提示** 里按模组覆盖。
+**Practical Enchantments（实用附魔）** 增加一批**在玩法上真的有用**的附魔：战斗、挖掘、防御、三叉戟，以及与生物互动的机制，而不是只改数字。每个附魔都构建在 **MerlinLib** 之上——由它完成注册、行为接线，并提供查看与发放的界面与指令。
 
-## 指令
+当前附魔清单见 CurseForge 页面；游戏内用 `/merlinlib list` 可以直接列出。
 
-- 附魔的查看与发放走 MerlinLib：`/merlinlib` 的子命令，或 MerlinLib 的物品编辑器界面。
-- 附魔 id 形如 `practical_enchantments:smashing`（可用于数据包、命令与测试工具）。
+### 它增加了什么
+
+- 面向**武器、工具、盔甲与三叉戟**的附魔，每个都有自己的效果，而不是单纯的数值加成。
+- 附魔之间的**互斥关系**，口径与铁砧、附魔台一致。
+- 顺着原版进程的**获取途径**：附魔台、图书管理员交易、结构箱子里的附魔书。
+- 一批**与生物互动**的附魔：它们改变的是生物的应对方式，而不是伤害数字。
+
+### 前置要求
+
+- **MerlinLib**，且**客户端与服务端都要安装**。它是必需前置，不是可选。
+- 原生支持 **Fabric** 与 **NeoForge** 双端。
+- 本模组是**客户端 + 服务端**模组，两端都要装。
+
+### 安装
+
+1. 为对应加载器装好 MerlinLib。
+2. 把对应加载器的 Practical Enchantments 放进 `mods/`。
+3. 客户端与服务端都需要这两个 jar。
+
+### 在游戏内查看与发放
+
+工具由 MerlinLib 提供，本模组不带自己的指令：
+
+- `/merlinlib list` —— 列出注册表里所有非原版附魔（含本模组全部）。
+- `/merlinlib info <id>` —— 单个附魔：是否在注册表、最大等级、权重。
+- `/merlinlib book <id> [等级]` —— 发放对应附魔书（需要 OP）。
+- 附魔 id 形如 `practical_enchantments:<名字>`，可用于指令、数据包与物品编辑器。
+
+附魔的**描述文本**由附魔描述类模组（如 EnchantmentDescriptions）显示；本模组自己不绘制描述。
+
+### 设置
+
+- 附魔定义、互斥组与村民交易都是**数据包资源**，改完 `/reload` 即生效，无需重启。
+- 进服时聊天栏的公告：文案在 `assets/practical_enchantments/lang/`，开关是 `config/practical_enchantments/common.properties` 的 `notice.merlinlib`；也可以在 **MerlinLib 设置 → 通用 → 编辑各模组聊天栏提示** 里按模组覆盖。
+
+### 链接
+
+- 仓库与问题反馈：<https://github.com/Huziyang520/Practical-Enchantments>
+- CurseForge 上同名可搜到。
