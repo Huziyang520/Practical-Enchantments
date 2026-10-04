@@ -20,7 +20,7 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.block.Block;
 
 /**
- * 夺首附魔 - 剑/斧/矛 Ⅲ 级（宝藏，不可附魔台，大师级图书管理员交易）。
+ * 夺首附魔 - 剑/斧/矛 Ⅲ 级（不可附魔台，大师级图书管理员交易）。
  *
  * <p>击杀有头颅的生物时，在原版掉落概率上额外增加 2.5%/级 的掉头率：
  * 僵尸、骷髅、苦力怕、凋灵骷髅、猪灵。凋灵骷髅原版基础概率 2.5%。</p>

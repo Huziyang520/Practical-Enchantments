@@ -55,6 +55,9 @@ public final class PracticalEnchantments {
 	 * <p>幂等：重复调用只会多挂几个只会执行一次的 lambda，真正的登记由下面的布尔量守住。</p>
 	 */
 	public static void bootstrap() {
+		// 进服提示先登记一次"默认开启"：MerlinLib 的提示设置界面在客户端就能列出本模组，
+		// 不必等到进过世界（真默认值在服务器启动、读完配置后再覆盖一次注册）。
+		MerlinLibNotice.registerEarly();
 		// 战利品：数据包读表之前就位（ServerStarting 早于数据包加载）。
 		MerlinApi.lifecycle().onServerStarting(server -> registerLootInjections());
 		// 事件回调与配置：数据包读完之后（动态注册表此时才有附魔）。
@@ -62,6 +65,8 @@ public final class PracticalEnchantments {
 			PracticalConfig.load();
 			MerlinLibNotice.register();
 			registerEventCallbacks(server.registryAccess());
+			// 第二批（2.5）三个附魔的生物行为：只向 MerlinLib 登记规则，AI 由库执行
+			AiRules.register(server.registryAccess());
 		});
 	}
 
@@ -75,6 +80,20 @@ public final class PracticalEnchantments {
 		if (lootRegistered) {
 			return;
 		}
+
+		registerLoot(QUALITY_TREASURE, 0.12F, "minecraft:chests/woodland_mansion", "practical_enchantments:disguise");
+		registerLoot(QUALITY_TREASURE, 0.10F, "minecraft:chests/bastion_treasure", "practical_enchantments:disguise");
+		registerLoot(QUALITY_TREASURE, 0.10F, "minecraft:chests/stronghold_library", "practical_enchantments:disguise");
+		registerLoot(QUALITY_TREASURE, 0.08F, "minecraft:chests/end_city_treasure", "practical_enchantments:disguise");
+		registerLoot(QUALITY_TREASURE, 0.08F, "minecraft:chests/pillager_outpost", "practical_enchantments:disguise");
+		registerLoot(QUALITY_RARE, 0.10F, "minecraft:chests/jungle_temple", "practical_enchantments:cat_charm");
+		registerLoot(QUALITY_RARE, 0.10F, "minecraft:chests/shipwreck_treasure", "practical_enchantments:cat_charm");
+		registerLoot(QUALITY_RARE, 0.08F, "minecraft:chests/desert_pyramid", "practical_enchantments:cat_charm");
+		registerLoot(QUALITY_RARE, 0.06F, "minecraft:chests/simple_dungeon", "practical_enchantments:cat_charm");
+		registerLoot(QUALITY_COMMON, 0.10F, "minecraft:chests/igloo_chest", "practical_enchantments:cat_attraction");
+		registerLoot(QUALITY_COMMON, 0.10F, "minecraft:chests/shipwreck_supply", "practical_enchantments:cat_attraction");
+		registerLoot(QUALITY_COMMON, 0.06F, "minecraft:chests/simple_dungeon", "practical_enchantments:cat_attraction");
+		registerLoot(QUALITY_COMMON, 0.06F, "minecraft:chests/abandoned_mineshaft", "practical_enchantments:cat_attraction");
 		lootRegistered = true;
 		// 中国人 —— 宝藏，仅远古城市 10%
 		registerLoot(QUALITY_TREASURE, 0.10F, LootTables.ANCIENT_CITY, ChineseEnchantment.ID);

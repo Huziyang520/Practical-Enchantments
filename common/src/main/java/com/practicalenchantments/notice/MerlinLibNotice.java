@@ -35,9 +35,9 @@ public final class MerlinLibNotice {
 	/** 翻译键（语言文件里就是这个名字） */
 	public static final String KEY = "practical_enchantments.notice.merlinlib";
 
-	/** 兜底文本：客户端没有本模组时显示这条，与 lang/zh_cn.json 逐字一致 */
+	/** 兜底文本：客户端没有本模组时显示这条，与 lang/en_us.json 逐字一致 */
 	public static final String FALLBACK =
-		"Practical Enchantments:本模组将于1.3.0版本开始将前置更换为MerlinLib并改为客户端+服务端模组，不再依赖EnchantLib，并且将优先开发26.3版本，26.2版本和其他版本的移植将被搁置一段时间。该提示可在配置文件中关闭。如果你有好的新附魔想法，欢迎在GitHub或着CurseForge上提交。";
+		"Practical Enchantments: Starting from version 1.3.0, this mod will switch its dependency to MerlinLib and become a client + server mod, no longer depending on EnchantLib. Development will prioritize version 1.20.1, while synchronization/porting for 26.2, 26.3, and other versions will be temporarily suspended for a while. If you have good ideas for new enchantments, welcome to submit them on GitHub or CurseForge. This notice can be disabled in the config file or in MerlinLib's config screen.";
 
 	/** 通知 id：命名空间就是归属模组，MerlinLib 的设置界面按它分组 */
 	private static final Identifier ID =
@@ -56,5 +56,18 @@ public final class MerlinLibNotice {
 		MerlinApi.notices().register(ID, NoticeMode.EVERY_JOIN,
 			Component.translatableWithFallback(KEY, FALLBACK),
 			PracticalConfig.isMerlinLibNoticeEnabled());
+	}
+
+	/**
+	 * 在模组构造期先登记一次（默认开启）。
+	 *
+	 * <p>MerlinLib 的「编辑各模组聊天栏提示」是客户端界面：它只列**已经注册过通知的模组**。本模组的正式注册
+	 * 发生在服务器启动完成（那时才读得到自己的配置），于是"没进过世界就看不到本模组那一行"。
+	 * 这里先用默认值登记一次让界面立刻能看到，进世界后再由 {@link #register()} 用配置里的真默认值覆盖
+	 * （同一 id 重复注册是覆盖）。</p>
+	 */
+	public static void registerEarly() {
+		MerlinApi.notices().register(ID, NoticeMode.EVERY_JOIN,
+			Component.translatableWithFallback(KEY, FALLBACK), true);
 	}
 }

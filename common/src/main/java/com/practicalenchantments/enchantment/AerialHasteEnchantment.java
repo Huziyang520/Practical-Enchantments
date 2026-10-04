@@ -7,8 +7,8 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.enchantment.Enchantment;
 
 /**
- * 浮空速掘附魔 - 头盔 I 级
- * 效果：消除空中挖掘速度惩罚（空中 = 地面速度）
+ * 浮空速掘附魔
+ * 消除空中挖掘速度惩罚
  */
 public final class AerialHasteEnchantment {
 

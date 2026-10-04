@@ -81,7 +81,10 @@ public abstract class TridentSmashMixin {
 
 		// 粉碎 × 忠诚：方块命中路径不走 onHitEntity，牵引窗口必须在这里显式启动，
 		// 否则粉碎掉落物永远拉不回来（坑 30 根因）
+		// 忠诚 + 粉碎 + 贯穿 三者齐备才牵引掉落物：README 一直这么写，代码此前只查了忠诚，
+		// 于是"没有贯穿也能把方块拉回来"。
 		if (DeathSaveSupport.getLevelFull(trident.getWeaponItem(), "minecraft:loyalty") > 0
+			&& DeathSaveSupport.getLevel(trident.getWeaponItem(), "penetration") > 0
 			&& owner instanceof net.minecraft.world.entity.player.Player player) {
 			TridentPullSupport.startItemPull(player.getUUID());
 		}

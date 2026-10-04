@@ -1,0 +1,17 @@
+{
+  "gives": {
+    "id": "minecraft:enchanted_book",
+    "components": {
+      "minecraft:stored_enchantments": {
+        "practical_enchantments:disguise": 1
+      }
+    }
+  },
+  "max_uses": 3,
+  "reputation_discount": 0.2,
+  "wants": {
+    "id": "minecraft:emerald",
+    "count": 24
+  },
+  "xp": 15
+}

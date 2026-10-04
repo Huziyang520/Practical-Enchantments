@@ -6,7 +6,8 @@
     "PlayerGetDestroySpeedMixin",
     "DeathSaveMixin",
     "TridentSmashMixin",
-    "TridentPullMixin"
+    "TridentPullMixin",
+    "CatMagnetTamingMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -16,7 +16,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 
 /**
- * 明朗附魔 - 头盔 I 级
+ * 明朗附魔
  *
  * <p><b>只回收自己授予的那份夜视</b>：玩家自己用 {@code /effect give}、药水、信标或其它模组
  * 拿到的夜视（尤其是 infinite 永久夜视）一律不覆盖、不删除。判定靠

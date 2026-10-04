@@ -91,12 +91,20 @@ public final class TridentPullSupport {
 		// 牵引命中生物（末影龙/凋灵免疫）
 		LivingEntity target = state.mobTarget;
 		if (target != null && target.isAlive()
-			&& !(target instanceof EnderDragon) && !(target instanceof WitherBoss)) {
+			&& !isBoss(target)) {
+			// 光设速度是拽不动的：生物的 AI 与寻路会在它自己的 tick 里把速度覆盖回去，这就是
+			// "完全拉不过来"的原因。先停掉它的寻路与目标，再每刻重设速度，才算真的拽住。
+			if (target instanceof net.minecraft.world.entity.Mob mob) {
+				mob.getNavigation().stop();
+				mob.setTarget(null);
+			}
+			target.setDeltaMovement(Vec3.ZERO);
 			Vec3 desired = owner.position().subtract(target.position());
 			if (desired.length() > PULL_EPSILON) {
-				double distBoost = Math.min(desired.length() / 16.0D, 1.2D);
+				double distBoost = Math.min(desired.length() / 12.0D, 1.6D);
 				target.setDeltaMovement(desired.normalize().scale(MOB_PULL_SPEED * distBoost)
 					.add(0, MOB_PULL_LIFT, 0));
+				target.fallDistance = 0.0F;
 				// 26.3 起 Entity#hurtMarked 字段已移除，markHurt() 改为写 syncVelocity；
 				// 牵引需要每刻把速度同步给客户端，直接置位该公开字段。
 				target.syncVelocity = true;
@@ -119,6 +127,24 @@ public final class TridentPullSupport {
 			ACTIVE.remove(owner.getUUID());
 		}
 		return true;
+	}
+
+	/**
+	 * BOSS 与"拽不动"的存在：一律不牵引。
+	 *
+	 * <p>除了末影龙与凋灵，还按实体 id 兜住监守者一类的重装怪——按 id 判定而不是逐个 instanceof，
+	 * 免得以后版本新增大型怪时又要回来补一次。</p>
+	 *
+	 * @param entity 候选目标
+	 * @return true 表示不牵引
+	 */
+	private static boolean isBoss(LivingEntity entity) {
+		if (entity instanceof EnderDragon || entity instanceof WitherBoss) {
+			return true;
+		}
+		String path = net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE
+			.getKey(entity.getType()).getPath();
+		return path.contains("dragon") || path.contains("wither") || path.contains("warden");
 	}
 
 	/** 清理某玩家的活动牵引（三叉戟落地/移除时不必精确清理，窗口到期自动清） */
