@@ -1,0 +1,252 @@
+// Practical Enchantments for Minecraft 1.20.1 / Forge.
+//
+// Single-module Forge project: one src/ tree holds both the loader independent logic and the
+// Forge specific code, split by package rather than by Gradle module.
+//
+// Toolchain: ForgeGradle 6 + Gradle 8.11 + JDK 17 (Forge 1.20.1 bundles Mixin 0.8.5, which only
+// understands compatibility level JAVA_17). The 1.20.1 runtime is SRG named, so mixins need a
+// refmap; ForgeGradle 6 generates and packages <mod_id>.refmap.json on its own.
+
+plugins {
+    id 'eclipse'
+    id 'idea'
+    id 'net.minecraftforge.gradle' version '[6.0.24,6.2)'
+}
+
+base {
+    // <mod_id>-<version>-forge-<minecraft_version>.jar
+    archivesName = "${mod_id}-${version}-forge-${minecraft_version}"
+}
+
+// The version is already part of archivesName, so drop the automatic -<version> suffix.
+tasks.withType(AbstractArchiveTask).configureEach {
+    archiveVersion = ''
+}
+
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(java_version)
+}
+
+minecraft {
+    mappings channel: 'official', version: minecraft_version
+    copyIdeResources = true
+
+    runs {
+        configureEach {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', ''
+            property 'forge.logging.console.level', 'debug'
+            mods {
+                "${mod_id}" {
+                    source sourceSets.main
+                }
+            }
+        }
+        client {
+            property 'forge.enabledGameTestNamespaces', mod_id
+        }
+        server {
+            property 'forge.enabledGameTestNamespaces', mod_id
+            args '--nogui'
+        }
+        data {
+            workingDirectory project.file('run-data')
+            args '--mod', mod_id, '--all',
+                    '--output', file('src/generated/resources/').getAbsolutePath(),
+                    '--existing', file('src/main/resources/').getAbsolutePath()
+        }
+    }
+}
+
+sourceSets.main.resources { srcDir 'src/generated/resources' }
+
+repositories {
+    maven {
+        name = 'AliyunPublic'
+        url = 'https://maven.aliyun.com/repository/public'
+    }
+    mavenCentral()
+}
+
+dependencies {
+    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+
+    // MerlinLib is a hard runtime prerequisite (declared in mods.toml, the player installs it).
+    // For compiling we only need its official-mapped classes: ForgeGradle reobfuscates the jar
+    // to SRG only at packaging time, so the raw class output of the library build is already in
+    // the same mapping namespace as this project.
+    // => Build MerlinLib/1.20.1 first, then this project.
+    compileOnly files(project.file("../../MerlinLib/1.20.1/build/classes/java/main"))
+
+    compileOnly 'org.spongepowered:mixin:0.8.5'
+    // The Mixin annotation processor, which is what WRITES the refmap. Without it the jar ships a
+    // mixins.json naming a refmap file nobody produced, and every mixin silently fails to apply.
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+    compileOnly 'com.google.code.findbugs:jsr305:3.0.2'
+}
+
+// ---------------------------------------------------------------------------------------------
+// The refmap: the four arguments it needs, and why each one is there
+// ---------------------------------------------------------------------------------------------
+// 1.20.1 runs SRG-named, so a mixin written against Mojang names has to be translated at build time.
+// That translation is the refmap, produced by Mixin's own annotation processor. This configuration
+// is copied from the MerlinLib project, where getting it wrong cost several build cycles; every
+// argument below is load bearing and each fails in a different, non-obvious way:
+//
+//   1. The processor itself must be on the annotation path. ForgeGradle 6 contains no Mixin
+//      integration at all, so without it the jar ships a mixins.json naming a refmap that does not
+//      exist, and every mixin silently fails to apply at runtime - the mod loads, its behaviour is
+//      absent, and nothing is logged.
+//
+//   2. `mappingTypes=tsrg`. This is the least obvious and the one that produces the most confusing
+//      failure. ObfuscationServiceFG3 does not register its `searge` environment unconditionally: it
+//      first asks `getOptions("mappingTypes").contains("tsrg")` and registers nothing at all when the
+//      answer is no. With no environment registered every lookup fails, no matter how correct the
+//      mapping file is.
+//
+//   3. `reobfTsrgFile`, not `mixin.env.refMapRemappingFile`. The latter is a RUNTIME system property
+//      and javac reports it as "not recognized by any processor". The former is the name in
+//      ObfuscationServiceFG3's constant pool.
+//
+//   4. The file must be TSRG, and ForgeGradle produces SRG. Hence the conversion task below, whose
+//      exact output grammar (2-token class lines, 2-token fields, 3-token methods with the descriptor
+//      BETWEEN the names) was read off the parser's bytecode rather than guessed.
+//
+// Verified against the machine's own 1.20.1 instance: every mod in its mods folder that ships a
+// mixins.json also ships a refmap (Patchouli, Jade, Alex's Caves, Citadel, KubeJS, ...).
+def srgToMcpFile = file("${project.buildDir}/createSrgToMcp/output.srg")
+def refmapTsrgFile = file("${project.buildDir}/tmp/mojmap-to-srg.tsrg")
+def refmapFile = file("${project.buildDir}/resources/main/${mod_id}.refmap.json")
+
+tasks.register('convertSrgToTsrg') {
+    dependsOn 'createSrgToMcp'
+    def input = srgToMcpFile
+    def output = refmapTsrgFile
+    inputs.file(input)
+    outputs.file(output)
+
+    doLast {
+        def members = [:].withDefault { [] }
+        int classCount = 0
+        int memberCount = 0
+
+        input.eachLine('UTF-8') { line ->
+            if (line.startsWith('MD: ')) {
+                // MD: <owner>/<srgName> <srgDesc> <owner>/<mojmapName> <mojmapDesc>
+                def parts = line.substring(4).split(' ')
+                if (parts.length >= 4) {
+                    int srgSlash = parts[0].lastIndexOf('/')
+                    int mojSlash = parts[2].lastIndexOf('/')
+                    if (srgSlash > 0 && mojSlash > 0) {
+                        def owner = parts[0].substring(0, srgSlash)
+                        def srgName = parts[0].substring(srgSlash + 1)
+                        def mojName = parts[2].substring(mojSlash + 1)
+                        if (srgName != mojName) {
+                            members[owner] << "\t${mojName} ${parts[1]} ${srgName}".toString()
+                            memberCount++
+                        }
+                    }
+                }
+            } else if (line.startsWith('FD: ')) {
+                // FD: <owner>/<srgField> <owner>/<mojmapField>
+                def parts = line.substring(4).split(' ')
+                if (parts.length >= 2) {
+                    int srgSlash = parts[0].lastIndexOf('/')
+                    int mojSlash = parts[1].lastIndexOf('/')
+                    if (srgSlash > 0 && mojSlash > 0) {
+                        def owner = parts[0].substring(0, srgSlash)
+                        def srgName = parts[0].substring(srgSlash + 1)
+                        def mojName = parts[1].substring(mojSlash + 1)
+                        if (srgName != mojName) {
+                            members[owner] << "\t${mojName} ${srgName}".toString()
+                            memberCount++
+                        }
+                    }
+                }
+            }
+        }
+
+        output.parentFile.mkdirs()
+        output.withWriter('UTF-8') { writer ->
+            writer.writeLine('tsrg2 mojmap srg')
+            members.keySet().sort().each { owner ->
+                // Two tokens, not one: the parser only treats a non-indented line as a class when it
+                // splits into more than one token, and a bare name is rejected as an unrecognised
+                // directive. The two names are identical here, but the arity is what dispatches.
+                writer.writeLine("${owner} ${owner}")
+                members[owner].each { writer.writeLine(it) }
+                classCount++
+            }
+        }
+        logger.lifecycle("convertSrgToTsrg: ${classCount} class(es), ${memberCount} member(s) -> ${output}")
+    }
+}
+
+tasks.named('compileJava', JavaCompile).configure {
+    dependsOn 'convertSrgToTsrg'
+    options.annotationProcessorPath = configurations.annotationProcessor
+    options.compilerArgs += [
+            "-AoutRefMapFile=${refmapFile}",
+            "-AmappingTypes=tsrg",
+            "-AreobfTsrgFile=${refmapTsrgFile}",
+            "-AoutTsrgFile=${file("${project.buildDir}/tmp/refmap-out.tsrg")}",
+            // `searge` is the ForgeGradle service's own name. Mixin 0.8.5 ships `searge` and `notch`
+            // and neither `mojang` nor `official`; naming a missing one makes the processor print
+            // "Specified default obfuscation environment ... was not defined" and fail every injector.
+            "-AdefaultObfuscationEnv=searge",
+    ]
+}
+
+// The source files carry Chinese comments; javac would otherwise use the platform charset (GBK)
+// and fail with "unmappable character".
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+tasks.named('processResources', ProcessResources).configure {
+    // The Mixin annotation processor writes the refmap INTO build/resources/main, which is the very
+    // directory this task packages. Without this dependency Gradle is free to run processResources
+    // first - and on a clean build it does - so the jar ends up with a mixins.json naming a refmap
+    // that was written a moment later and never copied in. The build still reports SUCCESS, and the
+    // only symptom is that every mixin fails to apply at runtime. This is the same dependency
+    // MerlinLib's build carries, for the same reason.
+    dependsOn tasks.named('compileJava')
+
+    var replaceProperties = [
+            minecraft_version         : minecraft_version,
+            minecraft_version_range   : minecraft_version_range,
+            forge_version             : forge_version,
+            forge_loader_version_range: forge_loader_version_range,
+            merlinlib_version         : merlinlib_version,
+            mod_id                    : mod_id,
+            mod_name                  : mod_name,
+            mod_author                : mod_author,
+            license                   : license,
+            credits                   : credits,
+            version                   : version,
+            description               : project.description,
+    ]
+    inputs.properties replaceProperties
+
+    filesMatching(['META-INF/mods.toml', 'pack.mcmeta']) {
+        expand replaceProperties
+    }
+}
+
+tasks.named('jar', Jar).configure {
+    manifest {
+        attributes([
+                'Specification-Title'   : mod_id,
+                'Specification-Vendor'  : mod_author,
+                'Specification-Version' : '1',
+                'Implementation-Title'  : project.name,
+                'Implementation-Version': project.version,
+                'Implementation-Vendor' : mod_author,
+                'Built-On-Minecraft'    : minecraft_version,
+                // Forge 1.20.1's ModFileParser has no `mixins` key in mods.toml, so the mixin
+                // configuration is announced the classic way: through this manifest attribute.
+                'MixinConfigs'          : "${mod_id}.mixins.json",
+        ])
+    }
+    finalizedBy 'reobfJar'
+}

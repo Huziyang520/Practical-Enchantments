@@ -1,0 +1,125 @@
+package com.practicalenchantments.enchantment;
+
+import com.huziyang520.merlinlib.api.EntityCounter;
+import com.huziyang520.merlinlib.event.EnchantmentEventRegistrar;
+import com.huziyang520.merlinlib.event.GlobalEvents;
+import com.huziyang520.merlinlib.event.LivingEntityTickEvent;
+import com.practicalenchantments.PracticalEnchantments;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+
+/**
+ * 羽落附魔 - 靴子单级（娱乐，仅创造/指令获取）。
+ *
+ * <p>穿着时持续获得缓降，免疫摔落伤害；潜行（Shift）时缓降失效以恢复正常下落速度。
+ * 与原版摔落缓冲（羽毛掉落）互斥。</p>
+ *
+ * <p><b>只回收自己授予的那份缓降</b>：玩家自己用 {@code /effect give}、药水或其它模组拿到的缓降
+ * （尤其是 infinite 永久缓降）一律不覆盖、不删除。判定靠 {@link EntityCounter} 标记 +
+ * "当前实例是否就是本附魔施加的短时长实例"两道条件（同「明朗」的写法，见坑 19 的思路）。</p>
+ *
+ * <p>授予方式用 <b>有限时长 + 定期刷新</b>（20 秒 / 每 20 tick 刷新）而不是无限时长：
+ * 标记不持久化（玩家离线即清），有限时长兜底保证任何情况下缓降都会自然过期、不会永久残留。
+ * 剩余时长始终 ≥380 tick，不会进入原版图标闪烁区间（&lt;200 tick）。</p>
+ *
+ * <h2>1.20.1 移植说明（相对 26.3 的强制差异）</h2>
+ * <ol>
+ * <li><b>{@code registerCallbacks} 去掉 {@code HolderLookup.Provider} 参数</b>，改用
+ * {@code PracticalEnchantments.resolveEnchantment(ID)}（原因见 {@code AerialHasteEnchantment}
+ * 类注释第 1 条）。</li>
+ *
+ * <li><b>{@code Holder<Enchantment>} → {@code Enchantment}</b>：见 {@code VenomEnchantment}
+ * 类注释第 2 条。</li>
+ *
+ * <li><b>{@code Identifier} → {@code ResourceLocation}；{@code Identifier.fromNamespaceAndPath(a, b)}
+ * → {@code new ResourceLocation(a, b)}</b>：见 {@code BrightEnchantment} 类注释第 3 条。</li>
+ *
+ * <li><b>{@code boots.getEnchantments().getLevel(HOLDER)} →
+ * {@code EnchantmentHelper.getItemEnchantmentLevel(HOLDER, boots)}</b>：见
+ * {@code BrightEnchantment} 类注释第 4 条。</li>
+ *
+ * <li><b>注意本类与「明朗」的一处不对称，26.3 就是这样，未改。</b>「明朗」在判定前先挡掉非
+ * {@code ServerPlayer}，本类<b>不挡</b>：它对<b>任何</b>活体生效，包括僵尸穿靴子。这不是 1.20.1
+ * 造成的差异，是 26.3 的原始行为，移植时原样保留（顺带说明：{@link EntityCounter} 挂在
+ * {@code Entity} 上，非玩家实体同样可用）。</li>
+ *
+ * <li><b>没有其它改动。</b>{@code entity.getItemBySlot(EquipmentSlot.FEET)}、
+ * {@code entity.isShiftKeyDown()}、{@code getEffect/addEffect/removeEffect}、
+ * {@code MobEffectInstance} 五参构造器、{@code isInfiniteDuration()/getAmplifier()/getDuration()}
+ * 全部同形。{@code MobEffects.SLOW_FALLING} 在 1.20.1 也叫这个名字（不像
+ * {@code SPEED} 改成了 {@code MOVEMENT_SPEED}）。</li>
+ * </ol>
+ */
+public final class GentleDescentEnchantment {
+
+	public static final String ID = PracticalEnchantments.MOD_ID + ":gentle_descent";
+
+
+	private static Enchantment HOLDER;
+
+	/** 缓降时长（20 秒）：有限时长 + 刷新，保证任何情况下都会自然过期 */
+	private static final int SLOW_FALLING_DURATION = 400;
+
+	/** 刷新间隔（tick）：每 20 tick 一次，剩余时长始终 ≥380 tick，不会闪烁 */
+	private static final int REFRESH_INTERVAL = 20;
+
+	/** EntityCounter 标记：当前缓降由本附魔授予（只撤销自己授予的） */
+	private static final ResourceLocation SF_GRANTED =
+		new ResourceLocation(PracticalEnchantments.MOD_ID, "gentle_descent_sf_granted");
+
+	private GentleDescentEnchantment() {
+	}
+
+
+	public static void registerCallbacks(EnchantmentEventRegistrar registrar) {
+		HOLDER = PracticalEnchantments.resolveEnchantment(ID);
+		GlobalEvents.enableLivingEntityTick();
+		GlobalEvents.LIVING_ENTITY_TICK.register(GentleDescentEnchantment::onLivingTick);
+	}
+
+	private static void onLivingTick(LivingEntityTickEvent event) {
+		var entity = event.entity();
+		ItemStack boots = entity.getItemBySlot(EquipmentSlot.FEET);
+		boolean hasGentle = HOLDER != null && !boots.isEmpty()
+			&& EnchantmentHelper.getItemEnchantmentLevel(HOLDER, boots) > 0;
+
+		MobEffectInstance current = entity.getEffect(MobEffects.SLOW_FALLING);
+
+		if (hasGentle && !entity.isShiftKeyDown()) {
+			// 只在"没有缓降"或"现有缓降就是本附魔给的短时长缓降"时施加 / 刷新。
+			// 玩家自己拿到的缓降（药水 / 指令 / 其它模组，尤其 infinite）一律不覆盖、不降级。
+			if (current == null) {
+				entity.addEffect(new MobEffectInstance(
+					MobEffects.SLOW_FALLING, SLOW_FALLING_DURATION, 0, true, false));
+			} else if (isOurs(current) && event.tickCount() % REFRESH_INTERVAL == 0) {
+				entity.addEffect(new MobEffectInstance(
+					MobEffects.SLOW_FALLING, SLOW_FALLING_DURATION, 0, true, false));
+			}
+			EntityCounter.set(entity, SF_GRANTED, 1);
+		} else {
+			// 潜行 / 脱靴：只回收本附魔授予的那一份。
+			// ⚠️ 不能无条件删除"所有无限时长缓降"——那会连玩家自己上的永久缓降一起删掉。
+			if (current != null && isOurs(current) && EntityCounter.get(entity, SF_GRANTED) > 0) {
+				entity.removeEffect(MobEffects.SLOW_FALLING);
+			}
+			EntityCounter.set(entity, SF_GRANTED, 0);
+		}
+	}
+
+	/**
+	 * 判断当前状态效果是否就是本附魔施加的那一份（非无限时长、0 级、不超过本附魔给的时长）。
+	 *
+	 * <p>玩家自己用指令 / 药水拿到的缓降要么是无限时长、要么时长明显长于
+	 * {@link #SLOW_FALLING_DURATION}，因此不会被误判、更不会被删除。</p>
+	 */
+	private static boolean isOurs(MobEffectInstance instance) {
+		return !instance.isInfiniteDuration()
+			&& instance.getAmplifier() == 0
+			&& instance.getDuration() <= SLOW_FALLING_DURATION;
+	}
+}

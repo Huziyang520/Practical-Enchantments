@@ -1,0 +1,17 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.practicalenchantments.mixin",
+  "refmap": "practical_enchantments.refmap.json",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "PlayerGetDestroySpeedMixin",
+    "DeathSaveMixin",
+    "TridentSmashMixin",
+    "TridentPullMixin",
+    "CatMagnetTamingMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
