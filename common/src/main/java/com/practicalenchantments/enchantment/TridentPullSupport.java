@@ -187,7 +187,32 @@ public final class TridentPullSupport {
 		item.setDeltaMovement(direction.scale(ITEM_PULL_SPEED).add(0, 0.04D, 0));
 		item.setPickUpDelay(0);
 		item.syncVelocity = true;
-		crossObstacles(level, item, direction, distance);
+		// 只设速度是不够的：地面摩擦、与主人自身及邻近掉落物的推挤、以及"我们设速度"与"掉落物自己
+		// tick"的先后顺序都会把这一速度吃掉，表现就是"拉了但拉不回来"。所以这里每刻再直接把掉落物
+		// 朝主人推进一步——位移不经过物理，强度不受任何因素影响。
+		stepToward(level, item, direction, distance);
+	}
+
+	/**
+	 * 每刻一次的位置直推：把掉落物朝主人推一小步，被方块挡住就跨过去。
+	 *
+	 * <p>步子取 {@code min(ITEM_PULL_SPEED, 剩余距离)}，所以永远不会冲过主人；挡路时交给
+	 * {@link #crossObstacles} 按跨越逻辑处理（跨不过去本刻不动，绝不塞进方块里）。</p>
+	 *
+	 * @param level     服务端世界
+	 * @param item      掉落物
+	 * @param direction 单位化的"朝玩家"方向
+	 * @param distance  到玩家的剩余距离
+	 */
+	private static void stepToward(ServerLevel level, ItemEntity item, Vec3 direction, double distance) {
+		double step = Math.min(ITEM_PULL_SPEED, distance);
+		Vec3 offset = direction.scale(step);
+		if (blockedByBlock(level, item, item.getBoundingBox().move(offset))) {
+			crossObstacles(level, item, direction, distance);
+			return;
+		}
+		Vec3 to = item.position().add(offset);
+		item.setPos(to.x, to.y, to.z);
 	}
 
 	/**
