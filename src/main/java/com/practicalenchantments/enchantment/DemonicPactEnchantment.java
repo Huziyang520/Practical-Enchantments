@@ -93,7 +93,11 @@ public final class DemonicPactEnchantment {
 			return false;
 		}
 
-		int cost = 64 - 8 * (level - 1);
+		// 消耗下限 16：清单的原式是 64 - 8 × (等级-1)（Ⅰ/Ⅱ/Ⅲ = 64/56/48），但等级并不总是
+		// 停在 Ⅲ——其他模组可以突破等级上限，到 8 级时原式只剩 8 个、9 级起为 0 甚至负数，
+		// 而负数会让 countEmeralds() < cost 恒为 false，等于完全不要绿宝石的免死。用户拍板：
+		// 至少消耗 16 个（平衡性）。
+		int cost = Math.max(16, 64 - 8 * (level - 1));
 		if (countEmeralds(player) < cost) {
 			return false;
 		}
