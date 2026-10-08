@@ -30,6 +30,26 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * <p>同一玩家同时多把三叉戟回归时共用一条状态，牵引每刻重设速度，
  * 效果只增强不冲突。</p>
+ *
+ * <h2>跨方块：为什么是位置直移，而不是给掉落物"开穿透"</h2>
+ *
+ * <p>掉落物被拉向玩家的路上遇到方块会被原版碰撞挡住（跨一格或多格障碍即被拦截）。直觉的修法是
+ * 牵引期间给掉落物开穿透（{@code Entity.noPhysics = true}），<b>但对 {@code ItemEntity} 无效</b>：
+ * {@code javap -c net.minecraft.world.entity.item.ItemEntity} 显示它每一步 tick 都自己重算该字段
+ * ——客户端分支直接置 {@code false}；服务端分支置 {@code !level.noCollision(this, box)}，为真时还会
+ * 调 {@code moveTowardsClosestSpace} 把自己挤出方块。也就是说外部置的值会被它自己的 tick 覆盖，
+ * 穿透这条路根本不成立（该行为在本线与 1.20.1 线一致，两边都实测过字节码）。</p>
+ *
+ * <p>因此改为<b>位置直移</b>：每刻先用掉落物自己的碰撞盒按同样的一小步做一次 {@code noCollision}
+ * 探测，只有在"这一步会被挡住"时才沿同一方向一次跨过整个障碍——从第 2 步起逐步加大，找到第一个
+ * 碰撞盒放得下的位置再 {@code setPos}，最多跨 {@link #ITEM_CROSS_MAX_STEPS} 步（0.5 × 8 = 4 格）。
+ * 这样：</p>
+ * <ul>
+ *   <li>空旷处完全不介入，原有速度牵引一分不改；</li>
+ *   <li>跨过去的是<b>整个障碍</b>，掉落物不会停在方块内部（停在内部会被原版挤回原侧，等于白跨）；</li>
+ *   <li>厚墙或贴天花板时找不到落点就本刻不动、等下一刻，绝不把掉落物塞进石头里；</li>
+ *   <li>跨越距离按到玩家的剩余距离封顶，不会冲过头。</li>
+ * </ul>
  */
 public final class TridentPullSupport {
 
@@ -40,6 +60,15 @@ public final class TridentPullSupport {
 	/** 掉落物牵引速度与半径（力度必须盖过地面摩擦才能"拉到身边"） */
 	public static final double ITEM_PULL_SPEED = 0.45D;
 	public static final double ITEM_PULL_RADIUS = 6.0D;
+	/**
+	 * 跨越障碍时每一步的长度（既是探测粒度，也是"至少跨多远"）。
+	 *
+	 * <p>用 0.5 是为了与 {@link #ITEM_PULL_SPEED} 同量级：跨越时每刻前进的距离与正常牵引差不多，
+	 * 观感上不会一会儿慢一会儿瞬移。</p>
+	 */
+	public static final double ITEM_CROSS_STEP = 0.5D;
+	/** 一次跨越最多前进的步数（0.5 × 8 = 4 格）；再厚就本刻放弃、等下一刻 */
+	public static final int ITEM_CROSS_MAX_STEPS = 8;
 	/** 距离小于该值停止牵引（避免抖动） */
 	public static final double PULL_EPSILON = 0.5D;
 	/** 粉碎产物牵引窗口（tick）：要长于掉落物飞回来的时间 */
@@ -117,9 +146,12 @@ public final class TridentPullSupport {
 		for (ItemEntity item : level.getEntitiesOfClass(ItemEntity.class,
 			anchor.getBoundingBox().inflate(ITEM_PULL_RADIUS))) {
 			Vec3 move = ownerPos.subtract(item.position());
-			if (move.length() > PULL_EPSILON) {
-				item.setDeltaMovement(move.normalize().scale(ITEM_PULL_SPEED).add(0, 0.04D, 0));
+			double distance = move.length();
+			if (distance > PULL_EPSILON) {
+				Vec3 direction = move.scale(1.0D / distance);
+				item.setDeltaMovement(direction.scale(ITEM_PULL_SPEED).add(0, 0.04D, 0));
 				item.setPickUpDelay(0);
+				crossObstacles(level, item, direction, distance);
 			}
 		}
 
@@ -127,6 +159,41 @@ public final class TridentPullSupport {
 			ACTIVE.remove(owner.getUUID());
 		}
 		return true;
+	}
+
+	/**
+	 * 下一步会被方块挡住时，把掉落物沿同一方向一次送到障碍另一侧的空位上。
+	 *
+	 * <p>探测用的是掉落物自己的碰撞盒（与它 {@code move()} 时同一套判定）：先把碰撞盒按一小步
+	 * （{@link #ITEM_CROSS_STEP}）前移，{@code noCollision} 为真说明这一步走得通，直接交给原版移动，
+	 * 本方法不介入；为假才从第 2 步起逐步加大，取第一个碰撞盒放得下的位置直移过去。最多
+	 * {@link #ITEM_CROSS_MAX_STEPS} 步，且不超过到玩家的剩余距离（免得冲过头）。</p>
+	 *
+	 * <p>为什么必须"跨过整个障碍"而不是往前挪一点点：掉落物一旦停在方块内部，{@code ItemEntity}
+	 * 自己的 tick 会把 {@code noPhysics} 置真并调 {@code moveTowardsClosestSpace} 把它挤出去，
+	 * 多半就是被挤回原侧——那等于没跨。所以宁可一次跨到位。</p>
+	 *
+	 * @param level     服务端世界
+	 * @param item      掉落物
+	 * @param direction 单位化的"朝玩家"方向
+	 * @param distance  到玩家的剩余距离
+	 */
+	private static void crossObstacles(ServerLevel level, ItemEntity item, Vec3 direction,
+		double distance) {
+		Vec3 step = direction.scale(ITEM_CROSS_STEP);
+		if (level.noCollision(item, item.getBoundingBox().move(step))) {
+			return;
+		}
+		int furthest = (int) Math.min(ITEM_CROSS_MAX_STEPS, distance / ITEM_CROSS_STEP);
+		Vec3 from = item.position();
+		for (int steps = 2; steps <= furthest; steps++) {
+			Vec3 offset = step.scale(steps);
+			if (level.noCollision(item, item.getBoundingBox().move(offset))) {
+				Vec3 landing = from.add(offset);
+				item.setPos(landing.x, landing.y, landing.z);
+				return;
+			}
+		}
 	}
 
 	/**
