@@ -222,9 +222,22 @@ public final class TridentPullSupport {
 	 * 下一步会被方块挡住时，把掉落物沿同一方向一次送到障碍另一侧的空位上。
 	 *
 	 * <p>探测用的是掉落物自己的碰撞盒（与它 {@code move()} 时同一套判定）：先把碰撞盒按一小步
-	 * （{@link #ITEM_CROSS_STEP}）前移，{@code noCollision} 为真说明这一步走得通，直接交给原版移动，
-	 * 本方法不介入；为假才从第 2 步起逐步加大，取第一个碰撞盒放得下的位置直移过去。最多
-	 * {@link #ITEM_CROSS_MAX_STEPS} 步，且不超过到玩家的剩余距离（免得冲过头）。</p>
+	 * （{@link #ITEM_CROSS_STEP}）前移，这一步走得通就直接交给原版移动，本方法不介入；走不通才从
+	 * 第 2 步起逐步加大，取第一个碰撞盒放得下的位置直移过去。最多 {@link #ITEM_CROSS_MAX_STEPS}
+	 * 步，且不超过到玩家的剩余距离（免得冲过头）。</p>
+	 *
+	 * <h2>探测为什么必须是纯方块，而不是 {@code noCollision}</h2>
+	 *
+	 * <p>初版用的是 {@code Level#noCollision(Entity, AABB)}。它看着合适，实际把<b>实体</b>也算进
+	 * 碰撞（{@code CollisionGetter} 里它就是 {@code getEntityCollisions(...).isEmpty()} 加上方块
+	 * 那一半），于是平地上也会"被挡住"：掉落物被牵引到玩家身边时，前移一步的碰撞盒正好套住玩家
+	 * 自己的身体，探测报真，跨越逻辑便按同一方向去找 1~4 格外的"空位"——找到的是玩家<b>另一侧</b>
+	 * 的地面，于是 {@code setPos} 把掉落物瞬移过玩家，下一刻方向反过来又瞬移回来。表现就是
+	 * "平地也拉不回来"，一直在玩家身侧抖。</p>
+	 *
+	 * <p>成群掉落物同理：彼此也是实体，同样互相当成障碍。所以探测改用
+	 * {@code CollisionGetter#getBlockCollisions}——它只取方块形状，玩家与邻近掉落物都不再算障碍，
+	 * 跨越只为真正的方块存在。</p>
 	 *
 	 * <p>为什么必须"跨过整个障碍"而不是往前挪一点点：掉落物一旦停在方块内部，{@code ItemEntity}
 	 * 自己的 tick 会把 {@code noPhysics} 置真并调 {@code moveTowardsClosestSpace} 把它挤出去，
@@ -238,19 +251,34 @@ public final class TridentPullSupport {
 	private static void crossObstacles(ServerLevel level, ItemEntity item, Vec3 direction,
 		double distance) {
 		Vec3 step = direction.scale(ITEM_CROSS_STEP);
-		if (level.noCollision(item, item.getBoundingBox().move(step))) {
+		if (!blockedByBlock(level, item, item.getBoundingBox().move(step))) {
 			return;
 		}
 		int furthest = (int) Math.min(ITEM_CROSS_MAX_STEPS, distance / ITEM_CROSS_STEP);
 		Vec3 from = item.position();
 		for (int steps = 2; steps <= furthest; steps++) {
 			Vec3 offset = step.scale(steps);
-			if (level.noCollision(item, item.getBoundingBox().move(offset))) {
+			if (!blockedByBlock(level, item, item.getBoundingBox().move(offset))) {
 				Vec3 landing = from.add(offset);
 				item.setPos(landing.x, landing.y, landing.z);
 				return;
 			}
 		}
+	}
+
+	/**
+	 * 这一段碰撞盒是否被<b>方块</b>挡住（不算实体）。
+	 *
+	 * <p>{@code getBlockCollisions} 是 {@code CollisionGetter} 上的公开方法，返回的只有方块形状与
+	 * 世界边界；玩家、生物、其他掉落物都不在其中。跨越逻辑只该被方块触发，所以用它。</p>
+	 *
+	 * @param level 服务端世界
+	 * @param item  掉落物（提供碰撞上下文，例如它自己的尺寸与 {@code noPhysics}）
+	 * @param box   待测的碰撞盒
+	 * @return true 表示被方块挡住
+	 */
+	private static boolean blockedByBlock(ServerLevel level, ItemEntity item, net.minecraft.world.phys.AABB box) {
+		return level.getBlockCollisions(item, box).iterator().hasNext();
 	}
 
 	/**
