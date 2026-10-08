@@ -58,8 +58,15 @@ public final class TridentPullSupport {
 	/** 牵引上抛分量：让目标离地，减少地面摩擦 */
 	public static final double MOB_PULL_LIFT = 0.12D;
 	/** 掉落物牵引速度与半径（力度必须盖过地面摩擦才能"拉到身边"） */
-	public static final double ITEM_PULL_SPEED = 0.45D;
-	public static final double ITEM_PULL_RADIUS = 6.0D;
+	public static final double ITEM_PULL_SPEED = 0.55D;
+	public static final double ITEM_PULL_RADIUS = 10.0D;
+	/**
+	 * 以玩家为中心的第二扫描半径。
+	 *
+	 * <p>三叉戟只扫自己身边（{@link #ITEM_PULL_RADIUS}），而被粉碎的方块可能在回归路径之外，
+	 * 其掉落物从不在三叉戟的扫描球里出现过——这就是"经常失败"。玩家身边再扫一遍把它们接上。</p>
+	 */
+	public static final double ITEM_PULL_PLAYER_RADIUS = 8.0D;
 	/**
 	 * 跨越障碍时每一步的长度（既是探测粒度，也是"至少跨多远"）。
 	 *
@@ -72,7 +79,7 @@ public final class TridentPullSupport {
 	/** 距离小于该值停止牵引（避免抖动） */
 	public static final double PULL_EPSILON = 0.5D;
 	/** 粉碎产物牵引窗口（tick）：要长于掉落物飞回来的时间 */
-	public static final int ITEM_PULL_DURATION_TICKS = 60;
+	public static final int ITEM_PULL_DURATION_TICKS = 100;
 	/** 实体命中牵引窗口（tick） */
 	public static final int MOB_PULL_DURATION_TICKS = 25;
 
@@ -145,14 +152,12 @@ public final class TridentPullSupport {
 		Vec3 ownerPos = owner.position();
 		for (ItemEntity item : level.getEntitiesOfClass(ItemEntity.class,
 			anchor.getBoundingBox().inflate(ITEM_PULL_RADIUS))) {
-			Vec3 move = ownerPos.subtract(item.position());
-			double distance = move.length();
-			if (distance > PULL_EPSILON) {
-				Vec3 direction = move.scale(1.0D / distance);
-				item.setDeltaMovement(direction.scale(ITEM_PULL_SPEED).add(0, 0.04D, 0));
-				item.setPickUpDelay(0);
-				crossObstacles(level, item, direction, distance);
-			}
+			pullItem(level, item, ownerPos);
+		}
+		// 再以玩家为中心扫一遍：偏离回归路径的产物从未进入三叉戟的扫描球，只有这一遍能接住。
+		for (ItemEntity item : level.getEntitiesOfClass(ItemEntity.class,
+			owner.getBoundingBox().inflate(ITEM_PULL_PLAYER_RADIUS))) {
+			pullItem(level, item, ownerPos);
 		}
 
 		if (state.ticks <= 0) {
@@ -162,12 +167,49 @@ public final class TridentPullSupport {
 	}
 
 	/**
+	 * 把一件掉落物朝玩家拽一步。
+	 *
+	 * <p>和生物分支一样每刻重设速度；关键在于补上速度同步——26.3 的服务端只在
+	 * {@code Entity#syncVelocity} 置位时才把这一时刻的速度发出去（生物分支一直在置位，掉落物分支
+	 * 原先漏了：服务端一直在拉，客户端看到的还是旧位置，表现就是"拉了但经常像失败"）。</p>
+	 *
+	 * @param level    服务端世界（跨越障碍时用它做碰撞探测）
+	 * @param item     掉落物
+	 * @param ownerPos 玩家的当前位置
+	 */
+	private static void pullItem(ServerLevel level, ItemEntity item, Vec3 ownerPos) {
+		Vec3 move = ownerPos.subtract(item.position());
+		double distance = move.length();
+		if (distance <= PULL_EPSILON) {
+			return;
+		}
+		Vec3 direction = move.scale(1.0D / distance);
+		item.setDeltaMovement(direction.scale(ITEM_PULL_SPEED).add(0, 0.04D, 0));
+		item.setPickUpDelay(0);
+		item.syncVelocity = true;
+		crossObstacles(level, item, direction, distance);
+	}
+
+	/**
 	 * 下一步会被方块挡住时，把掉落物沿同一方向一次送到障碍另一侧的空位上。
 	 *
 	 * <p>探测用的是掉落物自己的碰撞盒（与它 {@code move()} 时同一套判定）：先把碰撞盒按一小步
-	 * （{@link #ITEM_CROSS_STEP}）前移，{@code noCollision} 为真说明这一步走得通，直接交给原版移动，
-	 * 本方法不介入；为假才从第 2 步起逐步加大，取第一个碰撞盒放得下的位置直移过去。最多
-	 * {@link #ITEM_CROSS_MAX_STEPS} 步，且不超过到玩家的剩余距离（免得冲过头）。</p>
+	 * （{@link #ITEM_CROSS_STEP}）前移，这一步走得通就直接交给原版移动，本方法不介入；走不通才从
+	 * 第 2 步起逐步加大，取第一个碰撞盒放得下的位置直移过去。最多 {@link #ITEM_CROSS_MAX_STEPS}
+	 * 步，且不超过到玩家的剩余距离（免得冲过头）。</p>
+	 *
+	 * <h2>探测为什么必须是纯方块，而不是 {@code noCollision}</h2>
+	 *
+	 * <p>初版用的是 {@code Level#noCollision(Entity, AABB)}。它看着合适，实际把<b>实体</b>也算进
+	 * 碰撞（{@code CollisionGetter} 里它就是 {@code getEntityCollisions(...).isEmpty()} 加上方块
+	 * 那一半），于是平地上也会"被挡住"：掉落物被牵引到玩家身边时，前移一步的碰撞盒正好套住玩家
+	 * 自己的身体，探测报真，跨越逻辑便按同一方向去找 1~4 格外的"空位"——找到的是玩家<b>另一侧</b>
+	 * 的地面，于是 {@code setPos} 把掉落物瞬移过玩家，下一刻方向反过来又瞬移回来。表现就是
+	 * "平地也拉不回来"，一直在玩家身侧抖。</p>
+	 *
+	 * <p>成群掉落物同理：彼此也是实体，同样互相当成障碍。所以探测改用
+	 * {@code CollisionGetter#getBlockCollisions}——它只取方块形状，玩家与邻近掉落物都不再算障碍，
+	 * 跨越只为真正的方块存在。</p>
 	 *
 	 * <p>为什么必须"跨过整个障碍"而不是往前挪一点点：掉落物一旦停在方块内部，{@code ItemEntity}
 	 * 自己的 tick 会把 {@code noPhysics} 置真并调 {@code moveTowardsClosestSpace} 把它挤出去，
@@ -181,19 +223,34 @@ public final class TridentPullSupport {
 	private static void crossObstacles(ServerLevel level, ItemEntity item, Vec3 direction,
 		double distance) {
 		Vec3 step = direction.scale(ITEM_CROSS_STEP);
-		if (level.noCollision(item, item.getBoundingBox().move(step))) {
+		if (!blockedByBlock(level, item, item.getBoundingBox().move(step))) {
 			return;
 		}
 		int furthest = (int) Math.min(ITEM_CROSS_MAX_STEPS, distance / ITEM_CROSS_STEP);
 		Vec3 from = item.position();
 		for (int steps = 2; steps <= furthest; steps++) {
 			Vec3 offset = step.scale(steps);
-			if (level.noCollision(item, item.getBoundingBox().move(offset))) {
+			if (!blockedByBlock(level, item, item.getBoundingBox().move(offset))) {
 				Vec3 landing = from.add(offset);
 				item.setPos(landing.x, landing.y, landing.z);
 				return;
 			}
 		}
+	}
+
+	/**
+	 * 这一段碰撞盒是否被<b>方块</b>挡住（不算实体）。
+	 *
+	 * <p>{@code getBlockCollisions} 是 {@code CollisionGetter} 上的公开方法，返回的只有方块形状与
+	 * 世界边界；玩家、生物、其他掉落物都不在其中。跨越逻辑只该被方块触发，所以用它。</p>
+	 *
+	 * @param level 服务端世界
+	 * @param item  掉落物（提供碰撞上下文，例如它自己的尺寸与 {@code noPhysics}）
+	 * @param box   待测的碰撞盒
+	 * @return true 表示被方块挡住
+	 */
+	private static boolean blockedByBlock(ServerLevel level, ItemEntity item, net.minecraft.world.phys.AABB box) {
+		return level.getBlockCollisions(item, box).iterator().hasNext();
 	}
 
 	/**
