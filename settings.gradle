@@ -1,0 +1,45 @@
+pluginManagement {
+	repositories {
+		// 国内镜像在前（离线构建走缓存，联网兜底时优先镜像）
+		maven {
+			name = 'AliyunPublic'
+			url = uri('https://maven.aliyun.com/repository/public')
+		}
+		gradlePluginPortal()
+		mavenCentral()
+		// CurseGradle（de.maxhenkel.cursegradle）未发布到 Gradle 插件门户，走作者自有 Maven
+		maven { url 'https://maven.maxhenkel.de/releases' }
+		exclusiveContent {
+			forRepository {
+				maven {
+					name = 'Fabric'
+					url = uri('https://maven.fabricmc.net')
+				}
+			}
+			filter {
+				includeGroupAndSubgroups('net.fabricmc')
+			}
+		}
+		exclusiveContent {
+			forRepository {
+				maven {
+					name = 'NeoForge'
+					url = uri('https://maven.neoforged.net/releases')
+				}
+			}
+			filter {
+				includeGroupAndSubgroups('net.neoforged')
+			}
+		}
+	}
+}
+plugins {
+	id 'org.gradle.toolchains.foojay-resolver-convention' version '1.0.0'
+}
+rootProject.name = 'practical-enchantments-multiloader'
+includeBuild('build-logic')
+// MerlinLib 走 mavenLocal 的已发布产物（本区间的坐标 merlinlib-*-26.1-26.2:0.9.0），
+// 不用复合构建指向 MerlinLib 源码目录：那条路线会把 MerlinLib 的 build 目录带进本次构建。
+include('common')
+include('fabric')
+include('neoforge')

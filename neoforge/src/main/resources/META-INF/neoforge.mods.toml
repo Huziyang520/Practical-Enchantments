@@ -1,0 +1,46 @@
+# 本分支覆盖 26.1 ~ 26.2，以 26.1.2 为编译基线。
+# - modLoader / loaderVersion 在 26.3 才降级为可选，26.1.2 线仍要求声明；两份版本上都写不冲突。
+modLoader="javafml"
+loaderVersion="${neoforge_loader_version_range}"
+license="${license}"
+
+[[mods]]
+modId="${mod_id}"
+version="${version}"
+displayName="${mod_name}"
+authors="${mod_author}"
+# 图标字段跨版本迁移：26.1.2 只认 logoFile，26.2+ 只认 iconFile（logoFile 已弃用）。
+# 一份 jar 要覆盖两个版本，故两个都声明（同一个 128x128 方形图标）。
+logoFile="icon.png"
+iconFile="icon.png"
+displayURL="https://www.curseforge.com/minecraft/mc-mods/practical-enchantments"
+issueTrackerURL="https://github.com/Huziyang520/Practical-Enchantments/issues"
+description='''${description}'''
+
+# NeoForge requires an explicit mixin-config declaration in mods.toml; without it
+# every shared mixin is silently skipped (Fabric declares the same config via
+# fabric.mod.json's "mixins" array).
+[[mixins]]
+config = "practical_enchantments.mixins.json"
+
+[[dependencies.${mod_id}]]
+    modId="neoforge"
+    type="required"
+    # 不写 [26.1.2.94,)：那会拒绝 26.1 / 26.1.1 的 NeoForge 构建。
+    versionRange="[26.1,26.3)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.${mod_id}]]
+    modId="minecraft"
+    type="required"
+    versionRange="${minecraft_version_range}"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.${mod_id}]]
+    modId="merlinlib"
+    type="required"
+    versionRange="[${merlinlib_version},)"
+    ordering="BEFORE"
+    side="BOTH"
