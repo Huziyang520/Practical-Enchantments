@@ -1,0 +1,22 @@
+{
+  "description": {
+    "translate": "enchantment.practical_enchantments.disguise",
+    "fallback": "伪装"
+  },
+  "supported_items": [
+    "minecraft:skeleton_skull",
+    "minecraft:wither_skeleton_skull",
+    "minecraft:zombie_head",
+    "minecraft:creeper_head",
+    "minecraft:piglin_head",
+    "minecraft:dragon_head",
+    "minecraft:player_head"
+  ],
+  "weight": 1,
+  "max_level": 1,
+  "min_cost": { "base": 12, "per_level_above_first": 0 },
+  "max_cost": { "base": 35, "per_level_above_first": 0 },
+  "anvil_cost": 3,
+  "slots": ["head"],
+  "effects": {}
+}

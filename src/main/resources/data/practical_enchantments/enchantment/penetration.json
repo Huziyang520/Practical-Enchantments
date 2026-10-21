@@ -1,0 +1,15 @@
+{
+  "description": {
+    "translate": "enchantment.practical_enchantments.penetration",
+    "fallback": "贯穿"
+  },
+  "supported_items": "#minecraft:enchantable/trident",
+  "exclusive_set": "#practical_enchantments:exclusive_set/trident_riptide",
+  "weight": 6,
+  "max_level": 5,
+  "min_cost": { "base": 6, "per_level_above_first": 8 },
+  "max_cost": { "base": 28, "per_level_above_first": 8 },
+  "anvil_cost": 3,
+  "slots": ["mainhand"],
+  "effects": {}
+}

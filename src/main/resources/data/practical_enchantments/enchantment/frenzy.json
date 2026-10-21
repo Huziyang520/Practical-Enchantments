@@ -1,0 +1,14 @@
+{
+  "description": {
+    "translate": "enchantment.practical_enchantments.frenzy",
+    "fallback": "狂暴"
+  },
+  "supported_items": "#minecraft:enchantable/sharp_weapon",
+  "weight": 1,
+  "max_level": 2,
+  "min_cost": { "base": 0, "per_level_above_first": 0 },
+  "max_cost": { "base": 0, "per_level_above_first": 0 },
+  "anvil_cost": 3,
+  "slots": ["mainhand"],
+  "effects": {}
+}
