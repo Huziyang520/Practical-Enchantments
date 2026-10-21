@@ -6,7 +6,7 @@
 
 ## English
 
-**Practical Enchantments** adds a growing set of enchantments that do something you can feel in play - combat, mining, defence, tridents, and interacting with mobs - instead of only moving numbers around. Every enchantment is built on **MerlinLib**, which is what registers it, wires its behaviour and provides the in-game tools for looking at it.
+**Practical Enchantments** adds a growing set of enchantments that do something you can feel in play - combat, mining, defence, tridents, and interacting with mobs - instead of only moving numbers around. Every enchantment is built on **MerlinLib**, which registers it and provides the in-game tools for looking at it.
 
 ### What it adds
 
@@ -52,9 +52,7 @@ Enchantment **descriptions** in the tooltip come from an enchantment description
 
 ## 中文
 
-**Practical Enchantments（实用附魔）** 增加一批**在玩法上真的有用**的附魔：战斗、挖掘、防御、三叉戟，以及与生物互动的机制，而不是只改数字。每个附魔都构建在 **MerlinLib** 之上——由它完成注册、行为接线，并提供查看与发放的界面与指令。
-
-当前附魔清单见 CurseForge 页面；游戏内用 `/merlinlib list` 可以直接列出。
+**Practical Enchantments（实用附魔）** 增加一批**在玩法上真的有用**的附魔：战斗、挖掘、防御、三叉戟，以及与生物互动的机制，而不是只改数字。每个附魔都构建在 **MerlinLib** 之上——由它完成注册，并提供查看与发放的界面与指令。
 
 ### 它增加了什么
 
