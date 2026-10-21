@@ -8,8 +8,7 @@
 
 **Practical Enchantments** adds enchantments that do something you can feel in play — combat, mining,
 defence, tridents, and how mobs react to you — instead of only moving numbers around. Every one of
-them is built on **MerlinLib**, which registers them, wires their behaviour and ships the in-game tools
-for looking at them.
+them is built on **MerlinLib**, which registers them and provides the in-game tools for looking at them.
 
 **Enchantment list:** [`ENCHANTMENTS_LIST.md`](ENCHANTMENTS_LIST.md) — every enchantment, what it fits,
 its levels, where it comes from and what it conflicts with, in one page.
@@ -66,8 +65,8 @@ EnchantmentDescriptions; this mod does not draw them itself.
 ## 中文
 
 **Practical Enchantments（实用附魔）** 增加一批**在玩法上真的能感觉到**的附魔：战斗、挖掘、防御、
-三叉戟，以及与生物的互动机制，而不是只改数字。每一个都构建在 **MerlinLib** 之上——由它完成注册、
-行为接线，并提供游戏内查看与发放的工具。
+三叉戟，以及与生物的互动机制，而不是只改数字。每一个都构建在 **MerlinLib** 之上——由它完成注册，
+并提供游戏内查看与发放的工具。
 
 **附魔清单：**[`ENCHANTMENTS_LIST_CN.md`](ENCHANTMENTS_LIST_CN.md)（英文版 [`ENCHANTMENTS_LIST.md`](ENCHANTMENTS_LIST.md)）
 ——每个附魔的适用物品、等级、获取途径与互斥关系，一页看完。

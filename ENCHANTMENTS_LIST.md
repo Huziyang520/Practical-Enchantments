@@ -6,9 +6,9 @@ commands, in data packs and in MerlinLib's item editor; `/merlinlib list` prints
 **Columns**
 
 - **Applies to** — the item family the enchantment accepts.
-- **Obtained by** — the sources that exist in this build: the enchanting table, librarian trades, and
-  the structure chests this mod injects enchanted books into, with the chance per chest.
-  *Not obtainable* means creative mode / `/merlinlib book` only, by design.
+- **Obtained by** — the sources that exist: the enchanting table, librarian trades, and the structure
+  chests this mod injects enchanted books into, with the chance per chest.
+  *Not obtainable* means creative mode / `/merlinlib book` only.
 - **Conflicts with** — enforced by the anvil and by the enchanting table alike.
 
 ## At a glance
@@ -56,7 +56,7 @@ commands, in data packs and in MerlinLib's item editor; `/merlinlib list` prints
 
 - **Applies to:** helmets · **Levels:** single
 - **Obtained by:** enchanting table, librarian trades, armorer trade (18 emeralds for an enchanted diamond helmet), abandoned mineshaft 10%, dungeon 8%, shipwreck treasure 7%, igloo 6%
-- **Effect:** permanent Night Vision while worn. The helmet loses one point of durability per second during the night and stops doing so during the day; taking the helmet off ends the effect at once.
+- **Effect:** permanent Night Vision while worn. The helmet loses one point of durability every 13.75 seconds during the night and stops doing so during the day; taking the helmet off ends the effect at once.
 
 ### Cat Attraction (`cat_attraction`)
 
@@ -102,7 +102,7 @@ commands, in data packs and in MerlinLib's item editor; `/merlinlib list` prints
 ### Execute (`execute`)
 
 - **Applies to:** swords and axes · **Levels:** single
-- **Obtained by:** ancient city 20%, end city 15%, woodland mansion 10% (no other source by design)
+- **Obtained by:** ancient city 20%, end city 15%, woodland mansion 10%
 - **Effect:** extra damage against targets that are already hurt. Between 10 % and 35 % health the
   damage is **×1.5**, below 10 % it is **×3** — and **×2 / ×4** when the weapon is an axe. Above 35 %
   nothing changes. The multiplier applies to the final damage, so it stacks with Sharpness.
@@ -166,8 +166,8 @@ commands, in data packs and in MerlinLib's item editor; `/merlinlib list` prints
 - **Applies to:** tridents · **Levels:** Ⅰ–Ⅴ
 - **Obtained by:** enchanting table, large underwater ruin 20%, shipwreck treasure 14%, abandoned mineshaft 12%
 - **Effect:** a thrown trident breaks the block it hits. The level decides which pickaxe it counts as —
-  Ⅰ wood, Ⅱ stone, Ⅲ iron, Ⅳ diamond, Ⅴ netherite — and blocks above that tier are left alone rather
-  than destroyed without dropping. Unbreakable blocks such as bedrock are never touched. With
+  Ⅰ wood, Ⅱ stone, Ⅲ iron, Ⅳ diamond, Ⅴ netherite — and blocks above that tier are not broken.
+  Unbreakable blocks such as bedrock are never touched. With
   Penetration **and** Loyalty the drops fly back to you.
 
 ### Soul Siphon (`soul_siphon`)
@@ -182,9 +182,9 @@ commands, in data packs and in MerlinLib's item editor; `/merlinlib list` prints
 - **Applies to:** any armour piece · **Levels:** Ⅰ–Ⅲ
 - **Obtained by:** not obtainable in survival (creative / commands)
 - **Conflicts with:** Demonic Pact
-- **Effect:** on lethal damage you survive as if by a totem, but **every item in your inventory is
-  dropped on the ground and the enchanted armour piece is destroyed**. Darkness lasts
-  **20 − 4 × (level − 1)** seconds. Deliberately a joke enchantment: the escape costs more than the death.
+- **Effect:** on lethal damage the totem of undying save triggers, but **every item in your inventory
+  and armour slots is dropped on the ground and the enchanted armour piece is destroyed**. Darkness
+  lasts **20 − 4 × (level − 1)** seconds.
 
 ### Venom (`venom`)
 
