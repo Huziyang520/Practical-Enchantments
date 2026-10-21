@@ -73,9 +73,10 @@ public final class BrightEnchantment {
 			}
 			EntityCounter.set(player, NV_GRANTED, 1);
 
-			// 夜间（13000~23000 刻）每秒扣除 1 点耐久
+			// 夜间（13000~23000 刻）每 13.75 秒（275 tick）扣除 1 点耐久。
+			// 一夜 10000 tick ⇒ 约 36 点；旧值 20 tick（1 秒）一夜要 500 点，任何头盔都过不了一夜。
 			long timeOfDay = player.level().getGameTime() % 24000;
-			if (timeOfDay >= 13000 && timeOfDay <= 23000 && event.tickCount() % 20 == 0) {
+			if (timeOfDay >= 13000 && timeOfDay <= 23000 && event.tickCount() % 275 == 0) {
 				helmet.hurtAndBreak(1, player, EquipmentSlot.HEAD);
 			}
 		} else {
