@@ -92,18 +92,30 @@ public final class ChineseEnchantment {
 
 		boolean hasChinese = hasChinese(player);
 		var abilities = player.getAbilities();
+		// 原版自己给的飞行：创造与旁观模式天生 mayfly。它不是本附魔授予的，收回胸甲时不许碰。
+		boolean vanillaFlight = player.isCreative() || player.isSpectator();
 
 		if (hasChinese) {
-			// 解锁创造飞行（仅开放飞行权限），并标记"飞行由本附魔授予"
+			// 解锁创造飞行（仅开放飞行权限），并且**只有在我们真的把 mayfly 从 false 翻成 true 时**才记账。
+			//
+			// 这是「创造模式下脱掉胸甲就掉下来、而且再也起飞不了」的根因：旧写法只要身上有本附魔就无条件
+			// `EntityCounter.set(FLY_GRANTED, 1)`，而创造模式玩家的 mayfly 本来就是 true（不是我们给的）。
+			// 于是脱下胸甲时走 else-if 分支，把创造模式自带的 mayfly 与 flying 一起清成 false ——
+			// 玩家的飞行能力被附魔「收回」，只能重新穿上胸甲才恢复。
+			// 现在只在「确实由我们打开」时记账，收回时自然无从误收回原版能力。
 			if (!abilities.mayfly) {
 				abilities.mayfly = true;
 				player.onUpdateAbilities();
+				EntityCounter.set(player, FLY_GRANTED, 1);
 			}
-			EntityCounter.set(player, FLY_GRANTED, 1);
 		} else if (abilities.mayfly && EntityCounter.get(player, FLY_GRANTED) > 0) {
 			// 胸甲被拿下或耐久归零：只撤销本附魔授予的飞行权限。
 			// 原版创造/旁观模式以及其他模组授予的 mayfly 一律不碰。
 			EntityCounter.set(player, FLY_GRANTED, 0);
+			if (vanillaFlight) {
+				// 兜底：旧版本留下的标记可能在创造模式下被写成 1（存档/跨版本），这里同样不清原版飞行。
+				return;
+			}
 			abilities.mayfly = false;
 			// ⚠️ 必须把 flying 一并收回，否则会卡在半空中飞下不来：
 			// ① 原版 ServerPlayer 从不写 abilities.flying（javap 实证：整个类只读不写），

@@ -80,6 +80,15 @@ public final class BrightEnchantment {
 	/** 刷新间隔（tick）：每 20 tick 一次，剩余时长始终 ≥380 tick，不会闪烁 */
 	private static final int REFRESH_INTERVAL = 20;
 
+	/**
+	 * 夜间扣除 1 点耐久的间隔（tick）。
+	 *
+	 * <p>275 tick = 13.75 秒。原实现是 20 tick（1 秒）一次，一夜（13000~23000 刻，共 10000 tick）
+	 * 要扣 500 点耐久，任何头盔都会在一夜内报废；13.75 秒一次是同一条夜晚区间里约 36 点，
+	 * 与「一夜消耗一件钻石头盔的量级」相符，也是用户指定的数值。</p>
+	 */
+	private static final int DURABILITY_INTERVAL = 275;
+
 	/** EntityCounter 标记：当前夜视由本附魔授予（只撤销自己授予的，同坑 19 的思路） */
 	private static final ResourceLocation NV_GRANTED =
 		new ResourceLocation(PracticalEnchantments.MOD_ID, "bright_nv_granted");
@@ -114,9 +123,9 @@ public final class BrightEnchantment {
 			}
 			EntityCounter.set(player, NV_GRANTED, 1);
 
-			// 夜间（13000~23000 刻）每秒扣除 1 点耐久
+			// 夜间（13000~23000 刻）每 13.75 秒扣除 1 点耐久
 			long timeOfDay = player.level().getGameTime() % 24000;
-			if (timeOfDay >= 13000 && timeOfDay <= 23000 && event.tickCount() % 20 == 0) {
+			if (timeOfDay >= 13000 && timeOfDay <= 23000 && event.tickCount() % DURABILITY_INTERVAL == 0) {
 				helmet.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(EquipmentSlot.HEAD));
 			}
 		} else {
