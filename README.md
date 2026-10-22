@@ -23,7 +23,7 @@ version branches - pick the one that matches your game and loader.
 A branch that covers a range of game versions ships one jar for the whole range.
 
 The enchantments themselves are listed in [ENCHANTMENTS_LIST.md](ENCHANTMENTS_LIST.md)
-([中文](ENCHANTMENTS_LIST_CN.md)); what changed in each release is in [changelog.md](changelog.md).
+([中文](ENCHANTMENTS_LIST_CN.md)); what changed in each release is in [CHANGELOGS.md](CHANGELOGS.md).
 
 ### What it adds
 
@@ -85,7 +85,7 @@ Enchantment **descriptions** in the tooltip come from an enchantment description
 覆盖一段游戏版本的分支，为整段版本提供同一个 jar。
 
 附魔一览见 [ENCHANTMENTS_LIST_CN.md](ENCHANTMENTS_LIST_CN.md)（[English](ENCHANTMENTS_LIST.md)），
-每个版本的改动见 [changelog.md](changelog.md)。
+每个版本的改动见 [CHANGELOGS.md](CHANGELOGS.md)。
 
 ### 它增加了什么
 
