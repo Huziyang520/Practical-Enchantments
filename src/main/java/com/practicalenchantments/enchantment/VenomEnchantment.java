@@ -12,9 +12,6 @@ import net.minecraft.world.item.enchantment.Enchantment;
 
 /**
  * 淬毒附魔 - 剑 Ⅱ 级（附魔台可出，专家级图书管理员）。
- *
- * <p>命中时附加中毒：Ⅰ 级中毒 I 6 秒，Ⅱ 级中毒 II 12 秒。
- * 与「火焰附加」「枯萎」三向互斥（blade_effect 组）。亡灵生物免疫中毒为原版机制。</p>
  */
 public final class VenomEnchantment {
 

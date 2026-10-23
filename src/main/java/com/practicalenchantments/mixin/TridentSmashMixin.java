@@ -19,14 +19,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /**
  * 粉碎附魔：投掷三叉戟击中方块时瞬间破坏。
- *
- * <p>ThrownTrident 不重写 {@code onHitBlock}，所以注入打在父类
- * {@link AbstractArrow#onHitBlock(BlockHitResult)} HEAD，用 instanceof 过滤出三叉戟。
- * 不取消原方法——插中方块后该插就插、忠诚该回回。</p>
- *
- * <p>挖掘等级用对应等级的镐作为"虚拟工具"判定 {@code isCorrectToolForDrops}：
- * 达不到等级的方块<b>不破坏</b>（防止低等级粉碎炸毁高等级矿物）。基岩等
- * 不可破坏方块（destroyTime &lt; 0）永远跳过。掉落物与经验按虚拟镐生成。</p>
  */
 @Mixin(AbstractArrow.class)
 public abstract class TridentSmashMixin {

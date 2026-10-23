@@ -14,8 +14,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 
 /**
- * 强劲附魔 - 弩 V 级
- * 效果：弩专属远程伤害增幅，每级 +25% 箭矢伤害
+ * 强劲附魔 - 弩 V 级 效果：弩专属远程伤害增幅，每级 +25% 箭矢伤害
  */
 public final class PowerfulEnchantment {
 

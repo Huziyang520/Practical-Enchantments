@@ -14,9 +14,6 @@ import net.minecraft.world.item.enchantment.Enchantment;
 
 /**
  * 狂暴附魔 - 剑/斧/矛 Ⅱ 级（宝藏，大师级图书管理员）。
- *
- * <p>击杀生物后获得速度：Ⅰ 级速度 II 6 秒，Ⅱ 级速度 III 8 秒；
- * 附在斧上时持续时间翻倍（Ⅰ 12 秒 / Ⅱ 16 秒）。每次击杀重新计时。</p>
  */
 public final class FrenzyEnchantment {
 

@@ -16,15 +16,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 
 /**
- * 明朗附魔
- *
- * <p><b>只回收自己授予的那份夜视</b>：玩家自己用 {@code /effect give}、药水、信标或其它模组
- * 拿到的夜视（尤其是 infinite 永久夜视）一律不覆盖、不删除。判定靠
- * {@link EntityCounter} 标记 + "当前实例是否就是本附魔施加的短时长实例"两道条件。</p>
- *
- * <p>授予方式用 <b>有限时长 + 定期刷新</b>（20 秒 / 每 20 tick 刷新）而不是无限时长：
- * 标记不持久化（玩家离线即清），用有限时长兜底可保证任何情况下夜视都会自然过期，
- * 不会出现"永久残留"。剩余时长始终 ≥380 tick，不会进入原版图标闪烁区间（&lt;200 tick）。</p>
+ * 明朗附魔 只回收自己授予的那份夜视：玩家自己用 {@code /effect give}、药水、信标或其它模组 拿到的夜视（尤其是 infinite 永久夜视）一律不覆盖、不删除。
  */
 public final class BrightEnchantment {
 

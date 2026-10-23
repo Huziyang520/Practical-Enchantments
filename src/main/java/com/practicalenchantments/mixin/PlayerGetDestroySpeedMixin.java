@@ -14,13 +14,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 /**
  * 浮空速掘：消除空中挖掘速度惩罚。
- *
- * <p>原版 {@link Player#getDestroySpeed(BlockState)} 在玩家不在地面时会将挖掘速度
- * 除以 5（空中速度仅剩 20%）。本 Mixin 在该方法返回时，若玩家佩戴了浮空速掘附魔的
- * 头盔且处于空中，则将返回值乘回 5，使空中挖掘速度恢复到与地面一致。</p>
- *
- * <p>仅当玩家处于空中时原版才会应用 ÷5，因此这里仅在 {@code !onGround()} 时修正，
- * 不会影响地面挖掘速度。</p>
  */
 @Mixin(Player.class)
 public abstract class PlayerGetDestroySpeedMixin {

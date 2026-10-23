@@ -7,13 +7,6 @@ import net.minecraft.world.entity.LivingEntity;
 
 /**
  * 吸血附魔 - 剑/斧/矛 Ⅴ 级（附魔台可出，老手级图书管理员）。
- *
- * <p>命中目标后回复生命，回复量 = 目标本次<b>实际损失生命</b>（护甲/护盾减免后）
- * × 4% × 等级，最高 20%/级。</p>
- *
- * <p>实际伤害只有两加载器的 AFTER_DAMAGE 事件提供，故不走 enchantlib 事件注册，
- * 由 fabric/neoforge 入口把平台事件桥接到 {@link #onAfterDamage}
- * （与 examplemod 的 RetributionEnchantment 同款写法）。</p>
  */
 public final class LifeStealEnchantment {
 

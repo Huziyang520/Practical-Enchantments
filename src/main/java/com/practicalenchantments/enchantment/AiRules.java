@@ -26,13 +26,6 @@ import net.minecraft.world.item.enchantment.ItemEnchantments;
 
 /**
  * 第二批（2.5）三个附魔的生物行为：伪装、猫咪护符、吸猫体质。
- *
- * <p>三者的判定都只回答 MerlinLib 的问题（见 {@link AiHook}），不自己动 AI，也不写 mixin：
- * 库负责在寻敌、躲避、转向三处挂钩，本模组只说"谁不该打穿这顶头的人"。</p>
- *
- * <p>伪装按头颅与生物族的对应关系生效：骷髅头对骷髅/流浪者、凋灵骷髅头对凋灵骷髅（**对凋灵无效**）、
- * 僵尸头对僵尸族、苦力怕头对苦力怕、猪灵头对猪灵**与蛮兵**；末影龙头与玩家头不对应任何生物。
- * 玩家主动攻击过的生物仍然会还手——{@code getLastHurtByMob} 判断。</p>
  */
 public final class AiRules {
 

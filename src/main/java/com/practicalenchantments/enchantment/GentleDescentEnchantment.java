@@ -16,17 +16,6 @@ import net.minecraft.world.item.enchantment.Enchantment;
 
 /**
  * 羽落附魔 - 靴子单级（娱乐，仅创造/指令获取）。
- *
- * <p>穿着时持续获得缓降，免疫摔落伤害；潜行（Shift）时缓降失效以恢复正常下落速度。
- * 与原版摔落缓冲（羽毛掉落）互斥。</p>
- *
- * <p><b>只回收自己授予的那份缓降</b>：玩家自己用 {@code /effect give}、药水或其它模组拿到的缓降
- * （尤其是 infinite 永久缓降）一律不覆盖、不删除。判定靠 {@link EntityCounter} 标记 +
- * "当前实例是否就是本附魔施加的短时长实例"两道条件（同「明朗」的写法，见坑 19 的思路）。</p>
- *
- * <p>授予方式用 <b>有限时长 + 定期刷新</b>（20 秒 / 每 20 tick 刷新）而不是无限时长：
- * 标记不持久化（玩家离线即清），有限时长兜底保证任何情况下缓降都会自然过期、不会永久残留。
- * 剩余时长始终 ≥380 tick，不会进入原版图标闪烁区间（&lt;200 tick）。</p>
  */
 public final class GentleDescentEnchantment {
 

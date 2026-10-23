@@ -15,7 +15,7 @@ plugins {
     id 'net.neoforged.moddev' version '2.0.147'
 }
 
-// version and group come from gradle.properties (version=1.4.0, group=com.practicalenchantments).
+// version and group come from gradle.properties (version=1.5.0, group=com.practicalenchantments).
 
 base {
     // <mod_id>-<version>-neoforge-<minecraft_version>.jar
@@ -60,7 +60,7 @@ dependencies {
     // MerlinLib is a hard runtime prerequisite (declared in neoforge.mods.toml, the player installs
     // it). 1.21.1 runs on Mojang official names, so the library jar is usable as is: no remapping.
     // => Build MerlinLib/1.21.1 first, then this project.
-    compileOnly files("../../MerlinLib/1.21.1/build/libs/merlinlib-0.9.0-neoforge-1.21.1.jar")
+    compileOnly files("../../MerlinLib/1.21.1/build/libs/merlinlib-${merlinlib_version}-neoforge-1.21.1.jar")
 
     compileOnly 'org.spongepowered:mixin:0.8.7'
     compileOnly 'com.google.code.findbugs:jsr305:3.0.2'

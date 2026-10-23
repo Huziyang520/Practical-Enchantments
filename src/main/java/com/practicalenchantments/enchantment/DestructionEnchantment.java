@@ -15,8 +15,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
 /**
- * 毁灭附魔 - 工具（剑除外）I 级
- * 效果：挖掘方块不产出物品掉落，改为掉落经验；基础 2 点，矿石类 5 点
+ * 毁灭附魔 - 工具（剑除外）I 级 效果：挖掘方块不产出物品掉落，改为掉落经验；基础 2 点，矿石类 5 点
  */
 public final class DestructionEnchantment {
 

@@ -17,8 +17,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import java.util.*;
 
 /**
- * 伐木工附魔 - 斧 I 级
- * 效果：砍伐原木时递归破坏整棵相连树木及树叶；单次最大 64 方块上限
+ * 伐木工附魔 - 斧 I 级 效果：砍伐原木时递归破坏整棵相连树木及树叶；单次最大 64 方块上限
  */
 public final class LumberjackEnchantment {
 

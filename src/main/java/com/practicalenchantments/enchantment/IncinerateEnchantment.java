@@ -12,8 +12,7 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.enchantment.Enchantment;
 
 /**
- * 焚灭附魔 - 剑、斧、矛 I 级
- * 效果：击杀生物无战利品掉落，经验值 ×2
+ * 焚灭：击杀生物无战利品掉落、经验值 ×2，并让史莱姆类死后不再分裂。剑、斧、矛 Ⅰ 级。
  */
 public final class IncinerateEnchantment {
 
@@ -21,9 +20,6 @@ public final class IncinerateEnchantment {
 
 	/** 互斥组名（对应数据包标签 {@code practical_enchantments:exclusive_set/looting}） */
 	public static final String GROUP_NAME = "looting";
-
-	/** 互斥组标签引用（见 {@code data/practical_enchantments/tags/enchantment/exclusive_set/looting.json}）：与原版抢夺互斥 */
-
 
 	public static void registerCallbacks(EnchantmentEventRegistrar registrar, HolderLookup.Provider registries) {
 		Holder<Enchantment> holder = PracticalEnchantments.resolveEnchantment(registries, ID);
@@ -44,6 +40,9 @@ public final class IncinerateEnchantment {
 			ItemEntity.class, victim.getBoundingBox().inflate(0.5))) {
 			item.discard();
 		}
+
+		// 分裂发生在 remove 里，晚于这里，故留标记让 Mixin 在那一步跳过
+		KillMarks.markIncinerated(victim);
 
 		// 经验值 ×2（原版掉落 1 倍经验球 + 这里再补 1 倍，合计 2 倍）
 		int baseXp = victim.getExperienceReward(event.level(), player);

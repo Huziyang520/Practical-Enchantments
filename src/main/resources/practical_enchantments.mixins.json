@@ -8,7 +8,11 @@
     "DeathSaveMixin",
     "TridentSmashMixin",
     "TridentPullMixin",
-    "CatMagnetTamingMixin"
+    "CatMagnetTamingMixin",
+    "EnchantmentInfiniteCrossbowMixin",
+    "PlayerInfinityAmmoMixin",
+    "CubeMobSplitMixin",
+    "GodwoodLootMixin"
   ],
   "client": [],
   "server": [],
