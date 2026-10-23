@@ -1,103 +1,85 @@
 # Practical Enchantments
 
-[English](#english) | [中文](#中文)
+**English** | [简体中文](#简体中文)
 
 ---
 
 ## English
 
-**Practical Enchantments** adds a growing set of enchantments that do something you can feel in play - combat, mining, defence, tridents, and interacting with mobs - instead of only moving numbers around. Every enchantment is built on **MerlinLib**, which registers it and provides the in-game tools for looking at it.
+**Practical Enchantments** adds a collection of useful and fun enchantments that you can actually feel in play.
 
-The enchantments themselves are listed in [ENCHANTMENTS_LIST.md](ENCHANTMENTS_LIST.md)
-([中文](ENCHANTMENTS_LIST_CN.md)); what changed in each release is in [CHANGELOGS.md](CHANGELOGS.md).
+📖 **Full enchantment list:** [English](https://github.com/Huziyang520/Practical-Enchantments/blob/main/ENCHANTMENTS_LIST.md) · [中文](https://github.com/Huziyang520/Practical-Enchantments/blob/main/ENCHANTMENTS_LIST_CN.md)
 
-### What it adds
+### ✨ Featured Enchantments
 
-- Enchantments for **weapons, tools, armour and tridents**, each with its own effect rather than a plain damage bonus.
-- **Mutual exclusions** between enchantments where they would overlap, following the vanilla anvil and enchanting table rules.
-- **Ways to obtain them** that follow vanilla progression: the enchanting table, librarian trades, and enchanted books in structure loot.
-- **Enchantments that interact with mobs** - some are about how mobs react to you rather than about damage.
+| Enchantment | Applies to | What it does |
+|---|---|---|
+| **Bright** | Helmets | Grants permanent Night Vision while worn. |
+| **Lumberjack** | Axes | Fells the entire connected tree (up to 64 blocks) with one chop. |
+| **Life Steal** | Swords, axes | Heals you for a percentage of the health your target actually lost. |
+| **Soul Siphon** | Swords, axes | Converts the damage you deal into experience orbs. |
+| **Destruction** | Mining tools | Mined blocks drop experience instead of items. |
+| **Smashing** | Tridents | A thrown trident breaks the block it hits; higher levels break harder blocks. |
+| **Disguise** | Mob heads | Wearing a mob's head stops that kind of mob from attacking you on its own. |
+| **Cat Charm** | Helmets | Creepers and phantoms keep their distance from you. |
+| **Demonic Pact** | Chestplates | On lethal damage, pays emeralds to cheat death like a Totem of Undying, at the cost of Darkness. |
 
-### Requirements
+### 🔧 Development Status
 
-- **MerlinLib**, installed on **both** the client and the server. It is required, not optional.
-- Both loaders are supported natively: **Fabric** and **NeoForge**.
-- This is a **client and server** mod: install it on both sides.
+- **Dependency:** requires only [MerlinLib](https://github.com/Huziyang520/MerlinLib), installed on both client and server.
+- **Mod crossover:** the mod includes crossover content with other mods. Twilight Forest and The Aether are already supported, and more is planned. Crossover content only shows up in-game when the corresponding mod is installed.
+- **Supported versions** :
 
-### Installing
+| Minecraft | Loader |
+|---|---|
+| 1.20.1 | Forge |
+| 1.21.1 | NeoForge |
+| 26.1 – latest release | NeoForge + Fabric |
 
-1. Install MerlinLib for your loader.
-2. Drop the Practical Enchantments jar for your loader into `mods/`.
-3. Client and server both need both jars.
+Other versions are not planned.
 
-### Finding and giving enchantments in game
+### 💬 A Word from the Author
 
-MerlinLib provides the tooling, so this mod ships no commands of its own:
-
-- `/merlinlib list` - every non-vanilla enchantment in the registry, including all of this mod's.
-- `/merlinlib info <id>` - one enchantment: whether it is in the registry, its maximum level and weight.
-- `/merlinlib book <id> [level]` - hands out the enchanted book (operators).
-- Enchantment ids look like `practical_enchantments:<name>`, usable in commands, data packs and the item editor.
-
-Enchantment **descriptions** in the tooltip come from an enchantment description mod (such as EnchantmentDescriptions); this mod does not draw them itself.
-
-### Settings
-
-- Enchantment definitions, exclusion groups and villager trades are data pack resources, so `/reload` picks up changes without restarting.
-- The join message in chat: its text lives in `assets/practical_enchantments/lang/`, and its switch is `notice.merlinlib` in `config/practical_enchantments/common.properties`. MerlinLib keeps one switch per mod in `config/MerlinLib/notices.toml`, editable on the join-notice page of its configuration screen or with `/merlinlib notices`.
-- Three vanilla bow switches sit under **Vanilla enchantment tweaks** in the configuration screen: Infinity on crossbows, firing with Infinity without an arrow in the bag, and spectral arrows surviving Infinity. All three are server settings.
-
-### Links
-
-- Repository and issues: <https://github.com/Huziyang520/Practical-Enchantments>
-- Also on CurseForge, under the same name.
+- If you run into any problem, feel free to report it anywhere you can think of.
+- Have a great idea for a new enchantment? Tell me on GitHub or in the comment section here. Suggestions are very welcome!
 
 ---
 
-## 中文
+## 简体中文
 
-**Practical Enchantments（实用附魔）** 增加一批**在玩法上真的有用**的附魔：战斗、挖掘、防御、三叉戟，以及与生物互动的机制，而不是只改数字。每个附魔都构建在 **MerlinLib** 之上——由它完成注册，并提供查看与发放的界面与指令。
+**实用附魔（Practical Enchantments）** 添加了一系列实用或有趣的附魔，优化你的游戏体验。
 
-附魔一览见 [ENCHANTMENTS_LIST_CN.md](ENCHANTMENTS_LIST_CN.md)（[English](ENCHANTMENTS_LIST.md)），
-每个版本的改动见 [CHANGELOGS.md](CHANGELOGS.md)。
+📖 **完整附魔清单：** [中文](https://github.com/Huziyang520/Practical-Enchantments/blob/main/ENCHANTMENTS_LIST_CN.md) · [English](https://github.com/Huziyang520/Practical-Enchantments/blob/main/ENCHANTMENTS_LIST.md)
 
-### 它增加了什么
+### ✨ 部分附魔一览
 
-- 面向**武器、工具、盔甲与三叉戟**的附魔，每个都有自己的效果，而不是单纯的数值加成。
-- 附魔之间的**互斥关系**，口径与铁砧、附魔台一致。
-- 顺着原版进程的**获取途径**：附魔台、图书管理员交易、结构箱子里的附魔书。
-- 一批**与生物互动**的附魔：它们改变的是生物的应对方式，而不是伤害数字。
+| 附魔 | 适用物品 | 效果 |
+|---|---|---|
+| **明朗** | 头盔 | 佩戴期间获得永久夜视。 |
+| **伐木工** | 斧 | 砍一根原木即可破坏整棵相连的树木（单次上限 64 个方块）。 |
+| **吸血** | 剑、斧 | 按目标实际损失的生命值，回复一定比例的血量。 |
+| **汲灵** | 剑、斧 | 将造成的伤害转化为经验球。 |
+| **毁灭** | 挖掘工具 | 挖掘的方块不再掉落物品，改为掉落经验。 |
+| **粉碎** | 三叉戟 | 投掷的三叉戟会破坏击中的方块，等级越高能破坏的方块越硬。 |
+| **伪装** | 各类生物头颅 | 戴上头颅后，对应的生物不再主动攻击你。 |
+| **猫咪护符** | 头盔 | 苦力怕与幻翼会主动远离你。 |
+| **恶魔交易** | 胸甲 | 受到致命伤害时消耗绿宝石免死（类似不死图腾），并附带黑暗效果作为代价。 |
 
-### 前置要求
+### 🔧 开发情况
 
-- **MerlinLib**，且**客户端与服务端都要安装**。它是必需前置，不是可选。
-- 原生支持 **Fabric** 与 **NeoForge** 双端。
-- 本模组是**客户端 + 服务端**模组，两端都要装。
+- **前置模组：** 仅需 [MerlinLib](https://github.com/Huziyang520/MerlinLib)，客户端与服务端都需要安装。
+- **模组联动：** 本模组与部分模组有联动内容，目前已支持暮色森林与天境，后续还有计划。联动内容需安装对应模组后才会在游戏内可见。
+- **支持版本**：
 
-### 安装
+| Minecraft 版本 | 模组加载器 |
+|---|---|
+| 1.20.1 | Forge |
+| 1.21.1 | NeoForge |
+| 26.1 – 最新正式版 | NeoForge + Fabric |
 
-1. 为对应加载器装好 MerlinLib。
-2. 把对应加载器的 Practical Enchantments 放进 `mods/`。
-3. 客户端与服务端都需要这两个 jar。
+其余版本暂无支持计划。
 
-### 在游戏内查看与发放
+### 💬 作者的话
 
-工具由 MerlinLib 提供，本模组不带自己的指令：
-
-- `/merlinlib list` —— 列出注册表里所有非原版附魔（含本模组全部）。
-- `/merlinlib info <id>` —— 单个附魔：是否在注册表、最大等级、权重。
-- `/merlinlib book <id> [等级]` —— 发放对应附魔书（需要 OP）。
-- 附魔 id 形如 `practical_enchantments:<名字>`，可用于指令、数据包与物品编辑器。
-
-附魔的**描述文本**由附魔描述类模组（如 EnchantmentDescriptions）显示；本模组自己不绘制描述。
-
-### 设置
-
-- 附魔定义、互斥组与村民交易都是**数据包资源**，改完 `/reload` 即生效，无需重启。
-- 进服时聊天栏的公告：文案在 `assets/practical_enchantments/lang/`，开关是 `config/practical_enchantments/common.properties` 的 `notice.merlinlib`。按模组的开关由 MerlinLib 统一放在 `config/MerlinLib/notices.toml`，可在它配置界面的进世界通知页或 `/merlinlib notices` 里改。
-- 配置界面的 **原版附魔调整** 里有三项原版弓弩行为：无限能否附在弩上、无限是否不需要背包有箭、无限是否作用于光灵箭。三项都是服务端设置。
-
-### 链接
-
-- 仓库与问题反馈：<https://github.com/Huziyang520/Practical-Enchantments>
-- CurseForge 上同名可搜到。
+- 本模组的任何问题，欢迎你在能想到的任何地方反馈给作者。
+- 如果你对新的附魔有好的创意，欢迎在 GitHub 或本页评论区告诉作者！
