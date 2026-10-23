@@ -1,4 +1,4 @@
-package com.practicalenchantments.enchantment.linked;
+package com.practicalenchantments.enchantment.linked.aether;
 
 import com.huziyang520.merlinlib.api.LootInjectionBuilder;
 import com.huziyang520.merlinlib.api.MerlinApi;
@@ -7,6 +7,7 @@ import com.huziyang520.merlinlib.event.BuiltInEvents;
 import com.huziyang520.merlinlib.event.EnchantmentContext;
 import com.huziyang520.merlinlib.event.EnchantmentEventRegistrar;
 import com.practicalenchantments.PracticalEnchantments;
+import com.practicalenchantments.enchantment.ExclusiveSets;
 import com.practicalenchantments.enchantment.KillMarks;
 import java.util.List;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -51,7 +52,7 @@ public final class AetherGodwood {
 	private AetherGodwood() {
 	}
 
-	static void registerContent(String namespace) {
+	public static void registerContent(String namespace) {
 		MerlinApi.enchantments().register(new ResourceLocation(PracticalEnchantments.MOD_ID, PATH))
 				.maxLevel(1)
 				.weight(1)
@@ -60,6 +61,8 @@ public final class AetherGodwood {
 				.supportedItems("#practical_enchantments:godwood_items")
 				.cost(20, 0, 50, 0)
 				.acquisition(Acquisition.TREASURE_ONLY)
+				// 与焚灭、抢夺互斥：同一个掉落类附魔在身上只该有一个
+				.exclusiveSet(ExclusiveSets.LOOTING.deepCopy())
 				.submit();
 		for (String path : LOOT_PATHS) {
 			MerlinApi.loot().register(LootInjectionBuilder.create()
@@ -73,7 +76,7 @@ public final class AetherGodwood {
 		}
 	}
 
-	static void registerCallbacks(EnchantmentEventRegistrar registrar, String namespace) {
+	public static void registerCallbacks(EnchantmentEventRegistrar registrar, String namespace) {
 		registrar.register(PracticalEnchantments.resolveEnchantment(ID),
 				BuiltInEvents.POST_KILL, AetherGodwood::onKill);
 		registrar.register(PracticalEnchantments.resolveEnchantment(ID),

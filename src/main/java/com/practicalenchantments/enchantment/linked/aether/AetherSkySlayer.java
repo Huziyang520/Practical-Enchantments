@@ -1,4 +1,4 @@
-package com.practicalenchantments.enchantment.linked;
+package com.practicalenchantments.enchantment.linked.aether;
 
 import com.huziyang520.merlinlib.api.LootInjectionBuilder;
 import com.huziyang520.merlinlib.api.MerlinApi;
@@ -34,7 +34,7 @@ public final class AetherSkySlayer {
 	private AetherSkySlayer() {
 	}
 
-	static void registerContent(String namespace) {
+	public static void registerContent(String namespace) {
 		MerlinApi.enchantments().register(new ResourceLocation(PracticalEnchantments.MOD_ID, PATH))
 				.maxLevel(5)
 				.weight(2)
@@ -56,7 +56,7 @@ public final class AetherSkySlayer {
 		}
 	}
 
-	static void registerCallbacks(EnchantmentEventRegistrar registrar) {
+	public static void registerCallbacks(EnchantmentEventRegistrar registrar) {
 		registrar.register(PracticalEnchantments.resolveEnchantment(ID),
 				BuiltInEvents.MODIFY_DAMAGE, AetherSkySlayer::onDamage);
 	}

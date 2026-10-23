@@ -1,4 +1,4 @@
-package com.practicalenchantments.enchantment.linked;
+package com.practicalenchantments.enchantment.linked.twilightforest;
 
 import com.huziyang520.merlinlib.api.LootInjectionBuilder;
 import com.huziyang520.merlinlib.api.MerlinApi;
@@ -30,7 +30,7 @@ public final class TfQuench {
 	private TfQuench() {
 	}
 
-	static void registerContent() {
+	public static void registerContent() {
 		MerlinApi.enchantments().register(new ResourceLocation(PracticalEnchantments.MOD_ID, PATH))
 				.maxLevel(1)
 				.weight(1)
@@ -52,7 +52,7 @@ public final class TfQuench {
 		}
 	}
 
-	static void registerCallbacks(EnchantmentEventRegistrar registrar) {
+	public static void registerCallbacks(EnchantmentEventRegistrar registrar) {
 		registrar.register(PracticalEnchantments.resolveEnchantment(ID),
 				BuiltInEvents.MODIFY_BLOCK_DROPS, TfQuench::onBlockDrops);
 	}

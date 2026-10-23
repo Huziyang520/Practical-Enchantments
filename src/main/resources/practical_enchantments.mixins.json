@@ -13,7 +13,8 @@
     "EnchantmentInfiniteCrossbowMixin",
     "PlayerInfinityAmmoMixin",
     "CubeMobSplitMixin",
-    "GodwoodLootMixin"
+    "GodwoodLootMixin",
+    "IncinerateDropMixin"
   ],
   "injectors": {
     "defaultRequire": 1
