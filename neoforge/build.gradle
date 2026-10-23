@@ -69,14 +69,8 @@ tasks.withType(JavaCompile).configureEach {
 	options.encoding = 'UTF-8'
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// CurseForge 一键推送（CurseGradle 1.5.2；插件不在 Gradle 门户，源见 settings.gradle）
-// ⚠ 实际上传不可用：CurseGradle 自建 HttpClient 不读代理 → Cloudflare 403。
-// 真正可用的上传是 ../cf-upload-init.gradle 的 cfUpload 任务（显式 HTTP CONNECT 代理 + legacy 端点）。
-// 【铁律】必须等用户实机测试通过并主动发指令后才允许执行，AI 不得自行上传。
-// 执行（在本 26.2 目录）：gradlew :neoforge:curseforge -Pcurse_release_type=<release|beta|alpha>
-// releaseType 必须随版本号变更逐模组询问用户，再用 -Pcurse_release_type 传入；缺省 beta 仅兜底。
-// API key 读 Gradle 属性 curseforge_api_key（用户全局配置；禁止写入仓库、禁止读取/打印该文件）。
+// CurseForge 上传走 CurseGradle 1.5.2（插件源见 settings.gradle）：gradlew :neoforge:curseforge -Pcurse_release_type=<release|beta|alpha>
+// 该插件不读代理，实际上传另用 cf-upload-init.gradle；API key 只从 Gradle 属性 curseforge_api_key 取。
 curseforge {
 	apiKey = project.findProperty('curseforge_api_key') ?: ''
 	project {
@@ -99,5 +93,5 @@ curseforge {
 		forgeGradleIntegration = false
 	}
 }
-// CurseGradle 不会自动为主产物挂任务依赖，上传前必须先构建
+// CurseGradle 不会自动为主产物挂任务依赖
 tasks.named('curseforge') { dependsOn 'jar' }

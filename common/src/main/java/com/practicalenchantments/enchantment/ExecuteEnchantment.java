@@ -13,14 +13,6 @@ import net.minecraft.world.item.enchantment.Enchantment;
 
 /**
  * 残杀附魔 - 剑/斧/矛单级（宝藏，附魔台/交易均不出）。
- *
- * <p>按目标受伤前血量比例放大最终伤害：</p>
- * <ul>
- *   <li>当前血量 10%~35%：剑/矛 ×1.5，斧 ×2</li>
- *   <li>当前血量低于 10%：剑/矛 ×3，斧 ×4</li>
- *   <li>高于 35%：伤害不变</li>
- * </ul>
- * <p>在最终伤害上乘算，与锋利等原版伤害附魔共存。</p>
  */
 public final class ExecuteEnchantment {
 

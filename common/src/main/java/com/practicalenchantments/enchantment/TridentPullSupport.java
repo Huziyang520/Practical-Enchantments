@@ -15,41 +15,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 三叉戟牵引状态中心（贯穿/粉碎 × 忠诚）。
- *
- * <p>两条捕获路径共用一张按<b>投掷者 UUID</b> 索引的状态表：</p>
- * <ul>
- *   <li>实体命中 → 走 enchantlib 的 {@code PROJECTILE_HIT} 事件回调
- *       （{@link PenetrationEnchantment#onProjectileHit} 调 {@link #captureMob}），
- *       不再对 ThrownTrident#onHitEntity 注入 Mixin；</li>
- *   <li>方块命中（粉碎）→ {@code TridentSmashMixin} 破坏成功后调 {@link #startItemPull}。</li>
- * </ul>
- *
- * <p>{@code TridentPullMixin} 的三叉戟 tick 只读本表：对存活目标与掉落物施加
- * 朝向主人的牵引。牵引不依赖三叉戟的 {@code dealtDamage}——方块命中路径上
- * 该字段不会置位（坑 30 根因）。</p>
- *
- * <p>同一玩家同时多把三叉戟回归时共用一条状态，牵引每刻重设速度，
- * 效果只增强不冲突。</p>
- *
- * <h2>跨方块：为什么是位置直移，而不是给掉落物"开穿透"</h2>
- *
- * <p>掉落物被拉向玩家的路上遇到方块会被原版碰撞挡住（跨一格或多格障碍即被拦截）。直觉的修法是
- * 牵引期间给掉落物开穿透（{@code Entity.noPhysics = true}），<b>但对 {@code ItemEntity} 无效</b>：
- * {@code javap -c net.minecraft.world.entity.item.ItemEntity} 显示它每一步 tick 都自己重算该字段
- * ——客户端分支直接置 {@code false}；服务端分支置 {@code !level.noCollision(this, box)}，为真时还会
- * 调 {@code moveTowardsClosestSpace} 把自己挤出方块。也就是说外部置的值会被它自己的 tick 覆盖，
- * 穿透这条路根本不成立（该行为在本线与 1.20.1 线一致，两边都实测过字节码）。</p>
- *
- * <p>因此改为<b>位置直移</b>：每刻先用掉落物自己的碰撞盒按同样的一小步做一次 {@code noCollision}
- * 探测，只有在"这一步会被挡住"时才沿同一方向一次跨过整个障碍——从第 2 步起逐步加大，找到第一个
- * 碰撞盒放得下的位置再 {@code setPos}，最多跨 {@link #ITEM_CROSS_MAX_STEPS} 步（0.5 × 8 = 4 格）。
- * 这样：</p>
- * <ul>
- *   <li>空旷处完全不介入，原有速度牵引一分不改；</li>
- *   <li>跨过去的是<b>整个障碍</b>，掉落物不会停在方块内部（停在内部会被原版挤回原侧，等于白跨）；</li>
- *   <li>厚墙或贴天花板时找不到落点就本刻不动、等下一刻，绝不把掉落物塞进石头里；</li>
- *   <li>跨越距离按到玩家的剩余距离封顶，不会冲过头。</li>
- * </ul>
  */
 public final class TridentPullSupport {
 
@@ -141,8 +106,8 @@ public final class TridentPullSupport {
 				target.setDeltaMovement(desired.normalize().scale(MOB_PULL_SPEED * distBoost)
 					.add(0, MOB_PULL_LIFT, 0));
 				target.fallDistance = 0.0F;
-				// 26.1-26.2 仍用 Entity#hurtMarked 置位来让服务端把速度同步给客户端
-				// （26.3 才把这个字段改名为 syncVelocity）。
+				// 每刻都要把速度同步给客户端；26.1-26.2 负责这件事的字段叫 hurtMarked
+				// （26.3 才改名 syncVelocity）。
 				target.hurtMarked = true;
 				target.setOnGround(false);
 			}
@@ -186,7 +151,6 @@ public final class TridentPullSupport {
 		Vec3 direction = move.scale(1.0D / distance);
 		item.setDeltaMovement(direction.scale(ITEM_PULL_SPEED).add(0, 0.04D, 0));
 		item.setPickUpDelay(0);
-		// 26.1-26.2 用 Entity#hurtMarked 触发速度同步（26.3 改名为 syncVelocity）
 		item.hurtMarked = true;
 		// 只设速度是不够的：地面摩擦、与主人自身及邻近掉落物的推挤、以及"我们设速度"与"掉落物自己
 		// tick"的先后顺序都会把这一速度吃掉，表现就是"拉了但拉不回来"。所以这里每刻再直接把掉落物

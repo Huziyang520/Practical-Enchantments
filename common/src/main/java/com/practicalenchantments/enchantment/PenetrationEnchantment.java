@@ -11,11 +11,6 @@ import net.minecraft.world.item.enchantment.Enchantment;
 
 /**
  * 贯穿附魔 - 三叉戟 Ⅴ 级（附魔台可出，不可交易）。
- *
- * <p>投掷命中实体额外造成 {@code 1.5 + 0.5×(等级-1)} 点伤害（Ⅰ~Ⅴ：1.5/2.0/2.5/3.0/3.5）。
- * 与激流互斥（trident_riptide 组）。</p>
- *
- * <p>「搭配忠诚时牵引命中目标」的物理效果由 {@code TridentPullMixin} 实现。</p>
  */
 public final class PenetrationEnchantment {
 
@@ -39,9 +34,9 @@ public final class PenetrationEnchantment {
 		float extra = 1.5F + 0.5F * (ctx.level() - 1);
 
 		// 弹射物本体伤害此刻已结算（mixin 注入点在 onHitEntity 之后），目标的伤害冷却
-		// （> 10 时）会把"额外伤害 ≤ lastHurt"的再次 hurtServer
-		// 直接吞掉——表现为 1.5 + 0.5×(等级-1) 完全没生效。先清零冷却，让额外伤害全额结算。
-		// 26.1-26.2 里该字段叫 invulnerableTime（Entity 上的公开字段；26.3 才改名为 damageCooldownTime）。
+		// （> 10 时）会把"额外伤害 ≤ lastHurt"的再次 hurtServer 直接吞掉——表现为
+		// 1.5 + 0.5×(等级-1) 完全没生效。先清零冷却，让额外伤害全额结算。
+		// 26.3 把这个字段改名 damageCooldownTime，26.1-26.2 仍叫 invulnerableTime。
 		event.target().invulnerableTime = 0;
 		event.target().hurtServer(event.level(),
 			event.attacker().damageSources().mobAttack(event.attacker()), extra);

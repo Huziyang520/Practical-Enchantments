@@ -10,16 +10,11 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 
 /**
  * 免死类附魔（恶魔交易 / 掉落不死亡）共用工具。
- *
- * <p>提供：① 不依赖注册器的 ItemStack 附魔等级查询（Mixin 里拿不到
- * HolderLookup，按附魔 ID 字符串比对）；② 原版不死图腾同款复活效果；
- * ③ 全身物品掉落工具。</p>
  */
 public final class DeathSaveSupport {
 
@@ -145,8 +140,8 @@ public final class DeathSaveSupport {
 		}
 
 		// 与原版死亡掉落一致：随机散射到脚下，而不是 Block.popResource 那样原地堆在方块中心。
-		// 26.1-26.2 的公开入口是 LivingEntity#drop(stack, randomly=true, thrownFromHand=false)：
-		// 它内部创建掉落物并 addFreshEntity（26.3 才拆成 public 的 createItemStackToDrop + 手动添加）。
+		// 26.1-26.2 的公开入口是 LivingEntity#drop(stack, randomly=true, thrownFromHand=false)，
+		// 它内部已经 addFreshEntity；26.3 才拆成 createItemStackToDrop + 手动添加。
 		for (ItemStack drop : drops) {
 			player.drop(drop, true, false);
 		}

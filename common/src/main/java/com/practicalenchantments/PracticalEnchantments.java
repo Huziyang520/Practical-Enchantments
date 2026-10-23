@@ -6,6 +6,7 @@ import com.huziyang520.merlinlib.api.MerlinApi;
 import com.huziyang520.merlinlib.event.EnchantmentEventRegistrar;
 import com.practicalenchantments.config.PracticalConfig;
 import com.practicalenchantments.enchantment.*;
+import com.practicalenchantments.enchantment.linked.LinkedEnchantments;
 import com.practicalenchantments.notice.MerlinLibNotice;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
@@ -16,19 +17,6 @@ import net.minecraft.world.item.enchantment.Enchantment;
 
 /**
  * Practical Enchantments 模组入口（前置：MerlinLib）。
- *
- * <p>本类不实现任何加载器接口：两端入口只调用一次 {@link #bootstrap()}，把本模组的三件事挂到
- * MerlinLib 的服务器生命周期上：</p>
- * <ul>
- *   <li><b>战利品注入</b>：必须赶在数据包读战利品表<b>之前</b>登记，所以挂在"服务器开始启动"；</li>
- *   <li><b>事件回调</b>：要解析附魔 Holder，必须等数据包读完（动态注册表就绪），所以挂在"服务器启动完成"；</li>
- *   <li><b>配置与进服预告</b>：与事件回调同一时机。</li>
- * </ul>
- *
- * <p>附魔定义、互斥组、{@code #minecraft:tradeable} 标签与村民交易都已改为数据包资源
- * （{@code data/} 下），本类不再注册它们。</p>
- *
- * <p>业务逻辑一份，位于 {@code common}，不含任何 {@code net.fabricmc} / {@code net.neoforged} 引用。</p>
  */
 public final class PracticalEnchantments {
 
@@ -58,6 +46,8 @@ public final class PracticalEnchantments {
 		// 进服提示先登记一次"默认开启"：MerlinLib 的提示设置界面在客户端就能列出本模组，
 		// 不必等到进过世界（真默认值在服务器启动、读完配置后再覆盖一次注册）。
 		MerlinLibNotice.registerEarly();
+		// 联动附魔的定义与战利品规则必须在数据包读取之前登记，模组不在时整块跳过。
+		LinkedEnchantments.registerContent();
 		// 战利品：数据包读表之前就位（ServerStarting 早于数据包加载）。
 		MerlinApi.lifecycle().onServerStarting(server -> registerLootInjections());
 		// 事件回调与配置：数据包读完之后（动态注册表此时才有附魔）。
@@ -205,6 +195,8 @@ public final class PracticalEnchantments {
 		ExecuteEnchantment.registerCallbacks(registrar, registries);
 		SoulSiphonEnchantment.registerCallbacks(registrar, registries);
 		PenetrationEnchantment.registerCallbacks(registrar, registries);
+		// 联动附魔：只在联动模组存在时才有 Holder 可解析
+		LinkedEnchantments.registerCallbacks(registrar, registries);
 	}
 
 	/** 单条战利品注入：一张表、一个附魔、一个百分比，以附魔书形式注入，权重 1。 */

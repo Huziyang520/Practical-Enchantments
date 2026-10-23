@@ -11,9 +11,6 @@ import net.minecraft.world.item.enchantment.Enchantment;
 
 /**
  * 汲灵附魔 - 剑/斧/矛 Ⅴ 级（附魔台可出，老手级图书管理员）。
- *
- * <p>每次命中按攻击的原始伤害（护甲减免前，含矛冲锋加成）产出经验球：</p>
- * <pre>经验 = round(min(原始伤害 × 0.2 × 等级, 2 × 等级))</pre>
  */
 public final class SoulSiphonEnchantment {
 

@@ -16,8 +16,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 
 /**
- * 中国人附魔 - 胸甲 I 级
- * 效果：装备后解锁创造飞行；空中受击耐久消耗 ×3；拿下胸甲立即恢复正常
+ * 中国人附魔 - 胸甲 I 级 效果：装备后解锁创造飞行；空中受击耐久消耗 ×3；拿下胸甲立即恢复正常
  */
 public final class ChineseEnchantment {
 
