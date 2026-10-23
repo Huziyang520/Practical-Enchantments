@@ -8,20 +8,6 @@
 
 **Practical Enchantments** adds a growing set of enchantments that do something you can feel in play - combat, mining, defence, tridents, and interacting with mobs - instead of only moving numbers around. Every enchantment is built on **MerlinLib**, which registers it and provides the in-game tools for looking at it.
 
-### Supported versions
-
-This branch, `main`, holds only what is the same for every release: the documents. The code lives on the
-version branches - pick the one that matches your game and loader.
-
-| Branch | Minecraft | Loader |
-|---|---|---|
-| [`1.20.1`](https://github.com/Huziyang520/Practical-Enchantments/tree/1.20.1) | 1.20.1 | Forge |
-| [`1.21.1`](https://github.com/Huziyang520/Practical-Enchantments/tree/1.21.1) | 1.21.1 | NeoForge |
-| [`26.1-26.2`](https://github.com/Huziyang520/Practical-Enchantments/tree/26.1-26.2) | 26.1 - 26.2 | NeoForge, Fabric |
-| [`26.3`](https://github.com/Huziyang520/Practical-Enchantments/tree/26.3) | 26.3 | NeoForge, Fabric |
-
-A branch that covers a range of game versions ships one jar for the whole range.
-
 The enchantments themselves are listed in [ENCHANTMENTS_LIST.md](ENCHANTMENTS_LIST.md)
 ([中文](ENCHANTMENTS_LIST_CN.md)); what changed in each release is in [CHANGELOGS.md](CHANGELOGS.md).
 
@@ -58,7 +44,8 @@ Enchantment **descriptions** in the tooltip come from an enchantment description
 ### Settings
 
 - Enchantment definitions, exclusion groups and villager trades are data pack resources, so `/reload` picks up changes without restarting.
-- The join message in chat: its text lives in `assets/practical_enchantments/lang/`, and its switch is `notice.merlinlib` in `config/practical_enchantments/common.properties`. It can also be overridden per mod from **MerlinLib config → General → Edit each mod's join notices**.
+- The join message in chat: its text lives in `assets/practical_enchantments/lang/`, and its switch is `notice.merlinlib` in `config/practical_enchantments/common.properties`. MerlinLib keeps one switch per mod in `config/MerlinLib/notices.toml`, editable on the join-notice page of its configuration screen or with `/merlinlib notices`.
+- Three vanilla bow switches sit under **Vanilla enchantment tweaks** in the configuration screen: Infinity on crossbows, firing with Infinity without an arrow in the bag, and spectral arrows surviving Infinity. All three are server settings.
 
 ### Links
 
@@ -70,19 +57,6 @@ Enchantment **descriptions** in the tooltip come from an enchantment description
 ## 中文
 
 **Practical Enchantments（实用附魔）** 增加一批**在玩法上真的有用**的附魔：战斗、挖掘、防御、三叉戟，以及与生物互动的机制，而不是只改数字。每个附魔都构建在 **MerlinLib** 之上——由它完成注册，并提供查看与发放的界面与指令。
-
-### 支持版本
-
-本分支 `main` 只放各版本完全相同的内容——文档；代码在版本分支上，按你的游戏版本与加载器选择。
-
-| 分支 | Minecraft | 加载器 |
-|---|---|---|
-| [`1.20.1`](https://github.com/Huziyang520/Practical-Enchantments/tree/1.20.1) | 1.20.1 | Forge |
-| [`1.21.1`](https://github.com/Huziyang520/Practical-Enchantments/tree/1.21.1) | 1.21.1 | NeoForge |
-| [`26.1-26.2`](https://github.com/Huziyang520/Practical-Enchantments/tree/26.1-26.2) | 26.1 - 26.2 | NeoForge, Fabric |
-| [`26.3`](https://github.com/Huziyang520/Practical-Enchantments/tree/26.3) | 26.3 | NeoForge, Fabric |
-
-覆盖一段游戏版本的分支，为整段版本提供同一个 jar。
 
 附魔一览见 [ENCHANTMENTS_LIST_CN.md](ENCHANTMENTS_LIST_CN.md)（[English](ENCHANTMENTS_LIST.md)），
 每个版本的改动见 [CHANGELOGS.md](CHANGELOGS.md)。
@@ -120,7 +94,8 @@ Enchantment **descriptions** in the tooltip come from an enchantment description
 ### 设置
 
 - 附魔定义、互斥组与村民交易都是**数据包资源**，改完 `/reload` 即生效，无需重启。
-- 进服时聊天栏的公告：文案在 `assets/practical_enchantments/lang/`，开关是 `config/practical_enchantments/common.properties` 的 `notice.merlinlib`；也可以在 **MerlinLib 设置 → 通用 → 编辑各模组聊天栏提示** 里按模组覆盖。
+- 进服时聊天栏的公告：文案在 `assets/practical_enchantments/lang/`，开关是 `config/practical_enchantments/common.properties` 的 `notice.merlinlib`。按模组的开关由 MerlinLib 统一放在 `config/MerlinLib/notices.toml`，可在它配置界面的进世界通知页或 `/merlinlib notices` 里改。
+- 配置界面的 **原版附魔调整** 里有三项原版弓弩行为：无限能否附在弩上、无限是否不需要背包有箭、无限是否作用于光灵箭。三项都是服务端设置。
 
 ### 链接
 

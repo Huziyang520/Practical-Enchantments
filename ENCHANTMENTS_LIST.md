@@ -26,6 +26,10 @@
 | Undying Drop | `undying_drop` | Armour (any piece) | Ⅰ–Ⅲ | not obtainable | Demonic Pact |
 | Venom | `venom` | Swords | Ⅰ–Ⅱ | table · trade · loot | Wither Aspect, Fire Aspect |
 | Wither Aspect | `wither_aspect` | Swords | Ⅰ–Ⅱ | trade · loot | Venom, Fire Aspect |
+| Ember Quench | `tf_quench` | Tools | single | Twilight Forest loot | — |
+| Twilight Slayer | `tf_night_slayer` | Swords, axes | Ⅰ–Ⅴ | Twilight Forest loot | — |
+| Godwood Aura | `aether_godwood` | Weapons, tools | single | Aether loot | — |
+| Sky Slayer | `aether_sky_slayer` | Bows | Ⅰ–Ⅴ | Aether loot | — |
 
 ## Details
 
@@ -213,6 +217,34 @@
   damage: **−1** at level Ⅰ and **−0.5** at level Ⅱ. Wither hurts everything, undead included, and can
   kill.
 - **In-game description:** Inflicts Wither on the target
+
+### Ember Quench (`tf_quench`)
+
+- **Applies to:** tools · **Levels:** single
+- **Obtained by:** Twilight Forest loot only
+- **Effect:** blocks you break drop what a furnace would give for them.
+- **In-game description:** Automatically smelts
+
+### Twilight Slayer (`tf_night_slayer`)
+
+- **Applies to:** swords, axes · **Levels:** Ⅰ–Ⅴ
+- **Obtained by:** Twilight Forest loot only
+- **Effect:** in a dimension whose clock says night, hits deal **2 + 1.5 × (level − 1)** more damage.
+- **In-game description:** Deals more damage in the dark
+
+### Godwood Aura (`aether_godwood`)
+
+- **Applies to:** weapons, tools · **Levels:** single
+- **Obtained by:** Aether loot only; not offered by the enchanting table and not sold by librarians
+- **Effect:** kills drop twice the loot; breaking a block has a chance to drop **1–2** extra God Shards.
+- **In-game description:** A mysterious power from the Aether: kills drop twice the loot, and breaking blocks may drop extra God Shards
+
+### Sky Slayer (`aether_sky_slayer`)
+
+- **Applies to:** bows · **Levels:** Ⅰ–Ⅴ
+- **Obtained by:** Aether loot only
+- **Effect:** hits on airborne targets deal **1 + level** more damage and slow them for 5 seconds — level Ⅰ slows nothing, level Ⅴ slows Ⅳ.
+- **In-game description:** Deals more damage to airborne targets
 
 ## Order
 
