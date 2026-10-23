@@ -13,24 +13,6 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Practical Enchantments 通用配置（服务端）。
- *
- * <p>文件位置：{@code config/practical_enchantments/common.properties}。
- * 首次运行会自动生成一份带中文注释的模板；改完保存后重进世界 / 重启服务器生效。</p>
- *
- * <p>本模组是服务端模组，只读服务端这一份配置，不需要与客户端同步。</p>
- *
- * <h2>1.20.1 移植：模板从文本块改成字符串拼接</h2>
- *
- * <p>本类逻辑是直移：路径、键名、默认值、日志、异常兜底都与 26.3 逐字相同。唯一改的是
- * {@link #TEMPLATE} 的写法。26.3 用 Java 文本块（{@code """}）写模板，这里改成
- * {@link String#join}{@code ("\n", ...) + "\n"}。</p>
- *
- * <p><b>如实记下这一点：</b>文本块自 Java 15 起就是标准语法，本工程用 JDK 17 编译，
- * 文本块其实<b>可以</b>编译，所以这不是编译器逼出来的差异，而是照着本工程的移植约定
- * （目标 Java 17、不使用文本块与 {@code Math.clamp}）改的。两种写法产生的字节完全一致：
- * 文本块会把行尾规范化为 {@code \n}，拼接版也显式用 {@code \n} 并在末尾补一个换行，
- * 生成的 {@code common.properties} 与 26.3 一模一样。若日后要还原成文本块，直接删掉
- * {@code TEMPLATE_LINES} 即可，语义没有任何差别。</p>
  */
 public final class PracticalConfig {
 
@@ -68,7 +50,7 @@ public final class PracticalConfig {
 		"notice.merlinlib=true"
 	};
 
-	/** 模板全文：与 26.3 文本块产生的字节一致（{@code \n} 行尾 + 末尾换行）。 */
+	/** 模板全文：{@code \n} 行尾 + 末尾换行。 */
 	private static final String TEMPLATE = String.join("\n", TEMPLATE_LINES) + "\n";
 
 	/** 是否显示 MerlinLib 更换预告（默认 true） */

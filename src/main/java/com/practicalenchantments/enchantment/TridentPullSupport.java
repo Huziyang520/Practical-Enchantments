@@ -15,66 +15,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 三叉戟牵引状态中心（贯穿/粉碎 × 忠诚）。
- *
- * <p>两条捕获路径共用一张按<b>投掷者 UUID</b> 索引的状态表：</p>
- * <ul>
- *   <li>实体命中 → 走 MerlinLib 的 {@code PROJECTILE_HIT} 事件回调
- *       （{@code PenetrationEnchantment#onProjectileHit} 调 {@link #captureMob}），
- *       不再对 ThrownTrident#onHitEntity 注入 Mixin；</li>
- *   <li>方块命中（粉碎）→ {@code TridentSmashMixin} 破坏成功后调 {@link #startItemPull}。</li>
- * </ul>
- *
- * <p>{@code TridentPullMixin} 的三叉戟 tick 只读本表：对存活目标与掉落物施加
- * 朝向主人的牵引。牵引不依赖三叉戟的 {@code dealtDamage}——方块命中路径上
- * 该字段不会置位（坑 30 根因）。</p>
- *
- * <p>同一玩家同时多把三叉戟回归时共用一条状态，牵引每刻重设速度，
- * 效果只增强不冲突。</p>
- *
- * <h2>1.20.1 移植：速度同步的字段名换了</h2>
- *
- * <p>公开方法签名与 26.3 完全一致（{@link #captureMob}、{@link #startItemPull}、
- * {@link #tick}、{@link #clear} 以及全部常量），只有一处被迫改动：</p>
- *
- * <p>26.3 的注释写着"Entity#hurtMarked 字段已移除，markHurt() 改为写 syncVelocity"，
- * 于是 26.3 的代码直接置位 {@code target.syncVelocity = true}。<b>1.20.1 恰好相反</b>：
- * 没有 {@code syncVelocity}，有的是公开字段 {@code Entity.hurtMarked}。这不是猜测——
- * 用 {@code javap} 把整个 Forge jar 扫了一遍，引用 {@code hurtMarked} 的类只有 7 个，
- * 其中服务端的 {@code ServerEntity} 是真正的消费者：</p>
- *
- * <pre>
- * net/minecraft/server/level/ServerEntity.class:
- *   1129: getfield  Entity.hurtMarked:Z
- *   1136: ifeq      1162
- *   1139: new       ClientboundSetEntityMotionPacket
- *   1151: invokevirtual broadcastAndSend
- *   1155: getfield  Entity.hurtMarked:Z
- *   1159: putfield  Entity.hurtMarked:Z      // 发完清位
- * </pre>
- *
- * <p>也就是说 1.20.1 里置位 {@code hurtMarked} 正是"把这一时刻的速度发给客户端"的官方手段，
- * 与 26.3 置位 {@code syncVelocity} 完全对位。所以这里照旧每刻置位，只是字段名换成
- * {@code hurtMarked}。</p>
- *
- * <h2>跨方块：为什么是位置直移，而不是给掉落物"开穿透"</h2>
- *
- * <p>掉落物被拉向玩家的路上遇到方块会被原版碰撞挡住（跨一格或多格障碍即被拦截）。直觉的修法是
- * 牵引期间给掉落物开穿透（{@code Entity.noPhysics = true}），<b>但对 {@code ItemEntity} 无效</b>：
- * {@code javap -c net.minecraft.world.entity.item.ItemEntity} 显示它每一步 tick 都自己重算该字段
- * ——客户端分支直接置 {@code false}；服务端分支置 {@code !level.noCollision(this, box)}，为真时还会
- * 调 {@code moveTowardsClosestSpace} 把自己挤出方块。也就是说外部置的值会被它自己的 tick 覆盖，
- * 穿透这条路根本不成立。</p>
- *
- * <p>因此改为<b>位置直移</b>：每刻先用掉落物自己的碰撞盒按同样的一小步做一次 {@code noCollision}
- * 探测，只有在"这一步会被挡住"时才沿同一方向一次跨过整个障碍——从第 2 步起逐步加大，找到第一个
- * 碰撞盒放得下的位置再 {@code setPos}，最多跨 {@link #ITEM_CROSS_MAX_STEPS} 步（0.5 × 8 = 4 格）。
- * 这样：</p>
- * <ul>
- *   <li>空旷处完全不介入，原有速度牵引一分不改；</li>
- *   <li>跨过去的是<b>整个障碍</b>，掉落物不会停在方块内部（停在内部会被原版挤回原侧，等于白跨）；</li>
- *   <li>厚墙或贴天花板时找不到落点就本刻不动、等下一刻，绝不把掉落物塞进石头里；</li>
- *   <li>跨越距离按到玩家的剩余距离封顶，不会冲过头。</li>
- * </ul>
  */
 public final class TridentPullSupport {
 
@@ -166,9 +106,9 @@ public final class TridentPullSupport {
 				target.setDeltaMovement(desired.normalize().scale(MOB_PULL_SPEED * distBoost)
 					.add(0, MOB_PULL_LIFT, 0));
 				target.fallDistance = 0.0F;
-				// 26.3 起 Entity#hurtMarked 字段已移除，markHurt() 改为写 syncVelocity；
+				// 上游版本起 Entity#hurtMarked 字段已移除，markHurt() 改为写 syncVelocity；
 				// 1.20.1 反过来——没有 syncVelocity，速度同步的公开入口就是 hurtMarked
-				// （见类 javadoc 里 ServerEntity 的 javap 证据）。置位它，服务端才会把
+				// （见类 javadoc 里 ServerEntity 的 字节码证据）。置位它，服务端才会把
 				// 这一时刻的速度用 ClientboundSetEntityMotionPacket 发给客户端。
 				target.hurtMarked = true;
 				target.setOnGround(false);
@@ -197,7 +137,7 @@ public final class TridentPullSupport {
 	 * 把一件掉落物朝玩家拽一步。
 	 *
 	 * <p>和生物分支一样每刻重设速度；关键在于补上速度同步——1.20.1 的 {@code ServerEntity} 只在
-	 * {@code Entity.hurtMarked} 置位时才把这一时刻的速度发出去（见类 javadoc 的 javap 证据）。
+	 * {@code Entity.hurtMarked} 置位时才把这一时刻的速度发出去（见类 javadoc 的 字节码证据）。
 	 * 原先生物分支置位、掉落物分支忘了置：服务端一直在拉，客户端看到的还是旧位置，表现就是
 	 * "拉了但经常像失败"。</p>
 	 *

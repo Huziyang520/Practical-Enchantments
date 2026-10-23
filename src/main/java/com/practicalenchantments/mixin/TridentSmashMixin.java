@@ -20,45 +20,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /**
  * 粉碎附魔：投掷三叉戟击中方块时瞬间破坏。
- *
- * <p>ThrownTrident 不重写 {@code onHitBlock}，所以注入打在父类
- * {@link AbstractArrow#onHitBlock(BlockHitResult)} HEAD，用 instanceof 过滤出三叉戟。
- * 不取消原方法——插中方块后该插就插、忠诚该回回。</p>
- *
- * <p>挖掘等级用对应等级的镐作为"虚拟工具"判定 {@code isCorrectToolForDrops}：
- * 达不到等级的方块<b>不破坏</b>（防止低等级粉碎炸毁高等级矿物）。基岩等
- * 不可破坏方块（destroyTime &lt; 0）永远跳过。掉落物与经验按虚拟镐生成。</p>
- *
- * <h2>1.20.1：注入点直移</h2>
- *
- * <p>javap 复核（与 26.3 同名同描述符，且 {@code ThrownTrident} 确实没有覆写它）：</p>
- *
- * <pre>
- * protected void net.minecraft.world.entity.projectile.AbstractArrow.onHitBlock(net.minecraft.world.phys.BlockHitResult);
- *   descriptor: (Lnet/minecraft/world/phys/BlockHitResult;)V
- * </pre>
- *
- * <h2>1.20.1 的强制分歧：取"这枚三叉戟是什么"的方式</h2>
- *
- * <p>26.3 用 {@code trident.getWeaponItem()}。<b>1.20.1 的 {@code AbstractArrow} 没有这个方法</b>——
- * 用 javap 列全成员确认，整个类里没有任何返回 {@code ItemStack} 的公开成员。本版本对应的是
- * {@code protected abstract ItemStack getPickupItem()}，它对三叉戟返回的就是
- * {@code tridentItem} 的副本（{@code javap -c} 看到的是
- * {@code getfield tridentItem; invokevirtual ItemStack.copy(); areturn}），
- * 正是这里要的"投掷时那份武器快照"。</p>
- *
- * <p>它是 {@code protected}，本包无法直接调用；MerlinLib 已经为此提供了公开的 Mixin 访问器
- * {@link AbstractArrowAccessor}（其 {@code merlinlib$getPickupItem()} 用 {@code @Invoker}
- * 暴露同一方法，并已登记进 {@code merlinlib.mixins.json}）。这里复用它，而不是另造一个访问器
- * 去改 PE 自己的 mixin 配置。</p>
- *
- * <p>其余调用逐个 javap 复核过：{@code BlockState#getDestroySpeed(BlockGetter, BlockPos)}、
- * {@code BlockState#requiresCorrectToolForDrops()}、{@code BlockState#spawnAfterBreak(ServerLevel, BlockPos, ItemStack, boolean)}
- * （均在 {@code BlockBehaviour$BlockStateBase} 上声明）、
- * {@code ItemStack#isCorrectToolForDrops(BlockState)}、
- * 6 参 {@code Block#dropResources(...)}、以及
- * {@code Level#destroyBlock(BlockPos, boolean)}（{@code LevelWriter} 的默认方法，本类经由
- * {@code Level → LevelAccessor → LevelSimulatedRW → LevelWriter} 继承到）——签名全部一致。</p>
  */
 @Mixin(AbstractArrow.class)
 public abstract class TridentSmashMixin {

@@ -83,6 +83,14 @@ dependencies {
     // mixins.json naming a refmap file nobody produced, and every mixin silently fails to apply.
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
     compileOnly 'com.google.code.findbugs:jsr305:3.0.2'
+
+    // Cloth Config and Jupiter, the two optional configuration screens of the vanilla-enchantment
+    // tweaks. Local copies of the exact jars the 1.20.1 test instance runs: the build is offline by
+    // rule, and a maven coordinate would risk resolving a different version than players have.
+    // libs/ is gitignored, so neither jar is committed; both are compileOnly, because the screens are
+    // only built when the mod is installed and nothing of either may be bundled.
+    compileOnly files('libs/cloth-config-forge-11.1.136.jar')
+    compileOnly files('libs/jupiter-2.3.7-1.20.1-forge.jar')
 }
 
 // ---------------------------------------------------------------------------------------------

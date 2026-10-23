@@ -43,5 +43,20 @@
   "enchantment.practical_enchantments.cat_charm.desc": "像小猫陪在你的身边~",
   "enchantment.practical_enchantments.cat_attraction": "吸猫体质",
   "enchantment.practical_enchantments.cat_attraction.desc": "喵星人（们）对你放下了戒心",
-  "practical_enchantments.notice.merlinlib": "Practical Enchantments：由于一些原因，原前置模组 EnchantLib 已停更，自 1.3.0 版本起，本模组仅需以 MerlinLib 为前置；本模组的任何问题，欢迎在你能想到的任何地方反馈给作者；若你对新的附魔/魔咒有好的创意，欢迎告诉作者。该提示可在 MerlinLib 的配置界面关闭。"
+  "enchantment.practical_enchantments.tf_quench": "炽血之淬",
+  "enchantment.practical_enchantments.tf_quench.desc": "自动熔炼",
+  "enchantment.practical_enchantments.tf_night_slayer": "暮色杀手",
+  "enchantment.practical_enchantments.tf_night_slayer.desc": "在黑暗中造成更高的伤害",
+  "enchantment.practical_enchantments.aether_godwood": "神木气息",
+  "enchantment.practical_enchantments.aether_godwood.desc": "来自天境的神秘力量，击杀生物可获取双倍掉落物；破坏时有概率额外掉落神能晶片",
+  "enchantment.practical_enchantments.aether_sky_slayer": "飞行杀手",
+  "enchantment.practical_enchantments.aether_sky_slayer.desc": "对空中单位造成更高的伤害",
+  "practical_enchantments.notice.merlinlib": "Practical Enchantments：由于一些原因，原前置模组 EnchantLib 已停更，自 1.3.0 版本起，本模组仅需以 MerlinLib 为前置；本模组的任何问题，欢迎在你能想到的任何地方反馈给作者；若你对新的附魔/魔咒有好的创意，欢迎告诉作者。该提示可在 MerlinLib 的配置界面关闭。",
+  "practical_enchantments.configuration.vanilla_tweaks": "原版附魔调整",
+  "practical_enchantments.configuration.vanilla_tweaks.infinity_crossbow": "无限可用于弩",
+  "practical_enchantments.configuration.vanilla_tweaks.infinity_crossbow.tooltip": "允许把「无限」附在弩上。",
+  "practical_enchantments.configuration.vanilla_tweaks.infinity_no_arrow": "无需背包有箭",
+  "practical_enchantments.configuration.vanilla_tweaks.infinity_no_arrow.tooltip": "带有「无限」的武器在背包没有普通箭时也能射击。",
+  "practical_enchantments.configuration.vanilla_tweaks.infinity_spectral": "无限作用于光灵箭",
+  "practical_enchantments.configuration.vanilla_tweaks.infinity_spectral.tooltip": "「无限」武器射出的光灵箭不消耗，但背包里仍需至少有一根光灵箭。"
 }

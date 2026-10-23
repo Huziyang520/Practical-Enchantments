@@ -10,55 +10,6 @@ import net.minecraft.world.item.enchantment.EnchantmentCategory;
 
 /**
  * Practical Enchantments 的 22 个附魔定义（1.20.1）。
- *
- * <h2>为什么是"一个注册类 + 22 个私有静态方法"，而不是 22 个类</h2>
- *
- * <p>26.3 的 22 个附魔是数据包 json，1.20.1 必须变成代码注册。选择一个注册类，理由有三条：</p>
- * <ol>
- *   <li><b>定义是纯数据，行为不在这里。</b>22 个附魔的触发逻辑由 26.3 的行为类
- *       （{@code VenomEnchantment} 等，各自带 {@code registerCallbacks}）承担，它们是<b>另一件事</b>，
- *       会单独移植。若把定义也塞进那些类，每个类就会同时承担"注册数值"与"事件回调"两种职责，
- *       而后者在 1.20.1 上还要等注册表就绪，时机与前者不同（定义必须在模组构造期完成）。</li>
- *   <li><b>注册必须一次性、在模组构造期完成。</b>1.20.1 的附魔是静态注册表，注册表事件只开一次。
- *       集中在一个 {@link #registerAll()} 里，最容易保证"全部注册、且只注册一次"，也最容易和
- *       {@code PracticalEnchantments.registerEnchantments()} 的守卫对齐。</li>
- *   <li><b>可审计性。</b>22 个 json 是规格说明书。把 22 段定义并排放在一个文件里，可以和
- *       {@code 26.3/.../enchantment/*.json} 逐条对照，而不用在 22 个文件之间来回跳。</li>
- * </ol>
- *
- * <h2>1.20.1 的强制分歧（逐条）</h2>
- *
- * <ul>
- *   <li><b>supported_items 原样透传。</b>json 里的 {@code #minecraft:enchantable/*} 是 1.21 的标签族，
- *       1.20.1 一个都不存在。翻译统一由 MerlinLib 的
- *       {@code EnchantmentRegistry.MerlinEnchantment.matchesTag} 完成，本类<b>不改写</b>这些字符串——
- *       翻译只该有一个地方。</li>
- *   <li><b>acquisition 来自两个标签文件。</b>26.3 用 {@code data/minecraft/tags/enchantment/} 下的
- *       {@code in_enchanting_table.json} 与 {@code tradeable.json} 表达"能否从附魔台/村民处获得"。
- *       1.20.1 没有 {@code tags/enchantment} 这一层，改由 {@link Acquisition} 的布尔量落到
- *       {@code isDiscoverable()} / {@code isTradeable()} 上。</li>
- *   <li><b>fishing / lootChest 一律 false。</b>PE 的宝箱战利品是<b>代码注入</b>
- *       （{@code MerlinApi.loot()}，见 {@code PracticalEnchantments.registerLootInjections()}），
- *       而不是 {@code minecraft:on_random_loot} 标签；26.3 也没有那两个标签文件。填 true 会记录一条
- *       本模组并未通过该渠道注册的来源，所以留 false，让 {@link Acquisition} 只陈述事实。</li>
- *   <li><b>treasureOnly / curse 一律 false。</b>26.3 没有 {@code treasure.json} 或 {@code curse.json}，
- *       原版默认即"非宝藏、非诅咒"。特别地 {@code destruction}/{@code incinerate} 虽在注释里被称作
- *       "宝藏"，但它们出现在 {@code tradeable.json} 里；而 {@code treasureOnly=true} 会把
- *       {@code isTradeable()} 压成 false，与标签直接矛盾，所以不能按注释推断。</li>
- *   <li><b>category 只在"附魔台必须筛"时设置。</b>1.20.1 的附魔台对<b>非书本</b>物品只调用
- *       {@code EnchantmentCategory.canEnchant(Item)}，<b>不看</b> {@code supported_items}
- *       （那条路径只在附魔书/战利品上走）。所以"能否在附魔台出现"由两件事共同决定：
- *       {@code isDiscoverable()}（来自 {@code in_enchanting_table.json}）与 category。
- *       凡在附魔台标签里的附魔，本类都设了与之匹配的 category；不在标签里的则一律留默认
- *       {@code VANISHABLE}，因为附魔台根本不会考虑它们，category 对它们没有意义。</li>
- * </ul>
- *
- * <h2>ID 常量放在这里</h2>
- *
- * <p>26.3 的每个行为类自带 {@code ID}（{@code String}）。移植到本工程时，那些类<b>还不存在</b>
- * （目标目录当前只有入口、Forge 入口与村民交易）。为免重复定义，本类拥有 22 个
- * {@code public static final ResourceLocation} 常量；行为类移植时应<b>引用</b>它们，而不是各写一份。
- * 注意类型差异：26.3 是 {@code String}，这里是 {@link ResourceLocation}，因为 1.20.1 的注册表按键就是它。</p>
  */
 public final class EnchantmentDefinitions {
 
@@ -76,7 +27,7 @@ public final class EnchantmentDefinitions {
 	 *
 	 * <p>写成 {@link JsonArray} 而不是 7 个字符串拼接：{@code supported_items} 在原生格式里允许数组，
 	 * 而 builder 的 {@code supportedItems(JsonElement)} 重载正是为这种多元素声明准备的。用
-	 * {@link JsonParser} 解析一段字面 json，是为了让这 7 个 id 与 26.3 的 json 文件保持<b>肉眼可比</b>的
+	 * {@link JsonParser} 解析一段字面 json，是为了让这 7 个 id 与 上游版本的 json 文件保持<b>肉眼可比</b>的
 	 * 同一形状——如果写成 {@code List<String>} 再转换，日后核对时就要多绕一层。</p>
 	 *
 	 * <p><b>为什么必须是数组而不是标签。</b>曾经用 {@code #forge:heads} 近似替代过，但那会漏掉
@@ -144,7 +95,7 @@ public final class EnchantmentDefinitions {
 	 * 注册全部 22 个附魔。
 	 *
 	 * <p><b>必须在模组构造期调用</b>：1.20.1 的附魔是 {@code DeferredRegister} 条目，注册表在模组
-	 * 构造期之后即冻结，之后再也加不进去。这也是 26.3 与本版本最大的行为差异——那边靠运行期生成
+	 * 构造期之后即冻结，之后再也加不进去。这也是 上游版本与本版本最大的行为差异——那边靠运行期生成
 	 * 数据包，任何时刻登记都算数。</p>
 	 *
 	 * <p>幂等性不由本方法负责：重复调用会重复向 MerlinLib 提交，后者会对同一 id 告警并以后者为准。

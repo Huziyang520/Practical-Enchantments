@@ -15,45 +15,6 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 
 /**
  * 羽落附魔 - 靴子单级（娱乐，仅创造/指令获取）。
- *
- * <p>穿着时持续获得缓降，免疫摔落伤害；潜行（Shift）时缓降失效以恢复正常下落速度。
- * 与原版摔落缓冲（羽毛掉落）互斥。</p>
- *
- * <p><b>只回收自己授予的那份缓降</b>：玩家自己用 {@code /effect give}、药水或其它模组拿到的缓降
- * （尤其是 infinite 永久缓降）一律不覆盖、不删除。判定靠 {@link EntityCounter} 标记 +
- * "当前实例是否就是本附魔施加的短时长实例"两道条件（同「明朗」的写法，见坑 19 的思路）。</p>
- *
- * <p>授予方式用 <b>有限时长 + 定期刷新</b>（20 秒 / 每 20 tick 刷新）而不是无限时长：
- * 标记不持久化（玩家离线即清），有限时长兜底保证任何情况下缓降都会自然过期、不会永久残留。
- * 剩余时长始终 ≥380 tick，不会进入原版图标闪烁区间（&lt;200 tick）。</p>
- *
- * <h2>1.20.1 移植说明（相对 26.3 的强制差异）</h2>
- * <ol>
- * <li><b>{@code registerCallbacks} 去掉 {@code HolderLookup.Provider} 参数</b>，改用
- * {@code PracticalEnchantments.resolveEnchantment(ID)}（原因见 {@code AerialHasteEnchantment}
- * 类注释第 1 条）。</li>
- *
- * <li><b>{@code Holder<Enchantment>} → {@code Enchantment}</b>：见 {@code VenomEnchantment}
- * 类注释第 2 条。</li>
- *
- * <li><b>{@code Identifier} → {@code ResourceLocation}；{@code Identifier.fromNamespaceAndPath(a, b)}
- * → {@code new ResourceLocation(a, b)}</b>：见 {@code BrightEnchantment} 类注释第 3 条。</li>
- *
- * <li><b>{@code boots.getEnchantments().getLevel(HOLDER)} →
- * {@code EnchantmentHelper.getItemEnchantmentLevel(HOLDER, boots)}</b>：见
- * {@code BrightEnchantment} 类注释第 4 条。</li>
- *
- * <li><b>注意本类与「明朗」的一处不对称，26.3 就是这样，未改。</b>「明朗」在判定前先挡掉非
- * {@code ServerPlayer}，本类<b>不挡</b>：它对<b>任何</b>活体生效，包括僵尸穿靴子。这不是 1.20.1
- * 造成的差异，是 26.3 的原始行为，移植时原样保留（顺带说明：{@link EntityCounter} 挂在
- * {@code Entity} 上，非玩家实体同样可用）。</li>
- *
- * <li><b>没有其它改动。</b>{@code entity.getItemBySlot(EquipmentSlot.FEET)}、
- * {@code entity.isShiftKeyDown()}、{@code getEffect/addEffect/removeEffect}、
- * {@code MobEffectInstance} 五参构造器、{@code isInfiniteDuration()/getAmplifier()/getDuration()}
- * 全部同形。{@code MobEffects.SLOW_FALLING} 在 1.20.1 也叫这个名字（不像
- * {@code SPEED} 改成了 {@code MOVEMENT_SPEED}）。</li>
- * </ol>
  */
 public final class GentleDescentEnchantment {
 

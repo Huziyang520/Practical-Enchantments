@@ -23,30 +23,6 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 
 /**
  * 第二批（2.5）三个附魔的生物行为：伪装、猫咪护符、吸猫体质。
- *
- * <p>三者的判定都只回答 MerlinLib 的问题（见 {@link AiHook}），不自己动 AI，也不写 mixin：
- * 库负责在寻敌、躲避、转向三处挂钩，本模组只说"谁不该打穿这顶头的人"。</p>
- *
- * <p>伪装按头颅与生物族的对应关系生效：骷髅头对骷髅/流浪者、凋灵骷髅头对凋灵骷髅（**对凋灵无效**）、
- * 僵尸头对僵尸族、苦力怕头对苦力怕、猪灵头对猪灵**与蛮兵**；末影龙头与玩家头不对应任何生物。
- * 玩家主动攻击过的生物仍然会还手——{@code getLastHurtByMob} 判断。</p>
- *
- * <h2>1.20.1 移植：附魔句柄从 Holder 换成普通对象</h2>
- *
- * <p>与 26.3 的差异只有一处，但它连着改了三行，如实记在这里：</p>
- * <ol>
- *   <li><b>不再有 {@code Holder<Enchantment>}。</b>26.3 的附魔住在数据包驱动的动态注册表里，只能拿
- *       Holder；1.20.1 没有这个注册表，附魔是模组构造期进静态注册表的普通 {@link Enchantment} 对象，
- *       所以字段与参数类型都换成 {@code Enchantment}，{@code register} 也不再需要
- *       {@code HolderLookup.Provider}。</li>
- *   <li><b>附魔等级改用 {@link EnchantmentHelper#getItemEnchantmentLevel(Enchantment, ItemStack)}。</b>
- *       26.3 的 {@code stack.getEnchantments().getLevel(holder)} 是数据组件写法；1.20.1 的附魔存在 NBT 里，
- *       由 {@code EnchantmentHelper} 按对象取等级，语义一致。</li>
- *   <li><b>{@code Cat} 与 {@code Ocelot} 换了包。</b>26.3 在
- *       {@code net.minecraft.world.entity.animal.feline} 下，1.20.1 在
- *       {@code net.minecraft.world.entity.animal} 下（已用 javap 确认）。两者都只做 instanceof 判断，
- *       行为不受影响。</li>
- * </ol>
  */
 public final class AiRules {
 
@@ -103,7 +79,7 @@ public final class AiRules {
 	/**
 	 * 登记三条规则。
 	 *
-	 * <p>26.3 的签名是 {@code register(HolderLookup.Provider)}：那时附魔要等数据包读完才能按 id 解析成
+	 * <p>上游版本的签名是 {@code register(HolderLookup.Provider)}：那时附魔要等数据包读完才能按 id 解析成
 	 * Holder。1.20.1 的附魔在模组构造期就进了静态注册表，按 id 直接取对象即可，所以参数整个去掉——
 	 * 调用方（{@code PracticalEnchantments#bootstrap}）也相应改成 {@code AiRules.register()}。</p>
 	 */

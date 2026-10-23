@@ -6,40 +6,13 @@ import com.huziyang520.merlinlib.api.MerlinApi;
 import com.huziyang520.merlinlib.event.EnchantmentEventRegistrar;
 import com.practicalenchantments.config.PracticalConfig;
 import com.practicalenchantments.enchantment.*;
+import com.practicalenchantments.enchantment.linked.LinkedEnchantments;
 import com.practicalenchantments.notice.MerlinLibNotice;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.enchantment.Enchantment;
 
 /**
  * Practical Enchantments 模组入口（前置：MerlinLib）。
- *
- * <p>本模组的三件事挂在 MerlinLib 的服务器生命周期上：</p>
- * <ul>
- *   <li><b>战利品注入</b>：必须赶在数据包读战利品表<b>之前</b>登记，所以挂在"服务器开始启动"；</li>
- *   <li><b>事件回调</b>：要解析附魔对象，所以挂在"服务器启动完成"；</li>
- *   <li><b>配置与进服预告</b>：与事件回调同一时机。</li>
- * </ul>
- *
- * <h2>1.20.1 与 26.3 的关键差异</h2>
- *
- * <p><b>附魔定义不再是数据包，而是代码。</b>26.3 的 22 个附魔住在
- * {@code data/practical_enchantments/enchantment/*.json}，由动态附魔注册表读取；1.20.1 没有这个
- * 注册表，附魔是静态代码注册表。因此 22 个 json 的内容全部落进
- * {@link com.practicalenchantments.enchantment.EnchantmentDefinitions}（见该类），
- * 6 组互斥标签落进 {@link com.practicalenchantments.enchantment.ExclusiveSets}。</p>
- *
- * <p>连带结果有三个，都是必须如实记下的边界：</p>
- * <ol>
- *   <li><b>附魔的注册时机从"任意时刻"变成"模组构造期"。</b>26.3 靠运行期生成数据包，任何时刻登记
- *       都能被读到；1.20.1 的 {@code DeferredRegister} 只在注册表事件期间可写。所以附魔定义在
- *       {@link #registerEnchantments()} 里立刻注册，而不是等到服务器启动。</li>
- *   <li><b>战利品注入仍然可以等到服务器启动</b>，因为 {@code LootTableLoadEvent} 是运行期事件，
- *       这正是下面把它挂在 {@code onServerStarting} 的原因——它与附魔注册的时机要求不同，
- *       不能合并成一个。</li>
- *   <li><b>事件回调只能等到附魔真的进了注册表之后</b>才能解析，所以仍然挂在 {@code onServerStarted}。</li>
- * </ol>
- *
- * <p>业务逻辑一份，位于本工程，不含任何加载器引用。</p>
  */
 public final class PracticalEnchantments {
 
@@ -70,6 +43,8 @@ public final class PracticalEnchantments {
 	public static void bootstrap() {
 		// 附魔注册必须最先做，且必须在模组构造期完成：注册表事件只在构造期之后、且只开一次。
 		registerEnchantments();
+		// 联动附魔的定义与战利品规则同样在构造期登记，联动模组不在时整块跳过。
+		LinkedEnchantments.registerContent();
 
 		// 进服提示先登记一次"默认开启"：MerlinLib 的提示设置界面在客户端就能列出本模组，
 		// 不必等到进过世界（真默认值在服务器启动、读完配置后再覆盖一次注册）。
@@ -92,7 +67,7 @@ public final class PracticalEnchantments {
 	/**
 	 * 注册 22 个附魔定义。
 	 *
-	 * <p>这是 1.20.1 与 26.3 差别最大的一处：26.3 什么都不注册，附魔是数据包条目；这里每一个附魔
+	 * <p>这是 1.20.1 与 上游版本差别最大的一处：上游版本什么都不注册，附魔是数据包条目；这里每一个附魔
 	 * 都要在自己的注册表事件里变成代码对象。定义的具体数值全部集中在
 	 * {@link EnchantmentDefinitions}，本方法只负责触发它。</p>
 	 */
@@ -212,7 +187,7 @@ public final class PracticalEnchantments {
 	/**
 	 * 注册各附魔的事件回调。
 	 *
-	 * <p>1.20.1 与 26.3 的签名差异：不再需要 {@code HolderLookup.Provider}。26.3 要它是因为附魔住在
+	 * <p>1.20.1 与 上游版本的签名差异：不再需要 {@code HolderLookup.Provider}。上游版本要它是因为附魔住在
 	 * 动态注册表里，只有读完数据包才能解析成 Holder；1.20.1 的附魔在模组构造期就进了静态注册表，
 	 * 任何时刻都能按 id 直接取到对象。</p>
 	 */
@@ -241,6 +216,8 @@ public final class PracticalEnchantments {
 		ExecuteEnchantment.registerCallbacks(registrar);
 		SoulSiphonEnchantment.registerCallbacks(registrar);
 		PenetrationEnchantment.registerCallbacks(registrar);
+		// 联动附魔：只在联动模组存在时才有附魔可解析
+		LinkedEnchantments.registerCallbacks(registrar);
 	}
 
 	/** 单条战利品注入：一张表、一个附魔、一个百分比，以附魔书形式注入，权重 1。 */
@@ -263,7 +240,7 @@ public final class PracticalEnchantments {
 	/**
 	 * 按 id 取附魔对象。
 	 *
-	 * <p>1.20.1 的替代品：26.3 这里接受一个 {@code HolderLookup.Provider} 并返回
+	 * <p>1.20.1 的替代品：上游版本这里接受一个 {@code HolderLookup.Provider} 并返回
 	 * {@code Holder<Enchantment>}，因为当时附魔在动态注册表里。1.20.1 的附魔是静态注册表的普通对象，
 	 * 直接用 id 取即可，没有 Holder 这一层。</p>
 	 *
