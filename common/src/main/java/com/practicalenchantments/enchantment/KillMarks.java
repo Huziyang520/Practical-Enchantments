@@ -39,6 +39,17 @@ public final class KillMarks {
 	}
 
 	/**
+	 * 只查询不消费：同一次死亡里掉落要拦多处，标记必须留到最后一处。
+	 *
+	 * @param victim 死者
+	 * @return 该死者是否被焚灭击杀
+	 */
+	public static boolean isIncinerated(LivingEntity victim) {
+		Long expiry = INCINERATED.get(victim.getUUID());
+		return expiry != null && expiry >= System.currentTimeMillis();
+	}
+
+	/**
 	 * 标记「死于神木气息」，供掉落翻倍使用。
 	 *
 	 * @param victim 死者

@@ -14,7 +14,8 @@
     "PlayerInfinityAmmoMixin",
     "SlimeSplitMixin",
     "CubeMobSplitMixin",
-    "GodwoodLootMixin"
+    "GodwoodLootMixin",
+    "IncinerateDropMixin"
   ],
   "injectors": {
     "defaultRequire": 1

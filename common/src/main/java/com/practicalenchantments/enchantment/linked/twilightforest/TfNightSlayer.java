@@ -1,4 +1,4 @@
-package com.practicalenchantments.enchantment.linked;
+package com.practicalenchantments.enchantment.linked.twilightforest;
 
 import com.huziyang520.merlinlib.api.LootInjectionBuilder;
 import com.huziyang520.merlinlib.api.MerlinApi;
@@ -14,15 +14,13 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.enchantment.Enchantment;
 
 /**
- * 暮色杀手：暮色森林维度处于夜晚时，剑与斧造成额外伤害。
+ * 暮色杀手：夜晚时剑与斧造成额外伤害，任何维度都按该维度自己的世界时间判定。
  */
 public final class TfNightSlayer {
 
 	public static final String PATH = "tf_night_slayer";
 	public static final String ID = PracticalEnchantments.MOD_ID + ":" + PATH;
 
-	/** 暮色森林维度的 id。 */
-	private static final Identifier DIMENSION = Identifier.fromNamespaceAndPath("twilightforest", "twilight_forest");
 	/** 夜晚在一天中的区间，与原版睡觉判定同一口径。 */
 	private static final long NIGHT_START = 13000L;
 	private static final long NIGHT_END = 23000L;
@@ -39,7 +37,7 @@ public final class TfNightSlayer {
 	private TfNightSlayer() {
 	}
 
-	static void registerContent() {
+	public static void registerContent() {
 		MerlinApi.enchantments().register(Identifier.fromNamespaceAndPath(PracticalEnchantments.MOD_ID, PATH))
 				.maxLevel(5)
 				.weight(2)
@@ -61,7 +59,7 @@ public final class TfNightSlayer {
 		}
 	}
 
-	static void registerCallbacks(EnchantmentEventRegistrar registrar, HolderLookup.Provider registries) {
+	public static void registerCallbacks(EnchantmentEventRegistrar registrar, HolderLookup.Provider registries) {
 		Holder<Enchantment> holder = PracticalEnchantments.resolveEnchantment(registries, ID);
 		registrar.register(holder, BuiltInEvents.MODIFY_DAMAGE, TfNightSlayer::onDamage);
 	}
@@ -74,9 +72,6 @@ public final class TfNightSlayer {
 	}
 
 	private static boolean isNight(ServerLevel level) {
-		if (!level.dimension().identifier().equals(DIMENSION)) {
-			return false;
-		}
 		long time = level.getDefaultClockTime() % DAY_LENGTH;
 		return time >= NIGHT_START && time <= NIGHT_END;
 	}

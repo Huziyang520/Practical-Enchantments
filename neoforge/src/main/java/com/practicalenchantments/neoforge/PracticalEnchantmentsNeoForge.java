@@ -11,7 +11,7 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 
 /**
- * NeoForge 平台入口：启动 common 侧的挂载，并把 SERVER 配置接到原生配置界面上。
+ * NeoForge 平台入口：启动 common 侧的挂载，并把服务端配置接到原生配置界面上。
  */
 @Mod(PracticalEnchantments.MOD_ID)
 public final class PracticalEnchantmentsNeoForge {
