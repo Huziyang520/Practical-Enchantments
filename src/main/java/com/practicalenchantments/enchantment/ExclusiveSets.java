@@ -26,7 +26,6 @@ public final class ExclusiveSets {
 	/** {@code .../exclusive_set/looting.json} */
 	public static final JsonArray LOOTING = array(
 		"practical_enchantments:incinerate",
-		"practical_enchantments:aether_godwood",
 		"minecraft:looting");
 
 	/** {@code .../exclusive_set/slow_fall.json} */
