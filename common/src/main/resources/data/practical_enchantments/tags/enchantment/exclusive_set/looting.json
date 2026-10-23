@@ -2,7 +2,6 @@
   "replace": false,
   "values": [
     "practical_enchantments:incinerate",
-    "practical_enchantments:aether_godwood",
     "minecraft:looting"
   ]
 }
