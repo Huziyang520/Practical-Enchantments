@@ -11,11 +11,6 @@ import net.minecraft.world.item.enchantment.Enchantment;
 
 /**
  * 贯穿附魔 - 三叉戟 Ⅴ 级（附魔台可出，不可交易）。
- *
- * <p>投掷命中实体额外造成 {@code 1.5 + 0.5×(等级-1)} 点伤害（Ⅰ~Ⅴ：1.5/2.0/2.5/3.0/3.5）。
- * 与激流互斥（trident_riptide 组）。</p>
- *
- * <p>「搭配忠诚时牵引命中目标」的物理效果由 {@code TridentPullMixin} 实现。</p>
  */
 public final class PenetrationEnchantment {
 

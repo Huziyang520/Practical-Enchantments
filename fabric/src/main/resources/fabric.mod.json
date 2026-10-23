@@ -31,7 +31,17 @@
     "entrypoints": {
       "main": [
         "com.practicalenchantments.fabric.PracticalEnchantmentsFabric"
+      ],
+      "client": [
+        "com.practicalenchantments.fabric.client.PracticalEnchantmentsFabricClient"
+      ],
+      "modmenu": [
+        "com.practicalenchantments.fabric.client.ModMenuIntegration"
       ]
+    },
+    "recommends": {
+      "cloth-config": "*",
+      "jupiter": "*"
     },
     "mixins": [
       "practical_enchantments.mixins.json"

@@ -12,12 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Practical Enchantments 通用配置（服务端）。
- *
- * <p>文件位置：{@code config/practical_enchantments/common.properties}。
- * 首次运行会自动生成一份带中文注释的模板；改完保存后重进世界 / 重启服务器生效。</p>
- *
- * <p>本模组是服务端模组，只读服务端这一份配置，不需要与客户端同步。</p>
+ * 通用配置（服务端）：{@code config/practical_enchantments/common.properties}，首次运行按模板生成。
  */
 public final class PracticalConfig {
 
@@ -41,17 +36,12 @@ public final class PracticalConfig {
 		# Practical Enchantments —— 通用配置（服务端）
 		# 改完保存后：重进世界 / 重启服务器生效。
 		#
-		# 是否在玩家进入游戏时，在聊天栏显示「前置将由 EnchantLib 更换为 MerlinLib」的预告：
+		# 是否在玩家进入游戏时，在聊天栏显示「前置已更换为 MerlinLib」的预告：
 		#   true  = 显示（默认）
 		#   false = 不显示
 		#
-		# 预告的文案不在本文件里，而在语言文件里，键名：practical_enchantments.notice.merlinlib
-		#   assets/practical_enchantments/lang/zh_cn.json
-		#   assets/practical_enchantments/lang/en_us.json
-		#   （assets/practical_enchantments/enchant_sync/lang/ 下的同名键是资源包推送链路的镜像）
-		#
-		# 本项现在代表「默认值」：提示由 MerlinLib 的进服通知功能发送，还可在
-		# MerlinLib 设置界面「通用 → 编辑各模组聊天栏提示」里按模组覆盖它。
+		# 文案在语言文件的 practical_enchantments.notice.merlinlib 键里。
+		# 本项是默认值：提示由 MerlinLib 的进服通知发送，也可在它的设置界面按模组覆盖。
 		notice.merlinlib=true
 		""";
 

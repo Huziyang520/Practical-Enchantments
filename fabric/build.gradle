@@ -4,10 +4,21 @@ plugins {
 	id 'de.maxhenkel.cursegradle' version '1.5.2'
 }
 
+repositories {
+	// 可选前置：Cloth Config 与 Mod Menu 只在这两个仓库里（配置里已把官方源放在镜像之前）。
+	maven { url = 'https://maven.shedaniel.me/' }
+	maven { url = 'https://maven.terraformersmc.com/releases/' }
+}
+
 dependencies {
 	minecraft("com.mojang:minecraft:${minecraft_version}")
 	implementation("net.fabricmc:fabric-loader:${fabric_loader_version}")
 	implementation("net.fabricmc.fabric-api:fabric-api:${fabric_version}")
+	// 可选前置（compileOnly，都不进 jar）：Cloth Config 与 Jupiter 提供配置界面，Mod Menu 提供入口按钮。
+	// Jupiter 没有任何 maven 托管，jar 放在 libs/（已被 .gitignore 排除），缺失时只是没有那个界面。
+	compileOnly("me.shedaniel.cloth:cloth-config-fabric:${cloth_config_version}")
+	compileOnly("com.terraformersmc:modmenu:${modmenu_version}")
+	compileOnly(files("libs/jupiter-2.4.3-26.2-universal.jar"))
 	// MerlinLib Fabric
 	implementation "com.huziyang520.merlinlib:merlinlib-fabric-26.3:${merlinlib_version}"
 }
@@ -60,14 +71,8 @@ tasks.withType(JavaCompile).configureEach {
 	options.encoding = 'UTF-8'
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// CurseForge 一键推送（CurseGradle 1.5.2；插件不在 Gradle 门户，源见 settings.gradle）
-// ⚠ 实际上传不可用：CurseGradle 自建 HttpClient 不读代理 → Cloudflare 403。
-// 真正可用的上传是 ../cf-upload-init.gradle 的 cfUpload 任务（显式 HTTP CONNECT 代理 + legacy 端点）。
-// 【铁律】必须等用户实机测试通过并主动发指令后才允许执行，AI 不得自行上传。
-// 执行（在本 26.2 目录）：gradlew :fabric:curseforge -Pcurse_release_type=<release|beta|alpha>
-// releaseType 必须随版本号变更逐模组询问用户，再用 -Pcurse_release_type 传入；缺省 beta 仅兜底。
-// API key 读 Gradle 属性 curseforge_api_key（用户全局配置；禁止写入仓库、禁止读取/打印该文件）。
+// CurseForge 上传走 CurseGradle 1.5.2（插件源见 settings.gradle）：gradlew :fabric:curseforge -Pcurse_release_type=<release|beta|alpha>
+// 该插件不读代理，实际上传另用 cf-upload-init.gradle；API key 只从 Gradle 属性 curseforge_api_key 取。
 curseforge {
 	apiKey = project.findProperty('curseforge_api_key') ?: ''
 	project {
@@ -75,13 +80,13 @@ curseforge {
 		changelogType = 'markdown'
 		changelog = rootProject.file('curseforge-changelog.md')
 		releaseType = project.findProperty('curse_release_type') ?: 'beta'
-		// 本环境 Loom 1.16.3 的 dontRemapOutputs=true（运行时探针证实），不注册 remapJar，jar 即最终可发布产物
+		// Loom 的 dontRemapOutputs 为 true，jar 即最终产物，不需要 remapJar
 		mainArtifact(tasks.named('jar').get()) {
 			displayName = "${mod_name} ${version} (Fabric) for Minecraft ${minecraft_version}"
 		}
 		addGameVersion minecraft_version
 		addGameVersion 'Fabric'
-		// 1.3.0 起本模组为双端模组（客户端 + 服务端），Client 与 Server 都要声明（2026-09-28 用户拍板）
+		// 双端模组：Client 与 Server 都要声明
 		addGameVersion 'Client'
 		addGameVersion 'Server'
 	}
@@ -90,5 +95,5 @@ curseforge {
 		forgeGradleIntegration = false
 	}
 }
-// CurseGradle 不会自动为主产物挂任务依赖，上传前必须先构建
+// CurseGradle 不会自动为主产物挂任务依赖
 tasks.named('curseforge') { dependsOn 'jar' }

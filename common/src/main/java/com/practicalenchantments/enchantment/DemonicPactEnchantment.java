@@ -11,13 +11,6 @@ import net.minecraft.world.item.Items;
 
 /**
  * 恶魔交易附魔 - 胸甲 Ⅲ 级（宝藏）。
- *
- * <p>受到致命伤害且背包绿宝石达到消耗值时免死一次：触发不死图腾效果 + 黑暗，
- * 消耗 64/56/48 个绿宝石（Ⅰ/Ⅱ/Ⅲ），60 秒（1200 tick）冷却；
- * 冷却内或绿宝石不足则正常死亡。与「掉落不死亡」互斥。</p>
- *
- * <p>由 {@code DeathSaveMixin} 在 {@code LivingEntity.die} HEAD 处调用，
- * 冷却时间戳存内存（重启重置，与盾牌冷却同档）。</p>
  */
 public final class DemonicPactEnchantment {
 

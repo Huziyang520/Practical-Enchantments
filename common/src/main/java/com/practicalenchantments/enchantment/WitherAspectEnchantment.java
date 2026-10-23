@@ -12,10 +12,6 @@ import net.minecraft.world.item.enchantment.Enchantment;
 
 /**
  * 枯萎附魔 - 剑 Ⅱ 级（宝藏，专家级图书管理员）。
- *
- * <p>命中时附加凋零：Ⅰ 级 6 秒，Ⅱ 级 12 秒（凋零可对亡灵生效）。
- * 武器基础伤害被削弱：Ⅰ 级 -1 点，Ⅱ 级 -0.5 点（等级越高代价越小）。
- * 与「火焰附加」「淬毒」三向互斥。</p>
  */
 public final class WitherAspectEnchantment {
 

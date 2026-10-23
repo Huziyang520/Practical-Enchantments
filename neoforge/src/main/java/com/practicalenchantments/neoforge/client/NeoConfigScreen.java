@@ -1,0 +1,32 @@
+package com.practicalenchantments.neoforge.client;
+
+import com.practicalenchantments.PracticalEnchantments;
+import net.minecraft.client.gui.screens.Screen;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.ModList;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.gui.ConfigurationScreen;
+import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
+
+/**
+ * 客户端配置界面：直接复用 NeoForge 原生的 {@link ConfigurationScreen}，不另画一套。
+ */
+@EventBusSubscriber(modid = PracticalEnchantments.MOD_ID, value = Dist.CLIENT)
+public final class NeoConfigScreen {
+
+	private NeoConfigScreen() {
+	}
+
+	@SubscribeEvent
+	public static void onClientSetup(FMLClientSetupEvent event) {
+		ModList.get().getModContainerById(PracticalEnchantments.MOD_ID)
+				.ifPresent(container -> container.registerExtensionPoint(IConfigScreenFactory.class,
+						(mod, parent) -> create(mod, parent)));
+	}
+
+	private static Screen create(net.neoforged.fml.ModContainer container, Screen parent) {
+		return new ConfigurationScreen(container, parent);
+	}
+}

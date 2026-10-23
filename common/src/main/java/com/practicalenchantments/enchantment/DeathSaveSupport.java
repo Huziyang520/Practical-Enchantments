@@ -16,10 +16,6 @@ import net.minecraft.world.item.enchantment.Enchantment;
 
 /**
  * 免死类附魔（恶魔交易 / 掉落不死亡）共用工具。
- *
- * <p>提供：① 不依赖注册器的 ItemStack 附魔等级查询（Mixin 里拿不到
- * HolderLookup，按附魔 ID 字符串比对）；② 原版不死图腾同款复活效果；
- * ③ 全身物品掉落工具。</p>
  */
 public final class DeathSaveSupport {
 

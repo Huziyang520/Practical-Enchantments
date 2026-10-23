@@ -8,11 +8,6 @@ import net.minecraft.world.entity.EquipmentSlot;
 
 /**
  * 掉落不死亡附魔 - 任意装备 Ⅲ 级（娱乐，仅创造/指令获取）。
- *
- * <p>受到致命伤害时免死一次：摧毁携带该附魔的那件装备，背包与全身装备全部
- * 掉落脚边，并获得黑暗效果（20/16/12 秒，Ⅰ/Ⅱ/Ⅲ）。与「恶魔交易」互斥。</p>
- *
- * <p>由 {@code DeathSaveMixin} 在 {@code LivingEntity.die} HEAD 处调用。</p>
  */
 public final class UndyingDropEnchantment {
 
