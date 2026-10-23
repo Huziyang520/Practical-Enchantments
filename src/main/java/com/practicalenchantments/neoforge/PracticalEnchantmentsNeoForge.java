@@ -32,7 +32,7 @@ public final class PracticalEnchantmentsNeoForge {
 		// 战利品注入、事件回调、配置与进服预告（由 MerlinLib 的服务器生命周期驱动）。
 		PracticalEnchantments.bootstrap();
 
-		// 原版附魔调整：SERVER 配置跟存档走，界面由 NeoForge 原生的 ConfigurationScreen 提供。
+		// 原版附魔调整：服务端配置跟存档走，界面由 NeoForge 原生的 ConfigurationScreen 提供。
 		container.registerConfig(NeoConfig.type(), NeoConfig.SPEC);
 		modEventBus.addListener(ModConfigEvent.Loading.class, event -> NeoConfig.apply());
 		modEventBus.addListener(ModConfigEvent.Reloading.class, event -> NeoConfig.apply());

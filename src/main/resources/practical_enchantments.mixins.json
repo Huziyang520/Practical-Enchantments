@@ -12,7 +12,8 @@
     "EnchantmentInfiniteCrossbowMixin",
     "PlayerInfinityAmmoMixin",
     "CubeMobSplitMixin",
-    "GodwoodLootMixin"
+    "GodwoodLootMixin",
+    "IncinerateDropMixin"
   ],
   "client": [],
   "server": [],

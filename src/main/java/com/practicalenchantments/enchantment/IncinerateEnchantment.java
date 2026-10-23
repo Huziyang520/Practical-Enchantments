@@ -8,7 +8,6 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.enchantment.Enchantment;
 
 /**
@@ -20,6 +19,8 @@ public final class IncinerateEnchantment {
 
 	/** 互斥组名（对应数据包标签 {@code practical_enchantments:exclusive_set/looting}） */
 	public static final String GROUP_NAME = "looting";
+	/** 互斥组标签的完整引用，供同一组的其它附魔复用。 */
+	public static final String GROUP_TAG = "#" + PracticalEnchantments.MOD_ID + ":exclusive_set/" + GROUP_NAME;
 
 	public static void registerCallbacks(EnchantmentEventRegistrar registrar, HolderLookup.Provider registries) {
 		Holder<Enchantment> holder = PracticalEnchantments.resolveEnchantment(registries, ID);
@@ -34,14 +35,8 @@ public final class IncinerateEnchantment {
 		// 对玩家无效
 		if (victim instanceof ServerPlayer) return;
 
-		// 无战利品掉落：移除死者周围已生成的物品实体（保留经验球）
-		// 掉落物会在死亡瞬间以 ItemEntity 形式生成在尸体附近，这里将其全部清空
-		for (ItemEntity item : event.level().getEntitiesOfClass(
-			ItemEntity.class, victim.getBoundingBox().inflate(0.5))) {
-			item.discard();
-		}
-
-		// 分裂发生在 remove 里，晚于这里，故留标记让 Mixin 在那一步跳过
+		// 死亡掉落（战利品表、装备、生物特有的额外掉落）由 KillMarks 的标记在 Entity 侧拦下，
+		// 经验球不走那条路径，因此经验照样保留。分裂发生在 remove 里，晚于这里，同样靠标记跳过。
 		KillMarks.markIncinerated(victim);
 
 		// 经验值 ×2（原版掉落 1 倍经验球 + 这里再补 1 倍，合计 2 倍）
