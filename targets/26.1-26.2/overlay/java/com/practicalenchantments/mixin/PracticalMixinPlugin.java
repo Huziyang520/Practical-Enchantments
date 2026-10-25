@@ -1,5 +1,4 @@
-// Picks the cube mob mixin that matches the running build: 26.1.2 has Slime#getSplitCount,
-// 26.2 and later moved it to AbstractCubeMob.
+// 按运行版本择一启用分裂 mixin（26.1.2 在 Slime，26.2 起在 AbstractCubeMob）。
 
 package com.practicalenchantments.mixin;
 
