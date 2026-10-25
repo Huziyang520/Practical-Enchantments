@@ -4,9 +4,7 @@ plugins {
 }
 
 base {
-	// jar 文件名 = <mod_id>-<version>-<loader>-<minecraft_version>
-	// 例：enchantlib-1.2.2-neoforge-26.2.jar（2026-09-12 命名规则，见 文档/AI模组制作（通用文档）.md §4.13）
-	archivesName = "${mod_id}-${version}-${project.name}-${minecraft_version}"
+	archivesName = "${mod_id}-${version}-${project.name}-${minecraft_version_slug}"
 }
 
 // Gradle 默认会在 archivesName 后再追加 -<version>；版本已含在 archivesName 里，
@@ -54,6 +52,7 @@ processResources {
 		'version'                       : version,
 		'group'                         : project.group,
 		'minecraft_version'             : minecraft_version,
+		'minecraft_version_slug'        : minecraft_version_slug,
 		'minecraft_version_range'       : minecraft_version_range,
 		'fabric_version'                : fabric_version,
 		'fabric_loader_version'         : fabric_loader_version,
@@ -86,7 +85,7 @@ publishing {
 		register('mavenJava', MavenPublication) {
 			// maven 坐标保持不含版本号（<mod_id>-<loader>-<minecraft_version>），
 			// 版本只体现在 jar 文件名与 version 属性里
-			artifactId "${mod_id}-${project.name}-${minecraft_version}"
+			artifactId "${mod_id}-${project.name}-${minecraft_version_slug}"
 			from components.java
 		}
 	}

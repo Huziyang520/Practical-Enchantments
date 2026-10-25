@@ -42,7 +42,7 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
 	// MerlinLib NeoForge
-	implementation "com.huziyang520.merlinlib:merlinlib-neoforge-26.3:${merlinlib_version}"
+	implementation "com.huziyang520.merlinlib:merlinlib-neoforge-26.X:${merlinlib_version}"
 }
 
 // Implement mcgradleconventions loader attribute

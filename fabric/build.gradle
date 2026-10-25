@@ -20,7 +20,7 @@ dependencies {
 	compileOnly("com.terraformersmc:modmenu:${modmenu_version}")
 	compileOnly(files("libs/jupiter-2.4.3-26.2-universal.jar"))
 	// MerlinLib Fabric
-	implementation "com.huziyang520.merlinlib:merlinlib-fabric-26.3:${merlinlib_version}"
+	implementation "com.huziyang520.merlinlib:merlinlib-fabric-26.X:${merlinlib_version}"
 }
 
 loom {
