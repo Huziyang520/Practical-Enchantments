@@ -1,8 +1,9 @@
 // 恶魔交易附魔 - 胸甲 Ⅲ 级（宝藏）。
 
-package com.practicalenchantments.enchantment;
+package com.practicalenchantments.enchantment.armor;
 
 import com.practicalenchantments.PracticalEnchantments;
+import com.practicalenchantments.enchantment.support.DeathSaveSupport;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import net.minecraft.server.level.ServerPlayer;

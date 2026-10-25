@@ -1,11 +1,13 @@
 // 焚灭：击杀生物无战利品掉落、经验值 ×2，并让史莱姆类死后不再分裂。剑、斧、矛 Ⅰ 级。
 
-package com.practicalenchantments.enchantment;
+package com.practicalenchantments.enchantment.weapon;
 
+import com.huziyang520.merlinlib.api.MerlinApi;
 import com.huziyang520.merlinlib.event.BuiltInEvents;
 import com.huziyang520.merlinlib.event.EnchantmentContext;
 import com.huziyang520.merlinlib.event.EnchantmentEventRegistrar;
 import com.practicalenchantments.PracticalEnchantments;
+import com.practicalenchantments.enchantment.support.KillMarks;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.server.level.ServerPlayer;
@@ -27,6 +29,7 @@ public final class IncinerateEnchantment {
 		LivingEntity victim = event.victim();
 		if (victim instanceof ServerPlayer) return;
 		KillMarks.markIncinerated(victim);
+		MerlinApi.drops().suppressDrops(victim);
 		int baseXp = victim.getExperienceReward(event.level(), player);
 		if (baseXp > 0) {
 			player.giveExperiencePoints(baseXp);

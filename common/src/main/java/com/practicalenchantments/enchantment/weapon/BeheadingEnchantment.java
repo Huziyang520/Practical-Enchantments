@@ -1,7 +1,8 @@
 // 夺首附魔 - 剑/斧/矛 Ⅲ 级（不可附魔台，大师级图书管理员交易）。
 
-package com.practicalenchantments.enchantment;
+package com.practicalenchantments.enchantment.weapon;
 
+import com.huziyang520.merlinlib.api.MerlinApi;
 import com.huziyang520.merlinlib.event.BuiltInEvents;
 import com.huziyang520.merlinlib.event.EnchantmentContext;
 import com.huziyang520.merlinlib.event.EnchantmentEventRegistrar;
@@ -19,7 +20,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.level.block.Block;
 
 public final class BeheadingEnchantment {
 	public static final String ID = PracticalEnchantments.MOD_ID + ":beheading";
@@ -46,7 +46,7 @@ public final class BeheadingEnchantment {
 		float base = victim instanceof WitherSkeleton ? WITHER_SKELETON_BASE : 0.0F;
 		float chance = base + BONUS_PER_LEVEL * ctx.level();
 		if (event.killer().getRandom().nextFloat() < chance) {
-			Block.popResource(event.level(), victim.blockPosition(), new ItemStack(head));
+			MerlinApi.drops().dropAtDeath(event.level(), victim.position(), new ItemStack(head), victim);
 		}
 	}
 

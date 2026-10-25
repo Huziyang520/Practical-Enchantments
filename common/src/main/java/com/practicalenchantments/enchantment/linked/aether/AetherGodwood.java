@@ -10,8 +10,7 @@ import com.huziyang520.merlinlib.event.BuiltInEvents;
 import com.huziyang520.merlinlib.event.EnchantmentContext;
 import com.huziyang520.merlinlib.event.EnchantmentEventRegistrar;
 import com.practicalenchantments.PracticalEnchantments;
-import com.practicalenchantments.enchantment.IncinerateEnchantment;
-import com.practicalenchantments.enchantment.KillMarks;
+import com.practicalenchantments.enchantment.support.KillMarks;
 import java.util.List;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
@@ -57,7 +56,7 @@ public final class AetherGodwood {
 				.supportedItems("#practical_enchantments:godwood_items")
 				.cost(20, 0, 50, 0)
 				.acquisition(Acquisition.TREASURE_ONLY)
-				.exclusiveSet(EnchantmentJson.tag(IncinerateEnchantment.GROUP_TAG))
+				.exclusiveSet(EnchantmentJson.tag("#" + PracticalEnchantments.MOD_ID + ":exclusive_set/block_drop"))
 				.submit();
 		for (String path : LOOT_PATHS) {
 			MerlinApi.loot().register(LootInjectionBuilder.create()

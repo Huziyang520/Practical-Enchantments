@@ -1,6 +1,6 @@
 // 按 id 读「无限」在物品上的等级。
 
-package com.practicalenchantments.enchantment;
+package com.practicalenchantments.enchantment.support;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;

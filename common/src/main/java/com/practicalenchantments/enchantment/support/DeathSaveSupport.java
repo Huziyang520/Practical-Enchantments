@@ -1,6 +1,6 @@
 // 免死类附魔（恶魔交易 / 掉落不死亡）共用工具。
 
-package com.practicalenchantments.enchantment;
+package com.practicalenchantments.enchantment.support;
 
 import com.practicalenchantments.PracticalEnchantments;
 import java.util.ArrayList;

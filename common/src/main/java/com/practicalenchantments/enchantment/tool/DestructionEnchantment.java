@@ -1,6 +1,6 @@
 // 毁灭附魔 - 工具（剑除外）I 级 效果：挖掘方块不产出物品掉落，改为掉落经验；基础 2 点，矿石类 5 点
 
-package com.practicalenchantments.enchantment;
+package com.practicalenchantments.enchantment.tool;
 
 import com.huziyang520.merlinlib.event.BuiltInEvents;
 import com.huziyang520.merlinlib.event.EnchantmentContext;

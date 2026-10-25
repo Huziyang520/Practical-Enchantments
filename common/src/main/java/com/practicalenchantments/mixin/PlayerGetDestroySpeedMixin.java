@@ -2,7 +2,7 @@
 
 package com.practicalenchantments.mixin;
 
-import com.practicalenchantments.enchantment.AerialHasteEnchantment;
+import com.practicalenchantments.enchantment.armor.AerialHasteEnchantment;
 import net.minecraft.core.Holder;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;

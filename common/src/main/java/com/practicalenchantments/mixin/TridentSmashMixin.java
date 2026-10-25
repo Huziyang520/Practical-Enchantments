@@ -2,8 +2,8 @@
 
 package com.practicalenchantments.mixin;
 
-import com.practicalenchantments.enchantment.DeathSaveSupport;
-import com.practicalenchantments.enchantment.TridentPullSupport;
+import com.practicalenchantments.enchantment.support.DeathSaveSupport;
+import com.practicalenchantments.enchantment.support.TridentPullSupport;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;

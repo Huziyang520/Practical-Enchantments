@@ -1,6 +1,6 @@
 // 明朗附魔 只回收自己授予的那份夜视：玩家自己用 /effect give、药水、信标或其它模组 拿到的夜视（尤其是 infinite 永久夜视）一律不覆盖、不删除。
 
-package com.practicalenchantments.enchantment;
+package com.practicalenchantments.enchantment.armor;
 
 import com.huziyang520.merlinlib.api.EntityCounter;
 import com.huziyang520.merlinlib.event.EnchantmentEventRegistrar;

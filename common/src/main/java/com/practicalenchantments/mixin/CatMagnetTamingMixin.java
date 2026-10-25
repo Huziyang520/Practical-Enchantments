@@ -2,7 +2,7 @@
 
 package com.practicalenchantments.mixin;
 
-import com.practicalenchantments.enchantment.AiRules;
+import com.practicalenchantments.enchantment.support.AiRules;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;

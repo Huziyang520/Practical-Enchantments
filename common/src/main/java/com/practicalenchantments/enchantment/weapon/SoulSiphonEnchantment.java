@@ -1,6 +1,6 @@
 // 汲灵附魔 - 剑/斧/矛 Ⅴ 级（附魔台可出，老手级图书管理员）。
 
-package com.practicalenchantments.enchantment;
+package com.practicalenchantments.enchantment.weapon;
 
 import com.huziyang520.merlinlib.event.BuiltInEvents;
 import com.huziyang520.merlinlib.event.EnchantmentContext;

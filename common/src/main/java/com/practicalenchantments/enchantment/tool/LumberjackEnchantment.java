@@ -1,6 +1,6 @@
 // 伐木工附魔 - 斧 I 级 效果：砍伐原木时递归破坏整棵相连树木及树叶；单次最大 64 方块上限
 
-package com.practicalenchantments.enchantment;
+package com.practicalenchantments.enchantment.tool;
 
 import com.huziyang520.merlinlib.event.BuiltInEvents;
 import com.huziyang520.merlinlib.event.EnchantmentContext;

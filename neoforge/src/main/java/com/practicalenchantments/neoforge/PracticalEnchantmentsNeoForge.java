@@ -3,7 +3,7 @@
 package com.practicalenchantments.neoforge;
 
 import com.practicalenchantments.PracticalEnchantments;
-import com.practicalenchantments.enchantment.LifeStealEnchantment;
+import com.practicalenchantments.enchantment.weapon.LifeStealEnchantment;
 import com.practicalenchantments.neoforge.config.NeoConfig;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;

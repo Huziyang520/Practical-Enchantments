@@ -2,7 +2,7 @@
 
 package com.practicalenchantments.mixin;
 
-import com.practicalenchantments.enchantment.KillMarks;
+import com.practicalenchantments.enchantment.support.KillMarks;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;

@@ -1,6 +1,6 @@
 // 强劲附魔 - 弩 V 级 效果：弩专属远程伤害增幅，每级 +25% 箭矢伤害
 
-package com.practicalenchantments.enchantment;
+package com.practicalenchantments.enchantment.weapon;
 
 import com.huziyang520.merlinlib.event.BuiltInEvents;
 import com.huziyang520.merlinlib.event.EnchantmentContext;

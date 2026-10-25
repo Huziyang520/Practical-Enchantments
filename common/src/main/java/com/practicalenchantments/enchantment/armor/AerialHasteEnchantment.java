@@ -1,6 +1,6 @@
 // 浮空速掘附魔 消除空中挖掘速度惩罚
 
-package com.practicalenchantments.enchantment;
+package com.practicalenchantments.enchantment.armor;
 
 import com.huziyang520.merlinlib.event.EnchantmentEventRegistrar;
 import com.practicalenchantments.PracticalEnchantments;

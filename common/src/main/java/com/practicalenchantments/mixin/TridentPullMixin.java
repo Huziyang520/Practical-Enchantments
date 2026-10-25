@@ -2,7 +2,7 @@
 
 package com.practicalenchantments.mixin;
 
-import com.practicalenchantments.enchantment.TridentPullSupport;
+import com.practicalenchantments.enchantment.support.TridentPullSupport;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.arrow.ThrownTrident;

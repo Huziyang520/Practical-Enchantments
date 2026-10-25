@@ -1,6 +1,6 @@
 // 枯萎附魔 - 剑 Ⅱ 级（宝藏，专家级图书管理员）。
 
-package com.practicalenchantments.enchantment;
+package com.practicalenchantments.enchantment.weapon;
 
 import com.huziyang520.merlinlib.event.BuiltInEvents;
 import com.huziyang520.merlinlib.event.EnchantmentContext;

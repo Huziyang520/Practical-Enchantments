@@ -1,6 +1,6 @@
 // 第二批（2.5）三个附魔的生物行为：伪装、猫咪护符、吸猫体质。
 
-package com.practicalenchantments.enchantment;
+package com.practicalenchantments.enchantment.support;
 
 import com.huziyang520.merlinlib.api.AiHook;
 import com.huziyang520.merlinlib.api.MerlinApi;

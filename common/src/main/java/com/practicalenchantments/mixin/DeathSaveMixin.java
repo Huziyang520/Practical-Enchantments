@@ -2,8 +2,8 @@
 
 package com.practicalenchantments.mixin;
 
-import com.practicalenchantments.enchantment.DemonicPactEnchantment;
-import com.practicalenchantments.enchantment.UndyingDropEnchantment;
+import com.practicalenchantments.enchantment.armor.DemonicPactEnchantment;
+import com.practicalenchantments.enchantment.armor.UndyingDropEnchantment;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import org.spongepowered.asm.mixin.Mixin;

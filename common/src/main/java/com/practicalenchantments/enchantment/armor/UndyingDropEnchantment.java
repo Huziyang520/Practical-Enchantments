@@ -1,8 +1,9 @@
 // 掉落不死亡附魔 - 任意装备 Ⅲ 级（娱乐，仅创造/指令获取）。
 
-package com.practicalenchantments.enchantment;
+package com.practicalenchantments.enchantment.armor;
 
 import com.practicalenchantments.PracticalEnchantments;
+import com.practicalenchantments.enchantment.support.DeathSaveSupport;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;

@@ -1,6 +1,6 @@
 // 羽落附魔 - 靴子单级（娱乐，仅创造/指令获取）。
 
-package com.practicalenchantments.enchantment;
+package com.practicalenchantments.enchantment.armor;
 
 import com.huziyang520.merlinlib.api.EntityCounter;
 import com.huziyang520.merlinlib.event.GlobalEvents;

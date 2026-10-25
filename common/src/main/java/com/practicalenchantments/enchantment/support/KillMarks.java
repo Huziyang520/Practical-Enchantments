@@ -1,6 +1,6 @@
 // 击杀类附魔留下的短时标记：附魔回调判定一次，Mixin 在执行点消费一次。
 
-package com.practicalenchantments.enchantment;
+package com.practicalenchantments.enchantment.support;
 
 import java.util.Map;
 import java.util.UUID;

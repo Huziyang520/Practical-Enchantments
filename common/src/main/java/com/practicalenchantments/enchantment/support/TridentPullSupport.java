@@ -1,6 +1,6 @@
 // 三叉戟牵引状态中心（贯穿/粉碎 × 忠诚）。
 
-package com.practicalenchantments.enchantment;
+package com.practicalenchantments.enchantment.support;
 
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;

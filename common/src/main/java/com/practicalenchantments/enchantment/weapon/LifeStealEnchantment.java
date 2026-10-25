@@ -1,8 +1,9 @@
 // 吸血附魔 - 剑/斧/矛 Ⅴ 级（附魔台可出，老手级图书管理员）。
 
-package com.practicalenchantments.enchantment;
+package com.practicalenchantments.enchantment.weapon;
 
 import com.practicalenchantments.PracticalEnchantments;
+import com.practicalenchantments.enchantment.support.DeathSaveSupport;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;

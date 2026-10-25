@@ -1,11 +1,13 @@
 // 贯穿附魔 - 三叉戟 Ⅴ 级（附魔台可出，不可交易）。
 
-package com.practicalenchantments.enchantment;
+package com.practicalenchantments.enchantment.weapon;
 
 import com.huziyang520.merlinlib.event.BuiltInEvents;
 import com.huziyang520.merlinlib.event.EnchantmentContext;
 import com.huziyang520.merlinlib.event.EnchantmentEventRegistrar;
 import com.practicalenchantments.PracticalEnchantments;
+import com.practicalenchantments.enchantment.support.DeathSaveSupport;
+import com.practicalenchantments.enchantment.support.TridentPullSupport;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.Items;

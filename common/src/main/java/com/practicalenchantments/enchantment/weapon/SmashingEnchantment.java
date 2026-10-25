@@ -1,6 +1,6 @@
 // 粉碎附魔 - 三叉戟 Ⅴ 级（附魔台可出，不可交易）。
 
-package com.practicalenchantments.enchantment;
+package com.practicalenchantments.enchantment.weapon;
 
 import com.practicalenchantments.PracticalEnchantments;
 

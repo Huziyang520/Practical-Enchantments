@@ -2,7 +2,7 @@
 
 package com.practicalenchantments.mixin;
 
-import com.practicalenchantments.enchantment.KillMarks;
+import com.practicalenchantments.enchantment.support.KillMarks;
 import net.minecraft.world.entity.monster.cubemob.AbstractCubeMob;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;

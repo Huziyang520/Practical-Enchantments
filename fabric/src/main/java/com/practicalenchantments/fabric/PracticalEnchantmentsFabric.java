@@ -3,7 +3,7 @@
 package com.practicalenchantments.fabric;
 
 import com.practicalenchantments.PracticalEnchantments;
-import com.practicalenchantments.enchantment.LifeStealEnchantment;
+import com.practicalenchantments.enchantment.weapon.LifeStealEnchantment;
 import com.practicalenchantments.fabric.config.FabricVanillaTweaks;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;

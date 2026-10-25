@@ -1,6 +1,6 @@
 // 狂暴附魔 - 剑/斧/矛 Ⅱ 级（宝藏，大师级图书管理员）。
 
-package com.practicalenchantments.enchantment;
+package com.practicalenchantments.enchantment.weapon;
 
 import com.huziyang520.merlinlib.event.BuiltInEvents;
 import com.huziyang520.merlinlib.event.EnchantmentContext;
