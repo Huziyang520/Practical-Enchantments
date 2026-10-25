@@ -1,3 +1,5 @@
+// 三叉戟回归 tick 驱动牵引（贯穿/粉碎 × 忠诚）。
+
 package com.practicalenchantments.mixin;
 
 import com.practicalenchantments.enchantment.TridentPullSupport;
@@ -9,12 +11,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-/**
- * 三叉戟回归 tick 驱动牵引（贯穿/粉碎 × 忠诚）。
- */
 @Mixin(ThrownTrident.class)
 public abstract class TridentPullMixin {
-
 	@Inject(method = "tick", at = @At("TAIL"))
 	private void practicalenchantments$pullWhileReturning(CallbackInfo ci) {
 		ThrownTrident self = (ThrownTrident) (Object) this;

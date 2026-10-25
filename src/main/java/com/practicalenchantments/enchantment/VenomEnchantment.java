@@ -1,3 +1,5 @@
+// 淬毒附魔 - 剑 Ⅱ 级（附魔台可出，专家级图书管理员）。
+
 package com.practicalenchantments.enchantment;
 
 import com.huziyang520.merlinlib.event.BuiltInEvents;
@@ -10,18 +12,11 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.item.enchantment.Enchantment;
 
-/**
- * 淬毒附魔 - 剑 Ⅱ 级（附魔台可出，专家级图书管理员）。
- */
 public final class VenomEnchantment {
-
 	public static final String ID = PracticalEnchantments.MOD_ID + ":venom";
-
-	/** 互斥组：淬毒 / 枯萎 / 火焰附加 */
 
 	private VenomEnchantment() {
 	}
-
 
 	public static void registerCallbacks(EnchantmentEventRegistrar registrar, HolderLookup.Provider registries) {
 		Holder<Enchantment> holder = PracticalEnchantments.resolveEnchantment(registries, ID);

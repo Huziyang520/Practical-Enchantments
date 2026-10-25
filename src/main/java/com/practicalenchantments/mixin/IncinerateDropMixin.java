@@ -1,3 +1,5 @@
+// 焚灭击杀的生物不掉物品：战利品表、装备与生物特有掉落最终都走 spawnAtLocation，经验球不走这里。
+
 package com.practicalenchantments.mixin;
 
 import com.practicalenchantments.enchantment.KillMarks;
@@ -10,16 +12,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-/**
- * 焚灭击杀的生物不掉物品：战利品表、装备与生物特有掉落最终都走 spawnAtLocation，经验球不走这里。
- */
 @Mixin(Entity.class)
 public abstract class IncinerateDropMixin {
-
-	/**
-	 * 1.21.1 的掉落只有一个汇聚点：{@code spawnAtLocation(ItemStack, float)}，
-	 * 另两个重载都转发到它；{@code LivingEntity#dropFromLootTable} 的方法引用也落在它上面。
-	 */
 	@Inject(method = "spawnAtLocation(Lnet/minecraft/world/item/ItemStack;F)"
 			+ "Lnet/minecraft/world/entity/item/ItemEntity;", at = @At("HEAD"),
 			cancellable = true, require = 1)
