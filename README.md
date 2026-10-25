@@ -34,7 +34,7 @@
 |---|---|
 | 1.20.1 | Forge |
 | 1.21.1 | NeoForge |
-| 26.1 – latest release | NeoForge + Fabric |
+| 26.3 – latest 26.x release | NeoForge + Fabric |
 
 Other versions are not planned.
 
@@ -75,7 +75,7 @@ Other versions are not planned.
 |---|---|
 | 1.20.1 | Forge |
 | 1.21.1 | NeoForge |
-| 26.1 – 最新正式版 | NeoForge + Fabric |
+| 26.3 – 最新 26.x 正式版 | NeoForge + Fabric |
 
 其余版本暂无支持计划。
 
