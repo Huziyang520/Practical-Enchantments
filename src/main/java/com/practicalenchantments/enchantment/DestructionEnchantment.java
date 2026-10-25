@@ -18,7 +18,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public final class DestructionEnchantment {
 	public static final String ID = PracticalEnchantments.MOD_ID + ":destruction";
-	private static final TagKey<Block> ORES_TAG = TagKey.create(Registries.BLOCK, ResourceLocation.parse("minecraft:ores"));
+	private static final TagKey<Block> ORES_TAG = TagKey.create(Registries.BLOCK, ResourceLocation.parse("c:ores"));
 
 	public static void registerCallbacks(EnchantmentEventRegistrar registrar, HolderLookup.Provider registries) {
 		Holder<Enchantment> holder = PracticalEnchantments.resolveEnchantment(registries, ID);
