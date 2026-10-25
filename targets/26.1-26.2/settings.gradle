@@ -1,0 +1,47 @@
+pluginManagement {
+	repositories {
+		gradlePluginPortal()
+		mavenCentral()
+		// CurseGradle（de.maxhenkel.cursegradle）未发布到 Gradle 插件门户，走作者自有 Maven
+		maven { url 'https://maven.maxhenkel.de/releases' }
+		exclusiveContent {
+			forRepository {
+				maven {
+					name = 'Fabric'
+					url = uri('https://maven.fabricmc.net')
+				}
+			}
+			filter {
+				includeGroupAndSubgroups('net.fabricmc')
+			}
+		}
+		exclusiveContent {
+			forRepository {
+				maven {
+					name = 'NeoForge'
+					url = uri('https://maven.neoforged.net/releases')
+				}
+			}
+			filter {
+				includeGroupAndSubgroups('net.neoforged')
+			}
+		}
+	}
+}
+plugins {
+	id 'org.gradle.toolchains.foojay-resolver-convention' version '1.0.0'
+}
+rootProject.name = 'practical-enchantments-multiloader'
+includeBuild('build-logic')
+// MerlinLib 以源码工程参与构建（复合构建）：库改完立即生效，不必先发布本地 maven。
+// 依赖坐标里的版本号只用于匹配，实现由下面的 substitution 指向 MerlinLib 源码工程。
+includeBuild('../../../../MerlinLib/26.X/targets/26.1-26.2') {
+	dependencySubstitution {
+		substitute module('com.huziyang520.merlinlib:merlinlib-common-26.1-26.2') using project(':common')
+		substitute module('com.huziyang520.merlinlib:merlinlib-fabric-26.1-26.2') using project(':fabric')
+		substitute module('com.huziyang520.merlinlib:merlinlib-neoforge-26.1-26.2') using project(':neoforge')
+	}
+}
+include('common')
+include('fabric')
+include('neoforge')

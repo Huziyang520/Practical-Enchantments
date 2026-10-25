@@ -1,0 +1,41 @@
+# 26.3 起不再写 modLoader / loaderVersion，两个字段已降级为可选、默认不限版本。
+license="${license}"
+
+[[mods]]
+modId="${mod_id}"
+version="${version}"
+displayName="${mod_name}"
+authors="${mod_author}"
+# 26.3 把方形小图标与宽横幅拆开：列表读 iconFile，详情面板的宽横幅读 bannerFile。
+# 本模组只有 128×128 方形图标，故只声明 iconFile（用 logoFile 会记一条 deprecated 警告）。
+iconFile="icon.png"
+displayURL="https://www.curseforge.com/minecraft/mc-mods/practical-enchantments"
+issueTrackerURL="https://github.com/Huziyang520/Practical-Enchantments/issues"
+description='''${description}'''
+
+# NeoForge requires an explicit mixin-config declaration in mods.toml; without it
+# every shared mixin is silently skipped (Fabric declares the same config via
+# fabric.mod.json's "mixins" array).
+[[mixins]]
+config = "practical_enchantments.mixins.json"
+
+[[dependencies.${mod_id}]]
+    modId="neoforge"
+    type="required"
+    versionRange="[${neoforge_version},)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.${mod_id}]]
+    modId="minecraft"
+    type="required"
+    versionRange="${minecraft_version_range}"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.${mod_id}]]
+    modId="merlinlib"
+    type="required"
+    versionRange="[${merlinlib_version},)"
+    ordering="BEFORE"
+    side="BOTH"

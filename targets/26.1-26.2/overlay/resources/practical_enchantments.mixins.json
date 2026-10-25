@@ -1,0 +1,22 @@
+{
+  "required": true,
+  "package": "com.practicalenchantments.mixin",
+  "compatibilityLevel": "JAVA_25",
+  "mixins": [
+    "PlayerGetDestroySpeedMixin",
+    "DeathSaveMixin",
+    "TridentSmashMixin",
+    "TridentPullMixin",
+    "CatMagnetTamingMixin",
+    "EnchantmentInfiniteCrossbowMixin",
+    "PlayerInfinityAmmoMixin",
+    "GodwoodLootMixin",
+    "IncinerateDropMixin",
+    "CubeMobSplitMixin",
+    "SlimeSplitMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "plugin": "com.practicalenchantments.mixin.PracticalMixinPlugin"
+}

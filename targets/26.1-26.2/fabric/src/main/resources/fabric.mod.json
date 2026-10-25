@@ -1,0 +1,49 @@
+{
+    "schemaVersion": 1,
+    "id": "${mod_id}",
+    "version": "${version}",
+    "name": "${mod_name}",
+    "description": "${description}",
+    "authors": [
+      "${mod_author}"
+    ],
+    "license": "${license}",
+    "icon": "icon.png",
+    "custom": {
+      "modmenu": {
+        "links": {
+          "备用反馈地址": "https://issue.mengcai.online/"
+        }
+      }
+    },
+    "contact": {
+      "homepage": "https://www.curseforge.com/minecraft/mc-mods/practical-enchantments",
+      "issues": "https://github.com/Huziyang520/Practical-Enchantments/issues"
+    },
+    "environment": "*",
+    "depends": {
+      "fabricloader": ">=${fabric_loader_version}",
+      "fabric-api": "*",
+      "minecraft": ">=26.1 <26.3",
+      "java": ">=${java_version}",
+      "merlinlib": "*"
+    },
+    "entrypoints": {
+      "main": [
+        "com.practicalenchantments.fabric.PracticalEnchantmentsFabric"
+      ],
+      "client": [
+        "com.practicalenchantments.fabric.client.PracticalEnchantmentsFabricClient"
+      ],
+      "modmenu": [
+        "com.practicalenchantments.fabric.client.ModMenuIntegration"
+      ]
+    },
+    "recommends": {
+      "cloth-config": "*",
+      "jupiter": "*"
+    },
+    "mixins": [
+      "practical_enchantments.mixins.json"
+    ]
+  }

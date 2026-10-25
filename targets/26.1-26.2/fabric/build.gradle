@@ -1,0 +1,99 @@
+plugins {
+	id 'multiloader-loader'
+	id 'net.fabricmc.fabric-loom'
+	id 'de.maxhenkel.cursegradle' version '1.5.2'
+}
+
+repositories {
+	// 可选前置：Cloth Config 与 Mod Menu 只在这两个仓库里（配置里已把官方源放在镜像之前）。
+	maven { url = 'https://maven.shedaniel.me/' }
+	maven { url = 'https://maven.terraformersmc.com/releases/' }
+}
+
+dependencies {
+	minecraft("com.mojang:minecraft:${minecraft_version}")
+	implementation("net.fabricmc:fabric-loader:${fabric_loader_version}")
+	implementation("net.fabricmc.fabric-api:fabric-api:${fabric_version}")
+	// 可选前置（compileOnly，都不进 jar）：Cloth Config 与 Jupiter 提供配置界面，Mod Menu 提供入口按钮。
+	// Jupiter 没有任何 maven 托管，jar 放在 libs/（已被 .gitignore 排除），缺失时只是没有那个界面。
+	compileOnly("me.shedaniel.cloth:cloth-config-fabric:${cloth_config_version}")
+	compileOnly("com.terraformersmc:modmenu:${modmenu_version}")
+	compileOnly(files("libs/jupiter-2.4.3-26.2-universal.jar"))
+	// MerlinLib Fabric
+	implementation "com.huziyang520.merlinlib:merlinlib-fabric-26.1-26.2:${merlinlib_version}"
+}
+
+loom {
+	def aw = project(':common').file("src/main/resources/${mod_id}.accesswidener")
+	if (aw.exists()) {
+		accessWidenerPath.set(aw)
+	}
+	runs {
+		configureEach {
+			vmArg "-Dfabric.skipMcVersionCheck=true"
+		}
+		client {
+			client()
+			setConfigName('Fabric Client')
+			ideConfigGenerated(true)
+			runDir('runs/client')
+		}
+		server {
+			server()
+			setConfigName('Fabric Server')
+			ideConfigGenerated(true)
+			runDir('runs/server')
+		}
+	}
+}
+
+// Implement mcgradleconventions loader attribute
+def loaderAttribute = Attribute.of('io.github.mcgradleconventions.loader', String)
+['apiElements', 'runtimeElements', 'sourcesElements', 'javadocElements', 'includeInternal', 'modCompileClasspath'].each { variant ->
+	configurations.matching { it.name == variant }.configureEach {
+		attributes {
+			attribute(loaderAttribute, 'fabric')
+		}
+	}
+}
+
+sourceSets.configureEach {
+	[it.compileClasspathConfigurationName, it.runtimeClasspathConfigurationName].each { variant ->
+		configurations.matching { it.name == variant }.configureEach {
+			attributes {
+				attribute(loaderAttribute, 'fabric')
+			}
+		}
+	}
+}
+
+tasks.withType(JavaCompile).configureEach {
+	options.encoding = 'UTF-8'
+}
+
+// CurseForge 上传走 CurseGradle 1.5.2（插件源见 settings.gradle）：gradlew :fabric:curseforge -Pcurse_release_type=<release|beta|alpha>
+// 该插件不读代理，实际上传另用 cf-upload-init.gradle；API key 只从 Gradle 属性 curseforge_api_key 取。
+curseforge {
+	apiKey = project.findProperty('curseforge_api_key') ?: ''
+	project {
+		id = '1689525'
+		changelogType = 'markdown'
+		changelog = rootProject.file('curseforge-changelog.md')
+		releaseType = project.findProperty('curse_release_type') ?: 'beta'
+		// Loom 的 dontRemapOutputs 为 true，jar 即最终产物，不需要 remapJar
+		mainArtifact(tasks.named('jar').get()) {
+			displayName = "${mod_name} ${version} (Fabric) for Minecraft ${minecraft_version}"
+		}
+		addGameVersion minecraft_version
+		addGameVersion 'Fabric'
+		// 双端模组：Client 与 Server 都要声明
+		addGameVersion 'Client'
+		addGameVersion 'Server'
+	}
+	options {
+		javaIntegration = false
+		forgeGradleIntegration = false
+	}
+}
+// CurseGradle 不会自动为主产物挂任务依赖
+tasks.named('curseforge') { dependsOn 'jar' }
