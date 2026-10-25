@@ -1,3 +1,5 @@
+// Fabric 侧原版附魔调整的存取：config/practical_enchantments/vanilla_tweaks.properties。
+
 package com.practicalenchantments.fabric.config;
 
 import com.practicalenchantments.PracticalEnchantments;
@@ -14,16 +16,10 @@ import java.util.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * Fabric 侧原版附魔调整的存取：{@code config/practical_enchantments/vanilla_tweaks.properties}。
- */
 public final class FabricVanillaTweaks {
-
 	private static final Logger LOGGER = LoggerFactory.getLogger(PracticalEnchantments.MOD_ID);
-
 	private static final Path FILE = Path.of("config", PracticalEnchantments.MOD_ID, "vanilla_tweaks.properties");
 
-	/** 全部选项，界面与文件都按这个顺序走。 */
 	public static final String[] KEYS = {
 			VanillaTweaks.KEY_INFINITY_CROSSBOW,
 			VanillaTweaks.KEY_INFINITY_NO_ARROW,
@@ -33,18 +29,12 @@ public final class FabricVanillaTweaks {
 	private FabricVanillaTweaks() {
 	}
 
-	/** 读文件并套用；文件不存在时先按默认值写一份。 */
 	public static void load() {
 		Map<String, Boolean> values = read();
 		write(values);
 		apply(values);
 	}
 
-	/**
-	 * 保存界面上改过的值：未出现的选项沿用当前值。
-	 *
-	 * @param changed 改动过的选项
-	 */
 	public static void save(Map<String, Boolean> changed) {
 		Map<String, Boolean> values = new LinkedHashMap<>();
 		for (String key : KEYS) {

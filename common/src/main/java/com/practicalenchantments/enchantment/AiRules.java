@@ -1,3 +1,5 @@
+// 第二批（2.5）三个附魔的生物行为：伪装、猫咪护符、吸猫体质。
+
 package com.practicalenchantments.enchantment;
 
 import com.huziyang520.merlinlib.api.AiHook;
@@ -24,15 +26,9 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
 
-/**
- * 第二批（2.5）三个附魔的生物行为：伪装、猫咪护符、吸猫体质。
- */
 public final class AiRules {
-
-	/** 头颅物品 → 它伪装成的生物族（用 instanceof 判定，覆盖同族变种）。 */
 	private static boolean hidesFrom(ItemStack head, Mob mob) {
 		if (head.is(Items.SKELETON_SKULL)) {
-			// 骷髅族：骷髅、流浪者、沼骸等都继承 AbstractSkeleton
 			return mob instanceof AbstractSkeleton && !(mob instanceof WitherSkeleton);
 		}
 		if (head.is(Items.WITHER_SKELETON_SKULL)) {
@@ -56,30 +52,17 @@ public final class AiRules {
 			&& stack.getOrDefault(DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY).getLevel(enchantment) > 0;
 	}
 
-	/** 吸猫体质的附魔 Holder，供驯服判定复用（注册后才有值）。 */
 	private static Holder<Enchantment> attractionHolder;
 
-	/**
-	 * 该玩家是否穿着"吸猫体质"。
-	 *
-	 * @param player 玩家
-	 * @return true 表示穿着
-	 */
 	public static boolean hasCatAttraction(Player player) {
 		return attractionHolder != null && wears(player, EquipmentSlot.LEGS, attractionHolder);
 	}
 
-	/** 规则只登记一次（换世界会再次启动服务器）。 */
 	private static boolean registered;
 
 	private AiRules() {
 	}
 
-	/**
-	 * 登记三条规则。
-	 *
-	 * @param registries 注册表访问，用于把附魔 id 解析成 Holder
-	 */
 	public static void register(HolderLookup.Provider registries) {
 		if (registered) {
 			return;
@@ -95,7 +78,6 @@ public final class AiRules {
 		attractionHolder = catAttraction;
 
 		MerlinApi.ai().register(new AiHook() {
-
 			@Override
 			public boolean allowsTargeting(Mob mob, LivingEntity target) {
 				if (!(target instanceof Player player)) {

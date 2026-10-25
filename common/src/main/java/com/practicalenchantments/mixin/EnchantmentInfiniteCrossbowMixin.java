@@ -1,3 +1,5 @@
+// 无限可以被附到弩上：Enchantment#canEnchant(ItemStack) 只查 supported_items。
+
 package com.practicalenchantments.mixin;
 
 import com.practicalenchantments.config.VanillaTweaks;
@@ -10,13 +12,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-/**
- * 无限可以被附到弩上：{@link Enchantment#canEnchant(ItemStack)} 只查 {@code supported_items}。
- */
 @Mixin(Enchantment.class)
 public abstract class EnchantmentInfiniteCrossbowMixin {
-
-	/** 原版无限的描述键，26.3 的附魔仍是记录，没有可比的注册 id。 */
 	private static final String INFINITY_KEY = "enchantment.minecraft.infinity";
 
 	@Inject(method = "canEnchant", at = @At("HEAD"), cancellable = true, require = 1)

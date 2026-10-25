@@ -1,3 +1,5 @@
+// 恶魔交易附魔 - 胸甲 Ⅲ 级（宝藏）。
+
 package com.practicalenchantments.enchantment;
 
 import com.practicalenchantments.PracticalEnchantments;
@@ -9,37 +11,21 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
-/**
- * 恶魔交易附魔 - 胸甲 Ⅲ 级（宝藏）。
- */
 public final class DemonicPactEnchantment {
-
 	public static final String ID = PracticalEnchantments.MOD_ID + ":demonic_pact";
-
-	/** 互斥组：恶魔交易 ↔ 掉落不死亡 */
-
-	/** 冷却（tick） */
 	private static final long COOLDOWN_TICKS = 1200L;
-
-	/** 玩家 UUID → 上次触发的 gameTime */
 	private static final ConcurrentHashMap<UUID, Long> LAST_TRIGGER = new ConcurrentHashMap<>();
 
 	private DemonicPactEnchantment() {
 	}
 
-
-	/**
-	 * 尝试触发恶魔交易。
-	 *
-	 * @return true 表示已免死（Mixin 应取消死亡）
-	 */
 	public static boolean trySave(ServerPlayer player, DamageSource source) {
 		ItemStack chestplate = player.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.CHEST);
 		int level = DeathSaveSupport.getLevel(chestplate, "demonic_pact");
 		if (level <= 0) {
 			return false;
 		}
-		// 虚空 / /kill 等绕过无敌的伤害不救（与不死图腾一致）
+
 		if (source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
 			return false;
 		}
@@ -55,7 +41,6 @@ public final class DemonicPactEnchantment {
 			return false;
 		}
 		consumeEmeralds(player, cost);
-
 		int darknessTicks = (20 - 4 * (level - 1)) * 20;
 		DeathSaveSupport.performResurrection(player, darknessTicks);
 		LAST_TRIGGER.put(player.getUUID(), now);

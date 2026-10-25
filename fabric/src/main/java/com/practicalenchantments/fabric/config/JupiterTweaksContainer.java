@@ -1,3 +1,5 @@
+// Jupiter 配置页：让本模组出现在 Jupiter 自己的配置列表里。
+
 package com.practicalenchantments.fabric.config;
 
 import com.iafenvoy.jupiter.ConfigManager;
@@ -18,17 +20,9 @@ import net.minecraft.resources.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * Jupiter 配置页：让本模组出现在 Jupiter 自己的配置列表里。
- */
 final class JupiterTweaksContainer extends FileConfigContainer {
-
 	private static final Logger LOGGER = LoggerFactory.getLogger(PracticalEnchantments.MOD_ID);
-
-	/** Jupiter 的镜像文件，删掉也不影响真实配置。 */
 	private static final String MIRROR = "config/" + PracticalEnchantments.MOD_ID + "/vanilla_tweaks.jcfg";
-
-	/** 界面上改动过的值，保存时合进属性文件。 */
 	private final Map<String, Boolean> pending = new LinkedHashMap<>();
 
 	private JupiterTweaksContainer() {
@@ -36,15 +30,10 @@ final class JupiterTweaksContainer extends FileConfigContainer {
 				Component.translatable(VanillaTweaks.SECTION_LANG_KEY), MIRROR);
 	}
 
-	/** 登记进 Jupiter 的配置列表。 */
 	static void register() {
 		ConfigManager.getInstance().registerConfigHandler(new JupiterTweaksContainer());
 	}
 
-	/**
-	 * @param parent 返回时回到的界面
-	 * @return Jupiter 的配置界面
-	 */
 	static Screen create(Screen parent) {
 		JupiterTweaksContainer container = new JupiterTweaksContainer();
 		container.init();

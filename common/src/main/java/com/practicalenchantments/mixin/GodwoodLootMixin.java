@@ -1,3 +1,5 @@
+// 神木气息击杀时生物掉落翻倍。
+
 package com.practicalenchantments.mixin;
 
 import com.practicalenchantments.enchantment.KillMarks;
@@ -10,12 +12,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-/**
- * 神木气息击杀时生物掉落翻倍。
- */
 @Mixin(LivingEntity.class)
 public abstract class GodwoodLootMixin {
-
 	@Redirect(method = "dropFromLootTable(Lnet/minecraft/server/level/ServerLevel;"
 			+ "Lnet/minecraft/resources/ResourceKey;Ljava/util/function/Function;"
 			+ "Ljava/util/function/BiConsumer;)Z", require = 1,
@@ -30,7 +28,6 @@ public abstract class GodwoodLootMixin {
 		}
 		ObjectArrayList<ItemStack> doubled = new ObjectArrayList<>(drops.size() * 2);
 		for (ItemStack drop : drops) {
-			// 两份都是副本：原栈会被两个物品实体共享同一个实例，那样存档时会互相干扰。
 			doubled.add(drop.copy());
 			doubled.add(drop.copy());
 		}

@@ -1,3 +1,5 @@
+// Cloth Config 界面：一个页签、三个开关，保存时交给 FabricVanillaTweaks。
+
 package com.practicalenchantments.fabric.config;
 
 import com.practicalenchantments.config.VanillaTweaks;
@@ -10,11 +12,7 @@ import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
-/**
- * Cloth Config 界面：一个页签、三个开关，保存时交给 {@link FabricVanillaTweaks}。
- */
 final class ClothTweaksScreen {
-
 	private ClothTweaksScreen() {
 	}
 

@@ -1,3 +1,5 @@
+// 明朗附魔 只回收自己授予的那份夜视：玩家自己用 /effect give、药水、信标或其它模组 拿到的夜视（尤其是 infinite 永久夜视）一律不覆盖、不删除。
+
 package com.practicalenchantments.enchantment;
 
 import com.huziyang520.merlinlib.api.EntityCounter;
@@ -15,37 +17,23 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 
-/**
- * 明朗附魔 只回收自己授予的那份夜视：玩家自己用 {@code /effect give}、药水、信标或其它模组 拿到的夜视（尤其是 infinite 永久夜视）一律不覆盖、不删除。
- */
 public final class BrightEnchantment {
-
 	public static final String ID = PracticalEnchantments.MOD_ID + ":bright";
-
-	/** 本附魔的 Holder（供判断头盔是否佩戴本附魔） */
 	private static Holder<Enchantment> HOLDER;
-
-	/** 夜视时长（20 秒）：有限时长 + 刷新，保证任何情况下都会自然过期 */
 	private static final int NIGHT_VISION_DURATION = 400;
-
-	/** 刷新间隔（tick）：每 20 tick 一次，剩余时长始终 ≥380 tick，不会闪烁 */
 	private static final int REFRESH_INTERVAL = 20;
 
-	/** EntityCounter 标记：当前夜视由本附魔授予（只撤销自己授予的，同坑 19 的思路） */
 	private static final Identifier NV_GRANTED =
 		Identifier.fromNamespaceAndPath(PracticalEnchantments.MOD_ID, "bright_nv_granted");
 
-
 	public static void registerCallbacks(EnchantmentEventRegistrar registrar, HolderLookup.Provider registries) {
 		HOLDER = PracticalEnchantments.resolveEnchantment(registries, ID);
-		// 使用全局 LIVING_ENTITY_TICK：脱下头盔（即便身上无其他附魔装备）也能移除夜视
 		GlobalEvents.enableLivingEntityTick();
 		GlobalEvents.LIVING_ENTITY_TICK.register(BrightEnchantment::onLivingTick);
 	}
 
 	private static void onLivingTick(LivingEntityTickEvent event) {
 		if (!(event.entity() instanceof ServerPlayer player)) return;
-
 		ItemStack helmet = player.getItemBySlot(EquipmentSlot.HEAD);
 		boolean hasBright = !helmet.isEmpty()
 			&& HOLDER != null
@@ -54,8 +42,6 @@ public final class BrightEnchantment {
 		MobEffectInstance current = player.getEffect(MobEffects.NIGHT_VISION);
 
 		if (hasBright) {
-			// 只在"没有夜视"或"现有夜视就是本附魔给的短时长夜视"时施加 / 刷新。
-			// 玩家自己拿到的夜视（药水 / 指令 / 信标 / 其它模组，尤其 infinite）一律不覆盖、不降级。
 			if (current == null) {
 				player.addEffect(new MobEffectInstance(
 					MobEffects.NIGHT_VISION, NIGHT_VISION_DURATION, 0, true, false));
@@ -64,16 +50,11 @@ public final class BrightEnchantment {
 					MobEffects.NIGHT_VISION, NIGHT_VISION_DURATION, 0, true, false));
 			}
 			EntityCounter.set(player, NV_GRANTED, 1);
-
-			// 夜间（13000~23000 刻）每 13.75 秒（275 tick）扣除 1 点耐久。
-			// 一夜 10000 tick ⇒ 约 36 点；旧值 20 tick（1 秒）一夜要 500 点，任何头盔都过不了一夜。
 			long timeOfDay = player.level().getGameTime() % 24000;
 			if (timeOfDay >= 13000 && timeOfDay <= 23000 && event.tickCount() % 275 == 0) {
 				helmet.hurtAndBreak(1, player, EquipmentSlot.HEAD);
 			}
 		} else {
-			// 摘下头盔或耐久归零：只回收本附魔授予的那份。
-			// ⚠️ 不能无条件删除"所有无限时长夜视"——那会连玩家自己上的永久夜视一起删掉。
 			if (current != null && isOurs(current) && EntityCounter.get(player, NV_GRANTED) > 0) {
 				player.removeEffect(MobEffects.NIGHT_VISION);
 			}
@@ -81,12 +62,6 @@ public final class BrightEnchantment {
 		}
 	}
 
-	/**
-	 * 判断当前状态效果是否就是本附魔施加的那一份（非无限时长、0 级、不超过本附魔给的时长）。
-	 *
-	 * <p>玩家自己用指令 / 药水拿到的夜视要么是无限时长、要么时长明显长于
-	 * {@link #NIGHT_VISION_DURATION}，因此不会被误判、更不会被删除。</p>
-	 */
 	private static boolean isOurs(MobEffectInstance instance) {
 		return !instance.isInfiniteDuration()
 			&& instance.getAmplifier() == 0

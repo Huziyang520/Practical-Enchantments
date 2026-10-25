@@ -1,19 +1,14 @@
+// 原版附魔调整的 NeoForge 配置：配置类型在运行时解析，跟存档走，界面由原生 ConfigurationScreen 提供。
+
 package com.practicalenchantments.neoforge.config;
 
 import com.practicalenchantments.config.VanillaTweaks;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.common.ModConfigSpec;
 
-/**
- * 原版附魔调整的 NeoForge 配置：配置类型在运行时解析，跟存档走，界面由原生 ConfigurationScreen 提供。
- */
 public final class NeoConfig {
-
 	public static final ModConfigSpec SPEC;
-
-	/** 运行时可用的配置类型；loader 之间的类型名差异只在这里吸收一次。 */
 	private static final ModConfig.Type TYPE = resolveType();
-
 	private static final ModConfigSpec.ConfigValue<Boolean> INFINITY_CROSSBOW;
 	private static final ModConfigSpec.ConfigValue<Boolean> INFINITY_NO_ARROW;
 	private static final ModConfigSpec.ConfigValue<Boolean> INFINITY_SPECTRAL;
@@ -37,28 +32,20 @@ public final class NeoConfig {
 	private NeoConfig() {
 	}
 
-	/**
-	 * 依次尝试服务端同步、共享、本地三种类型，取第一个存在的。
-	 *
-	 * @return 本 loader 上可用的配置类型
-	 */
 	private static ModConfig.Type resolveType() {
 		for (String candidate : new String[] {"SYNCED", "COMMON", "LOCAL"}) {
 			try {
 				return ModConfig.Type.valueOf(candidate);
 			} catch (IllegalArgumentException removedOnThisLoader) {
-				// 这个 loader 上没有该类型，继续试下一个
 			}
 		}
 		throw new IllegalStateException("Practical Enchantments: loader 没有可用的服务端配置类型");
 	}
 
-	/** @return 配置类型；服务端同步优先，缺则依次退到共享、本地 */
 	public static ModConfig.Type type() {
 		return TYPE;
 	}
 
-	/** 把当前配置值推给 common 的开关持有者。加载与重载各调用一次，模组构建期也先调一次。 */
 	public static void apply() {
 		if (!SPEC.isLoaded()) {
 			VanillaTweaks.apply(VanillaTweaks.DEFAULT_INFINITY_CROSSBOW, VanillaTweaks.DEFAULT_INFINITY_NO_ARROW,

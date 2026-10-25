@@ -1,3 +1,5 @@
+// 炽血之淬：挖掘方块时直接掉落熔炼产物。暮色森林专属，只从该模组的战利品箱产出。
+
 package com.practicalenchantments.enchantment.linked.twilightforest;
 
 import com.huziyang520.merlinlib.api.LootInjectionBuilder;
@@ -14,15 +16,10 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 
-/**
- * 炽血之淬：挖掘方块时直接掉落熔炼产物。暮色森林专属，只从该模组的战利品箱产出。
- */
 public final class TfQuench {
-
 	public static final String PATH = "tf_quench";
 	public static final String ID = PracticalEnchantments.MOD_ID + ":" + PATH;
 
-	/** 战利品箱候选表；某个表在该模组版本里不存在时只有一条日志，不影响加载。 */
 	private static final String[] LOOT_TABLES = {
 			"twilightforest:chests/hollow_hill",
 			"twilightforest:chests/labyrinth",
@@ -61,7 +58,6 @@ public final class TfQuench {
 		event.transformDrops(TfQuench::asSmelted);
 	}
 
-	/** 掉落数量照原样保留：一块原矿 3 个掉落就该得到 3 个锭；结果按堆叠上限截断。 */
 	private static ItemStack asSmelted(ItemStack drop) {
 		return SmeltingLookup.smelt(drop)
 				.map(result -> result.copyWithCount(

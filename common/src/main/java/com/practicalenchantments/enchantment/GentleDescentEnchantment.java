@@ -1,3 +1,5 @@
+// 羽落附魔 - 靴子单级（娱乐，仅创造/指令获取）。
+
 package com.practicalenchantments.enchantment;
 
 import com.huziyang520.merlinlib.api.EntityCounter;
@@ -14,29 +16,17 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 
-/**
- * 羽落附魔 - 靴子单级（娱乐，仅创造/指令获取）。
- */
 public final class GentleDescentEnchantment {
-
 	public static final String ID = PracticalEnchantments.MOD_ID + ":gentle_descent";
-
-
 	private static Holder<Enchantment> HOLDER;
-
-	/** 缓降时长（20 秒）：有限时长 + 刷新，保证任何情况下都会自然过期 */
 	private static final int SLOW_FALLING_DURATION = 400;
-
-	/** 刷新间隔（tick）：每 20 tick 一次，剩余时长始终 ≥380 tick，不会闪烁 */
 	private static final int REFRESH_INTERVAL = 20;
 
-	/** EntityCounter 标记：当前缓降由本附魔授予（只撤销自己授予的） */
 	private static final Identifier SF_GRANTED =
 		Identifier.fromNamespaceAndPath(PracticalEnchantments.MOD_ID, "gentle_descent_sf_granted");
 
 	private GentleDescentEnchantment() {
 	}
-
 
 	public static void registerCallbacks(EnchantmentEventRegistrar registrar, HolderLookup.Provider registries) {
 		HOLDER = PracticalEnchantments.resolveEnchantment(registries, ID);
@@ -53,8 +43,6 @@ public final class GentleDescentEnchantment {
 		MobEffectInstance current = entity.getEffect(MobEffects.SLOW_FALLING);
 
 		if (hasGentle && !entity.isShiftKeyDown()) {
-			// 只在"没有缓降"或"现有缓降就是本附魔给的短时长缓降"时施加 / 刷新。
-			// 玩家自己拿到的缓降（药水 / 指令 / 其它模组，尤其 infinite）一律不覆盖、不降级。
 			if (current == null) {
 				entity.addEffect(new MobEffectInstance(
 					MobEffects.SLOW_FALLING, SLOW_FALLING_DURATION, 0, true, false));
@@ -64,8 +52,6 @@ public final class GentleDescentEnchantment {
 			}
 			EntityCounter.set(entity, SF_GRANTED, 1);
 		} else {
-			// 潜行 / 脱靴：只回收本附魔授予的那一份。
-			// ⚠️ 不能无条件删除"所有无限时长缓降"——那会连玩家自己上的永久缓降一起删掉。
 			if (current != null && isOurs(current) && EntityCounter.get(entity, SF_GRANTED) > 0) {
 				entity.removeEffect(MobEffects.SLOW_FALLING);
 			}
@@ -73,12 +59,6 @@ public final class GentleDescentEnchantment {
 		}
 	}
 
-	/**
-	 * 判断当前状态效果是否就是本附魔施加的那一份（非无限时长、0 级、不超过本附魔给的时长）。
-	 *
-	 * <p>玩家自己用指令 / 药水拿到的缓降要么是无限时长、要么时长明显长于
-	 * {@link #SLOW_FALLING_DURATION}，因此不会被误判、更不会被删除。</p>
-	 */
 	private static boolean isOurs(MobEffectInstance instance) {
 		return !instance.isInfiniteDuration()
 			&& instance.getAmplifier() == 0
