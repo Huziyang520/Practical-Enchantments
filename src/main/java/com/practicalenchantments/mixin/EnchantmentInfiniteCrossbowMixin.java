@@ -1,3 +1,5 @@
+// 无限可以被附到弩上：canEnchant 的默认实现只查 EnchantmentCategory。
+
 package com.practicalenchantments.mixin;
 
 import com.practicalenchantments.config.VanillaTweaks;
@@ -10,13 +12,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-/**
- * 无限可以被附到弩上：{@code canEnchant} 的默认实现只查 {@code EnchantmentCategory}。
- */
 @Mixin(Enchantment.class)
 public abstract class EnchantmentInfiniteCrossbowMixin {
-
-	/** 认的是注册表里的单例 {@link Enchantments#INFINITY_ARROWS}，比较引用即可。 */
 	@Inject(method = "canEnchant", at = @At("HEAD"), cancellable = true, require = 1)
 	private void practicalenchantments$allowInfinityOnCrossbow(ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
 		if (!VanillaTweaks.infinityCrossbow() || !(stack.getItem() instanceof CrossbowItem)) {

@@ -1,3 +1,5 @@
+// 飞行杀手：以投射物命中空中目标时追加 1 + 等级 伤害，并从二级起附带减速。
+
 package com.practicalenchantments.enchantment.linked.aether;
 
 import com.huziyang520.merlinlib.api.LootInjectionBuilder;
@@ -13,18 +15,11 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.Projectile;
 
-/**
- * 飞行杀手：以投射物命中空中目标时追加 {@code 1 + 等级} 伤害，并从二级起附带减速。
- */
 public final class AetherSkySlayer {
-
 	public static final String PATH = "aether_sky_slayer";
 	public static final String ID = PracticalEnchantments.MOD_ID + ":" + PATH;
-
-	/** 减速持续 5 秒。 */
 	private static final int SLOW_TICKS = 100;
 
-	/** 天境战利品箱候选表，命名空间用实际加载的那个模组。 */
 	private static final String[] LOOT_PATHS = {
 			"chests/dungeon",
 			"chests/bronze_dungeon",

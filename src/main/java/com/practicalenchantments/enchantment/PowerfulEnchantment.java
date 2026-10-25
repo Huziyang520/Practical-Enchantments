@@ -1,3 +1,5 @@
+// 强劲附魔 - 弩 V 级
+
 package com.practicalenchantments.enchantment;
 
 import com.huziyang520.merlinlib.event.BuiltInEvents;
@@ -10,41 +12,20 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.ItemStack;
 
-/**
- * 强劲附魔 - 弩 V 级
- */
 public final class PowerfulEnchantment {
-
 	public static final String ID = PracticalEnchantments.MOD_ID + ":powerful";
-
-	/** 互斥组名（对应数据包标签 {@code practical_enchantments:exclusive_set/crossbow}） */
 	public static final String GROUP_NAME = "crossbow";
 
-	/**
-	 * 互斥组标签引用（见 {@code data/practical_enchantments/tags/enchantment/exclusive_set/crossbow.json}）。
-	 *
-	 * <p>为什么不直接用原版的 crossbow 互斥标签：原版
-	 * {@code #minecraft:exclusive_set/crossbow} 同时含多重射击与穿透，而本附魔按设计要求
-	 * <b>可与穿透叠加</b>，只与多重射击互斥，故自建只含多重射击的互斥组。</p>
-	 */
-
-
 	public static void registerCallbacks(EnchantmentEventRegistrar registrar) {
-		// 使用 MODIFY_DAMAGE 事件处理远程伤害加成
 		registrar.register(PracticalEnchantments.resolveEnchantment(ID),
 			BuiltInEvents.MODIFY_DAMAGE, PowerfulEnchantment::onModifyDamage);
 	}
 
 	private static void onModifyDamage(BuiltInEvents.ModifyDamageEvent event, EnchantmentContext ctx) {
-		// 只处理弹射物伤害（箭矢）
 		DamageSource source = event.source();
 		if (!source.is(DamageTypes.ARROW)) return;
-
-		// 检查攻击者主手是否持有弩
 		ItemStack mainHand = event.attacker().getItemBySlot(EquipmentSlot.MAINHAND);
 		if (!(mainHand.getItem() instanceof CrossbowItem)) return;
-
-		// 每级 +25% 伤害
 		int level = ctx.level();
 		float multiplier = 1.0f + (level * 0.25f);
 		float currentDamage = event.damage().getValue();

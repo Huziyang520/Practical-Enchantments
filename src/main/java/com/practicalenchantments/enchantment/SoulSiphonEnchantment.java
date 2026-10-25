@@ -1,3 +1,5 @@
+// 汲灵附魔 - 剑/斧/矛 Ⅴ 级（附魔台可出，老手级图书管理员）。
+
 package com.practicalenchantments.enchantment;
 
 import com.huziyang520.merlinlib.event.BuiltInEvents;
@@ -6,19 +8,13 @@ import com.huziyang520.merlinlib.event.EnchantmentEventRegistrar;
 import com.practicalenchantments.PracticalEnchantments;
 import net.minecraft.world.entity.ExperienceOrb;
 
-/**
- * 汲灵附魔 - 剑/斧/矛 Ⅴ 级（附魔台可出，老手级图书管理员）。
- */
 public final class SoulSiphonEnchantment {
-
 	public static final String ID = PracticalEnchantments.MOD_ID + ":soul_siphon";
-
 	private static final float COEFFICIENT_PER_LEVEL = 0.2F;
 	private static final float CAP_PER_LEVEL = 2.0F;
 
 	private SoulSiphonEnchantment() {
 	}
-
 
 	public static void registerCallbacks(EnchantmentEventRegistrar registrar) {
 		registrar.register(PracticalEnchantments.resolveEnchantment(ID),

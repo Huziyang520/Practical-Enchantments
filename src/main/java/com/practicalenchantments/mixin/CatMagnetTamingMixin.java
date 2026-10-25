@@ -1,3 +1,5 @@
+// 吸猫体质：喂鱼驯服必定成功（原版是 1/3）。
+
 package com.practicalenchantments.mixin;
 
 import com.practicalenchantments.enchantment.AiRules;
@@ -13,19 +15,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-/**
- * 吸猫体质：喂鱼驯服必定成功（原版是 1/3）。
- */
 @Mixin(Cat.class)
 public class CatMagnetTamingMixin {
-
-	/**
-	 * 补一次必定成功的驯服。
-	 *
-	 * @param player 交互的玩家
-	 * @param hand   交互的手
-	 * @param info   原版返回值
-	 */
 	@Inject(method = "mobInteract(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/world/InteractionResult;",
 		at = @At("RETURN"), require = 1)
 	private void practical$alwaysTame(Player player, InteractionHand hand,

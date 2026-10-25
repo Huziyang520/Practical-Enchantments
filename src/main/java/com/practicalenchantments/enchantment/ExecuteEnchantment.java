@@ -1,3 +1,5 @@
+// 残杀附魔 - 剑/斧/矛单级（宝藏，附魔台/交易均不出）。
+
 package com.practicalenchantments.enchantment;
 
 import com.huziyang520.merlinlib.event.BuiltInEvents;
@@ -8,19 +10,13 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.LivingEntity;
 
-/**
- * 残杀附魔 - 剑/斧/矛单级（宝藏，附魔台/交易均不出）。
- */
 public final class ExecuteEnchantment {
-
 	public static final String ID = PracticalEnchantments.MOD_ID + ":execute";
-
 	private static final float LOW_HP_RATIO = 0.10F;
 	private static final float MID_HP_RATIO = 0.35F;
 
 	private ExecuteEnchantment() {
 	}
-
 
 	public static void registerCallbacks(EnchantmentEventRegistrar registrar) {
 		registrar.register(PracticalEnchantments.resolveEnchantment(ID),

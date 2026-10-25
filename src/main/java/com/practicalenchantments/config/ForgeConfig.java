@@ -1,3 +1,5 @@
+// 原版附魔调整的配置：SERVER 类型，跟存档走，config/practical_enchantments-server.toml。
+
 package com.practicalenchantments.config;
 
 import java.util.List;
@@ -5,17 +7,11 @@ import java.util.Map;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.config.ModConfig;
 
-/**
- * 原版附魔调整的配置：SERVER 类型，跟存档走，{@code config/practical_enchantments-server.toml}。
- */
 public final class ForgeConfig {
-
-	/** 三项开关的键，按界面上的顺序。 */
 	public static final List<String> KEYS = List.of(VanillaTweaks.KEY_INFINITY_CROSSBOW,
 			VanillaTweaks.KEY_INFINITY_NO_ARROW, VanillaTweaks.KEY_INFINITY_SPECTRAL);
 
 	public static final ForgeConfigSpec SPEC;
-
 	private static final ForgeConfigSpec.BooleanValue INFINITY_CROSSBOW;
 	private static final ForgeConfigSpec.BooleanValue INFINITY_NO_ARROW;
 	private static final ForgeConfigSpec.BooleanValue INFINITY_SPECTRAL;
@@ -39,12 +35,10 @@ public final class ForgeConfig {
 	private ForgeConfig() {
 	}
 
-	/** 配置类型：SERVER 才会跟存档一起加载与同步。 */
 	public static ModConfig.Type type() {
 		return ModConfig.Type.SERVER;
 	}
 
-	/** 把当前配置值推给 common 的开关持有者。加载与重载各调用一次，模组构建期也先调一次。 */
 	public static void apply() {
 		if (!SPEC.isLoaded()) {
 			VanillaTweaks.apply(VanillaTweaks.DEFAULT_INFINITY_CROSSBOW, VanillaTweaks.DEFAULT_INFINITY_NO_ARROW,
@@ -54,13 +48,6 @@ public final class ForgeConfig {
 		VanillaTweaks.apply(INFINITY_CROSSBOW.get(), INFINITY_NO_ARROW.get(), INFINITY_SPECTRAL.get());
 	}
 
-	/**
-	 * 把配置界面上改过的值写进 spec 并落盘，随后立刻生效。
-	 *
-	 * <p>配置尚未加载（主菜单、服务器启动之前）时什么都不写。</p>
-	 *
-	 * @param values 选项键到新值的映射
-	 */
 	public static void write(Map<String, Boolean> values) {
 		if (!SPEC.isLoaded()) {
 			return;

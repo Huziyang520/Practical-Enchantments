@@ -1,3 +1,5 @@
+// Practical Enchantments 的 22 个附魔定义（1.20.1）。
+
 package com.practicalenchantments.enchantment;
 
 import com.huziyang520.merlinlib.api.MerlinApi;
@@ -8,99 +10,43 @@ import com.google.gson.JsonParser;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 
-/**
- * Practical Enchantments 的 22 个附魔定义（1.20.1）。
- */
 public final class EnchantmentDefinitions {
-
-	/** 可在附魔台获得，也可由村民出售（两个标签文件都列出）。 */
 	private static final Acquisition TABLE_AND_TRADE = new Acquisition(true, true, false, false, false, false);
-	/** 只出现在 {@code in_enchanting_table.json}。 */
 	private static final Acquisition TABLE_ONLY = new Acquisition(true, false, false, false, false, false);
-	/** 只出现在 {@code tradeable.json}。 */
 	private static final Acquisition TRADE_ONLY = new Acquisition(false, true, false, false, false, false);
-	/** 两个标签文件都没有；获取途径完全由本模组的代码登记（战利品注入 / 村民交易）。 */
 	private static final Acquisition NEITHER = new Acquisition(false, false, false, false, false, false);
 
-	/**
-	 * 「伪装」的 7 个头颅物品，逐字取自 {@code disguise.json} 的 {@code supported_items} 数组。
-	 *
-	 * <p>写成 {@link JsonArray} 而不是 7 个字符串拼接：{@code supported_items} 在原生格式里允许数组，
-	 * 而 builder 的 {@code supportedItems(JsonElement)} 重载正是为这种多元素声明准备的。用
-	 * {@link JsonParser} 解析一段字面 json，是为了让这 7 个 id 与 上游版本的 json 文件保持<b>肉眼可比</b>的
-	 * 同一形状——如果写成 {@code List<String>} 再转换，日后核对时就要多绕一层。</p>
-	 *
-	 * <p><b>为什么必须是数组而不是标签。</b>曾经用 {@code #forge:heads} 近似替代过，但那会漏掉
-	 * {@code minecraft:piglin_head}：该物品在 1.20.1 存在，只是没被 Forge 的 {@code forge:heads}
-	 * 收录。数组原文没有这个缺口。库侧早期"只取数组第一个元素"的缺陷已修（见
-	 * {@code EnchantmentJson.references}），所以这里可以放心用数组。</p>
-	 */
 	private static final JsonArray DISGUISE_ITEMS = JsonParser.parseString(
 		"[\"minecraft:skeleton_skull\",\"minecraft:wither_skeleton_skull\",\"minecraft:zombie_head\","
 			+ "\"minecraft:creeper_head\",\"minecraft:piglin_head\",\"minecraft:dragon_head\","
 			+ "\"minecraft:player_head\"]").getAsJsonArray();
 
-	// ==================== 22 个附魔 id ====================
-	// 供行为类、战利品注入与村民交易复用，避免同一字符串在多处硬编码。
-
-	/** 浮空速掘：头饰，取消浮空时的挖掘减速。 */
 	public static final ResourceLocation AERIAL_HASTE = id("aerial_haste");
-	/** 夺首：锋刃，提高头颅掉落率。 */
 	public static final ResourceLocation BEHEADING = id("beheading");
-	/** 明朗：头饰，永久夜视。 */
 	public static final ResourceLocation BRIGHT = id("bright");
-	/** 吸猫体质：腿甲，猫不再避开你。 */
 	public static final ResourceLocation CAT_ATTRACTION = id("cat_attraction");
-	/** 猫咪护符：头饰，苦力怕与幻翼不主动攻击。 */
 	public static final ResourceLocation CAT_CHARM = id("cat_charm");
-	/** 中国人：胸甲。 */
 	public static final ResourceLocation CHINESE = id("chinese");
-	/** 恶魔交易：胸甲，绿宝石免死。 */
 	public static final ResourceLocation DEMONIC_PACT = id("demonic_pact");
-	/** 毁灭：挖掘工具，摧毁方块并产出经验。 */
 	public static final ResourceLocation DESTRUCTION = id("destruction");
-	/** 伪装：头颅，对应生物不再主动攻击。 */
 	public static final ResourceLocation DISGUISE = id("disguise");
-	/** 残杀：锋刃，对残血目标加伤。 */
 	public static final ResourceLocation EXECUTE = id("execute");
-	/** 狂暴：锋刃，击杀后获得加速。 */
 	public static final ResourceLocation FRENZY = id("frenzy");
-	/** 羽落：靴子，永久缓降。 */
 	public static final ResourceLocation GENTLE_DESCENT = id("gentle_descent");
-	/** 焚灭：锋刃，彻底焚毁生物。 */
 	public static final ResourceLocation INCINERATE = id("incinerate");
-	/** 吸血：锋刃，按目标实际损失生命值回复。 */
 	public static final ResourceLocation LIFE_STEAL = id("life_steal");
-	/** 伐木工：斧，一次砍倒整棵树。 */
 	public static final ResourceLocation LUMBERJACK = id("lumberjack");
-	/** 贯穿：三叉戟，投掷加伤。 */
 	public static final ResourceLocation PENETRATION = id("penetration");
-	/** 强劲：弩，加伤。 */
 	public static final ResourceLocation POWERFUL = id("powerful");
-	/** 粉碎：三叉戟，投掷破坏方块。 */
 	public static final ResourceLocation SMASHING = id("smashing");
-	/** 汲灵：锋刃，把伤害转化为经验。 */
 	public static final ResourceLocation SOUL_SIPHON = id("soul_siphon");
-	/** 掉落不死亡：全套护甲，以掉落背包为代价免死。 */
 	public static final ResourceLocation UNDYING_DROP = id("undying_drop");
-	/** 淬毒：剑，命中附加中毒。 */
 	public static final ResourceLocation VENOM = id("venom");
-	/** 枯萎：剑，命中附加凋零。 */
 	public static final ResourceLocation WITHER_ASPECT = id("wither_aspect");
 
 	private EnchantmentDefinitions() {
 	}
 
-	/**
-	 * 注册全部 22 个附魔。
-	 *
-	 * <p><b>必须在模组构造期调用</b>：1.20.1 的附魔是 {@code DeferredRegister} 条目，注册表在模组
-	 * 构造期之后即冻结，之后再也加不进去。这也是 上游版本与本版本最大的行为差异——那边靠运行期生成
-	 * 数据包，任何时刻登记都算数。</p>
-	 *
-	 * <p>幂等性不由本方法负责：重复调用会重复向 MerlinLib 提交，后者会对同一 id 告警并以后者为准。
-	 * 真正的守卫在 {@code PracticalEnchantments.registerEnchantments()}。</p>
-	 */
 	public static void registerAll() {
 		aerialHaste();
 		beheading();
@@ -126,13 +72,6 @@ public final class EnchantmentDefinitions {
 		witherAspect();
 	}
 
-	/**
-	 * 浮空速掘 —— {@code aerial_haste.json}。
-	 *
-	 * <p>supported_items {@code #minecraft:enchantable/head_armor} → 1.20.1 无此标签，由 MerlinLib
-	 * 翻译为"头盔槽的 {@code ArmorItem}"。category 设为 {@code ARMOR_HEAD}：它在
-	 * {@code in_enchanting_table.json} 里，附魔台真的会提供它，而附魔台对非书本物品只问 category。</p>
-	 */
 	private static void aerialHaste() {
 		MerlinApi.enchantments()
 			.register(AERIAL_HASTE)
@@ -148,13 +87,6 @@ public final class EnchantmentDefinitions {
 			.submit();
 	}
 
-	/**
-	 * 夺首 —— {@code beheading.json}。
-	 *
-	 * <p>cost 全 0：json 里 min/max 的 base 与 per_level 都是 0，即"不受附魔台等级门槛约束"。
-	 * category 留空（默认 {@code VANISHABLE}）：它不在 {@code in_enchanting_table.json} 里，
-	 * {@code isDiscoverable()} 为 false，附魔台根本不会考虑它，category 对它没有意义。</p>
-	 */
 	private static void beheading() {
 		MerlinApi.enchantments()
 			.register(BEHEADING)
@@ -169,11 +101,6 @@ public final class EnchantmentDefinitions {
 			.submit();
 	}
 
-	/**
-	 * 明朗 —— {@code bright.json}。
-	 *
-	 * <p>category {@code ARMOR_HEAD}：在附魔台标签里，理由同 {@link #aerialHaste()}。</p>
-	 */
 	private static void bright() {
 		MerlinApi.enchantments()
 			.register(BRIGHT)
@@ -189,11 +116,6 @@ public final class EnchantmentDefinitions {
 			.submit();
 	}
 
-	/**
-	 * 吸猫体质 —— {@code cat_attraction.json}。
-	 *
-	 * <p>不在附魔台标签里（只可被村民出售、以及本模组的战利品注入），category 留空。</p>
-	 */
 	private static void catAttraction() {
 		MerlinApi.enchantments()
 			.register(CAT_ATTRACTION)
@@ -208,11 +130,6 @@ public final class EnchantmentDefinitions {
 			.submit();
 	}
 
-	/**
-	 * 猫咪护符 —— {@code cat_charm.json}。
-	 *
-	 * <p>不在附魔台标签里，category 留空。</p>
-	 */
 	private static void catCharm() {
 		MerlinApi.enchantments()
 			.register(CAT_CHARM)
@@ -227,12 +144,6 @@ public final class EnchantmentDefinitions {
 			.submit();
 	}
 
-	/**
-	 * 中国人 —— {@code chinese.json}。
-	 *
-	 * <p>两个标签文件都没有它（宝箱战利品由本模组代码注入），category 留空。
-	 * cost 与 anvil_cost 全 0，与 json 一致。</p>
-	 */
 	private static void chinese() {
 		MerlinApi.enchantments()
 			.register(CHINESE)
@@ -247,11 +158,6 @@ public final class EnchantmentDefinitions {
 			.submit();
 	}
 
-	/**
-	 * 恶魔交易 —— {@code demonic_pact.json}。
-	 *
-	 * <p>与掉落不死亡互斥（{@code exclusive_set/death_save}）。不在任何获取标签里，category 留空。</p>
-	 */
 	private static void demonicPact() {
 		MerlinApi.enchantments()
 			.register(DEMONIC_PACT)
@@ -267,15 +173,6 @@ public final class EnchantmentDefinitions {
 			.submit();
 	}
 
-	/**
-	 * 毁灭 —— {@code destruction.json}。
-	 *
-	 * <p>互斥引用的是 1.21 原版标签 {@code #minecraft:exclusive_set/mining}，1.20.1 没有这个标签层，
-	 * 故用 {@link ExclusiveSets#MINING} 的展开成员（{@code fortune} / {@code silk_touch}）替代。</p>
-	 *
-	 * <p>它<b>不在</b> {@code in_enchanting_table.json} 里（虽然注释称其为"宝藏"），
-	 * 只在 {@code tradeable.json} 里，所以 category 留空。</p>
-	 */
 	private static void destruction() {
 		MerlinApi.enchantments()
 			.register(DESTRUCTION)
@@ -291,26 +188,6 @@ public final class EnchantmentDefinitions {
 			.submit();
 	}
 
-	/**
-	 * 伪装 —— {@code disguise.json}。
-	 *
-	 * <h2>1.20.1 分歧：7 元素数组需要显式的 {@link JsonArray}</h2>
-	 *
-	 * <p>json 的 supported_items 是 7 个头颅物品的<b>数组</b>，而 builder 的
-	 * {@code supportedItems(String)} 只接受单个引用串，装不下数组。所以这里走
-	 * {@link EnchantmentBuilder#supportedItems(JsonElement)} 重载，传入按 json 原文顺序、逐字不差的
-	 * 7 个元素。</p>
-	 *
-	 * <p>值得记下来的是：<b>数组形式曾经是坏的</b>。MerlinLib 早期的
-	 * {@code EnchantmentJson.reference(...)} 对数组只取第一个元素，于是其余 6 个头颅会静默失效——
-	 * 附魔照常注册、处处可见，却只在一种头颅上生效。该缺陷已在库侧的
-	 * {@code EnchantmentJson.references(...)} 修好（返回全部引用，{@code MerlinEnchantment} 取并集），
-	 * 因此这里可以放心地用数组原文，而不必退化成 {@code #forge:heads} 之类的近似标签。</p>
-	 *
-	 * <p>曾经考虑过的替代方案，记录在此以免日后有人再走一遍：{@code #forge:heads} 覆盖其中 6 项，
-	 * 但<b>漏掉 {@code minecraft:piglin_head}</b>（该物品在 1.20.1 存在，只是没被 Forge 标签收录）。
-	 * 数组原文没有这个缺口。</p>
-	 */
 	private static void disguise() {
 		MerlinApi.enchantments()
 			.register(DISGUISE)
@@ -325,11 +202,6 @@ public final class EnchantmentDefinitions {
 			.submit();
 	}
 
-	/**
-	 * 残杀 —— {@code execute.json}。
-	 *
-	 * <p>不在任何获取标签里，category 留空。</p>
-	 */
 	private static void execute() {
 		MerlinApi.enchantments()
 			.register(EXECUTE)
@@ -344,11 +216,6 @@ public final class EnchantmentDefinitions {
 			.submit();
 	}
 
-	/**
-	 * 狂暴 —— {@code frenzy.json}。
-	 *
-	 * <p>不在附魔台标签里（只可村民出售 + 代码注入），category 留空。</p>
-	 */
 	private static void frenzy() {
 		MerlinApi.enchantments()
 			.register(FRENZY)
@@ -363,11 +230,6 @@ public final class EnchantmentDefinitions {
 			.submit();
 	}
 
-	/**
-	 * 羽落 —— {@code gentle_descent.json}。
-	 *
-	 * <p>与原版羽毛掉落（{@code minecraft:feather_falling}）互斥。不在任何获取标签里，category 留空。</p>
-	 */
 	private static void gentleDescent() {
 		MerlinApi.enchantments()
 			.register(GENTLE_DESCENT)
@@ -383,11 +245,6 @@ public final class EnchantmentDefinitions {
 			.submit();
 	}
 
-	/**
-	 * 焚灭 —— {@code incinerate.json}。
-	 *
-	 * <p>与原版抢夺（{@code minecraft:looting}）互斥。不在附魔台标签里，category 留空。</p>
-	 */
 	private static void incinerate() {
 		MerlinApi.enchantments()
 			.register(INCINERATE)
@@ -403,13 +260,6 @@ public final class EnchantmentDefinitions {
 			.submit();
 	}
 
-	/**
-	 * 吸血 —— {@code life_steal.json}。
-	 *
-	 * <p>category {@code WEAPON}：它在附魔台标签里，且 supported_items 是
-	 * {@code enchantable/sharp_weapon} → 1.20.1 的 {@code #minecraft:swords}。
-	 * 1.20.1 的 {@code WEAPON} 判定正是 {@code item instanceof SwordItem}，与该标签集合一致。</p>
-	 */
 	private static void lifeSteal() {
 		MerlinApi.enchantments()
 			.register(LIFE_STEAL)
@@ -425,16 +275,6 @@ public final class EnchantmentDefinitions {
 			.submit();
 	}
 
-	/**
-	 * 伐木工 —— {@code lumberjack.json}。
-	 *
-	 * <p>互斥引用 1.21 的 {@code #minecraft:exclusive_set/mining}，用 {@link ExclusiveSets#MINING} 代替。</p>
-	 *
-	 * <p>category {@code DIGGER}：它在附魔台标签里，而附魔台对非书本物品只问 category。
-	 * {@code DIGGER} 的判定是 {@code item instanceof DiggerItem}，即斧/镐/锹/锄——比 json 的
-	 * {@code #minecraft:axes} 宽。1.20.1 没有"斧"这一 category，这是本版本能做到的最接近值；
-	 * 若不设，VANISHABLE 会把几乎所有可损毁物品都放进来，比 DIGGER 更糟。</p>
-	 */
 	private static void lumberjack() {
 		MerlinApi.enchantments()
 			.register(LUMBERJACK)
@@ -451,12 +291,6 @@ public final class EnchantmentDefinitions {
 			.submit();
 	}
 
-	/**
-	 * 贯穿 —— {@code penetration.json}。
-	 *
-	 * <p>与原版激流（{@code minecraft:riptide}）互斥。category {@code TRIDENT}：在附魔台标签里，
-	 * 且 {@code TRIDENT} 的判定是 {@code item instanceof TridentItem}，与 supported_items 一致。</p>
-	 */
 	private static void penetration() {
 		MerlinApi.enchantments()
 			.register(PENETRATION)
@@ -473,13 +307,6 @@ public final class EnchantmentDefinitions {
 			.submit();
 	}
 
-	/**
-	 * 强劲 —— {@code powerful.json}。
-	 *
-	 * <p>supported_items 是单个物品 id {@code minecraft:crossbow}（不是标签）。
-	 * category {@code CROSSBOW}：在附魔台标签里，且 {@code CROSSBOW} 的判定正是
-	 * {@code item instanceof CrossbowItem}。</p>
-	 */
 	private static void powerful() {
 		MerlinApi.enchantments()
 			.register(POWERFUL)
@@ -496,11 +323,6 @@ public final class EnchantmentDefinitions {
 			.submit();
 	}
 
-	/**
-	 * 粉碎 —— {@code smashing.json}。
-	 *
-	 * <p>无互斥组。category {@code TRIDENT}：在附魔台标签里，理由同 {@link #penetration()}。</p>
-	 */
 	private static void smashing() {
 		MerlinApi.enchantments()
 			.register(SMASHING)
@@ -516,11 +338,6 @@ public final class EnchantmentDefinitions {
 			.submit();
 	}
 
-	/**
-	 * 汲灵 —— {@code soul_siphon.json}。
-	 *
-	 * <p>category {@code WEAPON}：在附魔台标签里，理由同 {@link #lifeSteal()}。</p>
-	 */
 	private static void soulSiphon() {
 		MerlinApi.enchantments()
 			.register(SOUL_SIPHON)
@@ -536,12 +353,6 @@ public final class EnchantmentDefinitions {
 			.submit();
 	}
 
-	/**
-	 * 掉落不死亡 —— {@code undying_drop.json}。
-	 *
-	 * <p>与恶魔交易互斥（{@code exclusive_set/death_save}）。slots 是 4 个槽位的数组，
-	 * MerlinLib 会逐一解析成 {@code HEAD/CHEST/LEGS/FEET}。不在任何获取标签里，category 留空。</p>
-	 */
 	private static void undyingDrop() {
 		MerlinApi.enchantments()
 			.register(UNDYING_DROP)
@@ -557,12 +368,6 @@ public final class EnchantmentDefinitions {
 			.submit();
 	}
 
-	/**
-	 * 淬毒 —— {@code venom.json}。
-	 *
-	 * <p>与枯萎、原版火焰附加三向互斥（{@code exclusive_set/blade_effect}）。
-	 * category {@code WEAPON}：在附魔台标签里，理由同 {@link #lifeSteal()}。</p>
-	 */
 	private static void venom() {
 		MerlinApi.enchantments()
 			.register(VENOM)
@@ -579,12 +384,6 @@ public final class EnchantmentDefinitions {
 			.submit();
 	}
 
-	/**
-	 * 枯萎 —— {@code wither_aspect.json}。
-	 *
-	 * <p>与淬毒、原版火焰附加三向互斥（{@code exclusive_set/blade_effect}）。
-	 * 不在附魔台标签里（只可村民出售 + 代码注入），category 留空。</p>
-	 */
 	private static void witherAspect() {
 		MerlinApi.enchantments()
 			.register(WITHER_ASPECT)
@@ -600,22 +399,10 @@ public final class EnchantmentDefinitions {
 			.submit();
 	}
 
-	/**
-	 * {@code enchantment.<命名空间>.<路径>}，即 json 里 {@code description.translate} 的值。
-	 *
-	 * @param path 附魔路径
-	 * @return 语言键
-	 */
 	private static String key(String path) {
 		return "enchantment." + PracticalEnchantments.MOD_ID + "." + path;
 	}
 
-	/**
-	 * 构造本模组命名空间下的附魔 id。
-	 *
-	 * @param path 附魔路径
-	 * @return 全名
-	 */
 	private static ResourceLocation id(String path) {
 		return new ResourceLocation(PracticalEnchantments.MOD_ID, path);
 	}
