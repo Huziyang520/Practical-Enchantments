@@ -58,5 +58,14 @@
   "practical_enchantments.configuration.vanilla_tweaks.infinity_no_arrow.tooltip": "带有「无限」的武器在背包没有普通箭时也能射击。",
   "practical_enchantments.configuration.vanilla_tweaks.infinity_spectral": "无限作用于光灵箭",
   "practical_enchantments.configuration.vanilla_tweaks.infinity_spectral.tooltip": "「无限」武器射出的光灵箭不消耗，但背包里仍需至少有一根光灵箭。",
-  "practical_enchantments.notice.merlinlib": "Practical Enchantments：由于一些原因，原前置模组 EnchantLib 已停更，自 1.3.0 版本起，本模组仅需以 MerlinLib 为前置；本模组的任何问题，欢迎在你能想到的任何地方反馈给作者；若你对新的附魔/魔咒有好的创意，欢迎告诉作者。该提示可在 MerlinLib 的配置界面关闭。"
+  "practical_enchantments.notice.merlinlib": "Practical Enchantments：由于一些原因，原前置模组 EnchantLib 已停更，自 1.3.0 版本起，本模组仅需以 MerlinLib 为前置；本模组的任何问题，欢迎在你能想到的任何地方反馈给作者；若你对新的附魔/魔咒有好的创意，欢迎告诉作者。该提示可在 MerlinLib 的配置界面关闭。",
+  "enchantment.practical_enchantments.bloodletting": "挑血",
+  "enchantment.practical_enchantments.bloodletting.desc": "攻击会激怒目标，对被激怒的目标造成额外伤害",
+  "effect.practical_enchantments.wrath": "嗔怒",
+  "item.minecraft.potion.effect.wrath": "癫狂药水",
+  "item.minecraft.splash_potion.effect.wrath": "喷溅型癫狂药水",
+  "item.minecraft.lingering_potion.effect.wrath": "滞留型癫狂药水",
+  "item.minecraft.potion.effect.long_wrath": "癫狂药水",
+  "item.minecraft.splash_potion.effect.long_wrath": "喷溅型癫狂药水",
+  "item.minecraft.lingering_potion.effect.long_wrath": "滞留型癫狂药水"
 }

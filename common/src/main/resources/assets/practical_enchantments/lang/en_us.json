@@ -58,5 +58,14 @@
   "practical_enchantments.configuration.vanilla_tweaks.infinity_no_arrow.tooltip": "Infinity weapons fire even with no ordinary arrow in the inventory.",
   "practical_enchantments.configuration.vanilla_tweaks.infinity_spectral": "Infinity for Spectral Arrows",
   "practical_enchantments.configuration.vanilla_tweaks.infinity_spectral.tooltip": "Spectral arrows are not consumed by Infinity weapons, but one still has to be in the inventory.",
-  "practical_enchantments.notice.merlinlib": "Practical Enchantments: the original dependency EnchantLib is no longer maintained, so since 1.3.0 MerlinLib is the only dependency this mod needs. Any problem with this mod can be reported to the author anywhere you can think of; ideas for new enchantments are always welcome. This notice can be switched off in the MerlinLib configuration screen."
+  "practical_enchantments.notice.merlinlib": "Practical Enchantments: the original dependency EnchantLib is no longer maintained, so since 1.3.0 MerlinLib is the only dependency this mod needs. Any problem with this mod can be reported to the author anywhere you can think of; ideas for new enchantments are always welcome. This notice can be switched off in the MerlinLib configuration screen.",
+  "enchantment.practical_enchantments.bloodletting": "Bloodletting",
+  "enchantment.practical_enchantments.bloodletting.desc": "Angers the target; angered targets take much more damage",
+  "effect.practical_enchantments.wrath": "Wrath",
+  "item.minecraft.potion.effect.wrath": "Potion of Wrath",
+  "item.minecraft.splash_potion.effect.wrath": "Splash Potion of Wrath",
+  "item.minecraft.lingering_potion.effect.wrath": "Lingering Potion of Wrath",
+  "item.minecraft.potion.effect.long_wrath": "Potion of Wrath",
+  "item.minecraft.splash_potion.effect.long_wrath": "Splash Potion of Wrath",
+  "item.minecraft.lingering_potion.effect.long_wrath": "Lingering Potion of Wrath"
 }

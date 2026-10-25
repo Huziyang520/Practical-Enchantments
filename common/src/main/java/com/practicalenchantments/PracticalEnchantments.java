@@ -7,6 +7,7 @@ import com.huziyang520.merlinlib.api.LootTables;
 import com.huziyang520.merlinlib.api.MerlinApi;
 import com.huziyang520.merlinlib.event.EnchantmentEventRegistrar;
 import com.practicalenchantments.config.PracticalConfig;
+import com.practicalenchantments.content.WrathContent;
 import com.practicalenchantments.enchantment.armor.AerialHasteEnchantment;
 import com.practicalenchantments.enchantment.armor.BrightEnchantment;
 import com.practicalenchantments.enchantment.armor.ChineseEnchantment;
@@ -17,6 +18,7 @@ import com.practicalenchantments.enchantment.support.AiRules;
 import com.practicalenchantments.enchantment.tool.DestructionEnchantment;
 import com.practicalenchantments.enchantment.tool.LumberjackEnchantment;
 import com.practicalenchantments.enchantment.weapon.BeheadingEnchantment;
+import com.practicalenchantments.enchantment.weapon.BloodlettingEnchantment;
 import com.practicalenchantments.enchantment.weapon.ExecuteEnchantment;
 import com.practicalenchantments.enchantment.weapon.FrenzyEnchantment;
 import com.practicalenchantments.enchantment.weapon.IncinerateEnchantment;
@@ -52,6 +54,7 @@ public final class PracticalEnchantments {
 	public static void bootstrap() {
 		MerlinLibNotice.registerEarly();
 		LinkedEnchantments.registerContent();
+		WrathContent.register();
 		MerlinApi.lifecycle().onServerStarting(server -> registerLootInjections());
 
 		MerlinApi.lifecycle().onServerStarted(server -> {
@@ -80,6 +83,11 @@ public final class PracticalEnchantments {
 		registerLoot(QUALITY_TREASURE, 0.10F, "minecraft:chests/stronghold_library", "practical_enchantments:disguise");
 		registerLoot(QUALITY_TREASURE, 0.08F, "minecraft:chests/end_city_treasure", "practical_enchantments:disguise");
 		registerLoot(QUALITY_TREASURE, 0.08F, "minecraft:chests/pillager_outpost", "practical_enchantments:disguise");
+		registerLoot(QUALITY_COMMON, 0.10F, LootTables.SIMPLE_DUNGEON, BloodlettingEnchantment.ID);
+		registerLoot(QUALITY_COMMON, 0.10F, LootTables.ABANDONED_MINESHAFT, BloodlettingEnchantment.ID);
+		registerLoot(QUALITY_COMMON, 0.08F, LootTables.PILLAGER_OUTPOST, BloodlettingEnchantment.ID);
+		registerLoot(QUALITY_COMMON, 0.08F, LootTables.VILLAGE_WEAPONSMITH, BloodlettingEnchantment.ID);
+		registerLoot(QUALITY_COMMON, 0.06F, LootTables.BASTION_TREASURE, BloodlettingEnchantment.ID);
 		registerLoot(QUALITY_RARE, 0.10F, "minecraft:chests/jungle_temple", "practical_enchantments:cat_charm");
 		registerLoot(QUALITY_RARE, 0.10F, "minecraft:chests/shipwreck_treasure", "practical_enchantments:cat_charm");
 		registerLoot(QUALITY_RARE, 0.08F, "minecraft:chests/desert_pyramid", "practical_enchantments:cat_charm");
@@ -156,6 +164,7 @@ public final class PracticalEnchantments {
 		ExecuteEnchantment.registerCallbacks(registrar, registries);
 		SoulSiphonEnchantment.registerCallbacks(registrar, registries);
 		PenetrationEnchantment.registerCallbacks(registrar, registries);
+		BloodlettingEnchantment.registerCallbacks(registrar, registries);
 		LinkedEnchantments.registerCallbacks(registrar, registries);
 	}
 
