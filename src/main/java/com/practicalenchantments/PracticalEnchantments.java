@@ -7,6 +7,8 @@ import com.huziyang520.merlinlib.api.LootTables;
 import com.huziyang520.merlinlib.api.MerlinApi;
 import com.huziyang520.merlinlib.event.EnchantmentEventRegistrar;
 import com.practicalenchantments.config.PracticalConfig;
+import com.practicalenchantments.content.AmuletScanSource;
+import com.practicalenchantments.content.WrathContent;
 import com.practicalenchantments.enchantment.*;
 import com.practicalenchantments.enchantment.linked.LinkedEnchantments;
 import com.practicalenchantments.notice.MerlinLibNotice;
@@ -30,7 +32,9 @@ public final class PracticalEnchantments {
 
 	public static void bootstrap() {
 		MerlinLibNotice.registerEarly();
+		AmuletScanSource.register();
 		LinkedEnchantments.registerContent();
+		WrathContent.register();
 		MerlinApi.lifecycle().onServerStarting(server -> registerLootInjections());
 
 		MerlinApi.lifecycle().onServerStarted(server -> {
@@ -51,6 +55,11 @@ public final class PracticalEnchantments {
 		registerLoot(QUALITY_TREASURE, 0.10F, "minecraft:chests/stronghold_library", "practical_enchantments:disguise");
 		registerLoot(QUALITY_TREASURE, 0.08F, "minecraft:chests/end_city_treasure", "practical_enchantments:disguise");
 		registerLoot(QUALITY_TREASURE, 0.08F, "minecraft:chests/pillager_outpost", "practical_enchantments:disguise");
+		registerLoot(QUALITY_COMMON, 0.10F, LootTables.SIMPLE_DUNGEON, ProvocationEnchantment.ID);
+		registerLoot(QUALITY_COMMON, 0.10F, LootTables.ABANDONED_MINESHAFT, ProvocationEnchantment.ID);
+		registerLoot(QUALITY_COMMON, 0.08F, LootTables.PILLAGER_OUTPOST, ProvocationEnchantment.ID);
+		registerLoot(QUALITY_COMMON, 0.08F, LootTables.VILLAGE_WEAPONSMITH, ProvocationEnchantment.ID);
+		registerLoot(QUALITY_COMMON, 0.06F, LootTables.BASTION_TREASURE, ProvocationEnchantment.ID);
 		registerLoot(QUALITY_RARE, 0.10F, "minecraft:chests/jungle_temple", "practical_enchantments:cat_charm");
 		registerLoot(QUALITY_RARE, 0.10F, "minecraft:chests/shipwreck_treasure", "practical_enchantments:cat_charm");
 		registerLoot(QUALITY_RARE, 0.08F, "minecraft:chests/desert_pyramid", "practical_enchantments:cat_charm");
@@ -105,6 +114,7 @@ public final class PracticalEnchantments {
 		registerLoot(QUALITY_COMMON, 0.20F, 3, LootTables.UNDERWATER_RUIN_BIG, SmashingEnchantment.ID);
 		registerLoot(QUALITY_COMMON, 0.14F, 2, LootTables.SHIPWRECK_TREASURE, SmashingEnchantment.ID);
 		registerLoot(QUALITY_COMMON, 0.12F, 2, LootTables.ABANDONED_MINESHAFT, SmashingEnchantment.ID);
+		ObsidianWalkerLoot.register();
 	}
 
 	public static void registerEventCallbacks(HolderLookup.Provider registries) {
@@ -128,6 +138,9 @@ public final class PracticalEnchantments {
 		ExecuteEnchantment.registerCallbacks(registrar, registries);
 		SoulSiphonEnchantment.registerCallbacks(registrar, registries);
 		PenetrationEnchantment.registerCallbacks(registrar, registries);
+		ObsidianWalkerEnchantment.registerCallbacks(registrar, registries);
+		InvisibleAirEnchantment.registerCallbacks(registrar, registries);
+		HeavyBlowEnchantment.registerCallbacks(registries);
 		LinkedEnchantments.registerCallbacks(registrar, registries);
 	}
 

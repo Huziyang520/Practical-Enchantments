@@ -13,7 +13,13 @@
     "PlayerInfinityAmmoMixin",
     "CubeMobSplitMixin",
     "GodwoodLootMixin",
-    "IncinerateDropMixin"
+    "IncinerateDropMixin",
+    "HeavyBlowCooldownMixin",
+    "WeaponAttackMixin",
+    "InvisibleAirSpawnMixin",
+    "AmuletPenaltyMixin",
+    "AmuletUpgradeKeepMixin",
+    "SweepDamageMixin"
   ],
   "client": [],
   "server": [],
