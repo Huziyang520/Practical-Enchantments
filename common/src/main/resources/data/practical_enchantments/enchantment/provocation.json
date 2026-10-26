@@ -1,7 +1,7 @@
 {
   "description": {
-    "translate": "enchantment.practical_enchantments.bloodletting",
-    "fallback": "\u6311\u8840"
+    "translate": "enchantment.practical_enchantments.provocation",
+    "fallback": "\u6311\u8845"
   },
   "supported_items": "#minecraft:enchantable/sharp_weapon",
   "weight": 5,

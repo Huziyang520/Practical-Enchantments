@@ -1,4 +1,4 @@
-// 护身符饰品栏门面：Curios 与 Trinkets 全程反射访问，前置缺失或签名不符时静默降级为“未装备”。
+// 护身符饰品栏门面：Curios/Trinkets 反射访问 + 副手槽位，前置缺失时静默降级为“未装备”。
 
 package com.practicalenchantments.content;
 
@@ -21,7 +21,7 @@ public final class AmuletSupport {
 	private static final String TRINKETS_ID = "trinkets_updated";
 	private static final String TRINKETS_LEGACY_ID = "trinkets";
 	private static final EquipmentSlot[] WORN_SLOTS = {
-			EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET};
+			EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET, EquipmentSlot.OFFHAND};
 	private static final String CURIOS_API = "top.theillusivec4.curios.api.CuriosApi";
 	private static final String TRINKETS_API = "eu.pb4.trinkets.api.TrinketsApi";
 	private static Set<Item> amulets;
@@ -40,7 +40,9 @@ public final class AmuletSupport {
 	}
 
 	public static boolean isWearing(LivingEntity entity, Item item) {
-		return curiosScan(entity, stack -> stack.is(item)) || trinketsScan(entity, stack -> stack.is(item));
+		return entity.getItemBySlot(EquipmentSlot.OFFHAND).is(item)
+				|| curiosScan(entity, stack -> stack.is(item))
+				|| trinketsScan(entity, stack -> stack.is(item));
 	}
 
 	public static int amuletLevel(LivingEntity entity, Holder<Enchantment> enchantment) {
@@ -116,6 +118,46 @@ public final class AmuletSupport {
 					|| Services.PLATFORM.isModLoaded(TRINKETS_LEGACY_ID);
 		}
 		return trinketsLoaded;
+	}
+
+	public static java.util.List<ItemStack> equippedAmuletStacks(LivingEntity entity) {
+		java.util.List<ItemStack> found = new java.util.ArrayList<>();
+		java.util.Set<ItemStack> seen = java.util.Collections.newSetFromMap(new java.util.IdentityHashMap<>());
+		if (curiosLoaded()) {
+			for (int guard = 0; guard < 16; guard++) {
+				ItemStack[] hit = {null};
+				curiosScan(entity, stack -> {
+					if (isAmulet(stack) && !seen.contains(stack)) {
+						hit[0] = stack;
+						return true;
+					}
+					return false;
+				});
+				if (hit[0] == null) {
+					break;
+				}
+				seen.add(hit[0]);
+				found.add(hit[0]);
+			}
+		}
+		if (trinketsLoaded()) {
+			for (int guard = 0; guard < 16; guard++) {
+				ItemStack[] hit = {null};
+				trinketsScan(entity, stack -> {
+					if (isAmulet(stack) && !seen.contains(stack)) {
+						hit[0] = stack;
+						return true;
+					}
+					return false;
+				});
+				if (hit[0] == null) {
+					break;
+				}
+				seen.add(hit[0]);
+				found.add(hit[0]);
+			}
+		}
+		return found;
 	}
 
 	private static int curiosAmuletLevel(LivingEntity entity, Holder<Enchantment> enchantment) {

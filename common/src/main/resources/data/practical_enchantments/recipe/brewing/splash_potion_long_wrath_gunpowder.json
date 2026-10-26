@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:brewing",
+  "input": {
+    "item": "minecraft:potion",
+    "potion_contents": {
+      "potions": "practical_enchantments:long_wrath"
+    }
+  },
+  "reagent": {
+    "item": "minecraft:gunpowder"
+  },
+  "output": {
+    "id": "minecraft:splash_potion",
+    "components": {
+      "minecraft:potion_contents": {
+        "potion": "practical_enchantments:long_wrath"
+      }
+    }
+  }
+}

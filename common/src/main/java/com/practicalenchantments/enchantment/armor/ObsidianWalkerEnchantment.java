@@ -1,4 +1,4 @@
-// 龙晶行者附魔 - 靴子单级，站在熔岩源上时把脚下的熔岩凝固成有瑕疵的黑曜石。
+// 龙晶行者附魔 - 靴子单级，行走时把脚下的熔岩源凝成会自行碎裂的有瑕疵的黑曜石。
 
 package com.practicalenchantments.enchantment.armor;
 
@@ -25,6 +25,8 @@ import net.minecraft.world.level.material.FluidState;
 
 public final class ObsidianWalkerEnchantment {
 	public static final String ID = PracticalEnchantments.MOD_ID + ":obsidian_walker";
+	private static final int INTERVAL = 4;
+	private static final int RADIUS = 1;
 
 	private ObsidianWalkerEnchantment() {
 	}
@@ -46,22 +48,35 @@ public final class ObsidianWalkerEnchantment {
 	}
 
 	private static void onTick(BuiltInEvents.EntityTickEvent event, EnchantmentContext ctx) {
-		if (ctx.slot() != EquipmentSlot.FEET) {
+		if (ctx.slot() != EquipmentSlot.FEET || (event.tickCount() & (INTERVAL - 1)) != 0) {
+			return;
+		}
+		LivingEntity entity = event.entity();
+		if (!entity.onGround() || entity.isInLava()) {
 			return;
 		}
 		ServerLevel level = event.level();
-		LivingEntity entity = event.entity();
-		BlockState solidified = PeContent.block(PeContent.FLAWED_OBSIDIAN).defaultBlockState();
 		BlockPos feet = entity.blockPosition();
-		solidify(level, feet, solidified);
-		solidify(level, feet.below(), solidified);
+		BlockState solidified = PeContent.block(PeContent.FLAWED_OBSIDIAN).defaultBlockState();
+		if (!solidifyLayer(level, feet.getY(), feet, solidified)) {
+			solidifyLayer(level, feet.getY() - 1, feet, solidified);
+		}
 	}
 
-	private static void solidify(ServerLevel level, BlockPos pos, BlockState solidified) {
-		FluidState fluid = level.getFluidState(pos);
-		if (!fluid.is(FluidTags.LAVA) || !fluid.isSource()) {
-			return;
+	private static boolean solidifyLayer(ServerLevel level, int y, BlockPos origin, BlockState solidified) {
+		boolean changed = false;
+		for (BlockPos column : BlockPos.betweenClosed(origin.offset(-RADIUS, 0, -RADIUS), origin.offset(RADIUS, 0, RADIUS))) {
+			BlockPos target = new BlockPos(column.getX(), y, column.getZ());
+			if (!level.isEmptyBlock(target.above())) {
+				continue;
+			}
+			FluidState fluid = level.getFluidState(target);
+			if (!fluid.is(FluidTags.LAVA) || !fluid.isSource()) {
+				continue;
+			}
+			level.setBlock(target, solidified, Block.UPDATE_ALL);
+			changed = true;
 		}
-		level.setBlock(pos, solidified, Block.UPDATE_ALL);
+		return changed;
 	}
 }

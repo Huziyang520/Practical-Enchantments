@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "practical_enchantments:block/flawed_obsidian_2"
+  }
+}

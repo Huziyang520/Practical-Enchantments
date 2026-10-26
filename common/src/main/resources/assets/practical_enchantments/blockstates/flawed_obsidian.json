@@ -1,7 +1,16 @@
 {
   "variants": {
-    "": {
-      "model": "practical_enchantments:block/flawed_obsidian"
+    "age=0": {
+      "model": "practical_enchantments:block/flawed_obsidian_0"
+    },
+    "age=1": {
+      "model": "practical_enchantments:block/flawed_obsidian_1"
+    },
+    "age=2": {
+      "model": "practical_enchantments:block/flawed_obsidian_2"
+    },
+    "age=3": {
+      "model": "practical_enchantments:block/flawed_obsidian_3"
     }
   }
 }

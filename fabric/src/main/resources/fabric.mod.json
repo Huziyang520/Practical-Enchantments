@@ -44,6 +44,7 @@
       "jupiter": "*"
     },
     "mixins": [
-      "practical_enchantments.mixins.json"
+      "practical_enchantments.mixins.json",
+      "practical_enchantments.client.mixins.json"
     ]
   }

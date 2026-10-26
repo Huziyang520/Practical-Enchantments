@@ -16,9 +16,11 @@
     "SlimeSplitMixin",
     "HeavyBlowCritMixin",
     "HeavyBlowCooldownMixin",
+    "WeaponAttackMixin",
     "InvisibleAirSpawnMixin",
     "AmuletPenaltyMixin",
-    "ObsidianWalkerImmunityMixin"
+    "AmuletUpgradeKeepMixin",
+    "SweepDamageMixin"
   ],
   "injectors": {
     "defaultRequire": 1

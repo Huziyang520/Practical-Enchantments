@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "package": "com.practicalenchantments.neoforge.client.mixin",
+  "compatibilityLevel": "JAVA_25",
+  "mixins": [],
+  "client": [
+    "InvisibleAirFirstPersonMixin",
+    "InvisibleAirItemInHandMixin",
+    "InvisibleAirArmPoseMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
