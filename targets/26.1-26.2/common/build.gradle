@@ -95,3 +95,33 @@ sourceSets.configureEach {
 tasks.withType(JavaCompile).configureEach {
 	options.encoding = 'UTF-8'
 }
+
+def packScript = file('../../../tools/validate_pack.py')
+
+tasks.register('validatePack') {
+	group = 'verification'
+	inputs.files(fileTree('src/main/resources'))
+	inputs.file(packScript)
+	outputs.upToDateWhen { false }
+	doLast {
+		if (!packScript.exists()) {
+			return
+		}
+		def python = System.getProperty('os.name').toLowerCase().contains('win') ? 'python' : 'python3'
+		def process
+		try {
+			process = new ProcessBuilder(python, packScript.absolutePath).redirectErrorStream(true).start()
+		} catch (Exception ignored) {
+			logger.warn('validatePack skipped: python not found')
+			return
+		}
+		def output = process.inputStream.text
+		if (process.waitFor() != 0) {
+			throw new GradleException("datapack validation failed:\n" + output)
+		}
+	}
+}
+
+tasks.named('compileJava') {
+	dependsOn tasks.named('validatePack')
+}

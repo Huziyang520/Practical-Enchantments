@@ -3,15 +3,20 @@
     "translate": "enchantment.practical_enchantments.cat_charm",
     "fallback": "猫咪护符"
   },
-  "supported_items": [
-    "#minecraft:enchantable/head_armor",
-    "#practical_enchantments:amulets"
-  ],
+  "supported_items": "#practical_enchantments:enchantable/head_armor",
   "weight": 1,
   "max_level": 1,
-  "min_cost": { "base": 12, "per_level_above_first": 0 },
-  "max_cost": { "base": 35, "per_level_above_first": 0 },
+  "min_cost": {
+    "base": 12,
+    "per_level_above_first": 0
+  },
+  "max_cost": {
+    "base": 35,
+    "per_level_above_first": 0
+  },
   "anvil_cost": 3,
-  "slots": ["head"],
+  "slots": [
+    "head"
+  ],
   "effects": {}
 }
