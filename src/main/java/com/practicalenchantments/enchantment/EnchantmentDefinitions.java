@@ -33,16 +33,21 @@ public final class EnchantmentDefinitions {
 	public static final ResourceLocation EXECUTE = id("execute");
 	public static final ResourceLocation FRENZY = id("frenzy");
 	public static final ResourceLocation GENTLE_DESCENT = id("gentle_descent");
+	public static final ResourceLocation HEAVY_BLOW = id("heavy_blow");
 	public static final ResourceLocation INCINERATE = id("incinerate");
+	public static final ResourceLocation INVISIBLE_AIR = id("invisible_air");
 	public static final ResourceLocation LIFE_STEAL = id("life_steal");
 	public static final ResourceLocation LUMBERJACK = id("lumberjack");
+	public static final ResourceLocation OBSIDIAN_WALKER = id("obsidian_walker");
 	public static final ResourceLocation PENETRATION = id("penetration");
 	public static final ResourceLocation POWERFUL = id("powerful");
+	public static final ResourceLocation PROVOCATION = id("provocation");
 	public static final ResourceLocation SMASHING = id("smashing");
 	public static final ResourceLocation SOUL_SIPHON = id("soul_siphon");
 	public static final ResourceLocation UNDYING_DROP = id("undying_drop");
 	public static final ResourceLocation VENOM = id("venom");
 	public static final ResourceLocation WITHER_ASPECT = id("wither_aspect");
+	private static final String AMULETS = "#practical_enchantments:amulets";
 
 	private EnchantmentDefinitions() {
 	}
@@ -60,16 +65,27 @@ public final class EnchantmentDefinitions {
 		execute();
 		frenzy();
 		gentleDescent();
+		heavyBlow();
 		incinerate();
+		invisibleAir();
 		lifeSteal();
 		lumberjack();
+		obsidianWalker();
 		penetration();
 		powerful();
+		provocation();
 		smashing();
 		soulSiphon();
 		undyingDrop();
 		venom();
 		witherAspect();
+	}
+
+	private static JsonArray armorItems(String tag) {
+		JsonArray items = new JsonArray();
+		items.add(tag);
+		items.add(AMULETS);
+		return items;
 	}
 
 	private static void aerialHaste() {
@@ -81,7 +97,7 @@ public final class EnchantmentDefinitions {
 			.cost(8, 0, 25, 0)
 			.anvilCost(2)
 			.slots("head")
-			.supportedItems("#minecraft:enchantable/head_armor")
+			.supportedItems(armorItems("#minecraft:enchantable/head_armor"))
 			.acquisition(TABLE_AND_TRADE)
 			.category(EnchantmentCategory.ARMOR_HEAD)
 			.submit();
@@ -110,7 +126,7 @@ public final class EnchantmentDefinitions {
 			.cost(10, 0, 25, 0)
 			.anvilCost(2)
 			.slots("head")
-			.supportedItems("#minecraft:enchantable/head_armor")
+			.supportedItems(armorItems("#minecraft:enchantable/head_armor"))
 			.acquisition(TABLE_AND_TRADE)
 			.category(EnchantmentCategory.ARMOR_HEAD)
 			.submit();
@@ -125,7 +141,7 @@ public final class EnchantmentDefinitions {
 			.cost(8, 0, 28, 0)
 			.anvilCost(2)
 			.slots("legs")
-			.supportedItems("#minecraft:enchantable/leg_armor")
+			.supportedItems(armorItems("#minecraft:enchantable/leg_armor"))
 			.acquisition(TRADE_ONLY)
 			.submit();
 	}
@@ -139,7 +155,7 @@ public final class EnchantmentDefinitions {
 			.cost(12, 0, 35, 0)
 			.anvilCost(3)
 			.slots("head")
-			.supportedItems("#minecraft:enchantable/head_armor")
+			.supportedItems(armorItems("#minecraft:enchantable/head_armor"))
 			.acquisition(TRADE_ONLY)
 			.submit();
 	}
@@ -153,7 +169,7 @@ public final class EnchantmentDefinitions {
 			.cost(0, 0, 0, 0)
 			.anvilCost(0)
 			.slots("chest")
-			.supportedItems("#minecraft:enchantable/chest_armor")
+			.supportedItems(armorItems("#minecraft:enchantable/chest_armor"))
 			.acquisition(NEITHER)
 			.submit();
 	}
@@ -167,7 +183,7 @@ public final class EnchantmentDefinitions {
 			.cost(0, 0, 0, 0)
 			.anvilCost(6)
 			.slots("chest")
-			.supportedItems("#minecraft:enchantable/chest_armor")
+			.supportedItems(armorItems("#minecraft:enchantable/chest_armor"))
 			.exclusiveSet(ExclusiveSets.DEATH_SAVE.deepCopy())
 			.acquisition(NEITHER)
 			.submit();
@@ -239,7 +255,7 @@ public final class EnchantmentDefinitions {
 			.cost(0, 0, 0, 0)
 			.anvilCost(2)
 			.slots("feet")
-			.supportedItems("#minecraft:enchantable/foot_armor")
+			.supportedItems(armorItems("#minecraft:enchantable/foot_armor"))
 			.exclusiveSet(ExclusiveSets.SLOW_FALL.deepCopy())
 			.acquisition(NEITHER)
 			.submit();
@@ -362,7 +378,7 @@ public final class EnchantmentDefinitions {
 			.cost(0, 0, 0, 0)
 			.anvilCost(3)
 			.slots("head", "chest", "legs", "feet")
-			.supportedItems("#minecraft:enchantable/armor")
+			.supportedItems(armorItems("#minecraft:enchantable/armor"))
 			.exclusiveSet(ExclusiveSets.DEATH_SAVE.deepCopy())
 			.acquisition(NEITHER)
 			.submit();
@@ -396,6 +412,67 @@ public final class EnchantmentDefinitions {
 			.supportedItems("#minecraft:swords")
 			.exclusiveSet(ExclusiveSets.BLADE_EFFECT.deepCopy())
 			.acquisition(TRADE_ONLY)
+			.submit();
+	}
+
+	private static void heavyBlow() {
+		MerlinApi.enchantments()
+			.register(HEAVY_BLOW)
+			.translationKey(key("heavy_blow"))
+			.weight(2)
+			.maxLevel(1)
+			.cost(15, 0, 45, 0)
+			.anvilCost(4)
+			.slots("mainhand")
+			.supportedItems("#minecraft:enchantable/sharp_weapon")
+			.acquisition(TRADE_ONLY)
+			.category(EnchantmentCategory.WEAPON)
+			.submit();
+	}
+
+	private static void invisibleAir() {
+		MerlinApi.enchantments()
+			.register(INVISIBLE_AIR)
+			.translationKey(key("invisible_air"))
+			.weight(1)
+			.maxLevel(1)
+			.cost(20, 0, 50, 0)
+			.anvilCost(6)
+			.slots("mainhand")
+			.supportedItems("#minecraft:swords")
+			.acquisition(NEITHER)
+			.category(EnchantmentCategory.WEAPON)
+			.submit();
+	}
+
+	private static void obsidianWalker() {
+		MerlinApi.enchantments()
+			.register(OBSIDIAN_WALKER)
+			.translationKey(key("obsidian_walker"))
+			.weight(2)
+			.maxLevel(1)
+			.cost(20, 0, 45, 0)
+			.anvilCost(6)
+			.slots("feet")
+			.supportedItems("#minecraft:enchantable/foot_armor")
+			.exclusiveSet(ExclusiveSets.BOOTS.deepCopy())
+			.acquisition(NEITHER)
+			.category(EnchantmentCategory.ARMOR_FEET)
+			.submit();
+	}
+
+	private static void provocation() {
+		MerlinApi.enchantments()
+			.register(PROVOCATION)
+			.translationKey(key("provocation"))
+			.weight(5)
+			.maxLevel(3)
+			.cost(12, 8, 40, 10)
+			.anvilCost(2)
+			.slots("mainhand")
+			.supportedItems("#minecraft:enchantable/sharp_weapon")
+			.acquisition(NEITHER)
+			.category(EnchantmentCategory.WEAPON)
 			.submit();
 	}
 

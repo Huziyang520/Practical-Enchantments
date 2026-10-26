@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "practical_enchantments:iron_amulet",
+    "practical_enchantments:golden_amulet",
+    "practical_enchantments:diamond_amulet",
+    "practical_enchantments:netherite_amulet"
+  ]
+}

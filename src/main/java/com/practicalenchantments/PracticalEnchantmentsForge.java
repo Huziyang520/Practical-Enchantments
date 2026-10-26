@@ -4,9 +4,13 @@ package com.practicalenchantments;
 
 import com.practicalenchantments.config.ConfigUi;
 import com.practicalenchantments.config.ForgeConfig;
+import com.practicalenchantments.enchantment.HeavyBlowEnchantment;
 import com.practicalenchantments.enchantment.LifeStealEnchantment;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
+import net.minecraftforge.event.entity.player.CriticalHitEvent;
+import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -34,5 +38,18 @@ public class PracticalEnchantmentsForge {
 	@SubscribeEvent
 	public static void onLivingDamage(LivingDamageEvent event) {
 		LifeStealEnchantment.onAfterDamage(event.getEntity(), event.getSource(), event.getAmount(), 0.0F, false);
+	}
+
+	@SubscribeEvent
+	public static void onCriticalHit(CriticalHitEvent event) {
+		if (event.isVanillaCritical() || event.getResult() != Event.Result.DEFAULT) {
+			return;
+		}
+		Player player = event.getEntity();
+		if (!HeavyBlowEnchantment.has(player)) {
+			return;
+		}
+		event.setDamageModifier(1.5F);
+		event.setResult(Event.Result.ALLOW);
 	}
 }

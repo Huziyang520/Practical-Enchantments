@@ -14,7 +14,18 @@
     "PlayerInfinityAmmoMixin",
     "CubeMobSplitMixin",
     "GodwoodLootMixin",
-    "IncinerateDropMixin"
+    "IncinerateDropMixin",
+    "WeaponAttackMixin",
+    "SweepDamageMixin",
+    "HeavyBlowCooldownMixin",
+    "InvisibleAirSpawnMixin",
+    "AmuletPenaltyMixin",
+    "AmuletUpgradeKeepMixin"
+  ],
+  "client": [
+    "InvisibleAirFirstPersonMixin",
+    "InvisibleAirArmPoseMixin",
+    "InvisibleAirItemInHandMixin"
   ],
   "injectors": {
     "defaultRequire": 1

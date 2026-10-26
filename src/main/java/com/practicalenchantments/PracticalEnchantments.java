@@ -7,6 +7,9 @@ import com.huziyang520.merlinlib.api.LootTables;
 import com.huziyang520.merlinlib.api.MerlinApi;
 import com.huziyang520.merlinlib.event.EnchantmentEventRegistrar;
 import com.practicalenchantments.config.PracticalConfig;
+import com.practicalenchantments.content.AmuletScanSource;
+import com.practicalenchantments.content.PeContent;
+import com.practicalenchantments.content.WrathContent;
 import com.practicalenchantments.enchantment.*;
 import com.practicalenchantments.enchantment.linked.LinkedEnchantments;
 import com.practicalenchantments.notice.MerlinLibNotice;
@@ -27,6 +30,9 @@ public final class PracticalEnchantments {
 
 	public static void bootstrap() {
 		registerEnchantments();
+		PeContent.register();
+		AmuletScanSource.register();
+		WrathContent.register();
 		LinkedEnchantments.registerContent();
 		MerlinLibNotice.registerEarly();
 		MerlinApi.lifecycle().onServerStarting(server -> registerLootInjections());
@@ -111,6 +117,13 @@ public final class PracticalEnchantments {
 		registerLoot(QUALITY_COMMON, 0.20F, 3, LootTables.UNDERWATER_RUIN_BIG, SmashingEnchantment.ID);
 		registerLoot(QUALITY_COMMON, 0.14F, 2, LootTables.SHIPWRECK_TREASURE, SmashingEnchantment.ID);
 		registerLoot(QUALITY_COMMON, 0.12F, 2, LootTables.ABANDONED_MINESHAFT, SmashingEnchantment.ID);
+		registerLoot(QUALITY_COMMON, 0.10F, LootTables.SIMPLE_DUNGEON, ProvocationEnchantment.ID);
+		registerLoot(QUALITY_COMMON, 0.10F, LootTables.ABANDONED_MINESHAFT, ProvocationEnchantment.ID);
+		registerLoot(QUALITY_COMMON, 0.08F, LootTables.PILLAGER_OUTPOST, ProvocationEnchantment.ID);
+		registerLoot(QUALITY_COMMON, 0.08F, LootTables.VILLAGE_WEAPONSMITH, ProvocationEnchantment.ID);
+		registerLoot(QUALITY_COMMON, 0.06F, LootTables.BASTION_TREASURE, ProvocationEnchantment.ID);
+		registerLoot(QUALITY_TREASURE, 0.10F, LootTables.END_CITY_TREASURE, ObsidianWalkerEnchantment.ID);
+		registerLoot(QUALITY_TREASURE, 0.10F, LootTables.BASTION_TREASURE, ObsidianWalkerEnchantment.ID);
 	}
 
 	public static void registerEventCallbacks() {
@@ -134,6 +147,7 @@ public final class PracticalEnchantments {
 		ExecuteEnchantment.registerCallbacks(registrar);
 		SoulSiphonEnchantment.registerCallbacks(registrar);
 		PenetrationEnchantment.registerCallbacks(registrar);
+		ObsidianWalkerEnchantment.registerCallbacks(registrar);
 		LinkedEnchantments.registerCallbacks(registrar);
 	}
 
