@@ -16,7 +16,8 @@
     "HeavyBlowCritMixin",
     "HeavyBlowCooldownMixin",
     "InvisibleAirSpawnMixin",
-    "AmuletPenaltyMixin"
+    "AmuletPenaltyMixin",
+    "ObsidianWalkerImmunityMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -70,6 +70,70 @@ def local_items():
     return found
 
 
+def local_enchantment_files():
+    found = set()
+    for path in glob.glob(os.path.join(DATA, "*", "enchantment", "**", "*.json"), recursive=True):
+        rel = os.path.relpath(path, DATA).replace(os.sep, "/")
+        namespace, rest = rel.split("/", 1)
+        found.add(f"{namespace}:{rest.split('/', 1)[1][: -len('.json')]}")
+    return found
+
+
+def vanilla_items(jar):
+    if not jar or not os.path.isfile(jar):
+        return set()
+    found = set()
+    with zipfile.ZipFile(jar) as archive:
+        for name in archive.namelist():
+            match = re.match(r"assets/([^/]+)/items/(.+)\.json$", name)
+            if match:
+                found.add(f"{match.group(1)}:{match.group(2)}")
+    return found
+
+
+RECIPE_ID_KEYS = ("input", "material", "addition", "base", "template")
+
+
+def collect_recipe_ids(node, found):
+    if isinstance(node, dict):
+        for key, value in node.items():
+            if key in RECIPE_ID_KEYS and isinstance(value, str):
+                found.append(value)
+            elif key == "item" and isinstance(value, str):
+                found.append(value)
+            elif key == "result" and isinstance(value, dict) and isinstance(value.get("id"), str):
+                found.append(value["id"])
+            elif key == "key" and isinstance(value, dict):
+                for entry in value.values():
+                    if isinstance(entry, str):
+                        found.append(entry)
+                    elif isinstance(entry, list):
+                        found.extend(x for x in entry if isinstance(x, str))
+            elif key == "ingredients" and isinstance(value, list):
+                for entry in value:
+                    if isinstance(entry, str):
+                        found.append(entry)
+                    elif isinstance(entry, dict):
+                        collect_recipe_ids(entry, found)
+            else:
+                collect_recipe_ids(value, found)
+    elif isinstance(node, list):
+        for entry in node:
+            collect_recipe_ids(entry, found)
+
+
+def vanilla_enchantments(jar):
+    if not jar or not os.path.isfile(jar):
+        return set()
+    found = set()
+    with zipfile.ZipFile(jar) as archive:
+        for name in archive.namelist():
+            match = re.match(r"data/([^/]+)/enchantment/(.+)\.json$", name)
+            if match:
+                found.add(f"{match.group(1)}:{match.group(2)}")
+    return found
+
+
 def tag_registry(path):
     rel = os.path.relpath(path, DATA).replace(os.sep, "/")
     parts = rel.split("/")
@@ -124,6 +188,29 @@ def main():
             problems.append(f"{rel}: effects must be an object")
 
     known_items = local_items()
+    known_enchantments = local_enchantment_files() | vanilla_enchantments(args.jar)
+    known_items_all = known_items | vanilla_items(args.jar)
+
+    for path in glob.glob(os.path.join(DATA, "*", "recipe", "**", "*.json"), recursive=True) + \
+            glob.glob(os.path.join(DATA, "*", "recipes", "**", "*.json"), recursive=True):
+        rel = os.path.relpath(path, ROOT)
+        try:
+            data = load_json(path)
+        except Exception:  # noqa: BLE001 - already reported
+            continue
+        ids = []
+        collect_recipe_ids(data, ids)
+        for name in ids:
+            match = TAG_REF.match(name)
+            if match:
+                if not (match.group(1) == "minecraft" and not args.jar) and f"#{match.group(1)}:{match.group(2)}" not in known_tags:
+                    problems.append(f"{rel}: unknown item tag {name}")
+                continue
+            if ":" not in name or name in known_items_all:
+                continue
+            if name.startswith("minecraft:") and not args.jar:
+                continue
+            problems.append(f"{rel}: unknown item {name}")
     for path in glob.glob(os.path.join(DATA, "**", "*.json"), recursive=True):
         rel = os.path.relpath(path, ROOT)
         try:
@@ -138,10 +225,15 @@ def main():
             if not isinstance(name, str):
                 continue
             match = TAG_REF.match(name)
+            registry = tag_registry(path)
             vanilla_unknown = match and not args.jar and match.group(1) == "minecraft"
             if match and not vanilla_unknown and f"#{match.group(1)}:{match.group(2)}" not in known_tags:
                 problems.append(f"{rel}: unknown tag {name}")
-            elif not match and name.startswith("practical_enchantments:") and name not in known_items:
+            elif (registry == "enchantment" and not match and name not in known_enchantments
+                  and not (name.startswith("minecraft:") and not args.jar)):
+                problems.append(f"{rel}: enchantment {name} has no data/*/enchantment file, "
+                                "and enchantments registered from code cannot be listed in a tag")
+            elif registry == "item" and not match and name.startswith("practical_enchantments:") and name not in known_items:
                 problems.append(f"{rel}: item {name} has no assets/*/items entry")
 
     if problems:
