@@ -19,6 +19,9 @@ description='''${description}'''
 [[mixins]]
 config = "practical_enchantments.mixins.json"
 
+[[mixins]]
+config = "practical_enchantments.client.mixins.json"
+
 [[dependencies.${mod_id}]]
     modId="neoforge"
     type="required"

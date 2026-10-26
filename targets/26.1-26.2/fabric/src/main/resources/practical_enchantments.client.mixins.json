@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "package": "com.practicalenchantments.fabric.client.mixin",
+  "compatibilityLevel": "JAVA_25",
+  "mixins": [],
+  "client": [
+    "InvisibleAirFirstPersonMixin",
+    "InvisibleAirItemInHandMixin",
+    "InvisibleAirPlayerItemInHandMixin",
+    "InvisibleAirArmPoseMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
