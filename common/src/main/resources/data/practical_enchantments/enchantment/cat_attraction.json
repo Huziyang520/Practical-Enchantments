@@ -3,7 +3,10 @@
     "translate": "enchantment.practical_enchantments.cat_attraction",
     "fallback": "吸猫体质"
   },
-  "supported_items": "#minecraft:enchantable/leg_armor",
+  "supported_items": [
+    "#minecraft:enchantable/leg_armor",
+    "#practical_enchantments:amulets"
+  ],
   "weight": 1,
   "max_level": 1,
   "min_cost": { "base": 8, "per_level_above_first": 0 },

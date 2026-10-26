@@ -3,7 +3,10 @@
     "translate": "enchantment.practical_enchantments.undying_drop",
     "fallback": "掉落不死亡"
   },
-  "supported_items": "#minecraft:enchantable/armor",
+  "supported_items": [
+    "#minecraft:enchantable/armor",
+    "#practical_enchantments:amulets"
+  ],
   "exclusive_set": "#practical_enchantments:exclusive_set/death_save",
   "weight": 1,
   "max_level": 3,

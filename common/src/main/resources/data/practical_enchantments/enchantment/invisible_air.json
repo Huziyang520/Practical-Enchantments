@@ -1,0 +1,35 @@
+{
+  "description": {
+    "translate": "enchantment.practical_enchantments.invisible_air",
+    "fallback": "\u98ce\u738b\u7ed3\u754c"
+  },
+  "supported_items": "#minecraft:swords",
+  "weight": 1,
+  "max_level": 1,
+  "min_cost": {
+    "base": 20,
+    "per_level_above_first": 0
+  },
+  "max_cost": {
+    "base": 50,
+    "per_level_above_first": 0
+  },
+  "anvil_cost": 6,
+  "slots": [
+    "mainhand"
+  ],
+  "effects": {
+    "minecraft:attributes": [
+      {
+        "id": "practical_enchantments:invisible_air_reach",
+        "attribute": "minecraft:entity_interaction_range",
+        "amount": {
+          "type": "minecraft:linear",
+          "base": 0.5,
+          "per_level_above_first": 0.0
+        },
+        "operation": "add_multiplied_base"
+      }
+    ]
+  }
+}

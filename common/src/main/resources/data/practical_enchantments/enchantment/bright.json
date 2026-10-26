@@ -3,7 +3,10 @@
     "translate": "enchantment.practical_enchantments.bright",
     "fallback": "明朗"
   },
-  "supported_items": "#minecraft:enchantable/head_armor",
+  "supported_items": [
+    "#minecraft:enchantable/head_armor",
+    "#practical_enchantments:amulets"
+  ],
   "weight": 10,
   "max_level": 1,
   "min_cost": { "base": 10, "per_level_above_first": 0 },

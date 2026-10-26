@@ -67,5 +67,17 @@
   "item.minecraft.lingering_potion.effect.wrath": "滞留型癫狂药水",
   "item.minecraft.potion.effect.long_wrath": "癫狂药水",
   "item.minecraft.splash_potion.effect.long_wrath": "喷溅型癫狂药水",
-  "item.minecraft.lingering_potion.effect.long_wrath": "滞留型癫狂药水"
+  "item.minecraft.lingering_potion.effect.long_wrath": "滞留型癫狂药水",
+  "itemGroup.practical_enchantments.main": "实用附魔",
+  "block.practical_enchantments.flawed_obsidian": "有瑕疵的黑曜石",
+  "item.practical_enchantments.iron_amulet": "铁护身符",
+  "item.practical_enchantments.golden_amulet": "金护身符",
+  "item.practical_enchantments.diamond_amulet": "钻石护身符",
+  "item.practical_enchantments.netherite_amulet": "下界合金护身符",
+  "enchantment.practical_enchantments.obsidian_walker": "龙晶行者",
+  "enchantment.practical_enchantments.obsidian_walker.desc": "可以让你在熔岩上行走",
+  "enchantment.practical_enchantments.heavy_blow": "重击",
+  "enchantment.practical_enchantments.heavy_blow.desc": "用力挥舞武器，始终造成暴击伤害",
+  "enchantment.practical_enchantments.invisible_air": "风王结界",
+  "enchantment.practical_enchantments.invisible_air.desc": "在武器周围生成数层风改变光的折射率，让武器不可见"
 }

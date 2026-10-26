@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:crafting_transmute",
+  "category": "equipment",
+  "input": "practical_enchantments:golden_amulet",
+  "material": "minecraft:diamond",
+  "material_count": 4,
+  "result": {
+    "id": "practical_enchantments:diamond_amulet"
+  }
+}

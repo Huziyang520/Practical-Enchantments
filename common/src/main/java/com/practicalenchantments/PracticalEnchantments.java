@@ -7,12 +7,15 @@ import com.huziyang520.merlinlib.api.LootTables;
 import com.huziyang520.merlinlib.api.MerlinApi;
 import com.huziyang520.merlinlib.event.EnchantmentEventRegistrar;
 import com.practicalenchantments.config.PracticalConfig;
+import com.practicalenchantments.content.PeContent;
 import com.practicalenchantments.content.WrathContent;
 import com.practicalenchantments.enchantment.armor.AerialHasteEnchantment;
 import com.practicalenchantments.enchantment.armor.BrightEnchantment;
 import com.practicalenchantments.enchantment.armor.ChineseEnchantment;
 import com.practicalenchantments.enchantment.armor.DemonicPactEnchantment;
 import com.practicalenchantments.enchantment.armor.GentleDescentEnchantment;
+import com.practicalenchantments.enchantment.armor.ObsidianWalkerEnchantment;
+import com.practicalenchantments.enchantment.armor.ObsidianWalkerLoot;
 import com.practicalenchantments.enchantment.linked.LinkedEnchantments;
 import com.practicalenchantments.enchantment.support.AiRules;
 import com.practicalenchantments.enchantment.tool.DestructionEnchantment;
@@ -21,6 +24,8 @@ import com.practicalenchantments.enchantment.weapon.BeheadingEnchantment;
 import com.practicalenchantments.enchantment.weapon.BloodlettingEnchantment;
 import com.practicalenchantments.enchantment.weapon.ExecuteEnchantment;
 import com.practicalenchantments.enchantment.weapon.FrenzyEnchantment;
+import com.practicalenchantments.enchantment.weapon.HeavyBlowEnchantment;
+import com.practicalenchantments.enchantment.weapon.InvisibleAirEnchantment;
 import com.practicalenchantments.enchantment.weapon.IncinerateEnchantment;
 import com.practicalenchantments.enchantment.weapon.LifeStealEnchantment;
 import com.practicalenchantments.enchantment.weapon.PenetrationEnchantment;
@@ -53,6 +58,7 @@ public final class PracticalEnchantments {
 
 	public static void bootstrap() {
 		MerlinLibNotice.registerEarly();
+		PeContent.register();
 		LinkedEnchantments.registerContent();
 		WrathContent.register();
 		MerlinApi.lifecycle().onServerStarting(server -> registerLootInjections());
@@ -141,6 +147,7 @@ public final class PracticalEnchantments {
 		registerLoot(QUALITY_COMMON, 0.20F, 3, LootTables.UNDERWATER_RUIN_BIG, SmashingEnchantment.ID);
 		registerLoot(QUALITY_COMMON, 0.14F, 2, LootTables.SHIPWRECK_TREASURE, SmashingEnchantment.ID);
 		registerLoot(QUALITY_COMMON, 0.12F, 2, LootTables.ABANDONED_MINESHAFT, SmashingEnchantment.ID);
+		ObsidianWalkerLoot.register();
 	}
 
 	public static void registerEventCallbacks(HolderLookup.Provider registries) {
@@ -165,6 +172,9 @@ public final class PracticalEnchantments {
 		SoulSiphonEnchantment.registerCallbacks(registrar, registries);
 		PenetrationEnchantment.registerCallbacks(registrar, registries);
 		BloodlettingEnchantment.registerCallbacks(registrar, registries);
+		ObsidianWalkerEnchantment.registerCallbacks(registrar, registries);
+		InvisibleAirEnchantment.registerCallbacks(registrar, registries);
+		HeavyBlowEnchantment.registerCallbacks(registries);
 		LinkedEnchantments.registerCallbacks(registrar, registries);
 	}
 

@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:crafting_transmute",
+  "category": "equipment",
+  "input": "practical_enchantments:iron_amulet",
+  "material": "minecraft:gold_ingot",
+  "material_count": 4,
+  "result": {
+    "id": "practical_enchantments:golden_amulet"
+  }
+}

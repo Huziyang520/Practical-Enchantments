@@ -12,7 +12,11 @@
     "PlayerInfinityAmmoMixin",
     "CubeMobSplitMixin",
     "GodwoodLootMixin",
-    "IncinerateDropMixin"
+    "IncinerateDropMixin",
+    "HeavyBlowCritMixin",
+    "HeavyBlowCooldownMixin",
+    "InvisibleAirSpawnMixin",
+    "AmuletPenaltyMixin"
   ],
   "injectors": {
     "defaultRequire": 1

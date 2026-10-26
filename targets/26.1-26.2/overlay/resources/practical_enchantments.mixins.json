@@ -13,10 +13,14 @@
     "GodwoodLootMixin",
     "IncinerateDropMixin",
     "CubeMobSplitMixin",
-    "SlimeSplitMixin"
+    "SlimeSplitMixin",
+    "HeavyBlowCritMixin",
+    "HeavyBlowCooldownMixin",
+    "InvisibleAirSpawnMixin",
+    "AmuletPenaltyMixin"
   ],
   "injectors": {
     "defaultRequire": 1
   },
   "plugin": "com.practicalenchantments.mixin.PracticalMixinPlugin"
-}
+}
