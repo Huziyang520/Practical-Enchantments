@@ -48,6 +48,8 @@ jar {
 }
 
 processResources {
+	// 26.3 才有的数据包酿造配方，带进 26.1-26.2 只会刷 unknown recipe serializer
+	exclude 'data/practical_enchantments/recipe/brewing/**'
 	var expandProps = [
 		'version'                       : version,
 		'group'                         : project.group,
