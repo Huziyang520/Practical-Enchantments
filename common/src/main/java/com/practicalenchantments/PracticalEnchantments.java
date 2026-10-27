@@ -17,6 +17,7 @@ import com.practicalenchantments.enchantment.armor.DemonicPactEnchantment;
 import com.practicalenchantments.enchantment.armor.GentleDescentEnchantment;
 import com.practicalenchantments.enchantment.armor.ObsidianWalkerEnchantment;
 import com.practicalenchantments.enchantment.armor.ObsidianWalkerLoot;
+import com.practicalenchantments.enchantment.armor.UndyingDropEnchantment;
 import com.practicalenchantments.enchantment.linked.LinkedEnchantments;
 import com.practicalenchantments.enchantment.support.AiRules;
 import com.practicalenchantments.enchantment.tool.DestructionEnchantment;
@@ -176,6 +177,8 @@ public final class PracticalEnchantments {
 		ObsidianWalkerEnchantment.registerCallbacks(registrar, registries);
 		InvisibleAirEnchantment.registerCallbacks(registrar, registries);
 		HeavyBlowEnchantment.registerCallbacks(registries);
+		DemonicPactEnchantment.register(registries);
+		UndyingDropEnchantment.register(registries);
 		LinkedEnchantments.registerCallbacks(registrar, registries);
 	}
 

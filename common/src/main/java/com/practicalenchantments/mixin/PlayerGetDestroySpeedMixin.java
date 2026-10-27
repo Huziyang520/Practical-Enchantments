@@ -2,11 +2,10 @@
 
 package com.practicalenchantments.mixin;
 
+import com.practicalenchantments.content.AmuletSupport;
 import com.practicalenchantments.enchantment.armor.AerialHasteEnchantment;
 import net.minecraft.core.Holder;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
@@ -35,10 +34,6 @@ public abstract class PlayerGetDestroySpeedMixin {
 		if (holder == null) {
 			return false;
 		}
-		ItemStack helmet = player.getItemBySlot(EquipmentSlot.HEAD);
-		if (helmet.isEmpty()) {
-			return false;
-		}
-		return helmet.getEnchantments().getLevel(holder) > 0;
+		return AmuletSupport.wornLevel(player, holder) > 0;
 	}
 }
