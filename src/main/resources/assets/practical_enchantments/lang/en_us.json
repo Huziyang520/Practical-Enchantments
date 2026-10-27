@@ -68,6 +68,8 @@
   "item.minecraft.potion.effect.long_wrath": "Potion of Wrath",
   "item.minecraft.splash_potion.effect.long_wrath": "Splash Potion of Wrath",
   "item.minecraft.lingering_potion.effect.long_wrath": "Lingering Potion of Wrath",
+  "item.minecraft.tipped_arrow.effect.wrath": "Arrow of Wrath",
+  "item.minecraft.tipped_arrow.effect.long_wrath": "Extended Arrow of Wrath",
   "itemGroup.practical_enchantments.main": "Practical Enchantments",
   "block.practical_enchantments.flawed_obsidian": "Flawed Obsidian",
   "item.practical_enchantments.flawed_obsidian": "Flawed Obsidian",

@@ -7,6 +7,7 @@ import com.huziyang520.merlinlib.event.EnchantmentEventRegistrar;
 import com.huziyang520.merlinlib.event.GlobalEvents;
 import com.huziyang520.merlinlib.event.LivingEntityTickEvent;
 import com.practicalenchantments.PracticalEnchantments;
+import com.practicalenchantments.content.AmuletSupport;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -35,9 +36,7 @@ public final class BrightEnchantment {
 	private static void onLivingTick(LivingEntityTickEvent event) {
 		if (!(event.entity() instanceof ServerPlayer player)) return;
 		ItemStack helmet = player.getItemBySlot(EquipmentSlot.HEAD);
-		boolean hasBright = !helmet.isEmpty()
-			&& HOLDER != null
-			&& EnchantmentHelper.getItemEnchantmentLevel(HOLDER, helmet) > 0;
+		boolean hasBright = HOLDER != null && AmuletSupport.wornLevel(player, HOLDER) > 0;
 
 		MobEffectInstance current = player.getEffect(MobEffects.NIGHT_VISION);
 
@@ -51,7 +50,8 @@ public final class BrightEnchantment {
 			}
 			EntityCounter.set(player, NV_GRANTED, 1);
 			long timeOfDay = player.level().getGameTime() % 24000;
-			if (timeOfDay >= 13000 && timeOfDay <= 23000 && event.tickCount() % DURABILITY_INTERVAL == 0) {
+			if (timeOfDay >= 13000 && timeOfDay <= 23000 && event.tickCount() % DURABILITY_INTERVAL == 0
+					&& !helmet.isEmpty()) {
 				helmet.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(EquipmentSlot.HEAD));
 			}
 		} else {

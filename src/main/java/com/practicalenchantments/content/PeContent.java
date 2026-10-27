@@ -26,6 +26,7 @@ public final class PeContent {
 	private static final List<ResourceLocation> AMULETS =
 			List.of(IRON_AMULET, GOLDEN_AMULET, DIAMOND_AMULET, NETHERITE_AMULET);
 	private static boolean registered;
+	private static Block flawedObsidian;
 
 	private PeContent() {
 	}
@@ -44,6 +45,10 @@ public final class PeContent {
 	}
 
 	public static Block block(ResourceLocation id) {
+		Block created = flawedObsidian;
+		if (created != null && FLAWED_OBSIDIAN.equals(id)) {
+			return created;
+		}
 		return BuiltInRegistries.BLOCK.get(id);
 	}
 
@@ -56,10 +61,11 @@ public final class PeContent {
 	}
 
 	private static Block createBlock() {
-		return new FlawedObsidianBlock(BlockBehaviour.Properties.of()
+		Block created = new FlawedObsidianBlock(BlockBehaviour.Properties.of()
 				.noLootTable()
-				.randomTicks()
 				.strength(0.5F));
+		flawedObsidian = created;
+		return created;
 	}
 
 	private static Item createBlockItem() {

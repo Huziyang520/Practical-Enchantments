@@ -3,6 +3,7 @@
 package com.practicalenchantments.enchantment;
 
 import com.practicalenchantments.PracticalEnchantments;
+import com.practicalenchantments.content.AmuletSupport;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import net.minecraft.server.level.ServerPlayer;
@@ -10,18 +11,23 @@ import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.Enchantment;
 
 public final class DemonicPactEnchantment {
 	public static final String ID = PracticalEnchantments.MOD_ID + ":demonic_pact";
 	private static final long COOLDOWN_TICKS = 1200L;
 	private static final ConcurrentHashMap<UUID, Long> LAST_TRIGGER = new ConcurrentHashMap<>();
+	private static Enchantment ENCHANTMENT;
 
 	private DemonicPactEnchantment() {
 	}
 
 	public static boolean trySave(ServerPlayer player, DamageSource source) {
-		ItemStack chestplate = player.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.CHEST);
-		int level = DeathSaveSupport.getLevel(chestplate, "demonic_pact");
+		Enchantment enchantment = enchantment();
+		if (enchantment == null) {
+			return false;
+		}
+		int level = AmuletSupport.wornLevel(player, enchantment);
 		if (level <= 0) {
 			return false;
 		}
@@ -70,5 +76,13 @@ public final class DemonicPactEnchantment {
 			stack.shrink(take);
 			remaining -= take;
 		}
+	}
+	private static Enchantment enchantment() {
+		Enchantment cached = ENCHANTMENT;
+		if (cached == null) {
+			cached = PracticalEnchantments.resolveEnchantment(ID);
+			ENCHANTMENT = cached;
+		}
+		return cached;
 	}
 }

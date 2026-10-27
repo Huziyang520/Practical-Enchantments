@@ -2,6 +2,7 @@
 
 package com.practicalenchantments.mixin;
 
+import com.practicalenchantments.content.AmuletSupport;
 import com.practicalenchantments.enchantment.AerialHasteEnchantment;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -44,10 +45,6 @@ public abstract class PlayerGetDestroySpeedMixin {
 			}
 			practical$aerialHaste = enchantment;
 		}
-		ItemStack helmet = player.getItemBySlot(EquipmentSlot.HEAD);
-		if (helmet.isEmpty()) {
-			return false;
-		}
-		return EnchantmentHelper.getItemEnchantmentLevel(enchantment, helmet) > 0;
+		return AmuletSupport.wornLevel(player, enchantment) > 0;
 	}
 }
