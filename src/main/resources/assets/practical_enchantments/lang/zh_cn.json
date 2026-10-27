@@ -68,6 +68,8 @@
   "item.minecraft.potion.effect.long_wrath": "癫狂药水",
   "item.minecraft.splash_potion.effect.long_wrath": "喷溅型癫狂药水",
   "item.minecraft.lingering_potion.effect.long_wrath": "滞留型癫狂药水",
+  "item.minecraft.tipped_arrow.effect.wrath": "癫狂之箭",
+  "item.minecraft.tipped_arrow.effect.long_wrath": "延长版癫狂之箭",
   "itemGroup.practical_enchantments.main": "实用附魔",
   "block.practical_enchantments.flawed_obsidian": "有瑕疵的黑曜石",
   "item.practical_enchantments.flawed_obsidian": "有瑕疵的黑曜石",

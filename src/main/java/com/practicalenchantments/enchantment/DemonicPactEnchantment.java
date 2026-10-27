@@ -3,25 +3,37 @@
 package com.practicalenchantments.enchantment;
 
 import com.practicalenchantments.PracticalEnchantments;
+import com.practicalenchantments.content.AmuletSupport;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.Enchantment;
 
 public final class DemonicPactEnchantment {
 	public static final String ID = PracticalEnchantments.MOD_ID + ":demonic_pact";
 	private static final long COOLDOWN_TICKS = 1200L;
 	private static final ConcurrentHashMap<UUID, Long> LAST_TRIGGER = new ConcurrentHashMap<>();
+	private static Holder<Enchantment> HOLDER;
 
 	private DemonicPactEnchantment() {
 	}
 
+	public static void register(HolderLookup.Provider registries) {
+		HOLDER = PracticalEnchantments.resolveEnchantment(registries, ID);
+	}
+
 	public static boolean trySave(ServerPlayer player, DamageSource source) {
-		ItemStack chestplate = player.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.CHEST);
-		int level = DeathSaveSupport.getLevel(chestplate, "demonic_pact");
+		Holder<Enchantment> holder = HOLDER;
+		if (holder == null) {
+			return false;
+		}
+		int level = AmuletSupport.wornLevel(player, holder);
 		if (level <= 0) {
 			return false;
 		}

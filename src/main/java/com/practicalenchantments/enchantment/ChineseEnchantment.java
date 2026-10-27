@@ -9,6 +9,7 @@ import com.huziyang520.merlinlib.event.EnchantmentEventRegistrar;
 import com.huziyang520.merlinlib.event.GlobalEvents;
 import com.huziyang520.merlinlib.event.LivingEntityTickEvent;
 import com.practicalenchantments.PracticalEnchantments;
+import com.practicalenchantments.content.AmuletSupport;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.ResourceLocation;
@@ -65,8 +66,6 @@ public final class ChineseEnchantment {
 	}
 
 	private static boolean hasChinese(ServerPlayer player) {
-		ItemStack chestItem = player.getItemBySlot(EquipmentSlot.CHEST);
-		if (chestItem.isEmpty() || HOLDER == null) return false;
-		return chestItem.getEnchantments().getLevel(HOLDER) > 0;
+		return HOLDER != null && AmuletSupport.wornLevel(player, HOLDER) > 0;
 	}
 }

@@ -141,6 +141,8 @@ public final class PracticalEnchantments {
 		ObsidianWalkerEnchantment.registerCallbacks(registrar, registries);
 		InvisibleAirEnchantment.registerCallbacks(registrar, registries);
 		HeavyBlowEnchantment.registerCallbacks(registries);
+		DemonicPactEnchantment.register(registries);
+		UndyingDropEnchantment.register(registries);
 		LinkedEnchantments.registerCallbacks(registrar, registries);
 	}
 

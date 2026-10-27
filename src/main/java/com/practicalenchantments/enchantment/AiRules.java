@@ -5,6 +5,7 @@ package com.practicalenchantments.enchantment;
 import com.huziyang520.merlinlib.api.AiHook;
 import com.huziyang520.merlinlib.api.MerlinApi;
 import com.practicalenchantments.PracticalEnchantments;
+import com.practicalenchantments.content.AmuletSupport;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponents;
@@ -55,7 +56,7 @@ public final class AiRules {
 	private static Holder<Enchantment> attractionHolder;
 
 	public static boolean hasCatAttraction(Player player) {
-		return attractionHolder != null && wears(player, EquipmentSlot.LEGS, attractionHolder);
+		return attractionHolder != null && AmuletSupport.wornLevel(player, attractionHolder) > 0;
 	}
 
 	private static boolean registered;
@@ -84,7 +85,7 @@ public final class AiRules {
 					return true;
 				}
 				if ((mob instanceof Creeper || mob instanceof Phantom)
-					&& wears(player, EquipmentSlot.HEAD, catCharm)) {
+					&& AmuletSupport.wornLevel(player, catCharm) > 0) {
 					return false;
 				}
 				if (mob.getLastHurtByMob() == player) {
@@ -98,13 +99,13 @@ public final class AiRules {
 			public boolean wantsToFlee(Mob mob, LivingEntity entity) {
 				return entity instanceof Player player
 					&& (mob instanceof Creeper || mob instanceof Phantom)
-					&& wears(player, EquipmentSlot.HEAD, catCharm);
+					&& AmuletSupport.wornLevel(player, catCharm) > 0;
 			}
 
 			@Override
 			public boolean allowsAvoiding(Mob mob, LivingEntity entity) {
 				return !(mob instanceof Cat || mob instanceof Ocelot) || !(entity instanceof Player player)
-					|| !wears(player, EquipmentSlot.LEGS, catAttraction);
+					|| AmuletSupport.wornLevel(player, catAttraction) <= 0;
 			}
 		});
 	}

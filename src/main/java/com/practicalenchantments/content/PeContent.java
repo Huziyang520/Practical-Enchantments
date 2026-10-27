@@ -28,7 +28,6 @@ public final class PeContent {
 	public static final DeferredBlock<FlawedObsidianBlock> FLAWED_OBSIDIAN = BLOCKS.register("flawed_obsidian",
 			() -> new FlawedObsidianBlock(BlockBehaviour.Properties.of()
 					.noLootTable()
-					.randomTicks()
 					.strength(0.5F)));
 	public static final DeferredItem<BlockItem> FLAWED_OBSIDIAN_ITEM =
 			ITEMS.registerSimpleBlockItem("flawed_obsidian", FLAWED_OBSIDIAN);
