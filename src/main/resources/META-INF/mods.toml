@@ -43,3 +43,11 @@ issueTrackerURL="https://github.com/Huziyang520/Practical-Enchantments/issues"
     versionRange="[${merlinlib_version},)"
     ordering="BEFORE"
     side="BOTH"
+
+# MezzConfig is optional: when it is installed the tweaks also appear in its config screen.
+[[dependencies.${mod_id}]]
+    modId="mezz_config"
+    mandatory=false
+    versionRange="[0.5.0,1.0.0)"
+    ordering="NONE"
+    side="CLIENT"
