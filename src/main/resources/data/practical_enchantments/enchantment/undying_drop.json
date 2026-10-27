@@ -3,13 +3,24 @@
     "translate": "enchantment.practical_enchantments.undying_drop",
     "fallback": "掉落不死亡"
   },
-  "supported_items": "#minecraft:enchantable/armor",
+  "supported_items": "#practical_enchantments:enchantable/armor",
   "exclusive_set": "#practical_enchantments:exclusive_set/death_save",
   "weight": 1,
   "max_level": 3,
-  "min_cost": { "base": 0, "per_level_above_first": 0 },
-  "max_cost": { "base": 0, "per_level_above_first": 0 },
+  "min_cost": {
+    "base": 0,
+    "per_level_above_first": 0
+  },
+  "max_cost": {
+    "base": 0,
+    "per_level_above_first": 0
+  },
   "anvil_cost": 3,
-  "slots": ["head", "chest", "legs", "feet"],
+  "slots": [
+    "head",
+    "chest",
+    "legs",
+    "feet"
+  ],
   "effects": {}
 }

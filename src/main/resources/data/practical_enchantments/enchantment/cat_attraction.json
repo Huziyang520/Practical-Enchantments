@@ -3,12 +3,20 @@
     "translate": "enchantment.practical_enchantments.cat_attraction",
     "fallback": "吸猫体质"
   },
-  "supported_items": "#minecraft:enchantable/leg_armor",
+  "supported_items": "#practical_enchantments:enchantable/leg_armor",
   "weight": 1,
   "max_level": 1,
-  "min_cost": { "base": 8, "per_level_above_first": 0 },
-  "max_cost": { "base": 28, "per_level_above_first": 0 },
+  "min_cost": {
+    "base": 8,
+    "per_level_above_first": 0
+  },
+  "max_cost": {
+    "base": 28,
+    "per_level_above_first": 0
+  },
   "anvil_cost": 2,
-  "slots": ["legs"],
+  "slots": [
+    "legs"
+  ],
   "effects": {}
 }
