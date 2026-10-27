@@ -425,6 +425,7 @@ public final class EnchantmentDefinitions {
 			.anvilCost(4)
 			.slots("mainhand")
 			.supportedItems("#minecraft:enchantable/sharp_weapon")
+			.exclusiveSet(ExclusiveSets.HEAVY_BLOW.deepCopy())
 			.acquisition(TRADE_ONLY)
 			.category(EnchantmentCategory.WEAPON)
 			.submit();

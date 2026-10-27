@@ -5,6 +5,7 @@ package com.practicalenchantments;
 import com.practicalenchantments.config.ConfigUi;
 import com.practicalenchantments.config.ForgeConfig;
 import com.practicalenchantments.config.MezzConfigBridge;
+import com.practicalenchantments.content.WrathBrewing;
 import com.practicalenchantments.enchantment.HeavyBlowEnchantment;
 import com.practicalenchantments.enchantment.LifeStealEnchantment;
 import net.minecraft.world.entity.player.Player;
@@ -16,6 +17,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLEnvironment;
@@ -29,12 +31,18 @@ public class PracticalEnchantmentsForge {
 
 		FMLJavaModLoadingContext.get().getModEventBus()
 				.addListener((ModConfigEvent event) -> ForgeConfig.apply());
+		FMLJavaModLoadingContext.get().getModEventBus()
+				.addListener(this::onCommonSetup);
 		ForgeConfig.apply();
 
 		if (FMLEnvironment.dist == Dist.CLIENT) {
 			DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> ConfigUi::install);
 			DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> MezzConfigBridge::install);
 		}
+	}
+
+	public void onCommonSetup(FMLCommonSetupEvent event) {
+		event.enqueueWork(WrathBrewing::register);
 	}
 
 	@SubscribeEvent

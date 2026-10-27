@@ -34,6 +34,9 @@ public final class ExclusiveSets {
 		"minecraft:fortune",
 		"minecraft:silk_touch");
 
+	public static final JsonArray HEAVY_BLOW = array(
+		"minecraft:sweeping_edge");
+
 	public static final JsonArray BOOTS = array(
 		"minecraft:depth_strider",
 		"minecraft:frost_walker");

@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "Q": {
+      "item": "minecraft:quartz"
+    }
+  },
+  "pattern": [
+    " I ",
+    "I I",
+    " Q "
+  ],
+  "result": {
+    "item": "practical_enchantments:iron_amulet"
+  }
+}
