@@ -9,6 +9,7 @@
 **Practical Enchantments** adds a collection of useful and fun enchantments that you can actually feel in play.
 
 📖 **Full enchantment list:** [English](https://github.com/Huziyang520/Practical-Enchantments/blob/main/ENCHANTMENTS_LIST.md) · [中文](https://github.com/Huziyang520/Practical-Enchantments/blob/main/ENCHANTMENTS_LIST_CN.md)
+📖 **Full effect and potion list:** [English](https://github.com/Huziyang520/Practical-Enchantments/blob/main/EFFECTS_LIST.md) · [中文](https://github.com/Huziyang520/Practical-Enchantments/blob/main/EFFECTS_LIST_CN.md)
 
 ### ✨ Featured Enchantments
 
@@ -59,6 +60,7 @@ Other versions are not planned.
 **实用附魔（Practical Enchantments）** 添加了一系列实用或有趣的附魔，优化你的游戏体验。
 
 📖 **完整附魔清单：** [中文](https://github.com/Huziyang520/Practical-Enchantments/blob/main/ENCHANTMENTS_LIST_CN.md) · [English](https://github.com/Huziyang520/Practical-Enchantments/blob/main/ENCHANTMENTS_LIST.md)
+📖 **完整效果与药水清单：** [中文](https://github.com/Huziyang520/Practical-Enchantments/blob/main/EFFECTS_LIST_CN.md) · [English](https://github.com/Huziyang520/Practical-Enchantments/blob/main/EFFECTS_LIST.md)
 
 ### ✨ 部分附魔一览
 
