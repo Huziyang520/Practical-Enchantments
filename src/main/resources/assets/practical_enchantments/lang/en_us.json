@@ -76,11 +76,15 @@
   "item.practical_enchantments.netherite_amulet": "Netherite Amulet",
   "itemGroup.practical_enchantments.main": "Practical Enchantments",
   "practical_enchantments.configuration.vanilla_tweaks": "Vanilla Enchantment Tweaks",
+  "practical_enchantments.configuration.vanilla_tweaks.description": "Change how vanilla enchantments behave. Edits apply at once.",
   "practical_enchantments.configuration.vanilla_tweaks.infinity_crossbow": "Infinity on Crossbows",
+  "practical_enchantments.configuration.vanilla_tweaks.infinity_crossbow.description": "Allow Infinity to be applied to crossbows.",
   "practical_enchantments.configuration.vanilla_tweaks.infinity_crossbow.tooltip": "Allow Infinity to be applied to crossbows.",
   "practical_enchantments.configuration.vanilla_tweaks.infinity_no_arrow": "Infinity Needs No Arrow",
+  "practical_enchantments.configuration.vanilla_tweaks.infinity_no_arrow.description": "Infinity weapons fire even with no ordinary arrow in the inventory.",
   "practical_enchantments.configuration.vanilla_tweaks.infinity_no_arrow.tooltip": "Infinity weapons fire even with no ordinary arrow in the inventory.",
   "practical_enchantments.configuration.vanilla_tweaks.infinity_spectral": "Infinity for Spectral Arrows",
+  "practical_enchantments.configuration.vanilla_tweaks.infinity_spectral.description": "Spectral arrows are not consumed by Infinity weapons, but one still has to be in the inventory.",
   "practical_enchantments.configuration.vanilla_tweaks.infinity_spectral.tooltip": "Spectral arrows are not consumed by Infinity weapons, but one still has to be in the inventory.",
   "practical_enchantments.notice.merlinlib": "Practical Enchantments: the original dependency EnchantLib is no longer maintained, so since 1.3.0 MerlinLib is the only dependency this mod needs. Any problem with this mod can be reported to the author anywhere you can think of; ideas for new enchantments are always welcome. This notice can be switched off in the MerlinLib configuration screen."
 }
