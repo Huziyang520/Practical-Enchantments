@@ -41,7 +41,8 @@
     },
     "recommends": {
       "cloth-config": "*",
-      "jupiter": "*"
+      "jupiter": "*",
+      "mezz_config": "*"
     },
     "mixins": [
       "practical_enchantments.mixins.json",
