@@ -2,6 +2,8 @@
 
 package com.practicalenchantments.mixin;
 
+import com.practicalenchantments.support.SweepWindow;
+
 import com.practicalenchantments.enchantment.weapon.InvisibleAirEnchantment;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
