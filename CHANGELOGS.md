@@ -6,7 +6,7 @@
 - New items: iron, golden, diamond and netherite amulets. Armour enchantments work while an amulet is worn
   in a trinket slot or held in the offhand, and upgrading an amulet keeps every enchantment on it.
 - Flawed obsidian: left behind by Obsidian Walker, it cracks in three stages and melts back into lava, and
-  mining it turns it into lava as well.
+  mining it turns it into lava as well. It covers as wide an area as Frost Walker does.
 - Wrath: a new potion, its splash, lingering and tipped-arrow forms, and the brewing chain that leads to it.
 - The amulet price in an anvil stays low, so reinforcing one never runs into "Too Expensive".
 - Settings can also be edited from MezzConfig when it is installed; it is not required.
