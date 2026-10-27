@@ -42,6 +42,13 @@ public final class FabricVanillaTweaks {
 		}
 		write(values);
 		apply(values);
+		for (Map.Entry<String, Boolean> entry : values.entrySet()) {
+			MezzConfigBridge.push(entry.getKey(), entry.getValue());
+		}
+	}
+
+	public static boolean current(String key) {
+		return MezzConfigBridge.value(key);
 	}
 
 	private static Map<String, Boolean> read() {

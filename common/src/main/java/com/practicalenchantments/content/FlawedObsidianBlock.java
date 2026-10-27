@@ -50,6 +50,13 @@ public final class FlawedObsidianBlock extends Block {
 	}
 
 	@Override
+	protected void affectNeighborsAfterRemoval(BlockState state, ServerLevel level, BlockPos pos, boolean movedByPiston) {
+		if (level.getBlockState(pos).isAir()) {
+			level.setBlock(pos, Blocks.LAVA.defaultBlockState(), Block.UPDATE_ALL);
+		}
+	}
+
+	@Override
 	protected ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state, boolean includeData) {
 		return new ItemStack(PeContent.item(PeContent.FLAWED_OBSIDIAN));
 	}

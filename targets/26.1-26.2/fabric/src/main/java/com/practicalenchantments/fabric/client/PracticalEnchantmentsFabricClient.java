@@ -2,12 +2,14 @@
 
 package com.practicalenchantments.fabric.client;
 
+import com.practicalenchantments.fabric.config.MezzConfigBridge;
 import com.practicalenchantments.fabric.config.TweaksScreens;
 import net.fabricmc.api.ClientModInitializer;
 
 public final class PracticalEnchantmentsFabricClient implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
+		MezzConfigBridge.install();
 		TweaksScreens.install();
 	}
 }
