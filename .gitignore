@@ -39,3 +39,7 @@ Thumbs.db
 
 # the wrapper jar must stay in the repository
 !gradle/wrapper/gradle-wrapper.jar
+
+# 本地冒烟输出
+server-run.log
+run/
