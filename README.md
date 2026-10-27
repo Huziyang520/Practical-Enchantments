@@ -34,7 +34,7 @@
 ### 🔧 Development Status
 
 - **Dependency:** requires only [MerlinLib](https://github.com/Huziyang520/MerlinLib), installed on both client and server.
-- **Settings:** everything can be edited in game. With Cloth Config, Jupiter or MezzConfig installed, the settings also appear in that mod's screen; none of them is required.
+- **Settings:** NeoForge-side settings can all be modified in-game. For Forge and Fabric, choosing any one of Cloth Config, Jupiter, or MezzConfig will provide a visual configuration interface in-game.
 - **Mod crossover:** the mod includes crossover content with other mods. Twilight Forest and The Aether are already supported, and more is planned. Crossover content only shows up in-game when the corresponding mod is installed.
 - **Supported versions** :
 
@@ -84,7 +84,7 @@ Other versions are not planned.
 ### 🔧 开发情况
 
 - **前置模组：** 仅需 [MerlinLib](https://github.com/Huziyang520/MerlinLib)，客户端与服务端都需要安装。
-- **设置：** 全部设置都能在游戏内修改。装了 Cloth Config、Jupiter 或 MezzConfig 时，这些设置也会出现在对应模组的界面里；三者都不是必需前置。
+- **设置：** NeoForge 端设置都能在游戏内修改。Forge 和 Fabric 端在 Cloth Config、Jupiter 或 MezzConfig 中任选其一即可在游戏内拥有可视化配置界面。
 - **模组联动：** 本模组与部分模组有联动内容，目前已支持暮色森林与天境，后续还有计划。联动内容需安装对应模组后才会在游戏内可见。
 - **支持版本**：
 

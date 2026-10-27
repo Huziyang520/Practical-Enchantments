@@ -31,7 +31,7 @@
 | Godwood Aura | `aether_godwood` | Weapons, tools | single | Aether loot | — |
 | Sky Slayer | `aether_sky_slayer` | Bows | Ⅰ–Ⅴ | Aether loot | — |
 | Provocation | `provocation` | Swords, axes | Ⅰ–Ⅲ | table | — |
-| Heavy Blow | `heavy_blow` | Swords, axes | single | table | — |
+| Heavy Blow | `heavy_blow` | Swords, axes | single | table | Sweeping Edge |
 | Invisible Air | `invisible_air` | Swords | single | table | — |
 | Obsidian Walker | `obsidian_walker` | Boots | single | End city, bastion treasure | Frost Walker, Depth Strider |
 
@@ -262,7 +262,7 @@
 ### Heavy Blow (`practical_enchantments:heavy_blow`)
 
 - **Applies to:** swords, axes · **Levels:** single
-- **Obtained by:** enchanting table
+- **Obtained by:** enchanting table · **Conflicts with:** Sweeping Edge
 - **Effect:** every swing lands a critical hit. A swing that connects shortens the attack cooldown to
   **90%**; one that misses lengthens it to **160%**. Every landing hit costs one extra point of durability.
 - **In-game description:** Swing with full force and always land a critical hit
@@ -284,6 +284,12 @@
   three stages roughly a second apart and then melts back into lava; breaking it yourself turns it into
   lava as well.
 - **In-game description:** Lets you walk across lava, leaving flawed obsidian behind
+
+#### Flawed Obsidian
+
+| Item | id | What it is |
+|---|---|---|
+| **Flawed Obsidian** | `practical_enchantments:flawed_obsidian` | The block Obsidian Walker leaves on lava. It cracks through three stages about a second apart and then melts back into lava, and mining it turns it into lava too. |
 
 ## Order
 
