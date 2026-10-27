@@ -45,7 +45,10 @@ public final class ForgeConfig {
 					VanillaTweaks.DEFAULT_INFINITY_SPECTRAL);
 			return;
 		}
-		VanillaTweaks.apply(INFINITY_CROSSBOW.get(), INFINITY_NO_ARROW.get(), INFINITY_SPECTRAL.get());
+		VanillaTweaks.apply(
+				MezzConfigBridge.value(VanillaTweaks.KEY_INFINITY_CROSSBOW),
+				MezzConfigBridge.value(VanillaTweaks.KEY_INFINITY_NO_ARROW),
+				MezzConfigBridge.value(VanillaTweaks.KEY_INFINITY_SPECTRAL));
 	}
 
 	public static void write(Map<String, Boolean> values) {
@@ -57,6 +60,9 @@ public final class ForgeConfig {
 		}
 		SPEC.save();
 		apply();
+		for (Map.Entry<String, Boolean> entry : values.entrySet()) {
+			MezzConfigBridge.push(entry.getKey(), entry.getValue());
+		}
 	}
 
 	private static ForgeConfigSpec.BooleanValue value(String key) {

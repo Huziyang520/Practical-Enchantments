@@ -30,6 +30,15 @@ public final class VanillaTweaks {
 		infinitySpectral = spectral;
 	}
 
+	public static void apply(String key, boolean value) {
+		switch (key) {
+			case KEY_INFINITY_CROSSBOW -> infinityCrossbow = value;
+			case KEY_INFINITY_NO_ARROW -> infinityNoArrow = value;
+			case KEY_INFINITY_SPECTRAL -> infinitySpectral = value;
+			default -> throw new IllegalArgumentException("未知的原版附魔调整项: " + key);
+		}
+	}
+
 	public static boolean infinityCrossbow() {
 		return infinityCrossbow;
 	}

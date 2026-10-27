@@ -4,6 +4,7 @@ package com.practicalenchantments;
 
 import com.practicalenchantments.config.ConfigUi;
 import com.practicalenchantments.config.ForgeConfig;
+import com.practicalenchantments.config.MezzConfigBridge;
 import com.practicalenchantments.enchantment.HeavyBlowEnchantment;
 import com.practicalenchantments.enchantment.LifeStealEnchantment;
 import net.minecraft.world.entity.player.Player;
@@ -32,6 +33,7 @@ public class PracticalEnchantmentsForge {
 
 		if (FMLEnvironment.dist == Dist.CLIENT) {
 			DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> ConfigUi::install);
+			DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> MezzConfigBridge::install);
 		}
 	}
 
