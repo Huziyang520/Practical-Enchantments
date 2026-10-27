@@ -2,6 +2,8 @@
 
 package com.practicalenchantments.mixin;
 
+import com.practicalenchantments.support.SweepWindow;
+
 import com.practicalenchantments.enchantment.InvisibleAirEnchantment;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;

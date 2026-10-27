@@ -2,7 +2,6 @@
 
 package com.practicalenchantments.config;
 
-import com.iafenvoy.jupiter.render.screen.JupiterScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraftforge.client.ConfigScreenHandler;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -13,7 +12,7 @@ public final class ConfigUi {
 	private static final Logger LOGGER = LoggerFactory.getLogger("practical_enchantments");
 	private static final String CLOTH_API = "me.shedaniel.clothconfig2.api.ConfigBuilder";
 	private static final String JUPITER_API = "com.iafenvoy.jupiter.ConfigManager";
-	private static JupiterContainer container;
+	private static Object container;
 
 	private ConfigUi() {
 	}
@@ -26,8 +25,8 @@ public final class ConfigUi {
 			return;
 		}
 		if (jupiterPresent()) {
-			container = new JupiterContainer();
-			com.iafenvoy.jupiter.ConfigManager.getInstance().registerConfigHandler(container);
+			container = JupiterSupport.createContainer();
+			JupiterSupport.register(container);
 			LOGGER.info("[PracticalEnchantments] 找到 Jupiter：三项开关列在 Jupiter 的配置列表里，值写入 "
 					+ "practical_enchantments-server.toml");
 			registerScreen();
@@ -42,7 +41,7 @@ public final class ConfigUi {
 			return ClothScreen.create(parent);
 		}
 		if (jupiterPresent() && container != null) {
-			return JupiterScreen.getConfigScreen(parent, container, false);
+			return JupiterSupport.createScreen(parent, container);
 		}
 		return null;
 	}

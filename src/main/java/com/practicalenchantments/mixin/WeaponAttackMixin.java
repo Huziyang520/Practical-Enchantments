@@ -3,6 +3,7 @@
 package com.practicalenchantments.mixin;
 
 import com.practicalenchantments.content.WrathContent;
+import com.practicalenchantments.support.SweepWindow;
 import com.practicalenchantments.enchantment.HeavyBlowEnchantment;
 import com.practicalenchantments.enchantment.InvisibleAirEnchantment;
 import com.practicalenchantments.enchantment.ProvocationEnchantment;

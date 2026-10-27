@@ -1,6 +1,6 @@
 // 横扫窗口：记下这次挥击的主目标与时刻，让横扫命中能识别出自己。
 
-package com.practicalenchantments.mixin;
+package com.practicalenchantments.support;
 
 import java.util.Map;
 import java.util.UUID;
