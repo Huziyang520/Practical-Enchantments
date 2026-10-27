@@ -12,8 +12,12 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
 @Mixin(ItemInHandRenderer.class)
 public class InvisibleAirFirstPersonMixin {
-	@ModifyVariable(method = "renderArmWithItem(Lnet/minecraft/client/player/AbstractClientPlayer;FFLnet/minecraft/world/InteractionHand;FLnet/minecraft/world/item/ItemStack;FLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;I)V",
-			at = @At("HEAD"), argsOnly = true)
+	@ModifyVariable(method = "renderArmWithItem", at = @At("HEAD"), argsOnly = true, require = 0)
+	private ItemStack practicalenchantments$hideHeldStackOld(ItemStack stack) {
+		return InvisibleAirRender.isHidden(stack) ? ItemStack.EMPTY : stack;
+	}
+
+	@ModifyVariable(method = "submitArmWithItem", at = @At("HEAD"), argsOnly = true, require = 0)
 	private ItemStack practicalenchantments$hideHeldStack(ItemStack stack) {
 		return InvisibleAirRender.isHidden(stack) ? ItemStack.EMPTY : stack;
 	}
