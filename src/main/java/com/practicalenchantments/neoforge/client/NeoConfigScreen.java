@@ -3,6 +3,7 @@
 package com.practicalenchantments.neoforge.client;
 
 import com.practicalenchantments.PracticalEnchantments;
+import net.minecraft.client.gui.screens.Screen;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModList;
@@ -19,10 +20,11 @@ public final class NeoConfigScreen {
 	@SubscribeEvent
 	public static void onClientSetup(FMLClientSetupEvent event) {
 		ModList.get().getModContainerById(PracticalEnchantments.MOD_ID)
-				.ifPresent(container -> {
-					IConfigScreenFactory factory =
-							(mod, parent) -> new ConfigurationScreen(mod, parent);
-					container.<IConfigScreenFactory>registerExtensionPoint(IConfigScreenFactory.class, () -> factory);
-				});
+				.ifPresent(container -> container.registerExtensionPoint(IConfigScreenFactory.class,
+						(mod, parent) -> create(mod, parent)));
+	}
+
+	private static Screen create(net.neoforged.fml.ModContainer container, Screen parent) {
+		return new ConfigurationScreen(container, parent);
 	}
 }

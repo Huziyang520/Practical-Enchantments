@@ -33,7 +33,7 @@ public final class NeoConfig {
 	}
 
 	private static ModConfig.Type resolveType() {
-		for (String candidate : new String[] {"SYNCED", "SERVER", "LOCAL"}) {
+		for (String candidate : new String[] {"SYNCED", "COMMON", "LOCAL"}) {
 			try {
 				return ModConfig.Type.valueOf(candidate);
 			} catch (IllegalArgumentException removedOnThisLoader) {
@@ -56,7 +56,7 @@ public final class NeoConfig {
 	}
 
 	private static ModConfigSpec.ConfigValue<Boolean> define(ModConfigSpec.Builder builder, String key,
-															 boolean defaultValue, String comment) {
+															boolean defaultValue, String comment) {
 		return builder.translation(VanillaTweaks.nameKey(key)).comment(comment).define(key, defaultValue);
 	}
 }
