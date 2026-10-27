@@ -4,6 +4,7 @@
     "fallback": "\u91cd\u51fb"
   },
   "supported_items": "#minecraft:enchantable/sharp_weapon",
+  "exclusive_set": "#practical_enchantments:exclusive_set/heavy_blow",
   "weight": 2,
   "max_level": 1,
   "min_cost": {

@@ -19,6 +19,7 @@ import net.minecraft.world.level.block.state.BlockState;
 public final class DestructionEnchantment {
 	public static final String ID = PracticalEnchantments.MOD_ID + ":destruction";
 	private static final TagKey<Block> ORES_TAG = TagKey.create(Registries.BLOCK, Identifier.parse("minecraft:ores"));
+	private static final TagKey<Block> COMMON_ORES_TAG = TagKey.create(Registries.BLOCK, Identifier.parse("c:ores"));
 
 	public static void registerCallbacks(EnchantmentEventRegistrar registrar, HolderLookup.Provider registries) {
 		Holder<Enchantment> holder = PracticalEnchantments.resolveEnchantment(registries, ID);
@@ -31,7 +32,7 @@ public final class DestructionEnchantment {
 		event.drops().clear();
 		int xp = 2;
 
-		if (brokenState.is(ORES_TAG)) {
+		if (brokenState.is(ORES_TAG) || brokenState.is(COMMON_ORES_TAG)) {
 			xp = 5;
 		}
 
