@@ -4,23 +4,25 @@ package com.practicalenchantments.content;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionBrewing;
-import net.minecraft.world.item.alchemy.Potions;
 
 public final class RangeWrathBrewing {
+	private static final Identifier AWKWARD_ID = Identifier.withDefaultNamespace("awkward");
+
 	private RangeWrathBrewing() {
 	}
 
 	public static void apply(PotionBrewing.Builder builder) {
+		Holder<Potion> awkward = potion(AWKWARD_ID);
 		Holder<Potion> wrath = potion(WrathContent.POTION_ID);
 		Holder<Potion> longWrath = potion(WrathContent.LONG_POTION_ID);
-		if (wrath == null || longWrath == null) {
+		if (awkward == null || wrath == null || longWrath == null) {
 			return;
 		}
-		builder.addMix(Potions.AWKWARD, Items.MAGMA_BLOCK, wrath);
+		builder.addMix(awkward, Items.MAGMA_BLOCK, wrath);
 		builder.addMix(wrath, Items.REDSTONE, longWrath);
 		builder.addContainerRecipe(Items.POTION, Items.GUNPOWDER, Items.SPLASH_POTION);
 		builder.addContainerRecipe(Items.SPLASH_POTION, Items.DRAGON_BREATH, Items.LINGERING_POTION);

@@ -1,0 +1,4 @@
+# 区间 jar 的成员引用豁免清单：一行一个 完整类名#成员名
+
+# 26.2 把 Slime 挪进 cubemob 包，这个 mixin 由 PracticalMixinPlugin 在 26.2 整类跳过
+net.minecraft.world.entity.monster.Slime#getSize

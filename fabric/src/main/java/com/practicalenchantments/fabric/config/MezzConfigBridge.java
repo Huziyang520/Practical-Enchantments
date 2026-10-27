@@ -42,7 +42,7 @@ public final class MezzConfigBridge {
 			Class<?> categoryType = Class.forName(CATEGORY);
 			Object registration = configs.getMethod("forMod", String.class).invoke(null, PracticalEnchantments.MOD_ID);
 			Object schema = registrationType.getMethod("createClientSchemaBuilder", String.class, String.class)
-					.invoke(registration, "tweaks.ini", VanillaTweaks.SECTION_LANG_KEY);
+					.invoke(registration, "tweaks.ini", VanillaTweaks.SECTION_PREFIX);
 			Object category = schemaType.getMethod("addCategory", String.class)
 					.invoke(schema, VanillaTweaks.SECTION_KEY);
 			Method addBoolean = categoryType.getMethod("addBoolean", String.class, boolean.class);

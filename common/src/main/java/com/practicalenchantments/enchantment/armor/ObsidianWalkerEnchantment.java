@@ -26,7 +26,8 @@ import net.minecraft.world.level.material.FluidState;
 public final class ObsidianWalkerEnchantment {
 	public static final String ID = PracticalEnchantments.MOD_ID + ":obsidian_walker";
 	private static final int INTERVAL = 4;
-	private static final int RADIUS = 1;
+	public static final int RADIUS = 3;
+	private static final int RADIUS_SQR = RADIUS * RADIUS;
 
 	private ObsidianWalkerEnchantment() {
 	}
@@ -66,6 +67,11 @@ public final class ObsidianWalkerEnchantment {
 	private static boolean solidifyLayer(ServerLevel level, int y, BlockPos origin, BlockState solidified) {
 		boolean changed = false;
 		for (BlockPos column : BlockPos.betweenClosed(origin.offset(-RADIUS, 0, -RADIUS), origin.offset(RADIUS, 0, RADIUS))) {
+			int dx = column.getX() - origin.getX();
+			int dz = column.getZ() - origin.getZ();
+			if (dx * dx + dz * dz > RADIUS_SQR) {
+				continue;
+			}
 			BlockPos target = new BlockPos(column.getX(), y, column.getZ());
 			if (!level.isEmptyBlock(target.above())) {
 				continue;

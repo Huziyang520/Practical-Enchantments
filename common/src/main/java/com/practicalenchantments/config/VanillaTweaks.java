@@ -6,6 +6,7 @@ import com.practicalenchantments.PracticalEnchantments;
 
 public final class VanillaTweaks {
 	public static final String SECTION_KEY = "vanilla_tweaks";
+	public static final String SECTION_PREFIX = PracticalEnchantments.MOD_ID + ".configuration";
 
 	public static final String SECTION_LANG_KEY =
 			PracticalEnchantments.MOD_ID + ".configuration." + SECTION_KEY;
