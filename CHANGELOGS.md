@@ -1,3 +1,16 @@
+### 1.6.0 (2026-10-27)
+
+- Requires MerlinLib 1.0.0 or newer.
+- Shipped for 1.20.1 (Forge), 1.21.1 (NeoForge), 26.1 - 26.2 (NeoForge, Fabric) and 26.3 (NeoForge, Fabric).
+- New enchantments: Provocation, Heavy Blow, Invisible Air and Obsidian Walker.
+- New items: iron, golden, diamond and netherite amulets. Armour enchantments work while an amulet is worn
+  in a trinket slot or held in the offhand, and upgrading an amulet keeps every enchantment on it.
+- Flawed obsidian: left behind by Obsidian Walker, it cracks in three stages and melts back into lava, and
+  mining it turns it into lava as well.
+- Wrath: a new potion, its splash, lingering and tipped-arrow forms, and the brewing chain that leads to it.
+- The amulet price in an anvil stays low, so reinforcing one never runs into "Too Expensive".
+- Settings can also be edited from MezzConfig when it is installed; it is not required.
+
 ### 1.5.0 (2026-10-23)
 
 - Requires MerlinLib 0.9.1 or newer.

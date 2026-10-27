@@ -24,9 +24,17 @@
 | **Cat Charm** | Helmets | Creepers and phantoms keep their distance from you. |
 | **Demonic Pact** | Chestplates | On lethal damage, pays emeralds to cheat death like a Totem of Undying, at the cost of Darkness. |
 
+### 💠 Items
+
+| Item | What it does |
+|---|---|
+| **Iron / Golden / Diamond / Netherite Amulet** | Worn in a trinket slot or held in the offhand. Armour enchantments work from an amulet, and upgrading keeps every enchantment already on it. |
+| **Flawed Obsidian** | The block Obsidian Walker leaves on lava. It cracks through three stages and melts back into lava; breaking it turns it into lava too. |
+
 ### 🔧 Development Status
 
 - **Dependency:** requires only [MerlinLib](https://github.com/Huziyang520/MerlinLib), installed on both client and server.
+- **Settings:** everything can be edited in game. With Cloth Config, Jupiter or MezzConfig installed, the settings also appear in that mod's screen; none of them is required.
 - **Mod crossover:** the mod includes crossover content with other mods. Twilight Forest and The Aether are already supported, and more is planned. Crossover content only shows up in-game when the corresponding mod is installed.
 - **Supported versions** :
 
@@ -34,7 +42,8 @@
 |---|---|
 | 1.20.1 | Forge |
 | 1.21.1 | NeoForge |
-| 26.3 – latest 26.x release | NeoForge + Fabric |
+| 26.1 – 26.2 | NeoForge + Fabric |
+| 26.3 | NeoForge + Fabric |
 
 Other versions are not planned.
 
@@ -65,9 +74,17 @@ Other versions are not planned.
 | **猫咪护符** | 头盔 | 苦力怕与幻翼会主动远离你。 |
 | **恶魔交易** | 胸甲 | 受到致命伤害时消耗绿宝石免死（类似不死图腾），并附带黑暗效果作为代价。 |
 
+### 💠 物品
+
+| 物品 | 作用 |
+|---|---|
+| **铁 / 金 / 钻石 / 下界合金护身符** | 装备在饰品栏或副手。护甲类附魔在护身符上同样生效，升级时已有附魔全部保留。 |
+| **有瑕疵的黑曜石** | 龙晶行者踩过熔岩后留下的方块。它会分三阶裂开，最后熔回熔岩源；自己挖掉也会变回熔岩。 |
+
 ### 🔧 开发情况
 
 - **前置模组：** 仅需 [MerlinLib](https://github.com/Huziyang520/MerlinLib)，客户端与服务端都需要安装。
+- **设置：** 全部设置都能在游戏内修改。装了 Cloth Config、Jupiter 或 MezzConfig 时，这些设置也会出现在对应模组的界面里；三者都不是必需前置。
 - **模组联动：** 本模组与部分模组有联动内容，目前已支持暮色森林与天境，后续还有计划。联动内容需安装对应模组后才会在游戏内可见。
 - **支持版本**：
 
@@ -75,7 +92,8 @@ Other versions are not planned.
 |---|---|
 | 1.20.1 | Forge |
 | 1.21.1 | NeoForge |
-| 26.3 – 最新 26.x 正式版 | NeoForge + Fabric |
+| 26.1 – 26.2 | NeoForge + Fabric |
+| 26.3 | NeoForge + Fabric |
 
 其余版本暂无支持计划。
 
