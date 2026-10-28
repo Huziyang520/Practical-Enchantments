@@ -152,6 +152,9 @@ public final class PracticalEnchantments {
 		registerLoot(QUALITY_TREASURE, 0.12F, LootTables.ANCIENT_CITY, "practical_enchantments:wither_aspect");
 		registerLoot(QUALITY_TREASURE, 0.14F, LootTables.ANCIENT_CITY, "practical_enchantments:demonic_pact");
 		registerLoot(QUALITY_TREASURE, 0.10F, LootTables.BURIED_TREASURE, "practical_enchantments:demonic_pact");
+		registerLoot(QUALITY_TREASURE, 0.20F, LootTables.ANCIENT_CITY, "practical_enchantments:execute");
+		registerLoot(QUALITY_TREASURE, 0.15F, LootTables.END_CITY_TREASURE, "practical_enchantments:execute");
+		registerLoot(QUALITY_TREASURE, 0.10F, LootTables.WOODLAND_MANSION, "practical_enchantments:execute");
 		registerLoot(QUALITY_TREASURE, 0.10F, LootTables.END_CITY_TREASURE, ObsidianWalkerEnchantment.ID);
 		registerLoot(QUALITY_TREASURE, 0.10F, LootTables.BASTION_TREASURE, ObsidianWalkerEnchantment.ID);
 	}
