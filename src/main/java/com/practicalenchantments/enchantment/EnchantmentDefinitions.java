@@ -98,7 +98,7 @@ public final class EnchantmentDefinitions {
 			.anvilCost(2)
 			.slots("head")
 			.supportedItems(armorItems("#minecraft:enchantable/head_armor"))
-			.acquisition(TABLE_AND_TRADE)
+			.acquisition(TRADE_ONLY)
 			.category(EnchantmentCategory.ARMOR_HEAD)
 			.submit();
 	}
@@ -127,7 +127,7 @@ public final class EnchantmentDefinitions {
 			.anvilCost(2)
 			.slots("head")
 			.supportedItems(armorItems("#minecraft:enchantable/head_armor"))
-			.acquisition(TABLE_AND_TRADE)
+			.acquisition(TRADE_ONLY)
 			.category(EnchantmentCategory.ARMOR_HEAD)
 			.submit();
 	}
@@ -302,7 +302,7 @@ public final class EnchantmentDefinitions {
 			.slots("mainhand")
 			.supportedItems("#minecraft:axes")
 			.exclusiveSet(ExclusiveSets.MINING.deepCopy())
-			.acquisition(TABLE_AND_TRADE)
+			.acquisition(TRADE_ONLY)
 			.category(EnchantmentCategory.DIGGER)
 			.submit();
 	}
@@ -334,7 +334,7 @@ public final class EnchantmentDefinitions {
 			.slots("mainhand")
 			.supportedItems("minecraft:crossbow")
 			.exclusiveSet(ExclusiveSets.CROSSBOW.deepCopy())
-			.acquisition(TABLE_AND_TRADE)
+			.acquisition(TRADE_ONLY)
 			.category(EnchantmentCategory.CROSSBOW)
 			.submit();
 	}
