@@ -30,9 +30,9 @@
 | Twilight Slayer | `tf_night_slayer` | Swords, axes | Ⅰ–Ⅴ | Twilight Forest loot | — |
 | Godwood Aura | `aether_godwood` | Weapons, tools | single | Aether loot | — |
 | Sky Slayer | `aether_sky_slayer` | Bows | Ⅰ–Ⅴ | Aether loot | — |
-| Provocation | `provocation` | Swords, axes | Ⅰ–Ⅲ | table | — |
-| Heavy Blow | `heavy_blow` | Swords, axes | single | table | Sweeping Edge |
-| Invisible Air | `invisible_air` | Swords | single | table | — |
+| Provocation | `provocation` | Swords, axes | Ⅰ–Ⅲ | trade · loot | — |
+| Heavy Blow | `heavy_blow` | Swords, axes | single | trade · loot | Sweeping Edge |
+| Invisible Air | `invisible_air` | Swords | single | mob drop | — |
 | Obsidian Walker | `obsidian_walker` | Boots | single | End city, bastion treasure | Frost Walker, Depth Strider |
 
 ## Details
@@ -253,7 +253,7 @@
 ### Provocation (`practical_enchantments:provocation`)
 
 - **Applies to:** swords, axes · **Levels:** Ⅰ–Ⅲ
-- **Obtained by:** enchanting table
+- **Obtained by:** librarian trades, chest loot
 - **Effect:** a hit on a target that is not angered yet angers it for 10 seconds and deals only **10%** of
   the damage; hits on an angered target deal **× (1.15 + 0.20 × level)** the damage — 135% at Ⅰ, 155% at Ⅱ,
   175% at Ⅲ.
@@ -262,7 +262,7 @@
 ### Heavy Blow (`practical_enchantments:heavy_blow`)
 
 - **Applies to:** swords, axes · **Levels:** single
-- **Obtained by:** enchanting table · **Conflicts with:** Sweeping Edge
+- **Obtained by:** librarian trades, chest loot · **Conflicts with:** Sweeping Edge
 - **Effect:** every swing lands a critical hit. A swing that connects shortens the attack cooldown to
   **90%**; one that misses lengthens it to **160%**. Every landing hit costs one extra point of durability.
 - **In-game description:** Swing with full force and always land a critical hit
@@ -270,7 +270,7 @@
 ### Invisible Air (`practical_enchantments:invisible_air`)
 
 - **Applies to:** swords · **Levels:** single
-- **Obtained by:** enchanting table
+- **Obtained by:** carried by mobs that spawn with it — it drops with the sword they hold
 - **Effect:** layers of wind bend light around the blade, so it disappears from the hand while the item
   itself stays visible in the inventory. Hits deal **twice** the damage, sweeping attacks deal twice as
   much, and entity interaction range grows by **50%**.
