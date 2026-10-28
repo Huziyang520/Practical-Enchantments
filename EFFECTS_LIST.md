@@ -35,10 +35,4 @@
 | Potion of Wrath | Redstone Dust | Potion of Wrath, 75 seconds |
 
 Gunpowder turns either potion into its splash form and Dragon's Breath turns the splash form into the
-lingering one, exactly as it does for vanilla potions.
-
-## Order
-
-New effects go at the end of the table and at the end of the details, in this file and in
-`EFFECTS_LIST_CN.md` alike, with the same row order in both. Entries are appended, never inserted in the
-middle, so the order stays stable and a diff shows only what was added.
+lingering one.
