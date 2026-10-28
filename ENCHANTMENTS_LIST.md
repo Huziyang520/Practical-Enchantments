@@ -5,7 +5,7 @@
 | Enchantment | id | Applies to | Levels | Obtained by | Conflicts with |
 |---|---|---|---|---|---|
 | Aerial Haste | `aerial_haste` | Helmets | single | table · trade · loot | — |
-| Beheading | `beheading` | Swords, axes | Ⅰ–Ⅲ | trade · loot | — |
+| Beheading | `beheading` | Swords, axes, spears | Ⅰ–Ⅲ | trade · loot | — |
 | Bright | `bright` | Helmets | single | table · trade · loot | — |
 | Cat Attraction | `cat_attraction` | Leggings | single | trade · loot | — |
 | Cat Charm | `cat_charm` | Helmets | single | trade · loot | — |
@@ -13,16 +13,16 @@
 | Demonic Pact | `demonic_pact` | Chestplates | Ⅰ–Ⅲ | loot | Undying Drop |
 | Destruction | `destruction` | Mining tools | single | trade · loot | Fortune, Silk Touch |
 | Disguise | `disguise` | Heads (7 kinds) | single | trade · loot | — |
-| Execute | `execute` | Swords, axes | single | not obtainable | — |
-| Frenzy | `frenzy` | Swords, axes | Ⅰ–Ⅱ | trade · loot | — |
+| Execute | `execute` | Swords, axes, spears | single | not obtainable | — |
+| Frenzy | `frenzy` | Swords, axes, spears | Ⅰ–Ⅱ | trade · loot | — |
 | Gentle Descent | `gentle_descent` | Boots | single | not obtainable | Feather Falling |
-| Incinerate | `incinerate` | Swords, axes | single | trade · loot | Looting |
-| Life Steal | `life_steal` | Swords, axes | Ⅰ–Ⅴ | table · trade · loot | — |
+| Incinerate | `incinerate` | Swords, axes, spears | single | trade · loot | Looting |
+| Life Steal | `life_steal` | Swords, axes, spears | Ⅰ–Ⅴ | table · trade · loot | — |
 | Lumberjack | `lumberjack` | Axes | single | table · trade · loot | Fortune, Silk Touch |
 | Penetration | `penetration` | Tridents | Ⅰ–Ⅴ | table · loot | Riptide |
 | Powerful | `powerful` | Crossbows | Ⅰ–Ⅴ | table · trade · loot | Multishot |
 | Smashing | `smashing` | Tridents | Ⅰ–Ⅴ | table · loot | — |
-| Soul Siphon | `soul_siphon` | Swords, axes | Ⅰ–Ⅴ | table · trade · loot | — |
+| Soul Siphon | `soul_siphon` | Swords, axes, spears | Ⅰ–Ⅴ | table · trade · loot | — |
 | Undying Drop | `undying_drop` | Armour (any piece) | Ⅰ–Ⅲ | not obtainable | Demonic Pact |
 | Venom | `venom` | Swords | Ⅰ–Ⅱ | table · trade · loot | Wither Aspect, Fire Aspect |
 | Wither Aspect | `wither_aspect` | Swords | Ⅰ–Ⅱ | trade · loot | Venom, Fire Aspect |
@@ -30,8 +30,8 @@
 | Twilight Slayer | `tf_night_slayer` | Swords, axes | Ⅰ–Ⅴ | Twilight Forest loot | — |
 | Godwood Aura | `aether_godwood` | Weapons, tools | single | Aether loot | — |
 | Sky Slayer | `aether_sky_slayer` | Bows | Ⅰ–Ⅴ | Aether loot | — |
-| Provocation | `provocation` | Swords, axes | Ⅰ–Ⅲ | trade · loot | — |
-| Heavy Blow | `heavy_blow` | Swords, axes | single | trade · loot | Sweeping Edge |
+| Provocation | `provocation` | Swords, axes, spears | Ⅰ–Ⅲ | trade · loot | — |
+| Heavy Blow | `heavy_blow` | Swords, axes, spears | single | trade · loot | Sweeping Edge |
 | Invisible Air | `invisible_air` | Swords | single | mob drop | — |
 | Obsidian Walker | `obsidian_walker` | Boots | single | End city, bastion treasure | Frost Walker, Depth Strider |
 
@@ -253,7 +253,7 @@
 ### Provocation (`practical_enchantments:provocation`)
 
 - **Applies to:** swords, axes · **Levels:** Ⅰ–Ⅲ
-- **Obtained by:** librarian trades, chest loot
+- **Obtained by:** librarian trades, dungeon 16%, abandoned mineshaft 16%, village weaponsmith 14%, pillager outpost 12%, desert pyramid 12%, trial chamber reward 12%, jungle temple 10%, woodland mansion 10%, stronghold corridor 10%, village armorer 10%, ruined portal 10%, large underwater ruin 10%, shipwreck treasure 8%, nether fortress 8%, bastion treasure 6%
 - **Effect:** a hit on a target that is not angered yet angers it for 10 seconds and deals only **10%** of
   the damage; hits on an angered target deal **× (1.15 + 0.20 × level)** the damage — 135% at Ⅰ, 155% at Ⅱ,
   175% at Ⅲ.
@@ -262,7 +262,7 @@
 ### Heavy Blow (`practical_enchantments:heavy_blow`)
 
 - **Applies to:** swords, axes · **Levels:** single
-- **Obtained by:** librarian trades, chest loot · **Conflicts with:** Sweeping Edge
+- **Obtained by:** librarian trades, village weaponsmith 10%, pillager outpost 8%, dungeon 6%, bastion treasure 5% · **Conflicts with:** Sweeping Edge
 - **Effect:** every swing lands a critical hit. A swing that connects shortens the attack cooldown to
   **90%**; one that misses lengthens it to **160%**. Every landing hit costs one extra point of durability.
 - **In-game description:** Swing with full force and always land a critical hit
@@ -270,7 +270,7 @@
 ### Invisible Air (`practical_enchantments:invisible_air`)
 
 - **Applies to:** swords · **Levels:** single
-- **Obtained by:** carried by mobs that spawn with it — it drops with the sword they hold
+- **Obtained by:** carried by mobs that spawn with it — it drops with the sword they hold; never sold, never in a chest and never at the enchanting table
 - **Effect:** layers of wind bend light around the blade, so it disappears from the hand while the item
   itself stays visible in the inventory. Hits deal **twice** the damage, sweeping attacks deal twice as
   much, and entity interaction range grows by **50%**.

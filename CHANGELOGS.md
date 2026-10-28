@@ -1,3 +1,14 @@
+### 1.6.1 (2026-10-28)
+
+- Requires MerlinLib 1.0.0 or newer.
+- Shipped for 1.20.1 (Forge), 1.21.1 (NeoForge), 26.1 - 26.2 (NeoForge, Fabric) and 26.3 (NeoForge, Fabric).
+- Provocation and Heavy Blow are sold by librarians and can be found in chests again.
+- Invisible Air is no longer unobtainable: mobs spawn holding a sword that carries it, and it drops with the sword.
+- Beheading, Frenzy, Life Steal, Soul Siphon, Venom, Penetration, Smashing, Wither Aspect, Demonic Pact and
+  Execution now really show up in the chests the lists always promised.
+- Bright, Lumberjack, Powerful and Aerial Haste no longer come from the enchanting table, as designed.
+- Swords, axes and spears can all carry the melee enchantments.
+
 ### 1.6.0 (2026-10-27)
 
 - Requires MerlinLib 1.0.0 or newer.
