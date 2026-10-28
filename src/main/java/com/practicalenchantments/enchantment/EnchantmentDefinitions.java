@@ -472,7 +472,7 @@ public final class EnchantmentDefinitions {
 			.anvilCost(2)
 			.slots("mainhand")
 			.supportedItems("#minecraft:enchantable/sharp_weapon")
-			.acquisition(NEITHER)
+			.acquisition(TRADE_ONLY)
 			.category(EnchantmentCategory.WEAPON)
 			.submit();
 	}

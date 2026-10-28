@@ -8,8 +8,10 @@ import com.practicalenchantments.config.MezzConfigBridge;
 import com.practicalenchantments.content.WrathBrewing;
 import com.practicalenchantments.enchantment.HeavyBlowEnchantment;
 import com.practicalenchantments.enchantment.LifeStealEnchantment;
+import com.practicalenchantments.support.InvisibleAirMobGear;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.player.CriticalHitEvent;
 import net.minecraftforge.eventbus.api.Event;
@@ -48,6 +50,11 @@ public class PracticalEnchantmentsForge {
 	@SubscribeEvent
 	public static void onLivingDamage(LivingDamageEvent event) {
 		LifeStealEnchantment.onAfterDamage(event.getEntity(), event.getSource(), event.getAmount(), 0.0F, false);
+	}
+
+	@SubscribeEvent
+	public static void onEntityJoin(EntityJoinLevelEvent event) {
+		InvisibleAirMobGear.tryApply(event.getEntity(), event.getLevel(), event.loadedFromDisk());
 	}
 
 	@SubscribeEvent
