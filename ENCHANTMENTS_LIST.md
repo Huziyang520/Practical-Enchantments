@@ -40,7 +40,7 @@
 ### Aerial Haste (`practical_enchantments:aerial_haste`)
 
 - **Applies to:** helmets · **Levels:** single
-- **Obtained by:** enchanting table, librarian trades, ruined portal 30%, shipwreck treasure 20%, end city 10%, ancient city 8%
+- **Obtained by:** librarian trades, ruined portal 30%, shipwreck treasure 20%, end city 10%, ancient city 8%
 - **Effect:** removes the airborne mining penalty — mining in mid-air is as fast as mining on the ground. Underwater mining is not affected.
 - **In-game description:** Removes the mining speed penalty while airborne
 
@@ -54,7 +54,7 @@
 ### Bright (`practical_enchantments:bright`)
 
 - **Applies to:** helmets · **Levels:** single
-- **Obtained by:** enchanting table, librarian trades, armorer trade (18 emeralds for an enchanted diamond helmet), abandoned mineshaft 10%, dungeon 8%, shipwreck treasure 7%, igloo 6%
+- **Obtained by:** librarian trades, armorer trade (18 emeralds for an enchanted diamond helmet), abandoned mineshaft 10%, dungeon 8%, shipwreck treasure 7%, igloo 6%
 - **Effect:** permanent Night Vision while worn. The helmet loses one point of durability every 13.75 seconds during the night and stops doing so during the day; taking the helmet off ends the effect at once.
 - **In-game description:** Grants permanent Night Vision
 
@@ -150,7 +150,7 @@
 ### Lumberjack (`practical_enchantments:lumberjack`)
 
 - **Applies to:** axes · **Levels:** single
-- **Obtained by:** enchanting table, librarian trades, village toolsmith 8%, abandoned mineshaft 6%, pillager outpost 5%, dungeon 4%
+- **Obtained by:** librarian trades, village toolsmith 8%, abandoned mineshaft 6%, pillager outpost 5%, dungeon 4%
 - **Conflicts with:** Fortune, Silk Touch
 - **Effect:** felling one log breaks the whole connected tree — logs and leaves — up to **64 blocks**
   per swing. Leaves drop saplings and apples at vanilla rates. With Destruction on the same axe the
@@ -169,7 +169,7 @@
 ### Powerful (`practical_enchantments:powerful`)
 
 - **Applies to:** crossbows · **Levels:** Ⅰ–Ⅴ
-- **Obtained by:** enchanting table, librarian trades, pillager outpost 12%, village fletcher 8%, dungeon 6%, bastion remnant 5%
+- **Obtained by:** librarian trades, pillager outpost 12%, village fletcher 8%, dungeon 6%, bastion remnant 5%
 - **Conflicts with:** Multishot
 - **Effect:** crossbow bolts deal **+25 % damage per level**, following the same curve as vanilla
   Power. Bows are not affected.
