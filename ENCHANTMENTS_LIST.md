@@ -4,23 +4,23 @@
 
 | Enchantment | id | Applies to | Levels | Obtained by | Conflicts with |
 |---|---|---|---|---|---|
-| Aerial Haste | `aerial_haste` | Helmets | single | table · trade · loot | — |
+| Aerial Haste | `aerial_haste` | Helmets | single | trade · loot | — |
 | Beheading | `beheading` | Swords, axes, spears | Ⅰ–Ⅲ | trade · loot | — |
-| Bright | `bright` | Helmets | single | table · trade · loot | — |
+| Bright | `bright` | Helmets | single | trade · loot | — |
 | Cat Attraction | `cat_attraction` | Leggings | single | trade · loot | — |
 | Cat Charm | `cat_charm` | Helmets | single | trade · loot | — |
 | Chinese | `chinese` | Chestplates | single | loot | — |
 | Demonic Pact | `demonic_pact` | Chestplates | Ⅰ–Ⅲ | loot | Undying Drop |
 | Destruction | `destruction` | Mining tools | single | trade · loot | Fortune, Silk Touch |
 | Disguise | `disguise` | Heads (7 kinds) | single | trade · loot | — |
-| Execute | `execute` | Swords, axes, spears | single | not obtainable | — |
+| Execute | `execute` | Swords, axes, spears | single | loot | — |
 | Frenzy | `frenzy` | Swords, axes, spears | Ⅰ–Ⅱ | trade · loot | — |
 | Gentle Descent | `gentle_descent` | Boots | single | not obtainable | Feather Falling |
 | Incinerate | `incinerate` | Swords, axes, spears | single | trade · loot | Looting |
 | Life Steal | `life_steal` | Swords, axes, spears | Ⅰ–Ⅴ | table · trade · loot | — |
-| Lumberjack | `lumberjack` | Axes | single | table · trade · loot | Fortune, Silk Touch |
+| Lumberjack | `lumberjack` | Axes | single | trade · loot | Fortune, Silk Touch |
 | Penetration | `penetration` | Tridents | Ⅰ–Ⅴ | table · loot | Riptide |
-| Powerful | `powerful` | Crossbows | Ⅰ–Ⅴ | table · trade · loot | Multishot |
+| Powerful | `powerful` | Crossbows | Ⅰ–Ⅴ | trade · loot | Multishot |
 | Smashing | `smashing` | Tridents | Ⅰ–Ⅴ | table · loot | — |
 | Soul Siphon | `soul_siphon` | Swords, axes, spears | Ⅰ–Ⅴ | table · trade · loot | — |
 | Undying Drop | `undying_drop` | Armour (any piece) | Ⅰ–Ⅲ | not obtainable | Demonic Pact |
@@ -46,7 +46,7 @@
 
 ### Beheading (`practical_enchantments:beheading`)
 
-- **Applies to:** swords and axes · **Levels:** Ⅰ–Ⅲ
+- **Applies to:** swords, axes and spears · **Levels:** Ⅰ–Ⅲ
 - **Obtained by:** librarian trades, woodland mansion 12%, pillager outpost 8%
 - **Effect:** killed mobs are more likely to drop their head: **+2.5 % per level**. Only mobs that own a head item are affected.
 - **In-game description:** Increases the chance for mobs to drop their heads
@@ -107,7 +107,7 @@
 
 ### Execute (`practical_enchantments:execute`)
 
-- **Applies to:** swords and axes · **Levels:** single
+- **Applies to:** swords, axes and spears · **Levels:** single
 - **Obtained by:** ancient city 20%, end city 15%, woodland mansion 10%
 - **Effect:** extra damage against targets that are already hurt. Between 10 % and 35 % health the
   damage is **×1.5**, below 10 % it is **×3** — and **×2 / ×4** when the weapon is an axe. Above 35 %
@@ -116,7 +116,7 @@
 
 ### Frenzy (`practical_enchantments:frenzy`)
 
-- **Applies to:** swords and axes · **Levels:** Ⅰ–Ⅱ
+- **Applies to:** swords, axes and spears · **Levels:** Ⅰ–Ⅱ
 - **Obtained by:** librarian trades, woodland mansion 18%, pillager outpost 14%
 - **Effect:** killing something grants Speed — Ⅱ for 6 seconds at level Ⅰ, Ⅲ for 8 seconds at level Ⅱ.
   On an axe the duration is doubled. Each kill restarts the timer.
@@ -133,7 +133,7 @@
 
 ### Incinerate (`practical_enchantments:incinerate`)
 
-- **Applies to:** swords and axes · **Levels:** single
+- **Applies to:** swords, axes and spears · **Levels:** single
 - **Obtained by:** librarian trades, jungle temple 35%, desert pyramid 20%, large underwater ruin 20%, woodland mansion 10%
 - **Conflicts with:** Looting
 - **Effect:** mobs you kill drop nothing and give **double experience**. Players are not affected.
@@ -141,7 +141,7 @@
 
 ### Life Steal (`practical_enchantments:life_steal`)
 
-- **Applies to:** swords and axes · **Levels:** Ⅰ–Ⅴ
+- **Applies to:** swords, axes and spears · **Levels:** Ⅰ–Ⅴ
 - **Obtained by:** enchanting table, librarian trades, stronghold library 18%
 - **Effect:** every hit heals you for **4 % × level** of the health the target *actually lost* — hitting
   a 2-health mob with a 6-damage weapon heals as if you had dealt 2.
@@ -187,7 +187,7 @@
 
 ### Soul Siphon (`practical_enchantments:soul_siphon`)
 
-- **Applies to:** swords and axes · **Levels:** Ⅰ–Ⅴ
+- **Applies to:** swords, axes and spears · **Levels:** Ⅰ–Ⅴ
 - **Obtained by:** enchanting table, librarian trades, stronghold library 24%
 - **Effect:** each hit produces experience orbs worth **damage × 0.2 × level**, capped at
   **2 × level** per hit. The base is the damage before armour reduction.
@@ -231,7 +231,7 @@
 
 ### Twilight Slayer (`practical_enchantments:tf_night_slayer`)
 
-- **Applies to:** swords, axes · **Levels:** Ⅰ–Ⅴ
+- **Applies to:** swords, axes and spears · **Levels:** Ⅰ–Ⅴ
 - **Obtained by:** Twilight Forest loot only
 - **Effect:** in a dimension whose clock says night, hits deal **2 + 1.5 × (level − 1)** more damage.
 - **In-game description:** Deals more damage in the dark
@@ -252,7 +252,7 @@
 
 ### Provocation (`practical_enchantments:provocation`)
 
-- **Applies to:** swords, axes · **Levels:** Ⅰ–Ⅲ
+- **Applies to:** swords, axes and spears · **Levels:** Ⅰ–Ⅲ
 - **Obtained by:** librarian trades, dungeon 16%, abandoned mineshaft 16%, village weaponsmith 14%, pillager outpost 12%, desert pyramid 12%, trial chamber reward 12%, jungle temple 10%, woodland mansion 10%, stronghold corridor 10%, village armorer 10%, ruined portal 10%, large underwater ruin 10%, shipwreck treasure 8%, nether fortress 8%, bastion treasure 6%
 - **Effect:** a hit on a target that is not angered yet angers it for 10 seconds and deals only **10%** of
   the damage; hits on an angered target deal **× (1.15 + 0.20 × level)** the damage — 135% at Ⅰ, 155% at Ⅱ,
@@ -261,7 +261,7 @@
 
 ### Heavy Blow (`practical_enchantments:heavy_blow`)
 
-- **Applies to:** swords, axes · **Levels:** single
+- **Applies to:** swords, axes and spears · **Levels:** single
 - **Obtained by:** librarian trades, village weaponsmith 10%, pillager outpost 8%, dungeon 6%, bastion treasure 5% · **Conflicts with:** Sweeping Edge
 - **Effect:** every swing lands a critical hit. A swing that connects shortens the attack cooldown to
   **90%**; one that misses lengthens it to **160%**. Every landing hit costs one extra point of durability.
