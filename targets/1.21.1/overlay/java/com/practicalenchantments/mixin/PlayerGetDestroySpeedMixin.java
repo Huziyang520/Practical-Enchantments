@@ -3,7 +3,6 @@
 package com.practicalenchantments.mixin;
 
 import com.practicalenchantments.content.AmuletSupport;
-import com.practicalenchantments.enchantment.AerialHasteEnchantment;
 import com.practicalenchantments.enchantment.armor.AerialHasteEnchantment;
 import com.practicalenchantments.PracticalEnchantments;
 import net.minecraft.core.Holder;

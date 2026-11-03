@@ -4,8 +4,6 @@ package com.practicalenchantments.mixin;
 
 import com.practicalenchantments.enchantment.armor.DemonicPactEnchantment;
 import com.practicalenchantments.enchantment.armor.UndyingDropEnchantment;
-import com.practicalenchantments.enchantment.DemonicPactEnchantment;
-import com.practicalenchantments.enchantment.UndyingDropEnchantment;
 import com.practicalenchantments.PracticalEnchantments;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;

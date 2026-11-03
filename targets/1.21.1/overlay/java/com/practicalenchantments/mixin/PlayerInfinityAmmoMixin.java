@@ -3,7 +3,6 @@
 package com.practicalenchantments.mixin;
 
 import com.practicalenchantments.config.VanillaTweaks;
-import com.practicalenchantments.enchantment.InfinitySupport;
 import com.practicalenchantments.enchantment.support.InfinitySupport;
 import com.practicalenchantments.PracticalEnchantments;
 import net.minecraft.world.entity.player.Player;

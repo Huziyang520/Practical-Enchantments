@@ -4,8 +4,6 @@ package com.practicalenchantments.neoforge;
 
 import com.practicalenchantments.content.PeContent;
 import com.practicalenchantments.content.WrathBrewing;
-import com.practicalenchantments.enchantment.HeavyBlowEnchantment;
-import com.practicalenchantments.enchantment.LifeStealEnchantment;
 import com.practicalenchantments.enchantment.weapon.HeavyBlowEnchantment;
 import com.practicalenchantments.enchantment.weapon.LifeStealEnchantment;
 import com.practicalenchantments.neoforge.config.NeoConfig;

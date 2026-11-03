@@ -4,8 +4,7 @@ package com.practicalenchantments;
 
 import com.mojang.logging.LogUtils;
 import com.practicalenchantments.enchantment.armor.BrightEnchantment;
-import com.practicalenchantments.enchantment.BrightEnchantment;
-import com.practicalenchantments.enchantment.ChineseEnchantment;
+import com.practicalenchantments.enchantment.armor.ChineseEnchantment;
 import java.util.ArrayList;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;

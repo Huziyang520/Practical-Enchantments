@@ -2,7 +2,6 @@
 
 package com.practicalenchantments.mixin;
 
-import com.practicalenchantments.enchantment.InvisibleAirEnchantment;
 import com.practicalenchantments.enchantment.weapon.InvisibleAirEnchantment;
 import com.practicalenchantments.PracticalEnchantments;
 import net.minecraft.world.damagesource.DamageSource;

@@ -2,7 +2,6 @@
 
 package com.practicalenchantments.mixin;
 
-import com.practicalenchantments.enchantment.KillMarks;
 import com.practicalenchantments.enchantment.support.KillMarks;
 import com.practicalenchantments.PracticalEnchantments;
 import net.minecraft.world.entity.monster.Slime;

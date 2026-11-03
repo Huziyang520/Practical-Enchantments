@@ -3,9 +3,6 @@
 package com.practicalenchantments.mixin;
 
 import com.practicalenchantments.content.WrathContent;
-import com.practicalenchantments.enchantment.HeavyBlowEnchantment;
-import com.practicalenchantments.enchantment.InvisibleAirEnchantment;
-import com.practicalenchantments.enchantment.ProvocationEnchantment;
 import com.practicalenchantments.enchantment.weapon.HeavyBlowEnchantment;
 import com.practicalenchantments.enchantment.weapon.InvisibleAirEnchantment;
 import com.practicalenchantments.enchantment.weapon.ProvocationEnchantment;

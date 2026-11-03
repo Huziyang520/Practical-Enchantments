@@ -3,7 +3,6 @@
 package com.practicalenchantments.mixin;
 
 import com.practicalenchantments.enchantment.support.TridentPullSupport;
-import com.practicalenchantments.enchantment.TridentPullSupport;
 import com.practicalenchantments.PracticalEnchantments;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;

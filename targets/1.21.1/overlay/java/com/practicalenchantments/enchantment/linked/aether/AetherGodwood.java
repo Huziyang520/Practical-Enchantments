@@ -9,8 +9,6 @@ import com.huziyang520.merlinlib.content.EnchantmentJson;
 import com.huziyang520.merlinlib.event.BuiltInEvents;
 import com.huziyang520.merlinlib.event.EnchantmentContext;
 import com.huziyang520.merlinlib.event.EnchantmentEventRegistrar;
-import com.practicalenchantments.enchantment.IncinerateEnchantment;
-import com.practicalenchantments.enchantment.KillMarks;
 import com.practicalenchantments.enchantment.support.KillMarks;
 import com.practicalenchantments.enchantment.weapon.IncinerateEnchantment;
 import com.practicalenchantments.PracticalEnchantments;
