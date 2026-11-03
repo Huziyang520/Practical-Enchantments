@@ -1,0 +1,32 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.practicalenchantments.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "PlayerGetDestroySpeedMixin",
+    "DeathSaveMixin",
+    "TridentSmashMixin",
+    "TridentPullMixin",
+    "CatMagnetTamingMixin",
+    "EnchantmentInfiniteCrossbowMixin",
+    "PlayerInfinityAmmoMixin",
+    "CubeMobSplitMixin",
+    "GodwoodLootMixin",
+    "IncinerateDropMixin",
+    "HeavyBlowCooldownMixin",
+    "WeaponAttackMixin",
+    "InvisibleAirSpawnMixin",
+    "AmuletPenaltyMixin",
+    "AmuletUpgradeKeepMixin",
+    "SweepDamageMixin"
+  ],
+  "client": [],
+  "server": [],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
+  }
+}

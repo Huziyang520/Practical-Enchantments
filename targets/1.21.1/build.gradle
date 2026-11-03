@@ -1,0 +1,220 @@
+// Practical Enchantments —— 1.21.1 编译目标（NeoForge 单端）。
+//
+// 源码来源：../../common（26.X 主线 common）经 Sync 到 build/shared，再与 overlay/ 合并。
+// 版本强制差异全部落在 overlay/，不在这里写 if。
+//
+// 工艺：ModDevGradle 2.0.147 + Gradle 8.x + JDK 21。
+// 1.20.5 起 NeoForge 跑在 Mojang 官方名上，所以这里既不需要 refmap，也不需要 Mixin 注解处理器。
+
+plugins {
+	id 'java'
+	id 'net.neoforged.moddev' version '2.0.147'
+}
+
+base {
+	archivesName = "${mod_id}-${version}-neoforge-${minecraft_version}"
+}
+
+tasks.withType(org.gradle.api.tasks.bundling.AbstractArchiveTask).configureEach {
+	archiveVersion.set('')
+}
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(java_version as int)
+
+neoForge {
+	version = project.neo_version
+
+	runs {
+		client {
+			client()
+		}
+		server {
+			server()
+		}
+	}
+
+	mods {
+		"${mod_id}" {
+			sourceSet sourceSets.main
+		}
+	}
+}
+
+repositories {
+	maven { name = 'AliyunPublic'; url = uri('https://maven.aliyun.com/repository/public') }
+	maven { name = 'TencentPublic'; url = uri('https://mirrors.cloud.tencent.com/nexus/repository/maven-public/') }
+	maven { name = 'NeoForged'; url = uri('https://maven.neoforged.net/releases') }
+}
+
+// ---------------------------------------------------------------------------
+// 共享源码：26.X common + overlay
+// ---------------------------------------------------------------------------
+
+// overlay 覆盖的 Java 文件（相对 com/ 的路径）。这些路径不会再从 common 取。
+def overlaidJava = [
+		'com/practicalenchantments/client/mixin/InvisibleAirArmPoseMixin.java',
+		'com/practicalenchantments/client/mixin/InvisibleAirFirstPersonMixin.java',
+		'com/practicalenchantments/client/mixin/InvisibleAirItemInHandMixin.java',
+		'com/practicalenchantments/config/VanillaTweaks.java',
+		'com/practicalenchantments/content/AmuletSupport.java',
+		'com/practicalenchantments/content/FlawedObsidianBlock.java',
+		'com/practicalenchantments/content/InvisibleAirRender.java',
+		'com/practicalenchantments/content/PeContent.java',
+		'com/practicalenchantments/content/WrathBrewing.java',
+		'com/practicalenchantments/content/WrathContent.java',
+		'com/practicalenchantments/enchantment/armor/BrightEnchantment.java',
+		'com/practicalenchantments/enchantment/armor/ChineseEnchantment.java',
+		'com/practicalenchantments/enchantment/armor/DemonicPactEnchantment.java',
+		'com/practicalenchantments/enchantment/armor/GentleDescentEnchantment.java',
+		'com/practicalenchantments/enchantment/armor/ObsidianWalkerEnchantment.java',
+		'com/practicalenchantments/enchantment/armor/UndyingDropEnchantment.java',
+		'com/practicalenchantments/enchantment/linked/aether/AetherGodwood.java',
+		'com/practicalenchantments/enchantment/linked/aether/AetherSkySlayer.java',
+		'com/practicalenchantments/enchantment/linked/twilightforest/TfNightSlayer.java',
+		'com/practicalenchantments/enchantment/linked/twilightforest/TfQuench.java',
+		'com/practicalenchantments/enchantment/support/AiRules.java',
+		'com/practicalenchantments/enchantment/support/DeathSaveSupport.java',
+		'com/practicalenchantments/enchantment/support/InfinitySupport.java',
+		'com/practicalenchantments/enchantment/support/TridentPullSupport.java',
+		'com/practicalenchantments/enchantment/tool/DestructionEnchantment.java',
+		'com/practicalenchantments/enchantment/weapon/BeheadingEnchantment.java',
+		'com/practicalenchantments/enchantment/weapon/FrenzyEnchantment.java',
+		'com/practicalenchantments/enchantment/weapon/IncinerateEnchantment.java',
+		'com/practicalenchantments/enchantment/weapon/InvisibleAirEnchantment.java',
+		'com/practicalenchantments/enchantment/weapon/LifeStealEnchantment.java',
+		'com/practicalenchantments/enchantment/weapon/PenetrationEnchantment.java',
+		'com/practicalenchantments/mixin/AmuletUpgradeKeepMixin.java',
+		'com/practicalenchantments/mixin/CatMagnetTamingMixin.java',
+		'com/practicalenchantments/mixin/CubeMobSplitMixin.java',
+		'com/practicalenchantments/mixin/DeathSaveMixin.java',
+		'com/practicalenchantments/mixin/GodwoodLootMixin.java',
+		'com/practicalenchantments/mixin/HeavyBlowCooldownMixin.java',
+		'com/practicalenchantments/mixin/IncinerateDropMixin.java',
+		'com/practicalenchantments/mixin/InvisibleAirSpawnMixin.java',
+		'com/practicalenchantments/mixin/PlayerGetDestroySpeedMixin.java',
+		'com/practicalenchantments/mixin/PlayerInfinityAmmoMixin.java',
+		'com/practicalenchantments/mixin/SweepDamageMixin.java',
+		'com/practicalenchantments/mixin/TridentPullMixin.java',
+		'com/practicalenchantments/mixin/TridentSmashMixin.java',
+		'com/practicalenchantments/mixin/WeaponAttackMixin.java',
+		'com/practicalenchantments/neoforge/client/NeoConfigScreen.java',
+		'com/practicalenchantments/neoforge/config/NeoConfig.java',
+		'com/practicalenchantments/neoforge/PracticalEnchantmentsNeoForge.java',
+		'com/practicalenchantments/notice/MerlinLibNotice.java',
+		'com/practicalenchantments/PracticalEnchantments.java',
+		'com/practicalenchantments/VillagerTradeRegistration.java'
+]
+
+// common 侧对 1.21.1 不成立的 Java。这里排除的是「1.21.1 根本不走这条路」的类，
+// 不是靠 overlay 覆盖的那种。
+def droppedJava = [
+		// 1.21.1 用 NeoForge CriticalHitEvent 实现「永远暴击」，没有这个 mixin
+		'com/practicalenchantments/mixin/HeavyBlowCritMixin.java',
+]
+
+def sharedJava = layout.buildDirectory.dir('shared/java')
+def sharedResources = layout.buildDirectory.dir('shared/resources')
+
+tasks.register('sharedJava', Sync) {
+	from('../../common/src/main/java') {
+		overlaidJava.each { exclude it }
+		droppedJava.each { exclude it }
+	}
+	from('overlay/java')
+	into sharedJava
+}
+
+tasks.register('sharedResources', Sync) {
+	from('../../common/src/main/resources') {
+		// mixin 配置由 overlay 提供（compatibilityLevel 与登记表按线不同）
+		exclude 'practical_enchantments.mixins.json'
+
+		// 1.21.1 不读 assets/<ns>/items/（1.21.4 才引入）；invisible_air 那条两侧一致，保留
+		exclude 'assets/practical_enchantments/items/diamond_amulet.json'
+		exclude 'assets/practical_enchantments/items/golden_amulet.json'
+		exclude 'assets/practical_enchantments/items/iron_amulet.json'
+		exclude 'assets/practical_enchantments/items/netherite_amulet.json'
+		exclude 'assets/practical_enchantments/items/flawed_obsidian.json'
+
+		// 1.21.1 没有 villager_trade 注册表（走代码 VillagerTradeRegistration）
+		exclude 'data/minecraft/tags/villager_trade/**'
+		exclude 'data/practical_enchantments/villager_trade/**'
+
+		// 1.21.1 没有 minecraft:brewing 配方类型（走代码 WrathBrewing）
+		exclude 'data/practical_enchantments/recipe/brewing/**'
+
+		// 静态标签不能引用「只在装了天境时才注册」的附魔 id，否则注册表 Unbound values
+		exclude 'data/practical_enchantments/tags/enchantment/exclusive_set/godwood.json'
+
+		// Trinkets 只存在于 Fabric 侧
+		exclude 'data/trinkets/**'
+	}
+	from('overlay/resources')
+	into sharedResources
+}
+
+tasks.named('compileJava') { dependsOn 'sharedJava' }
+tasks.named('processResources') { dependsOn 'sharedResources' }
+
+sourceSets {
+	main {
+		java {
+			setSrcDirs([])
+			srcDir sharedJava
+		}
+		resources {
+			setSrcDirs([])
+			srcDir sharedResources
+			// 本目标独有、common 侧没有对应文件的资源（mods.toml / pack.mcmeta / 图标）
+			srcDir 'src/main/resources'
+		}
+	}
+}
+
+dependencies {
+	// MerlinLib 1.21.1：先构建 MerlinLib/master/targets/1.21.1，再构建本目标。
+	// 1.21.1 跑在 Mojang 官方名上，库 jar 可直接当依赖用，不需要重映射。
+	compileOnly files("../../../../MerlinLib/master/targets/1.21.1/build/libs/merlinlib-${merlinlib_version}-neoforge-1.21.1.jar")
+
+	compileOnly 'org.spongepowered:mixin:0.8.7'
+	compileOnly 'com.google.code.findbugs:jsr305:3.0.2'
+}
+
+tasks.named('processResources', ProcessResources).configure {
+	filteringCharset = 'UTF-8'
+
+	var replaceProperties = [
+			minecraft_version      : minecraft_version, minecraft_version_range: minecraft_version_range,
+			neo_version            : neo_version, neo_version_range: neo_version_range,
+			loader_version_range   : loader_version_range,
+			merlinlib_version      : merlinlib_version,
+			mod_id                 : mod_id, mod_name: mod_name, mod_license: license, mod_version: version,
+			mod_authors            : mod_author, mod_description: mod_description,
+			mod_credits            : credits,
+	]
+	inputs.properties replaceProperties
+
+	filesMatching(['META-INF/neoforge.mods.toml', 'pack.mcmeta']) {
+		expand replaceProperties + [project: project]
+	}
+}
+
+tasks.named('jar', Jar).configure {
+	manifest {
+		attributes([
+				'Specification-Title'     : mod_name,
+				'Specification-Vendor'    : mod_author,
+				'Specification-Version'   : '1',
+				'Implementation-Title'    : project.name,
+				'Implementation-Version'  : project.version,
+				'Implementation-Vendor'   : mod_author,
+				'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+				'Built-On-Minecraft'      : minecraft_version,
+		])
+	}
+}
+
+tasks.withType(JavaCompile).configureEach {
+	options.encoding = 'UTF-8'
+	options.compilerArgs += ['-Xmaxerrs', '1000']
+}

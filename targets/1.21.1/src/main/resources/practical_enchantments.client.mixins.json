@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "package": "com.practicalenchantments.client.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [],
+  "client": [
+    "InvisibleAirFirstPersonMixin",
+    "InvisibleAirItemInHandMixin",
+    "InvisibleAirArmPoseMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
