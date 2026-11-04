@@ -20,7 +20,16 @@
     "HeavyBlowCooldownMixin",
     "InvisibleAirSpawnMixin",
     "AmuletPenaltyMixin",
-    "AmuletUpgradeKeepMixin"
+    "AmuletUpgradeKeepMixin",
+    "AbstractArrowShootMixin",
+    "CrossbowRepeatingMixin",
+    "CrossbowChargedAccessor",
+    "CrossbowShotContextMixin",
+    "BowShotContextMixin",
+    "HideSkinPowderSnowMixin",
+    "HideSkinFreezeMixin",
+    "EnchantmentVanillaTweakMixin",
+    "HuntingArrowMixin"
   ],
   "client": [
     "InvisibleAirFirstPersonMixin",

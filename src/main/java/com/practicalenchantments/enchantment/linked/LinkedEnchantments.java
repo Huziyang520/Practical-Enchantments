@@ -7,6 +7,7 @@ import com.huziyang520.merlinlib.platform.Services;
 import com.practicalenchantments.PracticalEnchantments;
 import com.practicalenchantments.enchantment.linked.aether.AetherGodwood;
 import com.practicalenchantments.enchantment.linked.aether.AetherSkySlayer;
+import com.practicalenchantments.enchantment.linked.twilightforest.HuntingArrow;
 import com.practicalenchantments.enchantment.linked.twilightforest.TfNightSlayer;
 import com.practicalenchantments.enchantment.linked.twilightforest.TfQuench;
 import org.slf4j.Logger;
@@ -33,6 +34,7 @@ public final class LinkedEnchantments {
 		if (twilightForest) {
 			TfQuench.registerContent();
 			TfNightSlayer.registerContent();
+			HuntingArrow.registerContent();
 		}
 		if (aether) {
 			AetherGodwood.registerContent(aetherNamespace);

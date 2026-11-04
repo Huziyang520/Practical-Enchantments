@@ -18,10 +18,16 @@ public final class TfQuench {
 	public static final String ID = PracticalEnchantments.MOD_ID + ":" + PATH;
 
 	private static final String[] LOOT_TABLES = {
-			"twilightforest:chests/hollow_hill",
-			"twilightforest:chests/labyrinth",
-			"twilightforest:chests/dark_tower",
-			"twilightforest:chests/aurora_palace",
+			"twilightforest:chests/hill_1",
+			"twilightforest:chests/hill_2",
+			"twilightforest:chests/hill_3",
+			"twilightforest:chests/labyrinth_room",
+			"twilightforest:chests/labyrinth_dead_end",
+			"twilightforest:chests/labyrinth_vault",
+			"twilightforest:chests/darktower_boss",
+			"twilightforest:chests/darktower_cache",
+			"twilightforest:chests/aurora_cache",
+			"twilightforest:chests/aurora_room",
 	};
 
 	private TfQuench() {

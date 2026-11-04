@@ -22,7 +22,7 @@ public final class BrightEnchantment {
 	private static Enchantment HOLDER;
 	private static final int NIGHT_VISION_DURATION = 400;
 	private static final int REFRESH_INTERVAL = 20;
-	private static final int DURABILITY_INTERVAL = 275;
+	private static final int DURABILITY_INTERVAL = 550;
 
 	private static final ResourceLocation NV_GRANTED =
 		new ResourceLocation(PracticalEnchantments.MOD_ID, "bright_nv_granted");

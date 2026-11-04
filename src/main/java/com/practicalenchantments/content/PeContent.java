@@ -56,6 +56,18 @@ public final class PeContent {
 		return BuiltInRegistries.ITEM.get(id);
 	}
 
+	public static boolean isAmulet(ItemStack stack) {
+		if (stack == null || stack.isEmpty()) {
+			return false;
+		}
+		for (ResourceLocation amulet : AMULETS) {
+			if (stack.is(item(amulet))) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public static List<ResourceLocation> amulets() {
 		return AMULETS;
 	}

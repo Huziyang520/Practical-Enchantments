@@ -16,6 +16,9 @@ public final class EnchantmentDefinitions {
 	private static final Acquisition TRADE_ONLY = new Acquisition(false, true, false, false, false, false);
 	private static final Acquisition NEITHER = new Acquisition(false, false, false, false, false, false);
 
+	private static final JsonArray BOW_AND_CROSSBOW = JsonParser.parseString(
+		"[\"minecraft:bow\",\"minecraft:crossbow\"]").getAsJsonArray();
+
 	private static final JsonArray DISGUISE_ITEMS = JsonParser.parseString(
 		"[\"minecraft:skeleton_skull\",\"minecraft:wither_skeleton_skull\",\"minecraft:zombie_head\","
 			+ "\"minecraft:creeper_head\",\"minecraft:piglin_head\",\"minecraft:dragon_head\","
@@ -41,6 +44,10 @@ public final class EnchantmentDefinitions {
 	public static final ResourceLocation OBSIDIAN_WALKER = id("obsidian_walker");
 	public static final ResourceLocation PENETRATION = id("penetration");
 	public static final ResourceLocation POWERFUL = id("powerful");
+	public static final ResourceLocation REPEATING_CROSSBOW = id("repeating_crossbow");
+	public static final ResourceLocation SWIFT_ARROW = id("swift_arrow");
+	public static final ResourceLocation TRAUMA = id("trauma");
+	public static final ResourceLocation HIDE_SKIN = id("hide_skin");
 	public static final ResourceLocation PROVOCATION = id("provocation");
 	public static final ResourceLocation SMASHING = id("smashing");
 	public static final ResourceLocation SOUL_SIPHON = id("soul_siphon");
@@ -73,6 +80,10 @@ public final class EnchantmentDefinitions {
 		obsidianWalker();
 		penetration();
 		powerful();
+		swiftArrow();
+		trauma();
+		hideSkin();
+		repeatingCrossbow();
 		provocation();
 		smashing();
 		soulSiphon();
@@ -331,6 +342,68 @@ public final class EnchantmentDefinitions {
 			.maxLevel(5)
 			.cost(1, 10, 15, 10)
 			.anvilCost(2)
+			.slots("mainhand")
+			.supportedItems("minecraft:crossbow")
+			.exclusiveSet(ExclusiveSets.CROSSBOW.deepCopy())
+			.acquisition(TRADE_ONLY)
+			.category(EnchantmentCategory.CROSSBOW)
+			.submit();
+	}
+
+	private static void swiftArrow() {
+		MerlinApi.enchantments()
+			.register(SWIFT_ARROW)
+			.translationKey(key("swift_arrow"))
+			.weight(6)
+			.maxLevel(3)
+			.cost(5, 8, 25, 8)
+			.anvilCost(2)
+			.slots("mainhand", "offhand")
+			.supportedItems(BOW_AND_CROSSBOW)
+			.acquisition(TABLE_AND_TRADE)
+			.category(EnchantmentCategory.BOW)
+			.submit();
+	}
+
+	private static void trauma() {
+		MerlinApi.enchantments()
+			.register(TRAUMA)
+			.translationKey(key("trauma"))
+			.weight(4)
+			.maxLevel(2)
+			.cost(10, 9, 32, 9)
+			.anvilCost(3)
+			.slots("mainhand")
+			.supportedItems("#minecraft:enchantable/sharp_weapon")
+			.exclusiveSet(ExclusiveSets.BLADE_EFFECT.deepCopy())
+			.acquisition(TABLE_AND_TRADE)
+			.category(EnchantmentCategory.WEAPON)
+			.submit();
+	}
+
+	private static void hideSkin() {
+		MerlinApi.enchantments()
+			.register(HIDE_SKIN)
+			.translationKey(key("hide_skin"))
+			.weight(10)
+			.maxLevel(1)
+			.cost(1, 0, 21, 0)
+			.anvilCost(1)
+			.slots("armor")
+			.supportedItems("#minecraft:enchantable/armor")
+			.acquisition(TRADE_ONLY)
+			.category(EnchantmentCategory.ARMOR)
+			.submit();
+	}
+
+	private static void repeatingCrossbow() {
+		MerlinApi.enchantments()
+			.register(REPEATING_CROSSBOW)
+			.translationKey(key("repeating_crossbow"))
+			.weight(5)
+			.maxLevel(5)
+			.cost(8, 6, 30, 6)
+			.anvilCost(3)
 			.slots("mainhand")
 			.supportedItems("minecraft:crossbow")
 			.exclusiveSet(ExclusiveSets.CROSSBOW.deepCopy())

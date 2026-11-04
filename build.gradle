@@ -124,7 +124,7 @@ dependencies {
 // mixins.json also ships a refmap (Patchouli, Jade, Alex's Caves, Citadel, KubeJS, ...).
 def srgToMcpFile = file("${project.buildDir}/createSrgToMcp/output.srg")
 def refmapTsrgFile = file("${project.buildDir}/tmp/mojmap-to-srg.tsrg")
-def refmapFile = file("${project.buildDir}/resources/main/${mod_id}.refmap.json")
+def refmapFile = file("${project.buildDir}/mixin-refmap/${mod_id}.refmap.json")
 
 tasks.register('convertSrgToTsrg') {
     dependsOn 'createSrgToMcp'
@@ -219,6 +219,9 @@ tasks.named('processResources', ProcessResources).configure {
     // only symptom is that every mixin fails to apply at runtime. This is the same dependency
     // MerlinLib's build carries, for the same reason.
     dependsOn tasks.named('compileJava')
+    // The processor writes the refmap outside any task output directory, so it has to be
+    // declared as an input here or Gradle has no reason to copy it.
+    from("${project.buildDir}/mixin-refmap")
 
     var replaceProperties = [
             minecraft_version         : minecraft_version,
