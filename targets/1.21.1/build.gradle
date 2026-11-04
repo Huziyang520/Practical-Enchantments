@@ -57,6 +57,8 @@ def overlaidJava = [
 		'com/practicalenchantments/client/mixin/InvisibleAirItemInHandMixin.java',
 		'com/practicalenchantments/config/VanillaTweaks.java',
 		'com/practicalenchantments/content/AmuletSupport.java',
+		'com/practicalenchantments/content/BleedContent.java',
+		'com/practicalenchantments/content/RotContent.java',
 		'com/practicalenchantments/content/FlawedObsidianBlock.java',
 		'com/practicalenchantments/content/InvisibleAirRender.java',
 		'com/practicalenchantments/content/PeContent.java',
@@ -69,6 +71,7 @@ def overlaidJava = [
 		'com/practicalenchantments/enchantment/armor/ObsidianWalkerEnchantment.java',
 		'com/practicalenchantments/enchantment/linked/aether/AetherGodwood.java',
 		'com/practicalenchantments/enchantment/linked/aether/AetherSkySlayer.java',
+		'com/practicalenchantments/enchantment/linked/twilightforest/HuntingArrow.java',
 		'com/practicalenchantments/enchantment/linked/twilightforest/TfNightSlayer.java',
 		'com/practicalenchantments/enchantment/linked/twilightforest/TfQuench.java',
 		'com/practicalenchantments/enchantment/support/AiRules.java',
@@ -81,11 +84,18 @@ def overlaidJava = [
 		'com/practicalenchantments/enchantment/weapon/IncinerateEnchantment.java',
 		'com/practicalenchantments/enchantment/weapon/InvisibleAirEnchantment.java',
 		'com/practicalenchantments/enchantment/weapon/PenetrationEnchantment.java',
+		'com/practicalenchantments/enchantment/weapon/PowerfulEnchantment.java',
+		'com/practicalenchantments/enchantment/weapon/TraumaEnchantment.java',
+		'com/practicalenchantments/support/EnchantIds.java',
+		'com/practicalenchantments/support/Particles.java',
 		'com/practicalenchantments/mixin/AmuletUpgradeKeepMixin.java',
+		'com/practicalenchantments/mixin/AbstractArrowShootMixin.java',
+		'com/practicalenchantments/mixin/CrossbowRepeatingMixin.java',
 		'com/practicalenchantments/mixin/CatMagnetTamingMixin.java',
 		'com/practicalenchantments/mixin/CubeMobSplitMixin.java',
 		'com/practicalenchantments/mixin/DeathSaveMixin.java',
 		'com/practicalenchantments/mixin/GodwoodLootMixin.java',
+		'com/practicalenchantments/mixin/HuntingArrowMixin.java',
 		'com/practicalenchantments/mixin/HeavyBlowCooldownMixin.java',
 		'com/practicalenchantments/mixin/IncinerateDropMixin.java',
 		'com/practicalenchantments/mixin/InvisibleAirSpawnMixin.java',
@@ -123,6 +133,8 @@ tasks.register('sharedJava', Sync) {
 }
 
 tasks.register('sharedResources', Sync) {
+    // overlay 要覆盖 common 的同名资源（lang、enchantment json 等），后写入者胜
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
 	from('../../common/src/main/resources') {
 		// mixin 配置由 overlay 提供（compatibilityLevel 与登记表按线不同）
 		exclude 'practical_enchantments.mixins.json'

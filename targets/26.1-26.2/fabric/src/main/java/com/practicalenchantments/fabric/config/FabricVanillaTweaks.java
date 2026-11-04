@@ -24,6 +24,9 @@ public final class FabricVanillaTweaks {
 			VanillaTweaks.KEY_INFINITY_CROSSBOW,
 			VanillaTweaks.KEY_INFINITY_NO_ARROW,
 			VanillaTweaks.KEY_INFINITY_SPECTRAL,
+			VanillaTweaks.KEY_QUICK_CHARGE_BOW,
+			VanillaTweaks.KEY_POWER_CROSSBOW,
+			VanillaTweaks.KEY_THORNS_SHIELD,
 	};
 
 	private FabricVanillaTweaks() {
@@ -88,5 +91,9 @@ public final class FabricVanillaTweaks {
 				values.get(VanillaTweaks.KEY_INFINITY_CROSSBOW),
 				values.get(VanillaTweaks.KEY_INFINITY_NO_ARROW),
 				values.get(VanillaTweaks.KEY_INFINITY_SPECTRAL));
+		VanillaTweaks.applyExtra(
+				values.get(VanillaTweaks.KEY_QUICK_CHARGE_BOW),
+				values.get(VanillaTweaks.KEY_POWER_CROSSBOW),
+				values.get(VanillaTweaks.KEY_THORNS_SHIELD));
 	}
 }

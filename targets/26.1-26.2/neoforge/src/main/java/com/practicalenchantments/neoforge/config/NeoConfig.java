@@ -12,6 +12,9 @@ public final class NeoConfig {
 	private static final ModConfigSpec.ConfigValue<Boolean> INFINITY_CROSSBOW;
 	private static final ModConfigSpec.ConfigValue<Boolean> INFINITY_NO_ARROW;
 	private static final ModConfigSpec.ConfigValue<Boolean> INFINITY_SPECTRAL;
+	private static final ModConfigSpec.ConfigValue<Boolean> QUICK_CHARGE_BOW;
+	private static final ModConfigSpec.ConfigValue<Boolean> POWER_CROSSBOW;
+	private static final ModConfigSpec.ConfigValue<Boolean> THORNS_SHIELD;
 
 	static {
 		ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
@@ -25,6 +28,12 @@ public final class NeoConfig {
 		INFINITY_SPECTRAL = define(builder, VanillaTweaks.KEY_INFINITY_SPECTRAL,
 				VanillaTweaks.DEFAULT_INFINITY_SPECTRAL,
 				"无限是否同样作用于光灵箭；开时仍要求背包里至少有一根光灵箭。");
+		QUICK_CHARGE_BOW = define(builder, VanillaTweaks.KEY_QUICK_CHARGE_BOW,
+				VanillaTweaks.DEFAULT_QUICK_CHARGE_BOW, "快速装填是否可以附在弓上（默认关）。");
+		POWER_CROSSBOW = define(builder, VanillaTweaks.KEY_POWER_CROSSBOW,
+				VanillaTweaks.DEFAULT_POWER_CROSSBOW, "力量是否可以附在弩上（默认开）。");
+		THORNS_SHIELD = define(builder, VanillaTweaks.KEY_THORNS_SHIELD,
+				VanillaTweaks.DEFAULT_THORNS_SHIELD, "刺棘是否可以附在盾上（默认开）。");
 		builder.pop();
 		SPEC = builder.build();
 	}
@@ -50,9 +59,12 @@ public final class NeoConfig {
 		if (!SPEC.isLoaded()) {
 			VanillaTweaks.apply(VanillaTweaks.DEFAULT_INFINITY_CROSSBOW, VanillaTweaks.DEFAULT_INFINITY_NO_ARROW,
 					VanillaTweaks.DEFAULT_INFINITY_SPECTRAL);
+			VanillaTweaks.applyExtra(VanillaTweaks.DEFAULT_QUICK_CHARGE_BOW, VanillaTweaks.DEFAULT_POWER_CROSSBOW,
+					VanillaTweaks.DEFAULT_THORNS_SHIELD);
 			return;
 		}
 		VanillaTweaks.apply(INFINITY_CROSSBOW.get(), INFINITY_NO_ARROW.get(), INFINITY_SPECTRAL.get());
+		VanillaTweaks.applyExtra(QUICK_CHARGE_BOW.get(), POWER_CROSSBOW.get(), THORNS_SHIELD.get());
 	}
 
 	private static ModConfigSpec.ConfigValue<Boolean> define(ModConfigSpec.Builder builder, String key,

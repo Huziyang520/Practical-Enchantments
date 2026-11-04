@@ -5,9 +5,12 @@ package com.practicalenchantments;
 import com.huziyang520.merlinlib.api.LootInjectionBuilder;
 import com.huziyang520.merlinlib.api.LootTables;
 import com.huziyang520.merlinlib.api.MerlinApi;
+import com.huziyang520.merlinlib.platform.Services;
 import com.huziyang520.merlinlib.event.EnchantmentEventRegistrar;
 import com.practicalenchantments.config.PracticalConfig;
 import com.practicalenchantments.content.AmuletScanSource;
+import com.practicalenchantments.content.BleedContent;
+import com.practicalenchantments.content.RotContent;
 import com.practicalenchantments.content.WrathContent;
 import com.practicalenchantments.enchantment.armor.AerialHasteEnchantment;
 import com.practicalenchantments.enchantment.armor.BrightEnchantment;
@@ -18,6 +21,7 @@ import com.practicalenchantments.enchantment.armor.ObsidianWalkerEnchantment;
 import com.practicalenchantments.enchantment.armor.ObsidianWalkerLoot;
 import com.practicalenchantments.enchantment.armor.UndyingDropEnchantment;
 import com.practicalenchantments.enchantment.linked.LinkedEnchantments;
+import com.practicalenchantments.enchantment.linked.twilightforest.HuntingArrow;
 import com.practicalenchantments.enchantment.support.AiRules;
 import com.practicalenchantments.enchantment.tool.DestructionEnchantment;
 import com.practicalenchantments.enchantment.tool.LumberjackEnchantment;
@@ -33,6 +37,7 @@ import com.practicalenchantments.enchantment.weapon.PowerfulEnchantment;
 import com.practicalenchantments.enchantment.weapon.ProvocationEnchantment;
 import com.practicalenchantments.enchantment.weapon.SmashingEnchantment;
 import com.practicalenchantments.enchantment.weapon.SoulSiphonEnchantment;
+import com.practicalenchantments.enchantment.weapon.TraumaEnchantment;
 import com.practicalenchantments.enchantment.weapon.VenomEnchantment;
 import com.practicalenchantments.enchantment.weapon.WitherAspectEnchantment;
 import com.practicalenchantments.notice.MerlinLibNotice;
@@ -56,8 +61,13 @@ public final class PracticalEnchantments {
 
 	public static void bootstrap() {
 		MerlinLibNotice.registerEarly();
+		BleedContent.register();
+		RotContent.register();
 		AmuletScanSource.register();
 		LinkedEnchantments.registerContent();
+		if (Services.PLATFORM.isModLoaded(LinkedEnchantments.TWILIGHT_FOREST)) {
+			HuntingArrow.registerContent();
+		}
 		WrathContent.register();
 		MerlinApi.lifecycle().onServerStarting(server -> registerLootInjections());
 
@@ -172,6 +182,27 @@ public final class PracticalEnchantments {
 		registerLoot(QUALITY_COMMON, 0.20F, 3, LootTables.UNDERWATER_RUIN_BIG, SmashingEnchantment.ID);
 		registerLoot(QUALITY_COMMON, 0.14F, 2, LootTables.SHIPWRECK_TREASURE, SmashingEnchantment.ID);
 		registerLoot(QUALITY_COMMON, 0.12F, 2, LootTables.ABANDONED_MINESHAFT, SmashingEnchantment.ID);
+		registerLoot(QUALITY_COMMON, 0.16F, LootTables.SIMPLE_DUNGEON, "practical_enchantments:swift_arrow");
+		registerLoot(QUALITY_COMMON, 0.14F, LootTables.VILLAGE_FLETCHER, "practical_enchantments:swift_arrow");
+		registerLoot(QUALITY_COMMON, 0.12F, LootTables.SHIPWRECK_TREASURE, "practical_enchantments:swift_arrow");
+		registerLoot(QUALITY_RARE, 0.08F, LootTables.WOODLAND_MANSION, "practical_enchantments:trauma");
+		registerLoot(QUALITY_RARE, 0.06F, LootTables.BASTION_TREASURE, "practical_enchantments:trauma");
+		registerLoot(QUALITY_RARE, 0.10F, LootTables.PILLAGER_OUTPOST, "practical_enchantments:trauma");
+		registerLoot(QUALITY_COMMON, 0.18F, LootTables.SIMPLE_DUNGEON, "practical_enchantments:hide_skin");
+		registerLoot(QUALITY_COMMON, 0.16F, LootTables.ABANDONED_MINESHAFT, "practical_enchantments:hide_skin");
+		registerLoot(QUALITY_COMMON, 0.16F, LootTables.VILLAGE_ARMORER, "practical_enchantments:hide_skin");
+		registerLoot(QUALITY_COMMON, 0.15F, LootTables.DESERT_PYRAMID, "practical_enchantments:hide_skin");
+		registerLoot(QUALITY_COMMON, 0.15F, LootTables.JUNGLE_TEMPLE, "practical_enchantments:hide_skin");
+		registerLoot(QUALITY_COMMON, 0.14F, LootTables.IGLOO_CHEST, "practical_enchantments:hide_skin");
+		registerLoot(QUALITY_COMMON, 0.14F, LootTables.SHIPWRECK_SUPPLY, "practical_enchantments:hide_skin");
+		registerLoot(QUALITY_COMMON, 0.12F, LootTables.PILLAGER_OUTPOST, "practical_enchantments:hide_skin");
+		registerLoot(QUALITY_COMMON, 0.12F, LootTables.STRONGHOLD_CORRIDOR, "practical_enchantments:hide_skin");
+		registerLoot(QUALITY_COMMON, 0.10F, LootTables.RUINED_PORTAL, "practical_enchantments:hide_skin");
+		registerLoot(QUALITY_TREASURE, 0.15F, LootTables.ANCIENT_CITY, "practical_enchantments:repeating_crossbow");
+		registerLoot(QUALITY_TREASURE, 0.12F, LootTables.END_CITY_TREASURE, "practical_enchantments:repeating_crossbow");
+		registerLoot(QUALITY_TREASURE, 0.12F, LootTables.NETHER_BRIDGE, "practical_enchantments:repeating_crossbow");
+		registerLoot(QUALITY_TREASURE, 0.12F, LootTables.BASTION_TREASURE, "practical_enchantments:repeating_crossbow");
+		registerLoot(QUALITY_TREASURE, 0.12F, LootTables.PILLAGER_OUTPOST, "practical_enchantments:repeating_crossbow");
 		ObsidianWalkerLoot.register();
 	}
 
@@ -190,6 +221,7 @@ public final class PracticalEnchantments {
 		AerialHasteEnchantment.registerCallbacks(registrar, registries);
 		BeheadingEnchantment.registerCallbacks(registrar, registries);
 		VenomEnchantment.registerCallbacks(registrar, registries);
+		TraumaEnchantment.registerCallbacks(registrar, registries);
 		WitherAspectEnchantment.registerCallbacks(registrar, registries);
 		FrenzyEnchantment.registerCallbacks(registrar, registries);
 		GentleDescentEnchantment.registerCallbacks(registrar, registries);

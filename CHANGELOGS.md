@@ -1,3 +1,18 @@
+### 1.7.0 (2026-11-04)
+
+- Requires MerlinLib 1.1.0 or newer.
+- Shipped for 1.20.1 (Forge), 1.21.1 (NeoForge), 26.1 - 26.2 (NeoForge, Fabric) and 26.3 (NeoForge, Fabric).
+- New enchantments: Swift Arrow, Trauma, Hide Skin, Repeating Crossbow and Hunting Arrow.
+- New effects: Bleed (stacks up to 5, bursts on the fifth) and Rot (stacking damage that wears armour down).
+- Powerful now knocks targets back and makes them bleed instead of adding damage. Its in-game description
+  changed accordingly.
+- Hide Skin keeps you off the powder-snow sinking and stops freezing damage while worn.
+- Hunting Arrow turns your arrows into Twilight Forest seeker arrows.
+- New toggles: Quick Charge on bows, Power on crossbows, Thorns on shields.
+- Infinity now prefers spectral arrows over ordinary ones when both are in the inventory.
+- Bright now consumes one durability every 27.5 seconds of night instead of 13.75.
+- Ember Quench and Twilight Slayer now really come out of Twilight Forest chests.
+
 ### 1.6.1 (2026-10-28)
 
 - Requires MerlinLib 1.0.0 or newer.

@@ -1,0 +1,24 @@
+{
+  "description": {
+    "translate": "enchantment.practical_enchantments.repeating_crossbow",
+    "fallback": "连弩"
+  },
+  "supported_items": "minecraft:crossbow",
+  "exclusive_set": "#practical_enchantments:exclusive_set/crossbow",
+  "weight": 5,
+  "max_level": 5,
+  "min_cost": { "base": 8, "per_level_above_first": 6 },
+  "max_cost": { "base": 30, "per_level_above_first": 6 },
+  "anvil_cost": 3,
+  "slots": ["mainhand"],
+  "effects": {
+    "minecraft:crossbow_charge_time": {
+      "type": "minecraft:add",
+      "value": {
+        "type": "minecraft:linear",
+        "base": -0.12,
+        "per_level_above_first": 0.03
+      }
+    }
+  }
+}

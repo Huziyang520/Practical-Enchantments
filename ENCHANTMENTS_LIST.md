@@ -20,14 +20,60 @@
 | Life Steal | `life_steal` | Swords, axes, spears | Ⅰ–Ⅴ | table · trade · loot | — |
 | Lumberjack | `lumberjack` | Axes | single | trade · loot | Fortune, Silk Touch |
 | Penetration | `penetration` | Tridents | Ⅰ–Ⅴ | table · loot | Riptide |
-| Powerful | `powerful` | Crossbows | Ⅰ–Ⅴ | trade · loot | Multishot |
+| Powerful | `powerful` | Crossbows, blowguns | Ⅰ–Ⅴ | trade · loot | Multishot, Repeating Crossbow |
 | Smashing | `smashing` | Tridents | Ⅰ–Ⅴ | table · loot | — |
 | Soul Siphon | `soul_siphon` | Swords, axes, spears | Ⅰ–Ⅴ | table · trade · loot | — |
 | Undying Drop | `undying_drop` | Armour (any piece) | Ⅰ–Ⅲ | not obtainable | Demonic Pact |
 | Venom | `venom` | Swords | Ⅰ–Ⅱ | table · trade · loot | Wither Aspect, Fire Aspect |
 | Wither Aspect | `wither_aspect` | Swords | Ⅰ–Ⅱ | trade · loot | Venom, Fire Aspect |
 | Ember Quench | `tf_quench` | Tools | single | Twilight Forest loot | — |
+| Swift Arrow | `swift_arrow` | Bows, crossbows | Ⅰ–Ⅲ | table · trade · loot | — |
+| Trauma | `trauma` | Swords, axes, spears | Ⅰ–Ⅱ | table · trade · loot | Venom, Wither Aspect, Fire Aspect |
+| Hide Skin | `hide_skin` | Armour (leather excluded) | single | trade · loot | — |
+| Repeating Crossbow | `repeating_crossbow` | Crossbows | Ⅰ–Ⅴ | trade · loot | Powerful, Multishot |
+| Hunting Arrow | `hunting_arrow` | Bows, crossbows | single | Twilight Forest loot | — |
 | Twilight Slayer | `tf_night_slayer` | Swords, axes | Ⅰ–Ⅴ | Twilight Forest loot | — |
+| Swift Arrow | `swift_arrow` | Bows, crossbows | Ⅰ–Ⅲ | table · trade · loot | — |
+| Trauma | `trauma` | Swords, axes, spears | Ⅰ–Ⅱ | table · trade · loot | Venom, Wither Aspect, Fire Aspect |
+| Hide Skin | `hide_skin` | Armour (leather excluded) | single | trade · loot | — |
+| Repeating Crossbow | `repeating_crossbow` | Crossbows | Ⅰ–Ⅴ | trade · loot | Powerful, Multishot |
+| Hunting Arrow | `hunting_arrow` | Bows, crossbows | single | Twilight Forest loot | — |
+
+### Swift Arrow (`practical_enchantments:swift_arrow`)
+
+- **Applies to:** bows and crossbows · **Levels:** Ⅰ–Ⅲ
+- **Obtained by:** enchanting table, librarian trades, dungeon 16%, fletcher 14%, shipwreck treasure 12%
+- **Effect:** arrows leave the bow faster, which also flattens their arc. Each level adds 25% to the launch speed.
+- **In-game description:** (empty)
+
+### Trauma (`practical_enchantments:trauma`)
+
+- **Applies to:** swords, axes, spears · **Levels:** Ⅰ–Ⅱ
+- **Obtained by:** enchanting table, librarian trades, woodland mansion 8%, pillager outpost 10%, bastion treasure 6%
+- **Effect:** hits add one stack of Bleed per level; spears add one extra stack. Conflicts with Venom, Wither Aspect and Fire Aspect.
+- **In-game description:** (empty)
+
+### Hide Skin (`practical_enchantments:hide_skin`)
+
+- **Applies to:** armour of every slot, except leather armour and PE amulets · **Levels:** single
+- **Obtained by:** librarian trades, ten different chest tables, 10–18% each
+- **Effect:** the piece behaves like leather gear — boots let you stand on powder snow — and a single Hide Skin piece anywhere on the body stops freezing damage entirely.
+- **In-game description:** (empty)
+
+### Repeating Crossbow (`practical_enchantments:repeating_crossbow`)
+
+- **Applies to:** crossbows · **Levels:** Ⅰ–Ⅴ
+- **Obtained by:** librarian trades, ancient city, end city, nether fortress, bastion treasure, pillager outpost, abandoned camp
+- **Effect:** one loading puts 1 + level arrows of the same kind into the crossbow, spending the extra arrows from the inventory. Each shot still needs no re-draw until the loaded arrows run out. Loading is 12/9/6/3/0% faster per level.
+- **Conflicts with:** Powerful, Multishot.
+- **In-game description:** (empty)
+
+### Hunting Arrow (`practical_enchantments:hunting_arrow`)
+
+- **Applies to:** bows and crossbows · **Levels:** single
+- **Obtained by:** aurora cache and aurora room in the Twilight Forest, or a 65% drop from the Snow Queen
+- **Effect:** arrows become Twilight Forest seeker arrows, which home in on hostile mobs.
+- **In-game description:** (empty)
 | Godwood Aura | `aether_godwood` | Weapons, tools | single | Aether loot | — |
 | Sky Slayer | `aether_sky_slayer` | Bows | Ⅰ–Ⅴ | Aether loot | — |
 | Provocation | `provocation` | Swords, axes, spears | Ⅰ–Ⅲ | trade · loot | — |
@@ -171,9 +217,10 @@
 - **Applies to:** crossbows · **Levels:** Ⅰ–Ⅴ
 - **Obtained by:** librarian trades, pillager outpost 12%, village fletcher 8%, dungeon 6%, bastion remnant 5%
 - **Conflicts with:** Multishot
-- **Effect:** crossbow bolts deal **+25 % damage per level**, following the same curve as vanilla
-  Power. Bows are not affected.
-- **In-game description:** Increases crossbow damage
+- **Effect:** bolts knock the target back and make it bleed. The push grows with the level; the target
+  gets Slowness for 2 + 2 × level seconds at amplifier level − 1, plus ⌈level / 2⌉ stacks of Bleed.
+  Bows are not affected.
+- **In-game description:** Empowers bolts to knock targets back and make them bleed.
 
 ### Smashing (`practical_enchantments:smashing`)
 
@@ -222,6 +269,42 @@
   kill.
 - **In-game description:** Inflicts Wither on the target
 
+
+### Swift Arrow (`practical_enchantments:swift_arrow`)
+
+- **Applies to:** bows and crossbows · **Levels:** Ⅰ–Ⅲ
+- **Obtained by:** enchanting table, librarian trades, dungeon 16%, fletcher 14%, shipwreck treasure 12%
+- **Effect:** arrows leave the bow faster, which also flattens their arc. Each level adds 25% to the launch speed.
+- **In-game description:** (empty)
+
+### Trauma (`practical_enchantments:trauma`)
+
+- **Applies to:** swords, axes, spears · **Levels:** Ⅰ–Ⅱ
+- **Obtained by:** enchanting table, librarian trades, woodland mansion 8%, pillager outpost 10%, bastion treasure 6%
+- **Effect:** hits add one stack of Bleed per level; spears add one extra stack. Conflicts with Venom, Wither Aspect and Fire Aspect.
+- **In-game description:** (empty)
+
+### Hide Skin (`practical_enchantments:hide_skin`)
+
+- **Applies to:** armour of every slot, except leather armour and PE amulets · **Levels:** single
+- **Obtained by:** librarian trades, ten different chest tables, 10–18% each
+- **Effect:** the piece behaves like leather gear — boots let you stand on powder snow — and a single Hide Skin piece anywhere on the body stops freezing damage entirely.
+- **In-game description:** (empty)
+
+### Repeating Crossbow (`practical_enchantments:repeating_crossbow`)
+
+- **Applies to:** crossbows · **Levels:** Ⅰ–Ⅴ
+- **Obtained by:** librarian trades, ancient city, end city, nether fortress, bastion treasure, pillager outpost, abandoned camp
+- **Effect:** one loading puts 1 + level arrows of the same kind into the crossbow, spending the extra arrows from the inventory. Each shot still needs no re-draw until the loaded arrows run out. Loading is 12/9/6/3/0% faster per level.
+- **Conflicts with:** Powerful, Multishot.
+- **In-game description:** (empty)
+
+### Hunting Arrow (`practical_enchantments:hunting_arrow`)
+
+- **Applies to:** bows and crossbows · **Levels:** single
+- **Obtained by:** aurora cache and aurora room in the Twilight Forest, or a 65% drop from the Snow Queen
+- **Effect:** arrows become Twilight Forest seeker arrows, which home in on hostile mobs.
+- **In-game description:** (empty)
 ### Ember Quench (`practical_enchantments:tf_quench`)
 
 - **Applies to:** tools · **Levels:** single

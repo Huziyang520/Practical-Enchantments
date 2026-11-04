@@ -34,14 +34,34 @@ public abstract class PlayerInfinityAmmoMixin {
 		}
 
 		ItemStack ammo = cir.getReturnValue();
-		if (!ammo.isEmpty()) {
-			if (VanillaTweaks.infinitySpectral() && ammo.is(Items.SPECTRAL_ARROW)) {
-				cir.setReturnValue(ammo.copy());
+		if (VanillaTweaks.infinitySpectral()) {
+			if (!ammo.isEmpty() && !ammo.is(Items.SPECTRAL_ARROW)) {
+				ItemStack spectral = findSpectral(self);
+				if (!spectral.isEmpty()) {
+					cir.setReturnValue(spectral);
+					return;
+				}
 			}
+			if (ammo.is(Items.SPECTRAL_ARROW)) {
+				cir.setReturnValue(ammo.copy());
+				return;
+			}
+		}
+		if (!ammo.isEmpty()) {
 			return;
 		}
 		if (VanillaTweaks.infinityNoArrow()) {
 			cir.setReturnValue(new ItemStack(Items.ARROW));
 		}
+	}
+
+	private static ItemStack findSpectral(Player player) {
+		for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
+			ItemStack stack = player.getInventory().getItem(i);
+			if (stack.is(Items.SPECTRAL_ARROW)) {
+				return stack;
+			}
+		}
+		return ItemStack.EMPTY;
 	}
 }

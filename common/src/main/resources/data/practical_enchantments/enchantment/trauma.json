@@ -1,0 +1,15 @@
+{
+  "description": {
+    "translate": "enchantment.practical_enchantments.trauma",
+    "fallback": "创伤"
+  },
+  "supported_items": "#minecraft:enchantable/sharp_weapon",
+  "exclusive_set": "#practical_enchantments:exclusive_set/blade_effect",
+  "weight": 4,
+  "max_level": 2,
+  "min_cost": { "base": 10, "per_level_above_first": 9 },
+  "max_cost": { "base": 32, "per_level_above_first": 9 },
+  "anvil_cost": 3,
+  "slots": ["mainhand"],
+  "effects": {}
+}

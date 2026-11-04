@@ -19,7 +19,13 @@
     "InvisibleAirSpawnMixin",
     "AmuletPenaltyMixin",
     "AmuletUpgradeKeepMixin",
-    "SweepDamageMixin"
+    "SweepDamageMixin",
+    "AbstractArrowShootMixin",
+    "CrossbowRepeatingMixin",
+    "HideSkinPowderSnowMixin",
+    "HideSkinFreezeMixin",
+    "EnchantmentVanillaTweakMixin",
+    "HuntingArrowMixin"
   ],
   "client": [],
   "server": [],

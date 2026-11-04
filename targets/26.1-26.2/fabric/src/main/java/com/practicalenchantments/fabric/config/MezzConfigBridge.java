@@ -94,6 +94,10 @@ public final class MezzConfigBridge {
 				value(VanillaTweaks.KEY_INFINITY_CROSSBOW),
 				value(VanillaTweaks.KEY_INFINITY_NO_ARROW),
 				value(VanillaTweaks.KEY_INFINITY_SPECTRAL));
+		VanillaTweaks.applyExtra(
+				value(VanillaTweaks.KEY_QUICK_CHARGE_BOW),
+				value(VanillaTweaks.KEY_POWER_CROSSBOW),
+				value(VanillaTweaks.KEY_THORNS_SHIELD));
 	}
 
 	private static void listen(String key, Object value) throws ReflectiveOperationException {

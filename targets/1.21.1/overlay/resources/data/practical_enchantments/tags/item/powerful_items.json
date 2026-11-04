@@ -1,0 +1,14 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:crossbow",
+    {
+      "id": "#aether:dart_shooters",
+      "required": false
+    },
+    {
+      "id": "#aether_ii:dart_shooters",
+      "required": false
+    }
+  ]
+}

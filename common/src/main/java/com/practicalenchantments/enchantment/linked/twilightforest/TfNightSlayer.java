@@ -23,10 +23,16 @@ public final class TfNightSlayer {
 	private static final long DAY_LENGTH = 24000L;
 
 	private static final String[] LOOT_TABLES = {
-			"twilightforest:chests/hollow_hill",
-			"twilightforest:chests/labyrinth",
-			"twilightforest:chests/dark_tower",
-			"twilightforest:chests/aurora_palace",
+			"twilightforest:hill_1",
+			"twilightforest:hill_2",
+			"twilightforest:hill_3",
+			"twilightforest:labyrinth_room",
+			"twilightforest:labyrinth_dead_end",
+			"twilightforest:labyrinth_vault",
+			"twilightforest:darktower_boss",
+			"twilightforest:darktower_cache",
+			"twilightforest:aurora_cache",
+			"twilightforest:aurora_room",
 	};
 
 	private TfNightSlayer() {

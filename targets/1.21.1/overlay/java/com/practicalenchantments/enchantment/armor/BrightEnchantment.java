@@ -19,6 +19,7 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.ItemStack;
 
 public final class BrightEnchantment {
+	private static final int DURABILITY_INTERVAL = 550;
 	public static final String ID = PracticalEnchantments.MOD_ID + ":bright";
 	private static Holder<Enchantment> HOLDER;
 	private static final int NIGHT_VISION_DURATION = 400;
@@ -50,7 +51,7 @@ public final class BrightEnchantment {
 			}
 			EntityCounter.set(player, NV_GRANTED, 1);
 			long timeOfDay = player.level().getGameTime() % 24000;
-			if (timeOfDay >= 13000 && timeOfDay <= 23000 && event.tickCount() % 275 == 0
+			if (timeOfDay >= 13000 && timeOfDay <= 23000 && event.tickCount() % DURABILITY_INTERVAL == 0
 					&& !helmet.isEmpty()) {
 				helmet.hurtAndBreak(1, player, EquipmentSlot.HEAD);
 			}

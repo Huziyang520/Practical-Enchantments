@@ -42,6 +42,18 @@ public final class PeContent {
 	private PeContent() {
 	}
 
+	public static boolean isAmulet(ItemStack stack) {
+		if (stack == null || stack.isEmpty()) {
+			return false;
+		}
+		for (DeferredItem<Item> amulet : AMULETS) {
+			if (stack.is(amulet.get())) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public static void register(IEventBus modEventBus) {
 		BLOCKS.register(modEventBus);
 		ITEMS.register(modEventBus);

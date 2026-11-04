@@ -1,0 +1,17 @@
+{
+  "description": {
+    "translate": "enchantment.practical_enchantments.swift_arrow",
+    "fallback": "速矢"
+  },
+  "supported_items": [
+    "minecraft:bow",
+    "minecraft:crossbow"
+  ],
+  "weight": 6,
+  "max_level": 3,
+  "min_cost": { "base": 5, "per_level_above_first": 8 },
+  "max_cost": { "base": 25, "per_level_above_first": 8 },
+  "anvil_cost": 2,
+  "slots": ["mainhand", "offhand"],
+  "effects": {}
+}

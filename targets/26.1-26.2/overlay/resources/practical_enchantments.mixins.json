@@ -20,7 +20,12 @@
     "InvisibleAirSpawnMixin",
     "AmuletPenaltyMixin",
     "AmuletUpgradeKeepMixin",
-    "SweepDamageMixin"
+    "SweepDamageMixin",
+    "AbstractArrowShootMixin",
+    "CrossbowRepeatingMixin",
+    "HideSkinPowderSnowMixin",
+    "HideSkinFreezeMixin",
+    "EnchantmentVanillaTweakMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -24,6 +24,9 @@ public final class FabricVanillaTweaks {
 			VanillaTweaks.KEY_INFINITY_CROSSBOW,
 			VanillaTweaks.KEY_INFINITY_NO_ARROW,
 			VanillaTweaks.KEY_INFINITY_SPECTRAL,
+			VanillaTweaks.KEY_QUICK_CHARGE_BOW,
+			VanillaTweaks.KEY_POWER_CROSSBOW,
+			VanillaTweaks.KEY_THORNS_SHIELD,
 	};
 
 	private FabricVanillaTweaks() {
@@ -76,6 +79,9 @@ public final class FabricVanillaTweaks {
 		text.append("# infinity_crossbow  无限是否可以附在弩上（默认 false）\n");
 		text.append("# infinity_no_arrow  背包没有普通箭时是否仍可射击（默认 true）\n");
 		text.append("# infinity_spectral  无限是否同样作用于光灵箭（默认 true）\n");
+		text.append("# quick_charge_bow  快速装填是否可以附在弓上（默认 false）\n");
+		text.append("# power_crossbow    力量是否可以附在弩上（默认 true）\n");
+		text.append("# thorns_shield     刺棘是否可以附在盾上（默认 true）\n");
 		for (String key : KEYS) {
 			text.append('\n').append(key).append('=').append(values.get(key)).append('\n');
 		}
@@ -92,5 +98,9 @@ public final class FabricVanillaTweaks {
 				values.get(VanillaTweaks.KEY_INFINITY_CROSSBOW),
 				values.get(VanillaTweaks.KEY_INFINITY_NO_ARROW),
 				values.get(VanillaTweaks.KEY_INFINITY_SPECTRAL));
+		VanillaTweaks.applyExtra(
+				values.get(VanillaTweaks.KEY_QUICK_CHARGE_BOW),
+				values.get(VanillaTweaks.KEY_POWER_CROSSBOW),
+				values.get(VanillaTweaks.KEY_THORNS_SHIELD));
 	}
 }
