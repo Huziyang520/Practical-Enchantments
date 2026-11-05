@@ -1,14 +1,18 @@
-// 连弩：原版 tryLoadProjectiles 只装一根，这里按等级补装满同种箭矢并扣掉对应消耗。
+// 连弩：装填时按等级多装箭，发射时一次只放出一根、其余保持上弦。
 
 package com.practicalenchantments.mixin;
 
 import com.practicalenchantments.enchantment.weapon.RepeatingCrossbowEnchantment;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.component.ChargedProjectiles;
+import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -21,6 +25,8 @@ import java.util.List;
 public abstract class CrossbowRepeatingMixin {
 	@Unique
 	private static ItemStack practicalenchantments$ammo = ItemStack.EMPTY;
+	@Unique
+	private static List<ItemStackTemplate> practicalenchantments$rest;
 
 	@Inject(method = "tryLoadProjectiles", at = @At("HEAD"), require = 1)
 	private static void practicalenchantments$captureAmmo(LivingEntity shooter, ItemStack held,
@@ -61,5 +67,39 @@ public abstract class CrossbowRepeatingMixin {
 			ammo.shrink(available);
 		}
 		held.set(DataComponents.CHARGED_PROJECTILES, ChargedProjectiles.ofNonEmpty(merged));
+	}
+
+	@Inject(method = "use", at = @At("HEAD"), require = 1)
+	private void practicalenchantments$peelOne(Level level, Player player, InteractionHand hand,
+											   CallbackInfoReturnable<InteractionResult> cir) {
+		practicalenchantments$rest = null;
+		ItemStack held = player.getItemInHand(hand);
+		if (RepeatingCrossbowEnchantment.level(held) <= 0) {
+			return;
+		}
+		ChargedProjectiles current = held.get(DataComponents.CHARGED_PROJECTILES);
+		if (current == null) {
+			return;
+		}
+		List<ItemStackTemplate> loaded = current.items();
+		if (loaded.size() <= 1) {
+			return;
+		}
+		practicalenchantments$rest = new ArrayList<>(loaded.subList(1, loaded.size()));
+		held.set(DataComponents.CHARGED_PROJECTILES, ChargedProjectiles.ofNonEmpty(List.of(loaded.get(0).create())));
+	}
+
+	@Inject(method = "use", at = @At("RETURN"), require = 1)
+	private void practicalenchantments$keepLoaded(Level level, Player player, InteractionHand hand,
+												  CallbackInfoReturnable<InteractionResult> cir) {
+		if (practicalenchantments$rest == null) {
+			return;
+		}
+		List<ItemStack> remaining = new ArrayList<>(practicalenchantments$rest.size());
+		for (ItemStackTemplate template : practicalenchantments$rest) {
+			remaining.add(template.create());
+		}
+		practicalenchantments$rest = null;
+		player.getItemInHand(hand).set(DataComponents.CHARGED_PROJECTILES, ChargedProjectiles.ofNonEmpty(remaining));
 	}
 }

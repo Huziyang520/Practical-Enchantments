@@ -1,12 +1,14 @@
-// 腐毒效果：逐层独立计时，按护甲减免扣血并额外磨损护甲。
+// 腐毒效果：逐层独立计时，每 0.6 秒扣血并额外磨损护甲。
 
 package com.practicalenchantments.content;
 
 import com.huziyang520.merlinlib.api.MerlinApi;
 import com.huziyang520.merlinlib.effect.MerlinMobEffect;
 import com.practicalenchantments.support.EffectLayers;
+import com.practicalenchantments.support.ImmunityReset;
 import net.minecraft.core.Holder;
-import net.minecraft.core.particles.DustParticleOptions;
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
@@ -20,6 +22,8 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -60,25 +64,27 @@ public final class RotContent {
 		for (int i = 0; i < count; i++) {
 			EffectLayers.push(target, LAYER_TICKS);
 		}
-		int duration = EffectLayers.maxRemaining(target) + 40;
-		target.addEffect(new MobEffectInstance(holder, duration, 0, false, false, false));
+		target.addEffect(new MobEffectInstance(holder, MobEffectInstance.INFINITE_DURATION, 0, false, true, true));
 	}
 
 	private static boolean onTick(ServerLevel level, LivingEntity entity, int amplifier) {
+		if (entity.isDeadOrDying()) {
+			EffectLayers.clear(entity);
+			return false;
+		}
 		int layers = EffectLayers.tickDown(entity);
 		UUID id = entity.getUUID();
 		if (layers <= 0) {
 			TICKS.remove(id);
 			return false;
 		}
-		int ticks = TICKS.merge(id, 1, Integer::sum);
-		if (ticks >= DAMAGE_INTERVAL) {
+		if (TICKS.merge(id, 1, Integer::sum) >= DAMAGE_INTERVAL) {
 			TICKS.put(id, 0);
 			if (entity.getHealth() > 1.0F) {
-				entity.hurtServer(level, source(level), DAMAGE_PER_LAYER * layers);
+				hurt(level, entity, DAMAGE_PER_LAYER * layers);
 			}
 			wearArmor(entity, layers);
-			rotParticles(level, entity, layers);
+			chunks(level, entity, Math.min(6, 1 + layers));
 		}
 		return true;
 	}
@@ -97,11 +103,25 @@ public final class RotContent {
 		}
 	}
 
-	private static void rotParticles(ServerLevel level, LivingEntity entity, int layers) {
-		int count = Math.min(12, 2 + layers);
-		level.sendParticles(new DustParticleOptions(COLOR, 0.9F),
-				entity.getX(), entity.getY() + entity.getBbHeight() * 0.5D, entity.getZ(),
-				count, entity.getBbWidth() * 0.4D, entity.getBbHeight() * 0.3D, entity.getBbWidth() * 0.4D, 0.01D);
+	private static void chunks(ServerLevel level, LivingEntity entity, int count) {
+		BlockState state = Blocks.MOSS_BLOCK.defaultBlockState();
+		level.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, state),
+				entity.getX(), entity.getY() + entity.getBbHeight() * 0.6D, entity.getZ(),
+				count, entity.getBbWidth() * 0.45D, entity.getBbHeight() * 0.35D, entity.getBbWidth() * 0.45D, 0.3D);
+	}
+
+	private static void hurt(ServerLevel level, LivingEntity entity, float amount) {
+		if (amount <= 0.0F || entity.isDeadOrDying()) {
+			return;
+		}
+		boolean silent = entity.isSilent();
+		entity.setSilent(true);
+		try {
+			ImmunityReset.zero(entity);
+			entity.hurtServer(level, source(level), amount);
+		} finally {
+			entity.setSilent(silent);
+		}
 	}
 
 	private static DamageSource source(ServerLevel level) {

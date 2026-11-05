@@ -133,8 +133,9 @@ tasks.register('sharedJava', Sync) {
 }
 
 tasks.register('sharedResources', Sync) {
-    // overlay 要覆盖 common 的同名资源（lang、enchantment json 等），后写入者胜
-    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    // overlay 先写入，同名资源由它决定（EXCLUDE 会跳过后续重复）
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from('overlay/resources')
 	from('../../common/src/main/resources') {
 		// mixin 配置由 overlay 提供（compatibilityLevel 与登记表按线不同）
 		exclude 'practical_enchantments.mixins.json'
@@ -159,7 +160,6 @@ tasks.register('sharedResources', Sync) {
 		// Trinkets 只存在于 Fabric 侧
 		exclude 'data/trinkets/**'
 	}
-	from('overlay/resources')
 	into sharedResources
 }
 

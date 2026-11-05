@@ -1,12 +1,14 @@
-// 流血效果：层数存于 EffectLayers，效果实例只当开关与 tick 源。
+// 流血效果：层数存于 EffectLayers，每层每 tick 结算 0.02 点，达 5 层引爆。
 
 package com.practicalenchantments.content;
 
 import com.huziyang520.merlinlib.api.MerlinApi;
 import com.huziyang520.merlinlib.effect.MerlinMobEffect;
 import com.practicalenchantments.support.EffectLayers;
+import com.practicalenchantments.support.ImmunityReset;
 import net.minecraft.core.Holder;
-import net.minecraft.core.particles.DustParticleOptions;
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
@@ -18,9 +20,8 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
-import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 
 public final class BleedContent {
 	public static final String NAMESPACE = "practical_enchantments";
@@ -30,18 +31,10 @@ public final class BleedContent {
 	public static final float DAMAGE_PER_LAYER_TICK = 0.02F;
 	public static final float DAMAGE_PER_LAYER = LAYER_TICKS * DAMAGE_PER_LAYER_TICK;
 	public static final int COLOR = 0x8B0000;
-	private static final int BURST_COLOR = 0xB40000;
-	private static final int PACKET_TICKS = 20;
 
-	private static final Map<UUID, Account> ACCOUNTS = new ConcurrentHashMap<>();
 	private static MerlinMobEffect effect;
 
 	private BleedContent() {
-	}
-
-	private static final class Account {
-		private float pending;
-		private int ticks;
 	}
 
 	public static void register() {
@@ -70,38 +63,29 @@ public final class BleedContent {
 				explode(level, target);
 			}
 			if (EffectLayers.count(target) > 0) {
-				refresh(target, holder);
+				show(target, holder);
 			} else {
 				target.removeEffect(holder);
 			}
 		}
 	}
 
-	private static void refresh(LivingEntity target, Holder<MobEffect> holder) {
-		int duration = EffectLayers.maxRemaining(target) + 40;
-		target.addEffect(new MobEffectInstance(holder, duration, 0, false, false, false));
+	private static void show(LivingEntity target, Holder<MobEffect> holder) {
+		target.addEffect(new MobEffectInstance(holder, MobEffectInstance.INFINITE_DURATION, 0, false, true, true));
 	}
 
 	private static boolean onTick(ServerLevel level, LivingEntity entity, int amplifier) {
-		int layers = EffectLayers.tickDown(entity);
-		UUID id = entity.getUUID();
-		if (layers <= 0) {
-			Account done = ACCOUNTS.remove(id);
-			if (done != null && done.pending > 0.01F) {
-				entity.hurtServer(level, source(level), done.pending);
-			}
+		if (entity.isDeadOrDying()) {
+			EffectLayers.clear(entity);
 			return false;
 		}
-		Account account = ACCOUNTS.computeIfAbsent(id, key -> new Account());
-		account.pending += DAMAGE_PER_LAYER_TICK * layers;
-		if (++account.ticks >= PACKET_TICKS) {
-			float amount = account.pending;
-			account.pending = 0.0F;
-			account.ticks = 0;
-			entity.hurtServer(level, source(level), amount);
+		int layers = EffectLayers.tickDown(entity);
+		if (layers <= 0) {
+			return false;
 		}
+		hurt(level, entity, DAMAGE_PER_LAYER_TICK * layers);
 		if ((entity.tickCount & 3) == 0) {
-			bloodParticles(level, entity, COLOR, 2, 0.8F);
+			chunks(level, entity, Blocks.REDSTONE_BLOCK.defaultBlockState(), Math.min(3, layers), 0.35D);
 		}
 		return true;
 	}
@@ -111,16 +95,29 @@ public final class BleedContent {
 		if (remaining <= 0) {
 			return;
 		}
-		float damage = remaining * DAMAGE_PER_LAYER_TICK;
-		bloodParticles(level, entity, BURST_COLOR, 18, 1.6F);
-		bloodParticles(level, entity, COLOR, 10, 1.2F);
-		entity.hurtServer(level, source(level), damage);
+		chunks(level, entity, Blocks.REDSTONE_BLOCK.defaultBlockState(), 10, 0.85D);
+		chunks(level, entity, Blocks.NETHER_WART_BLOCK.defaultBlockState(), 10, 0.85D);
+		hurt(level, entity, remaining * DAMAGE_PER_LAYER_TICK);
 	}
 
-	private static void bloodParticles(ServerLevel level, LivingEntity entity, int color, int count, float scale) {
-		level.sendParticles(new DustParticleOptions(color, scale),
-				entity.getX(), entity.getY() + entity.getBbHeight() * 0.5D, entity.getZ(),
-				count, entity.getBbWidth() * 0.4D, entity.getBbHeight() * 0.3D, entity.getBbWidth() * 0.4D, 0.02D);
+	private static void chunks(ServerLevel level, LivingEntity entity, BlockState state, int count, double speed) {
+		level.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, state),
+				entity.getX(), entity.getY() + entity.getBbHeight() * 0.6D, entity.getZ(),
+				count, entity.getBbWidth() * 0.45D, entity.getBbHeight() * 0.35D, entity.getBbWidth() * 0.45D, speed);
+	}
+
+	private static void hurt(ServerLevel level, LivingEntity entity, float amount) {
+		if (amount <= 0.0F || entity.isDeadOrDying()) {
+			return;
+		}
+		boolean silent = entity.isSilent();
+		entity.setSilent(true);
+		try {
+			ImmunityReset.zero(entity);
+			entity.hurtServer(level, source(level), amount);
+		} finally {
+			entity.setSilent(silent);
+		}
 	}
 
 	private static DamageSource source(ServerLevel level) {
