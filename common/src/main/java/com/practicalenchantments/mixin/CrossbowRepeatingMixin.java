@@ -7,6 +7,7 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.ItemStack;
@@ -51,7 +52,8 @@ public abstract class CrossbowRepeatingMixin {
 			return;
 		}
 		List<ItemStackTemplate> loaded = current.items();
-		int available = Math.min(extra, ammo.getCount());
+		// getProjectile() 只回一份，多出来的箭要自己从背包里扣。
+		int available = practicalenchantments$takeAmmo(shooter, ammo, extra);
 		if (available <= 0) {
 			return;
 		}
@@ -63,10 +65,34 @@ public abstract class CrossbowRepeatingMixin {
 		for (int i = 0; i < available; i++) {
 			merged.add(template.create());
 		}
-		if (!shooter.hasInfiniteMaterials()) {
-			ammo.shrink(available);
-		}
 		held.set(DataComponents.CHARGED_PROJECTILES, ChargedProjectiles.ofNonEmpty(merged));
+	}
+
+	@Unique
+	private static int practicalenchantments$takeAmmo(LivingEntity shooter, ItemStack template, int want) {
+		if (want <= 0 || template.isEmpty()) {
+			return 0;
+		}
+		if (shooter.hasInfiniteMaterials()) {
+			return want;
+		}
+		if (!(shooter instanceof Player player)) {
+			int take = Math.min(want, Math.max(0, template.getCount() - 1));
+			template.shrink(take);
+			return take;
+		}
+		Inventory inventory = player.getInventory();
+		int taken = 0;
+		for (int i = 0; i < inventory.getContainerSize() && taken < want; i++) {
+			ItemStack slot = inventory.getItem(i);
+			if (slot.isEmpty() || slot == template || !slot.is(template.getItem())) {
+				continue;
+			}
+			int take = Math.min(want - taken, slot.getCount());
+			slot.shrink(take);
+			taken += take;
+		}
+		return taken;
 	}
 
 	@Inject(method = "use", at = @At("HEAD"), require = 1)

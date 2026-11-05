@@ -34,6 +34,10 @@ public abstract class WeaponAttackMixin {
 					target = "Lnet/minecraft/world/entity/Entity;hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z"))
 	private boolean practicalenchantments$weaponHit(Entity target, DamageSource source, float amount) {
 		Player self = (Player) (Object) this;
+		// 打尸体只会把 NeoForge 的死亡断言点炸，直接当作没命中
+		if (!target.isAlive() || target instanceof LivingEntity living && living.isDeadOrDying()) {
+			return false;
+		}
 		ItemStack stack = self.getMainHandItem();
 		float scaled = amount * provocationFactor(self, target, stack) * invisibleAirFactor(stack);
 		boolean hit = target.hurt(source, scaled);

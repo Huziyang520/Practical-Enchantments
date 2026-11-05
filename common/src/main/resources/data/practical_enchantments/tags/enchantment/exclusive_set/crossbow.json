@@ -2,6 +2,8 @@
   "replace": false,
   "values": [
     "practical_enchantments:powerful",
-    "minecraft:multishot"
+    "practical_enchantments:repeating_crossbow",
+    "minecraft:multishot",
+    "minecraft:infinity"
   ]
 }
