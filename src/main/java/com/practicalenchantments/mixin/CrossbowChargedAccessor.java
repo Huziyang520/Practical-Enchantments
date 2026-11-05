@@ -19,4 +19,9 @@ public interface CrossbowChargedAccessor {
 	static List<ItemStack> practicalenchantments$charged(ItemStack weapon) {
 		throw new AssertionError();
 	}
+
+	@Invoker("clearChargedProjectiles")
+	static void practicalenchantments$clear(ItemStack weapon) {
+		throw new AssertionError();
+	}
 }
