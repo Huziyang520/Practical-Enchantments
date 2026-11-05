@@ -78,6 +78,11 @@ public final class BleedContent {
 		MobEffect holder = effect;
 		int layers = LAYERS.tickDown(entity, 1);
 		layers = syncFromCommand(level, entity, holder, layers);
+		// 任何途径堆过 5 层都直接爆，不只在武器命中时
+		while (layers > MAX_LAYERS) {
+			explode(level, entity);
+			layers = LAYERS.count(entity);
+		}
 		if (layers <= 0) {
 			scheduleDisplay(level, entity, holder);
 			return false;
