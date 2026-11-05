@@ -5,6 +5,7 @@ package com.practicalenchantments.content;
 import com.huziyang520.merlinlib.api.MerlinApi;
 import com.huziyang520.merlinlib.effect.LayeredEffect;
 import com.huziyang520.merlinlib.effect.MerlinMobEffect;
+import com.huziyang520.merlinlib.particle.ParticleApi;
 import com.practicalenchantments.support.ImmunityReset;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -33,6 +34,7 @@ public final class BleedContent {
 	/** 每 10 tick 结算一次：总伤害不变，但目标不会每 tick 抽一下。 */
 	public static final int PULSE_TICKS = 10;
 	public static final int COLOR = 0x8B0000;
+	public static final String BURST_PROFILE = "blood_burst";
 
 	private static final LayeredEffect LAYERS = new LayeredEffect(LAYER_TICKS, MAX_LAYERS);
 	private static MerlinMobEffect effect;
@@ -82,7 +84,12 @@ public final class BleedContent {
 			}
 		}
 		if (entity.tickCount % PULSE_TICKS == 0) {
-			hurt(level, entity, DAMAGE_PER_LAYER_TICK * PULSE_TICKS * layers);
+			// 每层各扣 0.02/tick，逐层累加后一次结算
+			float total = 0.0F;
+			for (int layer = 0; layer < layers; layer++) {
+				total += DAMAGE_PER_LAYER_TICK * PULSE_TICKS;
+			}
+			hurt(level, entity, total);
 			bleedSound(level, entity);
 			chunks(level, entity, Blocks.REDSTONE_BLOCK.defaultBlockState(), Math.min(3, layers), 0.3D);
 		}
@@ -96,16 +103,11 @@ public final class BleedContent {
 		if (remaining <= 0) {
 			return;
 		}
-		BlockState blood = Blocks.REDSTONE_BLOCK.defaultBlockState();
-		BlockState gore = Blocks.NETHER_WART_BLOCK.defaultBlockState();
-		chunks(level, entity, blood, 14, 1.15D);
-		chunks(level, entity, gore, 14, 1.15D);
-		level.sendParticles(ParticleTypes.DAMAGE_INDICATOR,
-				entity.getX(), entity.getY() + entity.getBbHeight() * 0.6D, entity.getZ(),
-				12, entity.getBbWidth() * 0.5D, entity.getBbHeight() * 0.4D, entity.getBbWidth() * 0.5D, 0.25D);
-		level.sendParticles(ParticleTypes.EXPLOSION,
-				entity.getX(), entity.getY() + entity.getBbHeight() * 0.5D, entity.getZ(),
-				1, 0.0D, 0.0D, 0.0D, 0.0D);
+		double burstY = entity.getY() + entity.getBbHeight() * 0.55D;
+		// 血块走数据包定义的粒子档案（颜色、大小、块类型都在 data/.../merlin/particles 里）
+		MerlinApi.particles().burst(level, ParticleApi.profileId(NAMESPACE, BURST_PROFILE),
+				entity.getX(), burstY, entity.getZ(), 0.95D);
+		chunks(level, entity, Blocks.NETHER_WART_BLOCK.defaultBlockState(), 10, 1.0D);
 		level.playSound(null, entity.getX(), entity.getY(), entity.getZ(),
 				SoundEvents.SLIME_BLOCK_BREAK, SoundSource.PLAYERS, 1.0F, 0.45F);
 		level.playSound(null, entity.getX(), entity.getY(), entity.getZ(),
