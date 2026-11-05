@@ -37,7 +37,7 @@ public final class RotContent {
 			EquipmentSlot.FEET, EquipmentSlot.LEGS, EquipmentSlot.CHEST, EquipmentSlot.HEAD
 	};
 
-	private static final LayeredEffect LAYERS = new LayeredEffect(LAYER_TICKS, 10);
+	private static final LayeredEffect LAYERS = new LayeredEffect(LAYER_TICKS, 999);
 	private static MerlinMobEffect effect;
 
 	private RotContent() {
@@ -73,13 +73,10 @@ public final class RotContent {
 		}
 		Holder<MobEffect> holder = BuiltInRegistries.MOB_EFFECT.wrapAsHolder(effect);
 		int layers = LAYERS.tickDown(entity, 1);
+		layers = syncFromCommand(level, entity, holder, layers);
 		if (layers <= 0) {
-			// /effect 直接加的实例没有层，这里按 amplifier 补一层起步，方便指令测试
-			layers = startFromCommand(entity, holder);
-			if (layers <= 0) {
-				scheduleDisplay(level, entity, holder);
-				return false;
-			}
+			scheduleDisplay(level, entity, holder);
+			return false;
 		}
 		if (entity.tickCount % DAMAGE_INTERVAL == 0) {
 			// 每层各自结算：各自的伤害、各自的护甲磨损，磨损量再按当前层数叠加一次
@@ -127,16 +124,24 @@ public final class RotContent {
 		level.getServer().execute(() -> LAYERS.syncDisplay(entity, holder));
 	}
 
-	private static int startFromCommand(LivingEntity entity, Holder<MobEffect> holder) {
+	/**
+	 * /effect 施加的实例没有层记录：按 amplifier 补层，重复施加（时长被刷新）时继续叠加，
+	 * 这样指令也能测血爆。
+	 */
+	private static int syncFromCommand(ServerLevel level, LivingEntity entity, Holder<MobEffect> holder, int layers) {
 		MobEffectInstance instance = entity.getEffect(holder);
-		if (instance == null || LAYERS.tracked(entity)) {
-			return 0;
+		if (instance == null) {
+			return layers;
 		}
-		if (instance.getDuration() <= LAYER_TICKS && instance.getAmplifier() <= 0) {
-			return 0;
+		int want = Math.max(1, Math.min(255, instance.getAmplifier() + 1));
+		int longest = LAYERS.longest(entity);
+		boolean freshCast = layers <= 0
+				? instance.getDuration() > LAYER_TICKS || instance.getAmplifier() > 0
+				: instance.getDuration() > longest + 5;
+		if (!freshCast) {
+			return layers;
 		}
-		int seed = Math.max(1, Math.min(10, instance.getAmplifier() + 1));
-		for (int i = 0; i < seed; i++) {
+		for (int i = 0; i < want; i++) {
 			LAYERS.push(entity, instance.getDuration());
 		}
 		return LAYERS.count(entity);

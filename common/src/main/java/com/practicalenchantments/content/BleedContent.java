@@ -76,13 +76,10 @@ public final class BleedContent {
 		}
 		Holder<MobEffect> holder = BuiltInRegistries.MOB_EFFECT.wrapAsHolder(effect);
 		int layers = LAYERS.tickDown(entity, 1);
+		layers = syncFromCommand(level, entity, holder, layers);
 		if (layers <= 0) {
-			// /effect 直接加的实例没有层，这里按 amplifier 补一层起步，方便指令测试
-			layers = startFromCommand(entity, holder);
-			if (layers <= 0) {
-				scheduleDisplay(level, entity, holder);
-				return false;
-			}
+			scheduleDisplay(level, entity, holder);
+			return false;
 		}
 		if (entity.tickCount % PULSE_TICKS == 0) {
 			// 每层各扣 0.02/tick，逐层累加后一次结算
@@ -133,17 +130,30 @@ public final class BleedContent {
 		level.getServer().execute(() -> LAYERS.syncDisplay(entity, holder));
 	}
 
-	private static int startFromCommand(LivingEntity entity, Holder<MobEffect> holder) {
+	/**
+	 * /effect 施加的实例没有层记录：按 amplifier 补层，重复施加（时长被刷新）时继续叠加，
+	 * 这样指令也能测血爆。
+	 */
+	private static int syncFromCommand(ServerLevel level, LivingEntity entity, Holder<MobEffect> holder, int layers) {
 		MobEffectInstance instance = entity.getEffect(holder);
-		if (instance == null || LAYERS.tracked(entity)) {
-			return 0;
+		if (instance == null) {
+			return layers;
 		}
-		if (instance.getDuration() <= LAYER_TICKS && instance.getAmplifier() <= 0) {
-			return 0;
+		int want = Math.max(1, Math.min(MAX_LAYERS, instance.getAmplifier() + 1));
+		int longest = LAYERS.longest(entity);
+		boolean freshCast = layers <= 0
+				? instance.getDuration() > LAYER_TICKS || instance.getAmplifier() > 0
+				: instance.getDuration() > longest + 5;
+		if (!freshCast) {
+			return layers;
 		}
-		int seed = Math.max(1, Math.min(MAX_LAYERS, instance.getAmplifier() + 1));
-		for (int i = 0; i < seed; i++) {
-			LAYERS.push(entity, instance.getDuration());
+		// 已经满层时再施加一次 = 又叠了一层，直接爆
+		int push = layers >= MAX_LAYERS ? 1 : want;
+		for (int i = 0; i < push; i++) {
+			boolean overflowed = LAYERS.push(entity, instance.getDuration());
+			if (overflowed && level != null) {
+				explode(level, entity);
+			}
 		}
 		return LAYERS.count(entity);
 	}

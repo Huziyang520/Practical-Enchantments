@@ -21,6 +21,7 @@
     "AmuletUpgradeKeepMixin",
     "SweepDamageMixin",
     "AbstractArrowShootMixin",
+    "CrossbowChargeTimeMixin",
     "CrossbowRepeatingMixin",
     "HideSkinPowderSnowMixin",
     "HideSkinFreezeMixin",
