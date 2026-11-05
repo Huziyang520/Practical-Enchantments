@@ -1,0 +1,2 @@
+# 构建期校验脚本不算项目语言统计
+tools/*.py linguist-detectable=false

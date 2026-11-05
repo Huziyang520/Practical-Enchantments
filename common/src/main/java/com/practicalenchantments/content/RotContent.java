@@ -82,10 +82,13 @@ public final class RotContent {
 			}
 		}
 		if (entity.tickCount % DAMAGE_INTERVAL == 0) {
-			if (entity.getHealth() > 1.0F) {
-				hurt(level, entity, DAMAGE_PER_LAYER * layers);
+			// 每层各自结算：各自的伤害、各自的护甲磨损，磨损量再按当前层数叠加一次
+			for (int layer = 0; layer < layers && !entity.isDeadOrDying(); layer++) {
+				if (entity.getHealth() > 1.0F) {
+					hurt(level, entity, DAMAGE_PER_LAYER);
+				}
+				wearArmor(entity, layers);
 			}
-			wearArmor(entity, layers);
 			chunks(level, entity, Math.min(6, 1 + layers));
 			rotSound(level, entity);
 		}

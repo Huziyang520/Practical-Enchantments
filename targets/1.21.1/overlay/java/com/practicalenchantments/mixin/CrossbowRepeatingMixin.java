@@ -84,7 +84,7 @@ public abstract class CrossbowRepeatingMixin {
 		int taken = 0;
 		for (int i = 0; i < inventory.getContainerSize() && taken < want; i++) {
 			ItemStack slot = inventory.getItem(i);
-			if (slot.isEmpty() || slot == template || !slot.is(template.getItem())) {
+			if (slot.isEmpty() || !slot.is(template.getItem())) {
 				continue;
 			}
 			int take = Math.min(want - taken, slot.getCount());
