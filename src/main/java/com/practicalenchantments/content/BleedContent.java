@@ -48,6 +48,8 @@ public final class BleedContent {
 				.color(COLOR)
 				.onTick(BleedContent::onTick)
 				.submit();
+		LayeredEffect.register(EFFECT_ID.toString(), LAYERS);
+		LAYERS.bindDisplay(effect);
 	}
 
 	public static int layers(LivingEntity entity) {
