@@ -12,7 +12,9 @@ public final class ExclusiveSets {
 
 	public static final JsonArray CROSSBOW = array(
 		"practical_enchantments:powerful",
-		"minecraft:multishot");
+		"practical_enchantments:repeating_crossbow",
+		"minecraft:multishot",
+		"minecraft:infinity");
 
 	public static final JsonArray DEATH_SAVE = array(
 		"practical_enchantments:demonic_pact",

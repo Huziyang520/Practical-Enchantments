@@ -6,6 +6,7 @@ import com.practicalenchantments.enchantment.RepeatingCrossbowEnchantment;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.ItemStack;
@@ -43,19 +44,46 @@ public abstract class CrossbowRepeatingMixin {
 		if (extra <= 0) {
 			return;
 		}
-		int available = Math.min(extra, ammo.getCount());
 		List<ItemStack> loaded = CrossbowChargedAccessor.practicalenchantments$charged(held);
-		if (available <= 0 || loaded.isEmpty()) {
+		if (loaded.isEmpty()) {
+			return;
+		}
+		// getProjectile() 只回一份，多出来的箭要自己从背包里扣。
+		int available = practicalenchantments$takeAmmo(shooter, ammo, extra);
+		if (available <= 0) {
 			return;
 		}
 		ItemStack template = loaded.get(0).copy();
 		for (int i = 0; i < available; i++) {
 			CrossbowChargedAccessor.practicalenchantments$add(held, template.copy());
 		}
-		boolean creative = shooter instanceof Player player && player.getAbilities().instabuild;
-		if (!creative) {
-			ammo.shrink(available);
+	}
+
+	@Unique
+	private static int practicalenchantments$takeAmmo(LivingEntity shooter, ItemStack template, int want) {
+		if (want <= 0 || template.isEmpty()) {
+			return 0;
 		}
+		if (shooter instanceof Player player) {
+			if (player.getAbilities().instabuild) {
+				return want;
+			}
+			Inventory inventory = player.getInventory();
+			int taken = 0;
+			for (int i = 0; i < inventory.getContainerSize() && taken < want; i++) {
+				ItemStack slot = inventory.getItem(i);
+				if (slot.isEmpty() || slot == template || !slot.is(template.getItem())) {
+					continue;
+				}
+				int take = Math.min(want - taken, slot.getCount());
+				slot.shrink(take);
+				taken += take;
+			}
+			return taken;
+		}
+		int take = Math.min(want, Math.max(0, template.getCount() - 1));
+		template.shrink(take);
+		return take;
 	}
 
 	@Inject(method = "use", at = @At("HEAD"), require = 1)

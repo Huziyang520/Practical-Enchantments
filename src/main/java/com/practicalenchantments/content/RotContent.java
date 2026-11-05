@@ -1,31 +1,33 @@
-// 腐毒效果：逐层独立计时，每 0.6 秒扣血并额外磨损护甲。
+// 腐毒效果：层数交给 MerlinLib 的 LayeredEffect，每 0.6 秒扣血并额外磨损护甲。
 
 package com.practicalenchantments.content;
 
 import com.huziyang520.merlinlib.api.MerlinApi;
+import com.huziyang520.merlinlib.effect.LayeredEffect;
 import com.huziyang520.merlinlib.effect.MerlinMobEffect;
-import com.practicalenchantments.support.EffectLayers;
+import com.practicalenchantments.support.ImmunityReset;
+import net.minecraft.core.Holder;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.damagesource.DamageType;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockState;
-import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 public final class RotContent {
 	public static final String NAMESPACE = "practical_enchantments";
-	public static final ResourceLocation EFFECT_ID = new ResourceLocation(NAMESPACE, "rot");
+	public static final ResourceLocation EFFECT_ID = ResourceLocation.fromNamespaceAndPath(NAMESPACE, "rot");
 	public static final int LAYER_TICKS = 500;
 	public static final int DAMAGE_INTERVAL = 12;
 	public static final float DAMAGE_PER_LAYER = 0.25F;
@@ -33,7 +35,8 @@ public final class RotContent {
 	private static final EquipmentSlot[] ARMOR = {
 			EquipmentSlot.FEET, EquipmentSlot.LEGS, EquipmentSlot.CHEST, EquipmentSlot.HEAD
 	};
-	private static final Map<UUID, Integer> TICKS = new ConcurrentHashMap<>();
+
+	private static final LayeredEffect LAYERS = new LayeredEffect(LAYER_TICKS, 10);
 	private static MerlinMobEffect effect;
 
 	private RotContent() {
@@ -48,38 +51,44 @@ public final class RotContent {
 	}
 
 	public static int layers(LivingEntity entity) {
-		return EffectLayers.count(entity);
+		return LAYERS.count(entity);
 	}
 
 	public static void add(LivingEntity target, int count) {
 		if (effect == null || target == null || count <= 0 || target.level().isClientSide()) {
 			return;
 		}
+		MobEffect holder = effect;
 		for (int i = 0; i < count; i++) {
-			EffectLayers.push(target, LAYER_TICKS);
+			LAYERS.push(target);
+			LAYERS.syncDisplay(target, holder);
 		}
-		target.addEffect(new MobEffectInstance(effect, MobEffectInstance.INFINITE_DURATION, 0, false, true, true));
 	}
 
 	private static boolean onTick(ServerLevel level, LivingEntity entity, int amplifier) {
 		if (entity.isDeadOrDying()) {
-			EffectLayers.clear(entity);
+			LAYERS.clear(entity);
 			return false;
 		}
-		int layers = EffectLayers.tickDown(entity);
-		UUID id = entity.getUUID();
+		MobEffect holder = effect;
+		int layers = LAYERS.tickDown(entity, 1);
 		if (layers <= 0) {
-			TICKS.remove(id);
-			return false;
+			// /effect 直接加的实例没有层，这里按 amplifier 补一层起步，方便指令测试
+			layers = startFromCommand(entity, holder);
+			if (layers <= 0) {
+				scheduleDisplay(level, entity, holder);
+				return false;
+			}
 		}
-		if (TICKS.merge(id, 1, Integer::sum) >= DAMAGE_INTERVAL) {
-			TICKS.put(id, 0);
+		if (entity.tickCount % DAMAGE_INTERVAL == 0) {
 			if (entity.getHealth() > 1.0F) {
 				hurt(level, entity, DAMAGE_PER_LAYER * layers);
 			}
 			wearArmor(entity, layers);
 			chunks(level, entity, Math.min(6, 1 + layers));
+			rotSound(level, entity);
 		}
+		scheduleDisplay(level, entity, holder);
 		return true;
 	}
 
@@ -98,30 +107,50 @@ public final class RotContent {
 	}
 
 	private static void chunks(ServerLevel level, LivingEntity entity, int count) {
-		BlockState state = Blocks.MOSS_BLOCK.defaultBlockState();
-		level.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, state),
+		level.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, Blocks.MOSS_BLOCK.defaultBlockState()),
 				entity.getX(), entity.getY() + entity.getBbHeight() * 0.6D, entity.getZ(),
 				count, entity.getBbWidth() * 0.45D, entity.getBbHeight() * 0.35D, entity.getBbWidth() * 0.45D, 0.3D);
+	}
+
+	private static void rotSound(ServerLevel level, LivingEntity entity) {
+		level.playSound(null, entity.getX(), entity.getY() + entity.getBbHeight() * 0.5D, entity.getZ(),
+				SoundEvents.SLIME_BLOCK_STEP, SoundSource.PLAYERS, 0.18F,
+				0.5F + entity.getRandom().nextFloat() * 0.2F);
+	}
+
+	private static void scheduleDisplay(ServerLevel level, LivingEntity entity, MobEffect holder) {
+		// 效果实例不能在 applyEffectTick 里增删（那次迭代还在跑），推到本 tick 的末尾再做
+		level.getServer().execute(() -> LAYERS.syncDisplay(entity, holder));
+	}
+
+	private static int startFromCommand(LivingEntity entity, MobEffect holder) {
+		MobEffectInstance instance = entity.getEffect(holder);
+		if (instance == null || LAYERS.tracked(entity)) {
+			return 0;
+		}
+		if (instance.getDuration() <= LAYER_TICKS && instance.getAmplifier() <= 0) {
+			return 0;
+		}
+		int seed = Math.max(1, Math.min(10, instance.getAmplifier() + 1));
+		for (int i = 0; i < seed; i++) {
+			LAYERS.push(entity, instance.getDuration());
+		}
+		return LAYERS.count(entity);
 	}
 
 	private static void hurt(ServerLevel level, LivingEntity entity, float amount) {
 		if (amount <= 0.0F || entity.isDeadOrDying()) {
 			return;
 		}
-		boolean silent = entity.isSilent();
-		entity.setSilent(true);
-		try {
-			entity.invulnerableTime = 0;
-			entity.hurt(source(level), amount);
-		} finally {
-			entity.setSilent(silent);
-		}
+		ImmunityReset.zero(entity);
+		entity.hurt(source(level), amount);
 	}
 
 	private static DamageSource source(ServerLevel level) {
-		return new DamageSource(level.registryAccess()
-				.registryOrThrow(Registries.DAMAGE_TYPE)
-				.getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE,
-						new ResourceLocation(NAMESPACE, "rot"))));
+		Holder<DamageType> type = level.registryAccess()
+				.lookupOrThrow(Registries.DAMAGE_TYPE)
+				.getOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE,
+						ResourceLocation.fromNamespaceAndPath(NAMESPACE, "rot")));
+		return new DamageSource(type);
 	}
 }
