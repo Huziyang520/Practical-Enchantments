@@ -2,6 +2,7 @@
 
 package com.practicalenchantments.enchantment;
 
+import com.practicalenchantments.config.Tunables;
 import com.huziyang520.merlinlib.event.BuiltInEvents;
 import com.huziyang520.merlinlib.event.EnchantmentContext;
 import com.huziyang520.merlinlib.event.EnchantmentEventRegistrar;
@@ -23,7 +24,7 @@ public final class PenetrationEnchantment {
 		if (!event.weapon().is(Items.TRIDENT)) {
 			return;
 		}
-		float extra = 1.5F + 0.5F * (ctx.level() - 1);
+		float extra = (float) (Tunables.penetrationDamageBase() + Tunables.penetrationDamagePerLevel() * (ctx.level() - 1));
 		event.target().invulnerableTime = 0;
 		event.target().hurt(event.attacker().damageSources().mobAttack(event.attacker()), extra);
 

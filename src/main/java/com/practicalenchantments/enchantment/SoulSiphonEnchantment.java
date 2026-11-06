@@ -2,6 +2,7 @@
 
 package com.practicalenchantments.enchantment;
 
+import com.practicalenchantments.config.Tunables;
 import com.huziyang520.merlinlib.event.BuiltInEvents;
 import com.huziyang520.merlinlib.event.EnchantmentContext;
 import com.huziyang520.merlinlib.event.EnchantmentEventRegistrar;
@@ -10,9 +11,7 @@ import net.minecraft.world.entity.ExperienceOrb;
 
 public final class SoulSiphonEnchantment {
 	public static final String ID = PracticalEnchantments.MOD_ID + ":soul_siphon";
-	private static final float COEFFICIENT_PER_LEVEL = 0.2F;
-	private static final float CAP_PER_LEVEL = 2.0F;
-
+	
 	private SoulSiphonEnchantment() {
 	}
 
@@ -23,7 +22,8 @@ public final class SoulSiphonEnchantment {
 
 	private static void onHit(BuiltInEvents.ModifyDamageEvent event, EnchantmentContext ctx) {
 		float raw = Math.max(0.0F, event.originalDamage());
-		int xp = Math.round(Math.min(raw * COEFFICIENT_PER_LEVEL * ctx.level(), CAP_PER_LEVEL * ctx.level()));
+		int xp = Math.round(Math.min(raw * (float) Tunables.soulSiphonXpPerDamage() * ctx.level(),
+						(float) Tunables.soulSiphonXpCapPerLevel() * ctx.level()));
 		if (xp <= 0) {
 			return;
 		}

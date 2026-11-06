@@ -2,6 +2,7 @@
 
 package com.practicalenchantments.enchantment;
 
+import com.practicalenchantments.config.Tunables;
 import com.huziyang520.merlinlib.event.BuiltInEvents;
 import com.huziyang520.merlinlib.event.EnchantmentContext;
 import com.huziyang520.merlinlib.event.EnchantmentEventRegistrar;
@@ -12,9 +13,7 @@ import net.minecraft.world.entity.LivingEntity;
 
 public final class ExecuteEnchantment {
 	public static final String ID = PracticalEnchantments.MOD_ID + ":execute";
-	private static final float LOW_HP_RATIO = 0.10F;
-	private static final float MID_HP_RATIO = 0.35F;
-
+	
 	private ExecuteEnchantment() {
 	}
 
@@ -35,10 +34,10 @@ public final class ExecuteEnchantment {
 		float ratio = target.getHealth() / maxHp;
 		float multiplier;
 		boolean axe = player.getMainHandItem().is(ItemTags.AXES);
-		if (ratio < LOW_HP_RATIO) {
-			multiplier = axe ? 4.0F : 3.0F;
-		} else if (ratio <= MID_HP_RATIO) {
-			multiplier = axe ? 2.0F : 1.5F;
+		if (ratio < Tunables.executeLowHpThreshold()) {
+			multiplier = (float) (axe ? Tunables.executeMultiplierLowAxe() : Tunables.executeMultiplierLow());
+		} else if (ratio <= Tunables.executeMidHpThreshold()) {
+			multiplier = (float) (axe ? Tunables.executeMultiplierMidAxe() : Tunables.executeMultiplierMid());
 		} else {
 			return;
 		}

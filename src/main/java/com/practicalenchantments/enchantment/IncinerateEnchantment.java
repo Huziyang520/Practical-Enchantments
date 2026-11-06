@@ -2,6 +2,7 @@
 
 package com.practicalenchantments.enchantment;
 
+import com.practicalenchantments.config.Tunables;
 import com.huziyang520.merlinlib.event.BuiltInEvents;
 import com.huziyang520.merlinlib.event.EnchantmentContext;
 import com.huziyang520.merlinlib.event.EnchantmentEventRegistrar;
@@ -24,8 +25,9 @@ public final class IncinerateEnchantment {
 		if (victim instanceof ServerPlayer) return;
 		KillMarks.markIncinerated(victim);
 		int baseXp = victim.getExperienceReward();
-		if (baseXp > 0) {
-			player.giveExperiencePoints(baseXp);
+		int extraXp = baseXp * (Tunables.incinerateXpMultiplier() - 1);
+		if (extraXp > 0) {
+			player.giveExperiencePoints(extraXp);
 		}
 	}
 }

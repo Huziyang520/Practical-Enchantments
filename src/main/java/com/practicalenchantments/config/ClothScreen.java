@@ -1,9 +1,10 @@
-// Cloth Config 版「原版附魔调整」界面，键与文案取自 VanillaTweaks。
+// Cloth Config 界面：按分类各一个页签，数值项用带上下界的输入框。
 
 package com.practicalenchantments.config;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import me.shedaniel.clothconfig2.api.AbstractConfigListEntry;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
@@ -17,29 +18,69 @@ public final class ClothScreen {
 	public static Screen create(Screen parent) {
 		ConfigBuilder builder = ConfigBuilder.create()
 				.setParentScreen(parent)
-				.setTitle(Component.translatable(VanillaTweaks.SECTION_LANG_KEY));
+				.setTitle(Component.translatable(ConfigSchema.langKey("configuration")));
 		ConfigEntryBuilder entries = builder.entryBuilder();
-		ConfigCategory category = builder.getOrCreateCategory(
-				Component.translatable(VanillaTweaks.SECTION_LANG_KEY));
-		Map<String, Boolean> pending = new LinkedHashMap<>();
-
-		for (String key : ForgeConfig.KEYS) {
-			category.addEntry(entries.startBooleanToggle(Component.translatable(VanillaTweaks.nameKey(key)),
-							VanillaTweaks.value(key))
-					.setDefaultValue(VanillaTweaks.defaultValue(key))
-					.setTooltip(Component.translatable(VanillaTweaks.tooltipKey(key)))
-					.setSaveConsumer(chosen -> pending.put(key, chosen))
-					.build());
+		Map<String, String> pending = new LinkedHashMap<>();
+		for (String section : ConfigSchema.sections()) {
+			ConfigCategory category = builder.getOrCreateCategory(
+					Component.translatable(ConfigSchema.langKey(section)));
+			for (ConfigOption option : ConfigSchema.in(section)) {
+				category.addEntry(entry(entries, option, pending));
+			}
 		}
-
 		builder.setSavingRunnable(() -> {
 			if (pending.isEmpty()) {
 				return;
 			}
-			Map<String, Boolean> values = new LinkedHashMap<>(pending);
+			Map<String, String> values = new LinkedHashMap<>(pending);
 			pending.clear();
 			ForgeConfig.write(values);
 		});
 		return builder.build();
+	}
+
+	private static AbstractConfigListEntry<?> entry(ConfigEntryBuilder entries, ConfigOption option,
+			Map<String, String> pending) {
+		Component label = Component.translatable(ConfigSchema.nameKey(option));
+		Component[] tooltip = {Component.translatable(ConfigSchema.tooltipKey(option))};
+		String key = option.key();
+		String current = ForgeConfig.current(key);
+		return switch (option.kind()) {
+			case BOOLEAN -> entries.startBooleanToggle(label, Boolean.parseBoolean(current))
+					.setDefaultValue(option.defaultBool())
+					.setTooltip(tooltip)
+					.setSaveConsumer(chosen -> pending.put(key, chosen.toString()))
+					.build();
+			case INTEGER -> entries.startIntField(label, parseInt(current, option.defaultInt()))
+					.setDefaultValue(option.defaultInt())
+					.setMin(option.intMin())
+					.setMax(option.intMax())
+					.setTooltip(tooltip)
+					.setSaveConsumer(chosen -> pending.put(key, chosen.toString()))
+					.build();
+			case DECIMAL -> entries.startDoubleField(label, parseDouble(current, option.defaultDouble()))
+					.setDefaultValue(option.defaultDouble())
+					.setMin(option.min())
+					.setMax(option.max())
+					.setTooltip(tooltip)
+					.setSaveConsumer(chosen -> pending.put(key, chosen.toString()))
+					.build();
+		};
+	}
+
+	private static int parseInt(String text, int fallback) {
+		try {
+			return (int) Math.round(Double.parseDouble(text.trim()));
+		} catch (NumberFormatException exception) {
+			return fallback;
+		}
+	}
+
+	private static double parseDouble(String text, double fallback) {
+		try {
+			return Double.parseDouble(text.trim());
+		} catch (NumberFormatException exception) {
+			return fallback;
+		}
 	}
 }

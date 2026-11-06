@@ -2,6 +2,7 @@
 
 package com.practicalenchantments.enchantment;
 
+import com.practicalenchantments.config.Tunables;
 import com.practicalenchantments.PracticalEnchantments;
 import com.practicalenchantments.content.AmuletSupport;
 import net.minecraft.server.level.ServerPlayer;
@@ -36,7 +37,7 @@ public final class UndyingDropEnchantment {
 				&& DeathSaveSupport.getLevel(player.getItemBySlot(EquipmentSlot.OFFHAND), "undying_drop") > 0) {
 			destroyedSlot = EquipmentSlot.OFFHAND;
 		}
-		int darknessTicks = (20 - 4 * (level - 1)) * 20;
+		int darknessTicks = Tunables.undyingDropDarknessTicks(level);
 		DeathSaveSupport.dropEverything(player, destroyedSlot);
 		DeathSaveSupport.performResurrection(player, darknessTicks);
 		return true;

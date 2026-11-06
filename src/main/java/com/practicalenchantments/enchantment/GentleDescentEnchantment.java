@@ -2,6 +2,7 @@
 
 package com.practicalenchantments.enchantment;
 
+import com.practicalenchantments.config.Tunables;
 import com.huziyang520.merlinlib.api.EntityCounter;
 import com.huziyang520.merlinlib.event.EnchantmentEventRegistrar;
 import com.huziyang520.merlinlib.event.GlobalEvents;
@@ -18,9 +19,7 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 public final class GentleDescentEnchantment {
 	public static final String ID = PracticalEnchantments.MOD_ID + ":gentle_descent";
 	private static Enchantment HOLDER;
-	private static final int SLOW_FALLING_DURATION = 400;
-	private static final int REFRESH_INTERVAL = 20;
-
+	
 	private static final ResourceLocation SF_GRANTED =
 		new ResourceLocation(PracticalEnchantments.MOD_ID, "gentle_descent_sf_granted");
 
@@ -41,13 +40,13 @@ public final class GentleDescentEnchantment {
 
 		MobEffectInstance current = entity.getEffect(MobEffects.SLOW_FALLING);
 
-		if (hasGentle && !entity.isShiftKeyDown()) {
+		if (hasGentle && (!Tunables.gentleDescentCancelOnSneak() || !entity.isShiftKeyDown())) {
 			if (current == null) {
 				entity.addEffect(new MobEffectInstance(
-					MobEffects.SLOW_FALLING, SLOW_FALLING_DURATION, 0, true, false));
-			} else if (isOurs(current) && event.tickCount() % REFRESH_INTERVAL == 0) {
+					MobEffects.SLOW_FALLING, Tunables.secondsToTicks(Tunables.gentleDescentSeconds()), 0, true, false));
+			} else if (isOurs(current) && event.tickCount() % Tunables.secondsToTicks(Tunables.gentleDescentRefreshSeconds()) == 0) {
 				entity.addEffect(new MobEffectInstance(
-					MobEffects.SLOW_FALLING, SLOW_FALLING_DURATION, 0, true, false));
+					MobEffects.SLOW_FALLING, Tunables.secondsToTicks(Tunables.gentleDescentSeconds()), 0, true, false));
 			}
 			EntityCounter.set(entity, SF_GRANTED, 1);
 		} else {
@@ -61,6 +60,6 @@ public final class GentleDescentEnchantment {
 	private static boolean isOurs(MobEffectInstance instance) {
 		return !instance.isInfiniteDuration()
 			&& instance.getAmplifier() == 0
-			&& instance.getDuration() <= SLOW_FALLING_DURATION;
+			&& instance.getDuration() <= Tunables.secondsToTicks(Tunables.gentleDescentSeconds());
 	}
 }

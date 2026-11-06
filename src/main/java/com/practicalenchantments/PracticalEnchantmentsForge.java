@@ -28,6 +28,7 @@ import net.minecraftforge.fml.loading.FMLEnvironment;
 @Mod.EventBusSubscriber(modid = PracticalEnchantments.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class PracticalEnchantmentsForge {
 	public PracticalEnchantmentsForge() {
+		ForgeConfig.preload();
 		PracticalEnchantments.bootstrap();
 		ModLoadingContext.get().registerConfig(ForgeConfig.type(), ForgeConfig.SPEC);
 

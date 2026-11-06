@@ -2,6 +2,7 @@
 
 package com.practicalenchantments.mixin;
 
+import com.practicalenchantments.config.Tunables;
 import com.practicalenchantments.enchantment.EnchantmentDefinitions;
 import com.practicalenchantments.support.EnchantIds;
 import net.minecraft.world.item.CrossbowItem;
@@ -19,7 +20,7 @@ public abstract class CrossbowChargeTimeMixin {
 		if (level <= 0) {
 			return;
 		}
-		int percent = Math.max(0, 15 - 3 * level);
+		int percent = Tunables.repeatingCrossbowChargeCut(level);
 		if (percent <= 0) {
 			return;
 		}

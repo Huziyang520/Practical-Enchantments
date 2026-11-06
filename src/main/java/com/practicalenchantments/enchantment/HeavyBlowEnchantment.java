@@ -2,6 +2,7 @@
 
 package com.practicalenchantments.enchantment;
 
+import com.practicalenchantments.config.Tunables;
 import com.practicalenchantments.PracticalEnchantments;
 import java.util.Map;
 import java.util.UUID;
@@ -36,7 +37,10 @@ public final class HeavyBlowEnchantment {
 		if (previous != null && previous == player.tickCount) {
 			return;
 		}
-		player.getMainHandItem().hurtAndBreak(1, player, broken -> broken.broadcastBreakEvent(EquipmentSlot.MAINHAND));
+		for (int i = 0; i < Tunables.heavyBlowExtraDurabilityPerHit(); i++) {
+			player.getMainHandItem().hurtAndBreak(1, player,
+					broken -> broken.broadcastBreakEvent(EquipmentSlot.MAINHAND));
+		}
 	}
 
 	public static float cooldownFactor(Player player) {

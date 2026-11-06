@@ -2,6 +2,7 @@
 
 package com.practicalenchantments.content;
 
+import com.practicalenchantments.config.Tunables;
 import com.huziyang520.merlinlib.api.MerlinApi;
 import com.huziyang520.merlinlib.effect.LayeredEffect;
 import com.huziyang520.merlinlib.effect.MerlinMobEffect;
@@ -28,15 +29,11 @@ import net.minecraft.world.level.block.state.BlockState;
 public final class BleedContent {
 	public static final String NAMESPACE = "practical_enchantments";
 	public static final ResourceLocation EFFECT_ID = ResourceLocation.fromNamespaceAndPath(NAMESPACE, "bleed");
-	public static final int LAYER_TICKS = 100;
-	public static final int MAX_LAYERS = 5;
-	public static final float DAMAGE_PER_LAYER_TICK = 0.02F;
 	/** 每 10 tick 结算一次：总伤害不变，但目标不会每 tick 抽一下。 */
-	public static final int PULSE_TICKS = 10;
 	public static final int COLOR = 0x8B0000;
 	public static final String BURST_PROFILE = "blood_burst";
 
-	private static final LayeredEffect LAYERS = new LayeredEffect(LAYER_TICKS, MAX_LAYERS);
+	private static LayeredEffect LAYERS;
 	private static MerlinMobEffect effect;
 
 	private BleedContent() {
@@ -48,7 +45,8 @@ public final class BleedContent {
 				.color(COLOR)
 				.onTick(BleedContent::onTick)
 				.submit();
-		LayeredEffect.register(EFFECT_ID.toString(), LAYERS);
+		LAYERS = new LayeredEffect(Tunables.bleedLayerTicks(), Tunables.bleedMaxLayers());
+				LayeredEffect.register(EFFECT_ID.toString(), LAYERS);
 		LAYERS.bindDisplay(effect);
 	}
 
@@ -79,7 +77,7 @@ public final class BleedContent {
 		int layers = LAYERS.tickDown(entity, 1);
 		layers = syncFromCommand(level, entity, holder, layers);
 		// 任何途径堆过 5 层都直接爆，不只在武器命中时
-		while (layers > MAX_LAYERS) {
+		while (layers > Tunables.bleedMaxLayers()) {
 			explode(level, entity);
 			layers = LAYERS.count(entity);
 		}
@@ -87,11 +85,11 @@ public final class BleedContent {
 			scheduleDisplay(level, entity, holder);
 			return false;
 		}
-		if (entity.tickCount % PULSE_TICKS == 0) {
+		if (entity.tickCount % Tunables.bleedPulseTicks() == 0) {
 			// 每层各扣 0.02/tick，逐层累加后一次结算
 			float total = 0.0F;
 			for (int layer = 0; layer < layers; layer++) {
-				total += DAMAGE_PER_LAYER_TICK * PULSE_TICKS;
+				total += Tunables.bleedDamagePerLayerTick() * Tunables.bleedPulseTicks();
 			}
 			hurt(level, entity, total);
 			bleedSound(level, entity);
@@ -103,7 +101,7 @@ public final class BleedContent {
 
 	/** 满层爆开：这几层剩下的伤害一次结清，粒子和音效都比平时重。 */
 	private static void explode(ServerLevel level, LivingEntity entity) {
-		int remaining = LAYERS.drain(entity, MAX_LAYERS);
+		int remaining = LAYERS.drain(entity, Tunables.bleedMaxLayers());
 		if (remaining <= 0) {
 			return;
 		}
@@ -116,7 +114,7 @@ public final class BleedContent {
 				SoundEvents.SLIME_BLOCK_BREAK, SoundSource.PLAYERS, 1.0F, 0.45F);
 		level.playSound(null, entity.getX(), entity.getY(), entity.getZ(),
 				SoundEvents.HONEY_BLOCK_BREAK, SoundSource.PLAYERS, 0.85F, 0.4F);
-		hurt(level, entity, remaining * DAMAGE_PER_LAYER_TICK);
+		hurt(level, entity, remaining * Tunables.bleedDamagePerLayerTick());
 	}
 
 	private static void bleedSound(ServerLevel level, LivingEntity entity) {
@@ -145,16 +143,16 @@ public final class BleedContent {
 		if (instance == null) {
 			return layers;
 		}
-		int want = Math.max(1, Math.min(MAX_LAYERS, instance.getAmplifier() + 1));
+		int want = Math.max(1, Math.min(Tunables.bleedMaxLayers(), instance.getAmplifier() + 1));
 		int longest = LAYERS.longest(entity);
 		boolean freshCast = layers <= 0
-				? instance.getDuration() > LAYER_TICKS || instance.getAmplifier() > 0
+				? instance.getDuration() > Tunables.bleedLayerTicks() || instance.getAmplifier() > 0
 				: instance.getDuration() > longest + 5;
 		if (!freshCast) {
 			return layers;
 		}
 		// 已经满层时再施加一次 = 又叠了一层，直接爆
-		int push = layers >= MAX_LAYERS ? 1 : want;
+		int push = layers >= Tunables.bleedMaxLayers() ? 1 : want;
 		for (int i = 0; i < push; i++) {
 			boolean overflowed = LAYERS.push(entity, instance.getDuration());
 			if (overflowed && level != null) {

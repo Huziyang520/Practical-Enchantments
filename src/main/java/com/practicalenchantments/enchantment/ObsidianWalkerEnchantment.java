@@ -2,6 +2,7 @@
 
 package com.practicalenchantments.enchantment;
 
+import com.practicalenchantments.config.Tunables;
 import com.huziyang520.merlinlib.event.BuiltInEvents;
 import com.huziyang520.merlinlib.event.EnchantmentContext;
 import com.huziyang520.merlinlib.event.EnchantmentEventRegistrar;
@@ -21,10 +22,7 @@ import net.minecraft.world.level.material.FluidState;
 
 public final class ObsidianWalkerEnchantment {
 	public static final String ID = PracticalEnchantments.MOD_ID + ":obsidian_walker";
-	private static final int INTERVAL = 4;
-	public static final int RADIUS = 3;
-	private static final int RADIUS_SQR = RADIUS * RADIUS;
-
+	
 	private ObsidianWalkerEnchantment() {
 	}
 
@@ -43,7 +41,7 @@ public final class ObsidianWalkerEnchantment {
 	}
 
 	private static void onTick(BuiltInEvents.EntityTickEvent event, EnchantmentContext ctx) {
-		if (ctx.slot() != EquipmentSlot.FEET || (event.tickCount() & (INTERVAL - 1)) != 0) {
+		if (ctx.slot() != EquipmentSlot.FEET || event.tickCount() % Tunables.obsidianWalkerIntervalTicks() != 0) {
 			return;
 		}
 		LivingEntity entity = event.entity();
@@ -60,10 +58,12 @@ public final class ObsidianWalkerEnchantment {
 
 	private static boolean solidifyLayer(ServerLevel level, int y, BlockPos origin, BlockState solidified) {
 		boolean changed = false;
-		for (BlockPos column : BlockPos.betweenClosed(origin.offset(-RADIUS, 0, -RADIUS), origin.offset(RADIUS, 0, RADIUS))) {
+		int radius = Tunables.obsidianWalkerRadius();
+		int radiusSqr = radius * radius;
+		for (BlockPos column : BlockPos.betweenClosed(origin.offset(-radius, 0, -radius), origin.offset(radius, 0, radius))) {
 			int dx = column.getX() - origin.getX();
 			int dz = column.getZ() - origin.getZ();
-			if (dx * dx + dz * dz > RADIUS_SQR) {
+			if (dx * dx + dz * dz > radiusSqr) {
 				continue;
 			}
 			BlockPos target = new BlockPos(column.getX(), y, column.getZ());

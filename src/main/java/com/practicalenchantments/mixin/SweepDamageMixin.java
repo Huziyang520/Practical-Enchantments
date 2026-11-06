@@ -2,6 +2,7 @@
 
 package com.practicalenchantments.mixin;
 
+import com.practicalenchantments.config.Tunables;
 import com.practicalenchantments.support.SweepWindow;
 
 import com.practicalenchantments.enchantment.InvisibleAirEnchantment;
@@ -22,6 +23,6 @@ public abstract class SweepDamageMixin {
 		if (!SweepWindow.isSweepHit(player, (LivingEntity) (Object) this)) {
 			return amount;
 		}
-		return InvisibleAirEnchantment.hasInMainHand(player) ? amount * 2.0F : amount;
+		return InvisibleAirEnchantment.hasInMainHand(player) ? amount * (float) Tunables.invisibleAirSweepFactor() : amount;
 	}
 }

@@ -2,6 +2,7 @@
 
 package com.practicalenchantments.enchantment;
 
+import com.practicalenchantments.config.Tunables;
 import com.huziyang520.merlinlib.event.BuiltInEvents;
 import com.huziyang520.merlinlib.event.EnchantmentContext;
 import com.huziyang520.merlinlib.event.EnchantmentEventRegistrar;
@@ -21,9 +22,11 @@ public final class WitherAspectEnchantment {
 	}
 
 	private static void onHit(BuiltInEvents.ModifyDamageEvent event, EnchantmentContext ctx) {
-		int duration = ctx.level() == 1 ? 6 * 20 : 12 * 20;
+		int duration = Tunables.secondsToTicks(ctx.level() == 1
+					? Tunables.witherAspectSecondsL1() : Tunables.witherAspectSecondsL2());
 		event.target().addEffect(new MobEffectInstance(MobEffects.WITHER, duration, 0));
-		float penalty = ctx.level() == 1 ? 1.0F : 0.5F;
+		float penalty = (float) (ctx.level() == 1
+					? Tunables.witherAspectDamagePenaltyL1() : Tunables.witherAspectDamagePenaltyL2());
 		float afterPenalty = Math.max(0.0F, event.damage().getValue() - penalty);
 		event.damage().setValue(afterPenalty);
 	}

@@ -1,45 +1,46 @@
-// 原版附魔调整的配置：SERVER 类型，跟存档走，config/practical_enchantments-server.toml。
+// 全部配置的 Forge 侧：从登记表生成 SPEC，写进 config/practical_enchantments-server.toml。
 
 package com.practicalenchantments.config;
 
-import java.util.List;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.config.ModConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class ForgeConfig {
-	public static final List<String> KEYS = List.of(VanillaTweaks.KEY_INFINITY_CROSSBOW,
-			VanillaTweaks.KEY_INFINITY_NO_ARROW, VanillaTweaks.KEY_INFINITY_SPECTRAL,
-			VanillaTweaks.KEY_QUICK_CHARGE_BOW, VanillaTweaks.KEY_POWER_CROSSBOW,
-			VanillaTweaks.KEY_THORNS_SHIELD);
-
+	private static final Logger LOGGER = LoggerFactory.getLogger("practical_enchantments");
+	private static final Map<String, ForgeConfigSpec.ConfigValue<?>> VALUES = new LinkedHashMap<>();
 	public static final ForgeConfigSpec SPEC;
-	private static final ForgeConfigSpec.BooleanValue INFINITY_CROSSBOW;
-	private static final ForgeConfigSpec.BooleanValue INFINITY_NO_ARROW;
-	private static final ForgeConfigSpec.BooleanValue INFINITY_SPECTRAL;
-	private static final ForgeConfigSpec.BooleanValue QUICK_CHARGE_BOW;
-	private static final ForgeConfigSpec.BooleanValue POWER_CROSSBOW;
-	private static final ForgeConfigSpec.BooleanValue THORNS_SHIELD;
 
 	static {
 		ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
-		builder.push(VanillaTweaks.SECTION_KEY)
-				.translation(VanillaTweaks.SECTION_LANG_KEY)
-				.comment("原版附魔调整：无限在弩与光灵箭上的行为。");
-		INFINITY_CROSSBOW = define(builder, VanillaTweaks.KEY_INFINITY_CROSSBOW,
-				VanillaTweaks.DEFAULT_INFINITY_CROSSBOW, "无限是否可以附在弩上（默认关：只有弓能用）。");
-		INFINITY_NO_ARROW = define(builder, VanillaTweaks.KEY_INFINITY_NO_ARROW,
-				VanillaTweaks.DEFAULT_INFINITY_NO_ARROW, "带无限的武器在背包没有普通箭时是否仍可射击。");
-		INFINITY_SPECTRAL = define(builder, VanillaTweaks.KEY_INFINITY_SPECTRAL,
-				VanillaTweaks.DEFAULT_INFINITY_SPECTRAL,
-				"无限是否同样作用于光灵箭；开时仍要求背包里至少有一根光灵箭。");
-		QUICK_CHARGE_BOW = define(builder, VanillaTweaks.KEY_QUICK_CHARGE_BOW,
-				VanillaTweaks.DEFAULT_QUICK_CHARGE_BOW, "快速装填是否可以附在弓上（默认关）。");
-		POWER_CROSSBOW = define(builder, VanillaTweaks.KEY_POWER_CROSSBOW,
-				VanillaTweaks.DEFAULT_POWER_CROSSBOW, "力量是否可以附在弩上（默认开）。");
-		THORNS_SHIELD = define(builder, VanillaTweaks.KEY_THORNS_SHIELD,
-				VanillaTweaks.DEFAULT_THORNS_SHIELD, "刺棘是否可以附在盾上（默认开）。");
-		builder.pop();
+		for (String section : ConfigSchema.sections()) {
+			builder.push(section).translation(ConfigSchema.langKey(section));
+			String open = null;
+			for (ConfigOption option : ConfigSchema.in(section)) {
+				String parent = option.parent();
+				if (!parent.equals(open)) {
+					if (open != null) {
+						builder.pop();
+					}
+					if (!parent.isEmpty()) {
+						builder.push(parent).translation(ConfigSchema.langKey(section + "." + parent));
+					}
+					open = parent;
+				}
+				VALUES.put(option.key(), define(builder, option));
+			}
+			if (open != null && !open.isEmpty()) {
+				builder.pop();
+			}
+			builder.pop();
+		}
 		SPEC = builder.build();
 	}
 
@@ -50,52 +51,110 @@ public final class ForgeConfig {
 		return ModConfig.Type.SERVER;
 	}
 
-	public static void apply() {
-		if (!SPEC.isLoaded()) {
-			VanillaTweaks.apply(VanillaTweaks.DEFAULT_INFINITY_CROSSBOW, VanillaTweaks.DEFAULT_INFINITY_NO_ARROW,
-					VanillaTweaks.DEFAULT_INFINITY_SPECTRAL);
-			VanillaTweaks.applyExtra(VanillaTweaks.DEFAULT_QUICK_CHARGE_BOW, VanillaTweaks.DEFAULT_POWER_CROSSBOW,
-					VanillaTweaks.DEFAULT_THORNS_SHIELD);
-			return;
-		}
-		VanillaTweaks.apply(
-				MezzConfigBridge.value(VanillaTweaks.KEY_INFINITY_CROSSBOW),
-				MezzConfigBridge.value(VanillaTweaks.KEY_INFINITY_NO_ARROW),
-				MezzConfigBridge.value(VanillaTweaks.KEY_INFINITY_SPECTRAL));
-		VanillaTweaks.applyExtra(
-				MezzConfigBridge.value(VanillaTweaks.KEY_QUICK_CHARGE_BOW),
-				MezzConfigBridge.value(VanillaTweaks.KEY_POWER_CROSSBOW),
-				MezzConfigBridge.value(VanillaTweaks.KEY_THORNS_SHIELD));
+	/** 注册期就要用的值先读一遍文件，否则首次启动会按默认值注册。 */
+	public static void preload() {
+		Map<String, String> raw = new LinkedHashMap<>();
+		readToml(Path.of("config", "practical_enchantments-server.toml"), raw);
+		Tunables.applyAll(raw::get);
 	}
 
-	public static void write(Map<String, Boolean> values) {
+	public static void apply() {
 		if (!SPEC.isLoaded()) {
+			Tunables.applyAll(key -> null);
 			return;
 		}
-		for (Map.Entry<String, Boolean> entry : values.entrySet()) {
-			value(entry.getKey()).set(entry.getValue());
+		Tunables.applyAll(key -> {
+			ForgeConfigSpec.ConfigValue<?> value = VALUES.get(key);
+			return value == null ? null : String.valueOf(value.get());
+		});
+	}
+
+	/** 界面保存：逐项写回 SPEC 后落盘并刷新运行时快照。 */
+	public static void write(Map<String, String> changed) {
+		for (Map.Entry<String, String> entry : changed.entrySet()) {
+			ForgeConfigSpec.ConfigValue<?> value = VALUES.get(entry.getKey());
+			if (value == null) {
+				continue;
+			}
+			try {
+				setTyped(value, ConfigSchema.get(entry.getKey()), entry.getValue());
+			} catch (RuntimeException invalid) {
+				LOGGER.warn("[PracticalEnchantments] 配置项 {} 的值 {} 不合法，保留原值", entry.getKey(), entry.getValue());
+			}
 		}
 		SPEC.save();
 		apply();
-		for (Map.Entry<String, Boolean> entry : values.entrySet()) {
-			MezzConfigBridge.push(entry.getKey(), entry.getValue());
+	}
+
+	/** 界面回显用的当前值。 */
+	public static String current(String key) {
+		ForgeConfigSpec.ConfigValue<?> value = VALUES.get(key);
+		if (value == null || !SPEC.isLoaded()) {
+			return ConfigSchema.get(key).defaultValue();
+		}
+		return String.valueOf(value.get());
+	}
+
+	private static void setTyped(ForgeConfigSpec.ConfigValue<?> value, ConfigOption option, String raw) {
+		switch (option.kind()) {
+			case BOOLEAN -> {
+				if (value instanceof ForgeConfigSpec.BooleanValue bool) {
+					bool.set(Boolean.parseBoolean(raw.trim()));
+				}
+			}
+			case INTEGER -> {
+				if (value instanceof ForgeConfigSpec.IntValue number) {
+					number.set((int) Math.round(Double.parseDouble(raw.trim())));
+				}
+			}
+			case DECIMAL -> {
+				if (value instanceof ForgeConfigSpec.DoubleValue number) {
+					number.set(Double.parseDouble(raw.trim()));
+				}
+			}
 		}
 	}
 
-	private static ForgeConfigSpec.BooleanValue value(String key) {
-		return switch (key) {
-			case VanillaTweaks.KEY_INFINITY_CROSSBOW -> INFINITY_CROSSBOW;
-			case VanillaTweaks.KEY_INFINITY_NO_ARROW -> INFINITY_NO_ARROW;
-			case VanillaTweaks.KEY_INFINITY_SPECTRAL -> INFINITY_SPECTRAL;
-			case VanillaTweaks.KEY_QUICK_CHARGE_BOW -> QUICK_CHARGE_BOW;
-			case VanillaTweaks.KEY_POWER_CROSSBOW -> POWER_CROSSBOW;
-			case VanillaTweaks.KEY_THORNS_SHIELD -> THORNS_SHIELD;
-			default -> throw new IllegalArgumentException("未知的原版附魔调整项: " + key);
+	private static ForgeConfigSpec.ConfigValue<?> define(ForgeConfigSpec.Builder builder, ConfigOption option) {
+		ForgeConfigSpec.Builder entry = builder.translation(ConfigSchema.langKey(option.key()));
+		return switch (option.kind()) {
+			case BOOLEAN -> entry.define(option.name(), option.defaultBool());
+			case INTEGER -> entry.comment("范围 " + option.intMin() + " – " + option.intMax())
+					.defineInRange(option.name(), option.defaultInt(), option.intMin(), option.intMax());
+			case DECIMAL -> entry.comment("范围 " + (float) option.min() + " – " + (float) option.max())
+					.defineInRange(option.name(), option.defaultDouble(), option.min(), option.max());
 		};
 	}
 
-	private static ForgeConfigSpec.BooleanValue define(ForgeConfigSpec.Builder builder, String key,
-			boolean defaultValue, String comment) {
-		return builder.translation(VanillaTweaks.nameKey(key)).comment(comment).define(key, defaultValue);
+	private static void readToml(Path file, Map<String, String> out) {
+		if (!Files.isRegularFile(file)) {
+			return;
+		}
+		try {
+			String section = "";
+			for (String line : Files.readAllLines(file, StandardCharsets.UTF_8)) {
+				String trimmed = line.trim();
+				if (trimmed.startsWith("[") && trimmed.endsWith("]")) {
+					section = trimmed.substring(1, trimmed.length() - 1).trim();
+					continue;
+				}
+				if (trimmed.isEmpty() || trimmed.startsWith("#") || !trimmed.contains("=")) {
+					continue;
+				}
+				int cut = trimmed.indexOf('=');
+				String key = trimmed.substring(0, cut).trim();
+				String value = trimmed.substring(cut + 1).trim();
+				int comment = value.indexOf('#');
+				if (comment >= 0) {
+					value = value.substring(0, comment).trim();
+				}
+				if (value.startsWith("\"") && value.endsWith("\"") && value.length() > 1) {
+					value = value.substring(1, value.length() - 1);
+				}
+				out.put(section.isEmpty() ? key : section + "." + key, value);
+			}
+		} catch (IOException unreadable) {
+			LOGGER.warn("[PracticalEnchantments] 读取 {} 失败，注册期沿用默认值", file);
+		}
 	}
 }

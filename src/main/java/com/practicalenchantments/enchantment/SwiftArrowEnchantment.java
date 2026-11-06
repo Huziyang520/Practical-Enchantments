@@ -2,14 +2,14 @@
 
 package com.practicalenchantments.enchantment;
 
+import com.practicalenchantments.config.Tunables;
 import com.practicalenchantments.PracticalEnchantments;
 import com.practicalenchantments.support.EnchantIds;
 import net.minecraft.world.item.ItemStack;
 
 public final class SwiftArrowEnchantment {
 	public static final String ID = PracticalEnchantments.MOD_ID + ":swift_arrow";
-	public static final double SPEED_PER_LEVEL = 0.25D;
-
+	
 	private SwiftArrowEnchantment() {
 	}
 
@@ -19,6 +19,6 @@ public final class SwiftArrowEnchantment {
 
 	public static double speedFactor(ItemStack stack) {
 		int level = level(stack);
-		return level <= 0 ? 1.0D : 1.0D + SPEED_PER_LEVEL * level;
+		return level <= 0 ? 1.0D : 1.0D + Tunables.swiftArrowSpeedPerLevel() * level;
 	}
 }

@@ -2,6 +2,7 @@
 
 package com.practicalenchantments.enchantment;
 
+import com.practicalenchantments.config.Tunables;
 import com.practicalenchantments.PracticalEnchantments;
 import com.practicalenchantments.content.PeContent;
 import com.practicalenchantments.support.EnchantIds;
@@ -36,7 +37,8 @@ public final class HideSkinEnchantment {
 	}
 
 	public static boolean excluded(ItemStack stack) {
-		return !stack.isEmpty() && (LEATHER.contains(stack.getItem()) || PeContent.isAmulet(stack));
+		return !stack.isEmpty() && ((Tunables.hideSkinExcludeLeather() && LEATHER.contains(stack.getItem()))
+						|| PeContent.isAmulet(stack));
 	}
 
 	public static boolean wears(LivingEntity entity) {

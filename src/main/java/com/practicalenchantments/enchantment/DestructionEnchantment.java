@@ -2,6 +2,7 @@
 
 package com.practicalenchantments.enchantment;
 
+import com.practicalenchantments.config.Tunables;
 import com.huziyang520.merlinlib.event.BuiltInEvents;
 import com.huziyang520.merlinlib.event.EnchantmentContext;
 import com.huziyang520.merlinlib.event.EnchantmentEventRegistrar;
@@ -25,10 +26,10 @@ public final class DestructionEnchantment {
 		if (ctx.slot() != EquipmentSlot.MAINHAND) return;
 		BlockState brokenState = event.blockState();
 		event.drops().clear();
-		int xp = 2;
+		int xp = Tunables.destructionXpNormal();
 
 		if (brokenState.is(ORES_TAG)) {
-			xp = 5;
+			xp = Tunables.destructionXpOre();
 		}
 
 		event.addBonusXp(xp);

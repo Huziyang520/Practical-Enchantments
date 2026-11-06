@@ -2,6 +2,7 @@
 
 package com.practicalenchantments.enchantment.linked.aether;
 
+import com.practicalenchantments.config.Tunables;
 import com.huziyang520.merlinlib.api.LootInjectionBuilder;
 import com.huziyang520.merlinlib.api.MerlinApi;
 import com.huziyang520.merlinlib.content.Acquisition;
@@ -18,7 +19,6 @@ import net.minecraft.world.entity.projectile.Projectile;
 public final class AetherSkySlayer {
 	public static final String PATH = "aether_sky_slayer";
 	public static final String ID = PracticalEnchantments.MOD_ID + ":" + PATH;
-	private static final int SLOW_TICKS = 100;
 
 	private static final String[] LOOT_PATHS = {
 			"chests/dungeon",
@@ -66,7 +66,7 @@ public final class AetherSkySlayer {
 		}
 		event.damage().add(1.0F + ctx.level());
 		if (ctx.level() >= 2) {
-			target.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, SLOW_TICKS, ctx.level() - 2));
+			target.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, Tunables.secondsToTicks(Tunables.skySlayerSlowSeconds()), ctx.level() - 2));
 		}
 	}
 }

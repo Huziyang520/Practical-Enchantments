@@ -2,6 +2,7 @@
 
 package com.practicalenchantments.enchantment;
 
+import com.practicalenchantments.config.Tunables;
 import com.huziyang520.merlinlib.event.BuiltInEvents;
 import com.huziyang520.merlinlib.event.EnchantmentContext;
 import com.huziyang520.merlinlib.event.EnchantmentEventRegistrar;
@@ -16,7 +17,6 @@ import java.util.*;
 
 public final class LumberjackEnchantment {
 	public static final String ID = PracticalEnchantments.MOD_ID + ":lumberjack";
-	private static final int MAX_BLOCKS = 64;
 	private static final ThreadLocal<Boolean> PROCESSING = ThreadLocal.withInitial(() -> Boolean.FALSE);
 
 	public static void registerCallbacks(EnchantmentEventRegistrar registrar) {
@@ -42,7 +42,7 @@ public final class LumberjackEnchantment {
 			processed.add(brokenPos);
 			int brokenCount = 0;
 
-			while (!queue.isEmpty() && brokenCount < MAX_BLOCKS) {
+			while (!queue.isEmpty() && brokenCount < Tunables.lumberjackMaxBlocks()) {
 				BlockPos current = queue.poll();
 
 				for (BlockPos offset : new BlockPos[]{
@@ -52,7 +52,7 @@ public final class LumberjackEnchantment {
 				}) {
 					BlockPos neighbor = current.offset(offset);
 					if (processed.contains(neighbor)) continue;
-					if (brokenCount >= MAX_BLOCKS) break;
+					if (brokenCount >= Tunables.lumberjackMaxBlocks()) break;
 					BlockState neighborState = level.getBlockState(neighbor);
 
 					if (neighborState.is(BlockTags.LOGS) || neighborState.is(BlockTags.LEAVES)) {

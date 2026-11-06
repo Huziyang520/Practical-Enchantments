@@ -2,6 +2,7 @@
 
 package com.practicalenchantments.mixin;
 
+import com.practicalenchantments.config.Tunables;
 import com.practicalenchantments.enchantment.InvisibleAirEnchantment;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.RandomSource;
@@ -14,8 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Mob.class)
 public abstract class InvisibleAirSpawnMixin {
-	private static final float SPAWN_CHANCE = 0.02F;
-
+	
 	@Inject(method = "enchantSpawnedWeapon", at = @At("TAIL"), require = 1)
 	private void practicalenchantments$grantInvisibleAir(RandomSource random, float chanceMultiplier, CallbackInfo info) {
 		Mob self = (Mob) (Object) this;
@@ -23,7 +23,7 @@ public abstract class InvisibleAirSpawnMixin {
 		if (weapon.isEmpty() || !weapon.is(ItemTags.SWORDS) || !weapon.getEnchantmentTags().isEmpty()) {
 			return;
 		}
-		if (random.nextFloat() >= SPAWN_CHANCE) {
+		if (random.nextFloat() >= (float) Tunables.invisibleAirMobSpawnChance()) {
 			return;
 		}
 		weapon.enchant(InvisibleAirEnchantment.enchantment(), 1);

@@ -2,6 +2,7 @@
 
 package com.practicalenchantments.mixin;
 
+import com.practicalenchantments.config.Tunables;
 import com.practicalenchantments.enchantment.RepeatingCrossbowEnchantment;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -40,7 +41,7 @@ public abstract class CrossbowRepeatingMixin {
 		if (!cir.getReturnValueZ() || ammo.isEmpty()) {
 			return;
 		}
-		int extra = RepeatingCrossbowEnchantment.level(held);
+		int extra = RepeatingCrossbowEnchantment.level(held) * Tunables.repeatingCrossbowExtraAmmoPerLevel();
 		if (extra <= 0) {
 			return;
 		}
