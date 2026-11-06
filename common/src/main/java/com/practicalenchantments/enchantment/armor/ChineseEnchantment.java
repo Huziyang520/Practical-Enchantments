@@ -2,6 +2,7 @@
 
 package com.practicalenchantments.enchantment.armor;
 
+import com.practicalenchantments.config.Tunables;
 import com.huziyang520.merlinlib.api.EntityCounter;
 import com.huziyang520.merlinlib.event.BuiltInEvents;
 import com.huziyang520.merlinlib.event.EnchantmentContext;
@@ -61,7 +62,8 @@ public final class ChineseEnchantment {
 		if (player.onGround()) return;
 		ItemStack chestItem = player.getItemBySlot(EquipmentSlot.CHEST);
 		if (chestItem.isEmpty()) return;
-		int extra = 2 * Math.max(1, (int) (event.amount() / 4));
+		int extra = Tunables.chineseAirborneDurabilityBase()
+					* Math.max(1, (int) (event.amount() / Tunables.chineseDamageStep()));
 		chestItem.hurtAndBreak(extra, player, EquipmentSlot.CHEST);
 	}
 

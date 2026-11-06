@@ -2,6 +2,7 @@
 
 package com.practicalenchantments.enchantment.linked.aether;
 
+import com.practicalenchantments.config.Tunables;
 import com.huziyang520.merlinlib.api.LootInjectionBuilder;
 import com.huziyang520.merlinlib.api.MerlinApi;
 import com.huziyang520.merlinlib.content.Acquisition;
@@ -35,8 +36,7 @@ public final class AetherGodwood {
 			"aether:ambrosium_shard",
 			"aether:ambrosium");
 
-	private static final float SHARD_CHANCE = 0.25F;
-
+	
 	private static final String[] LOOT_PATHS = {
 			"chests/dungeon",
 			"chests/bronze_dungeon",
@@ -87,10 +87,11 @@ public final class AetherGodwood {
 
 	private static void onBlockDrops(BuiltInEvents.ModifyBlockDropsEvent event, EnchantmentContext ctx) {
 		Holder<Item> item = shard;
-		if (item == null || event.player().getRandom().nextFloat() >= SHARD_CHANCE) {
+		if (item == null || event.player().getRandom().nextFloat() >= (float) Tunables.godwoodShardChance()) {
 			return;
 		}
-		event.drops().add(new ItemStack(item, 1 + event.player().getRandom().nextInt(2)));
+		event.drops().add(new ItemStack(item,
+						1 + event.player().getRandom().nextInt(Tunables.godwoodShardCountMax())));
 	}
 
 	private static Holder<Item> resolveShard(HolderLookup.Provider registries, String namespace) {

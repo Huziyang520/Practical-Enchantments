@@ -2,6 +2,7 @@
 
 package com.practicalenchantments.mixin;
 
+import com.practicalenchantments.config.Tunables;
 import com.practicalenchantments.content.AmuletSupport;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.inventory.AnvilMenu;
@@ -15,7 +16,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(AnvilMenu.class)
 public abstract class AmuletPenaltyMixin {
-	private static final int COST_FAIL = 40;
 	private static boolean practical$recomputing;
 
 	@Shadow
@@ -56,7 +56,7 @@ public abstract class AmuletPenaltyMixin {
 		if (current <= 0) {
 			return;
 		}
-		int scaled = Math.min(COST_FAIL - 1, Math.max(1, Math.round(current * AmuletSupport.penaltyFactor(amulet))));
+		int scaled = Math.min(Tunables.amuletAnvilCostCap(), Math.max(1, Math.round(current * AmuletSupport.penaltyFactor(amulet))));
 		if (scaled == current) {
 			return;
 		}

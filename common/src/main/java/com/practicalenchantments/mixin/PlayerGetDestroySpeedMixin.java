@@ -2,6 +2,7 @@
 
 package com.practicalenchantments.mixin;
 
+import com.practicalenchantments.config.Tunables;
 import com.practicalenchantments.content.AmuletSupport;
 import com.practicalenchantments.enchantment.armor.AerialHasteEnchantment;
 import net.minecraft.core.Holder;
@@ -25,7 +26,7 @@ public abstract class PlayerGetDestroySpeedMixin {
 		}
 
 		if (hasAerialHaste(self)) {
-			cir.setReturnValue(cir.getReturnValueF() * 5.0f);
+			cir.setReturnValue(cir.getReturnValueF() * (float) Tunables.aerialHasteSpeedFactor());
 		}
 	}
 

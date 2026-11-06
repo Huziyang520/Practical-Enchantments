@@ -2,6 +2,7 @@
 
 package com.practicalenchantments.enchantment.weapon;
 
+import com.practicalenchantments.config.Tunables;
 import com.huziyang520.merlinlib.event.BuiltInEvents;
 import com.huziyang520.merlinlib.event.EnchantmentContext;
 import com.huziyang520.merlinlib.event.EnchantmentEventRegistrar;
@@ -31,7 +32,7 @@ public final class TraumaEnchantment {
 	private static void onHit(BuiltInEvents.ModifyDamageEvent event, EnchantmentContext ctx) {
 		int layers = ctx.level();
 		if (ctx.itemStack().is(SPEARS)) {
-			layers++;
+			layers += Tunables.traumaSpearBonusLayers();
 		}
 		BleedContent.add(event.target(), layers);
 	}

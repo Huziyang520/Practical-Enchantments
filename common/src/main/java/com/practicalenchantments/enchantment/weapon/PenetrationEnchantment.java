@@ -2,6 +2,7 @@
 
 package com.practicalenchantments.enchantment.weapon;
 
+import com.practicalenchantments.config.Tunables;
 import com.huziyang520.merlinlib.event.BuiltInEvents;
 import com.huziyang520.merlinlib.event.EnchantmentContext;
 import com.huziyang520.merlinlib.event.EnchantmentEventRegistrar;
@@ -28,12 +29,13 @@ public final class PenetrationEnchantment {
 		if (!event.weapon().is(Items.TRIDENT)) {
 			return;
 		}
-		float extra = 1.5F + 0.5F * (ctx.level() - 1);
+		float extra = (float) (Tunables.penetrationDamageBase() + Tunables.penetrationDamagePerLevel() * (ctx.level() - 1));
 		event.target().damageCooldownTime = 0;
 		event.target().hurtServer(event.level(),
 			event.attacker().damageSources().mobAttack(event.attacker()), extra);
 
-		if (DeathSaveSupport.getLevelFull(event.weapon(), "minecraft:loyalty") > 0) {
+		if (Tunables.penetrationPullRequiresLoyalty()
+				&& DeathSaveSupport.getLevelFull(event.weapon(), "minecraft:loyalty") > 0) {
 			TridentPullSupport.captureMob(event.attacker().getUUID(), event.target());
 		}
 	}

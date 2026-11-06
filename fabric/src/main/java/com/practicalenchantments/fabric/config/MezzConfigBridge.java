@@ -1,9 +1,10 @@
-// MezzConfig 联动：装了就把三项原版调整登记成 MezzConfig 的客户端配置，没装就静默跳过。
+// MezzConfig 联动：装了就把全部配置登记成它的客户端配置，没装就静默跳过。
 
 package com.practicalenchantments.fabric.config;
 
 import com.practicalenchantments.PracticalEnchantments;
-import com.practicalenchantments.config.VanillaTweaks;
+import com.practicalenchantments.config.ConfigOption;
+import com.practicalenchantments.config.ConfigSchema;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
@@ -42,21 +43,31 @@ public final class MezzConfigBridge {
 			Class<?> categoryType = Class.forName(CATEGORY);
 			Object registration = configs.getMethod("forMod", String.class).invoke(null, PracticalEnchantments.MOD_ID);
 			Object schema = registrationType.getMethod("createClientSchemaBuilder", String.class, String.class)
-					.invoke(registration, "tweaks.ini", VanillaTweaks.SECTION_PREFIX);
-			Object category = schemaType.getMethod("addCategory", String.class)
-					.invoke(schema, VanillaTweaks.SECTION_KEY);
+					.invoke(registration, "enchantments.ini", ConfigSchema.langKey("configuration"));
 			Method addBoolean = categoryType.getMethod("addBoolean", String.class, boolean.class);
+			Method addInteger = categoryType.getMethod("addInteger", String.class, int.class, int.class, int.class);
+			Method addDouble = categoryType.getMethod("addDouble", String.class, double.class, double.class, double.class);
 			Method buildValue = Class.forName(VALUE_BUILDER).getMethod("build");
-			for (String key : FabricVanillaTweaks.KEYS) {
-				Object builder = addBoolean.invoke(category, key, VanillaTweaks.defaultValue(key));
-				Object value = buildValue.invoke(builder);
-				VALUES.put(key, value);
-				listen(key, value);
+			for (String section : ConfigSchema.sections()) {
+				Object category = schemaType.getMethod("addCategory", String.class).invoke(schema, section);
+				for (ConfigOption option : ConfigSchema.in(section)) {
+					String name = option.path();
+					Object builder = switch (option.kind()) {
+						case BOOLEAN -> addBoolean.invoke(category, name, Boolean.parseBoolean(current(option)));
+						case INTEGER -> addInteger.invoke(category, name,
+								(int) Math.round(parseDouble(current(option), option.defaultInt())),
+								option.intMin(), option.intMax());
+						case DECIMAL -> addDouble.invoke(category, name,
+								parseDouble(current(option), option.defaultDouble()), option.min(), option.max());
+					};
+					Object value = buildValue.invoke(builder);
+					VALUES.put(option.key(), value);
+					listen(option, value);
+				}
 			}
 			schemaType.getMethod("build").invoke(schema);
 			installed = true;
-			applyAll();
-			LOGGER.info("[PracticalEnchantments] 已接入 MezzConfig，配置项：{}", VALUES.keySet());
+			LOGGER.info("[PracticalEnchantments] 已接入 MezzConfig，配置项：{}", VALUES.size());
 		} catch (Exception | LinkageError failure) {
 			VALUES.clear();
 			installed = false;
@@ -64,49 +75,53 @@ public final class MezzConfigBridge {
 		}
 	}
 
-	public static boolean value(String key) {
-		Object value = VALUES.get(key);
-		if (value == null) {
-			return VanillaTweaks.value(key);
-		}
-		try {
-			Object current = Class.forName(VALUE).getMethod("get").invoke(value);
-			return current instanceof Boolean enabled ? enabled : VanillaTweaks.value(key);
-		} catch (Exception | LinkageError failure) {
-			return VanillaTweaks.value(key);
-		}
-	}
-
-	public static void push(String key, boolean newValue) {
+	/** 把界面上的改动写回配置文件与运行时快照。 */
+	public static void push(String key, String newValue) {
 		Object value = VALUES.get(key);
 		if (value == null) {
 			return;
 		}
 		try {
-			Class.forName(VALUE).getMethod("set", Object.class).invoke(value, newValue);
+			ConfigOption option = ConfigSchema.get(key);
+			Object typed = switch (option.kind()) {
+				case BOOLEAN -> Boolean.parseBoolean(newValue);
+				case INTEGER -> (int) Math.round(Double.parseDouble(newValue));
+				case DECIMAL -> Double.parseDouble(newValue);
+			};
+			Class.forName(VALUE).getMethod("set", Object.class).invoke(value, typed);
 		} catch (Exception | LinkageError failure) {
 			LOGGER.warn("[PracticalEnchantments] 无法写入 MezzConfig 的 {}，仅本地生效", key, failure);
 		}
 	}
 
-	private static void applyAll() {
-		VanillaTweaks.apply(
-				value(VanillaTweaks.KEY_INFINITY_CROSSBOW),
-				value(VanillaTweaks.KEY_INFINITY_NO_ARROW),
-				value(VanillaTweaks.KEY_INFINITY_SPECTRAL));
-		VanillaTweaks.applyExtra(
-				value(VanillaTweaks.KEY_QUICK_CHARGE_BOW),
-				value(VanillaTweaks.KEY_POWER_CROSSBOW),
-				value(VanillaTweaks.KEY_THORNS_SHIELD));
+	private static String current(ConfigOption option) {
+		Object value = VALUES.get(option.key());
+		if (value == null) {
+			return FabricVanillaTweaks.current(option.key());
+		}
+		try {
+			Object raw = Class.forName(VALUE).getMethod("get").invoke(value);
+			return raw == null ? option.defaultValue() : raw.toString();
+		} catch (Exception | LinkageError failure) {
+			return FabricVanillaTweaks.current(option.key());
+		}
 	}
 
-	private static void listen(String key, Object value) throws ReflectiveOperationException {
+	private static double parseDouble(String text, double fallback) {
+		try {
+			return Double.parseDouble(text.trim());
+		} catch (NumberFormatException exception) {
+			return fallback;
+		}
+	}
+
+	private static void listen(ConfigOption option, Object value) throws ReflectiveOperationException {
 		Class<?> listenerType = Class.forName(LISTENER);
 		InvocationHandler handler = (proxy, method, args) -> {
 			if ("onConfigValueChanged".equals(method.getName()) && args != null && args.length == 1) {
 				Object next = args[0].getClass().getMethod("newValue").invoke(args[0]);
-				if (next instanceof Boolean enabled) {
-					VanillaTweaks.apply(key, enabled);
+				if (next != null) {
+					FabricVanillaTweaks.save(Map.of(option.key(), next.toString()));
 				}
 			}
 			return null;

@@ -15,8 +15,8 @@ import net.minecraft.world.item.ItemStack;
 public final class PracticalEnchantmentsFabric implements ModInitializer {
 	@Override
 	public void onInitialize() {
-		PracticalEnchantments.bootstrap();
 		FabricVanillaTweaks.load();
+		PracticalEnchantments.bootstrap();
 
 		CreativeModeTabEvents.modifyOutputEvent(PeContent.tabKey()).register(output -> {
 			for (ItemStack stack : PeContent.tabEntries()) {

@@ -2,6 +2,7 @@
 
 package com.practicalenchantments.enchantment.weapon;
 
+import com.practicalenchantments.config.Tunables;
 import com.huziyang520.merlinlib.api.MerlinApi;
 import com.huziyang520.merlinlib.event.BuiltInEvents;
 import com.huziyang520.merlinlib.event.EnchantmentContext;
@@ -19,9 +20,7 @@ import net.minecraft.world.phys.Vec3;
 public final class PowerfulEnchantment {
 	public static final String ID = PracticalEnchantments.MOD_ID + ":powerful";
 	public static final String GROUP_NAME = "crossbow";
-	private static final double KNOCKBACK_BASE = 0.25D;
-	private static final double KNOCKBACK_PER_LEVEL = 0.05D;
-
+	
 	private PowerfulEnchantment() {
 	}
 
@@ -37,8 +36,10 @@ public final class PowerfulEnchantment {
 		}
 		int level = ctx.level();
 		push(event, target, level);
-		target.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, (2 + 2 * level) * 20, level - 1, false, true));
-		BleedContent.add(target, (level + 1) / 2);
+		target.addEffect(new MobEffectInstance(MobEffects.SLOWNESS,
+			Tunables.secondsToTicks(Tunables.powerfulSlowSecondsBase() + Tunables.powerfulSlowSecondsPerLevel() * level),
+			level - 1, false, true));
+		BleedContent.add(target, (level + 1) / Tunables.powerfulBleedLayersDivisor());
 	}
 
 	private static void push(BuiltInEvents.ModifyDamageEvent event, LivingEntity target, int level) {
@@ -53,6 +54,7 @@ public final class PowerfulEnchantment {
 			dx /= length;
 			dz /= length;
 		}
-		MerlinApi.combat().knockback(target, KNOCKBACK_BASE + KNOCKBACK_PER_LEVEL * level, dx, dz);
+		MerlinApi.combat().knockback(target,
+			Tunables.powerfulKnockbackBase() + Tunables.powerfulKnockbackPerLevel() * level, dx, dz);
 	}
 }

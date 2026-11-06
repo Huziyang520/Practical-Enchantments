@@ -1,9 +1,11 @@
-// Fabric 侧原版附魔调整的存取：config/practical_enchantments/vanilla_tweaks.properties。
+// 全部配置的 Fabric 侧存取：config/practical_enchantments/vanilla_tweaks.properties。
 
 package com.practicalenchantments.fabric.config;
 
 import com.practicalenchantments.PracticalEnchantments;
-import com.practicalenchantments.config.VanillaTweaks;
+import com.practicalenchantments.config.ConfigOption;
+import com.practicalenchantments.config.ConfigSchema;
+import com.practicalenchantments.config.Tunables;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -19,43 +21,38 @@ import org.slf4j.LoggerFactory;
 public final class FabricVanillaTweaks {
 	private static final Logger LOGGER = LoggerFactory.getLogger(PracticalEnchantments.MOD_ID);
 	private static final Path FILE = Path.of("config", PracticalEnchantments.MOD_ID, "vanilla_tweaks.properties");
-
-	public static final String[] KEYS = {
-			VanillaTweaks.KEY_INFINITY_CROSSBOW,
-			VanillaTweaks.KEY_INFINITY_NO_ARROW,
-			VanillaTweaks.KEY_INFINITY_SPECTRAL,
-			VanillaTweaks.KEY_QUICK_CHARGE_BOW,
-			VanillaTweaks.KEY_POWER_CROSSBOW,
-			VanillaTweaks.KEY_THORNS_SHIELD,
-	};
+	private static final Map<String, String> CURRENT = new LinkedHashMap<>();
 
 	private FabricVanillaTweaks() {
 	}
 
 	public static void load() {
-		Map<String, Boolean> values = read();
+		Map<String, String> values = read();
 		write(values);
 		apply(values);
 	}
 
-	public static void save(Map<String, Boolean> changed) {
-		Map<String, Boolean> values = new LinkedHashMap<>();
-		for (String key : KEYS) {
-			values.put(key, changed.getOrDefault(key, VanillaTweaks.value(key)));
-		}
+	public static void save(Map<String, String> changed) {
+		Map<String, String> values = new LinkedHashMap<>(CURRENT);
+		values.putAll(changed);
 		write(values);
 		apply(values);
-		for (Map.Entry<String, Boolean> entry : values.entrySet()) {
+		for (Map.Entry<String, String> entry : changed.entrySet()) {
 			MezzConfigBridge.push(entry.getKey(), entry.getValue());
 		}
 	}
 
-	public static boolean current(String key) {
-		return MezzConfigBridge.value(key);
+	/** 当前生效值（供界面回显）。 */
+	public static String current(String key) {
+		return CURRENT.getOrDefault(key, ConfigSchema.get(key).defaultValue());
 	}
 
-	private static Map<String, Boolean> read() {
-		Map<String, Boolean> values = new LinkedHashMap<>();
+	public static Map<String, String> snapshot() {
+		return new LinkedHashMap<>(CURRENT);
+	}
+
+	private static Map<String, String> read() {
+		Map<String, String> values = new LinkedHashMap<>();
 		Properties properties = new Properties();
 		if (Files.isRegularFile(FILE)) {
 			try (Reader reader = new InputStreamReader(Files.newInputStream(FILE), StandardCharsets.UTF_8)) {
@@ -64,26 +61,31 @@ public final class FabricVanillaTweaks {
 				LOGGER.error("[PracticalEnchantments] 读取 {} 失败，沿用默认值", FILE, exception);
 			}
 		}
-		for (String key : KEYS) {
-			String raw = properties.getProperty(key);
-			values.put(key, raw == null ? VanillaTweaks.defaultValue(key) : Boolean.parseBoolean(raw.trim()));
+		for (ConfigOption option : ConfigSchema.all()) {
+			String raw = properties.getProperty(option.key());
+			values.put(option.key(), raw == null ? option.defaultValue() : raw.trim());
 		}
 		return values;
 	}
 
-	private static void write(Map<String, Boolean> values) {
+	private static void write(Map<String, String> values) {
 		StringBuilder text = new StringBuilder();
-		text.append("# Practical Enchantments —— 原版附魔调整\n");
+		text.append("# Practical Enchantments —— 附魔参数配置\n");
 		text.append("# 改完保存后：重进世界 / 重启服务器生效。\n");
-		text.append("#\n");
-		text.append("# infinity_crossbow  无限是否可以附在弩上（默认 false）\n");
-		text.append("# infinity_no_arrow  背包没有普通箭时是否仍可射击（默认 true）\n");
-		text.append("# infinity_spectral  无限是否同样作用于光灵箭（默认 true）\n");
-		text.append("# quick_charge_bow  快速装填是否可以附在弓上（默认 false）\n");
-		text.append("# power_crossbow    力量是否可以附在弩上（默认 true）\n");
-		text.append("# thorns_shield     刺棘是否可以附在盾上（默认 true）\n");
-		for (String key : KEYS) {
-			text.append('\n').append(key).append('=').append(values.get(key)).append('\n');
+		text.append("# 每项后面括号里是默认值与取值范围。\n");
+		for (String section : ConfigSchema.sections()) {
+			text.append('\n').append("# --- ").append(section).append(" ---\n");
+			for (ConfigOption option : ConfigSchema.in(section)) {
+				text.append("# ").append(option.key()).append(' ').append(option.defaultValue());
+				if (option.kind() == ConfigOption.Kind.INTEGER) {
+					text.append(" (").append(option.intMin()).append('~').append(option.intMax()).append(')');
+				} else if (option.kind() == ConfigOption.Kind.DECIMAL) {
+					text.append(" (").append((float) option.min()).append('~').append((float) option.max()).append(')');
+				}
+				text.append('\n');
+				text.append(option.key()).append('=').append(values.getOrDefault(option.key(), option.defaultValue()))
+						.append('\n');
+			}
 		}
 		try {
 			Files.createDirectories(FILE.getParent());
@@ -93,14 +95,9 @@ public final class FabricVanillaTweaks {
 		}
 	}
 
-	private static void apply(Map<String, Boolean> values) {
-		VanillaTweaks.apply(
-				values.get(VanillaTweaks.KEY_INFINITY_CROSSBOW),
-				values.get(VanillaTweaks.KEY_INFINITY_NO_ARROW),
-				values.get(VanillaTweaks.KEY_INFINITY_SPECTRAL));
-		VanillaTweaks.applyExtra(
-				values.get(VanillaTweaks.KEY_QUICK_CHARGE_BOW),
-				values.get(VanillaTweaks.KEY_POWER_CROSSBOW),
-				values.get(VanillaTweaks.KEY_THORNS_SHIELD));
+	private static void apply(Map<String, String> values) {
+		CURRENT.clear();
+		CURRENT.putAll(values);
+		Tunables.applyAll(CURRENT::get);
 	}
 }

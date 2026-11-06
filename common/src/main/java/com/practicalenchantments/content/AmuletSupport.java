@@ -2,6 +2,7 @@
 
 package com.practicalenchantments.content;
 
+import com.practicalenchantments.config.Tunables;
 import com.huziyang520.merlinlib.platform.Services;
 import java.util.HashSet;
 import java.util.Optional;
@@ -59,15 +60,15 @@ public final class AmuletSupport {
 
 	public static float penaltyFactor(ItemStack stack) {
 		if (stack.is(PeContent.item(PeContent.NETHERITE_AMULET))) {
-			return 0.05F;
+			return (float) Tunables.amuletPenaltyNetherite();
 		}
 		if (stack.is(PeContent.item(PeContent.DIAMOND_AMULET))) {
-			return 0.25F;
+			return (float) Tunables.amuletPenaltyDiamond();
 		}
 		if (stack.is(PeContent.item(PeContent.GOLDEN_AMULET))) {
-			return 0.5F;
+			return (float) Tunables.amuletPenaltyGolden();
 		}
-		return 0.75F;
+		return (float) Tunables.amuletPenaltyIron();
 	}
 
 	public static int repairCostCap(ItemStack stack) {
@@ -75,15 +76,15 @@ public final class AmuletSupport {
 			return Integer.MAX_VALUE;
 		}
 		if (stack.is(PeContent.item(PeContent.NETHERITE_AMULET))) {
-			return 1;
+			return Tunables.amuletRepairCapNetherite();
 		}
 		if (stack.is(PeContent.item(PeContent.DIAMOND_AMULET))) {
-			return 2;
+			return Tunables.amuletRepairCapDiamond();
 		}
 		if (stack.is(PeContent.item(PeContent.GOLDEN_AMULET))) {
-			return 3;
+			return Tunables.amuletRepairCapGolden();
 		}
-		return 4;
+		return Tunables.amuletRepairCapIron();
 	}
 
 	private static Set<Item> amulets() {

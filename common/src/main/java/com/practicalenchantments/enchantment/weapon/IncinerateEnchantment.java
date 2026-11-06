@@ -2,6 +2,7 @@
 
 package com.practicalenchantments.enchantment.weapon;
 
+import com.practicalenchantments.config.Tunables;
 import com.huziyang520.merlinlib.api.MerlinApi;
 import com.huziyang520.merlinlib.event.BuiltInEvents;
 import com.huziyang520.merlinlib.event.EnchantmentContext;
@@ -31,8 +32,9 @@ public final class IncinerateEnchantment {
 		KillMarks.markIncinerated(victim);
 		MerlinApi.drops().suppressDrops(victim);
 		int baseXp = victim.getExperienceReward(event.level(), player);
-		if (baseXp > 0) {
-			player.giveExperiencePoints(baseXp);
+		int extraXp = baseXp * (Tunables.incinerateXpMultiplier() - 1);
+		if (extraXp > 0) {
+			player.giveExperiencePoints(extraXp);
 		}
 	}
 }

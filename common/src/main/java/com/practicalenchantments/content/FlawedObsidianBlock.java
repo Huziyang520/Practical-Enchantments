@@ -2,6 +2,7 @@
 
 package com.practicalenchantments.content;
 
+import com.practicalenchantments.config.Tunables;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
@@ -17,10 +18,7 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 
 public final class FlawedObsidianBlock extends Block {
 	public static final IntegerProperty AGE = BlockStateProperties.AGE_3;
-	private static final int LAST_AGE = 3;
-	private static final int DELAY_BASE = 20;
-	private static final int DELAY_RANDOM = 20;
-
+	
 	public FlawedObsidianBlock(Properties properties) {
 		super(properties);
 		registerDefaultState(stateDefinition.any().setValue(AGE, 0));
@@ -41,7 +39,7 @@ public final class FlawedObsidianBlock extends Block {
 	@Override
 	protected void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
 		int age = state.getValue(AGE);
-		if (age < LAST_AGE) {
+		if (age < Tunables.flawedObsidianStages()) {
 			level.setBlock(pos, state.setValue(AGE, age + 1), Block.UPDATE_ALL);
 			level.scheduleTick(pos, this, nextDelay(random));
 			return;
@@ -62,6 +60,7 @@ public final class FlawedObsidianBlock extends Block {
 	}
 
 	private static int nextDelay(RandomSource random) {
-		return DELAY_BASE + random.nextInt(DELAY_RANDOM);
+		int bound = Tunables.flawedObsidianDelayRandomTicks();
+		return Tunables.flawedObsidianDelayBaseTicks() + (bound > 0 ? random.nextInt(bound) : 0);
 	}
 }

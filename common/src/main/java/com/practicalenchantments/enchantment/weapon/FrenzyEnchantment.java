@@ -2,6 +2,7 @@
 
 package com.practicalenchantments.enchantment.weapon;
 
+import com.practicalenchantments.config.Tunables;
 import com.huziyang520.merlinlib.event.BuiltInEvents;
 import com.huziyang520.merlinlib.event.EnchantmentContext;
 import com.huziyang520.merlinlib.event.EnchantmentEventRegistrar;
@@ -30,10 +31,10 @@ public final class FrenzyEnchantment {
 			return;
 		}
 
-		int baseSeconds = ctx.level() == 1 ? 6 : 8;
+		int baseSeconds = ctx.level() == 1 ? Tunables.frenzySecondsL1() : Tunables.frenzySecondsL2plus();
 		boolean axe = player.getMainHandItem().is(ItemTags.AXES);
-		int duration = baseSeconds * (axe ? 2 : 1) * 20;
-		int amplifier = ctx.level();
+		int duration = baseSeconds * (axe ? Tunables.frenzyAxeMultiplier() : 1) * 20;
+		int amplifier = ctx.level() * Tunables.frenzySpeedAmplifierPerLevel();
 		player.addEffect(new MobEffectInstance(MobEffects.SPEED, duration, amplifier, true, true));
 	}
 }

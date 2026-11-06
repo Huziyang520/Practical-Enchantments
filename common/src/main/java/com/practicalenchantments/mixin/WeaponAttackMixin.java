@@ -2,6 +2,7 @@
 
 package com.practicalenchantments.mixin;
 
+import com.practicalenchantments.config.Tunables;
 import com.practicalenchantments.content.WrathContent;
 import com.practicalenchantments.support.SweepWindow;
 import com.practicalenchantments.enchantment.weapon.HeavyBlowEnchantment;
@@ -22,12 +23,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(Player.class)
 public abstract class WeaponAttackMixin {
-	private static final float PROVOKED_DAMAGE_FACTOR = 0.10F;
-	private static final float ANGER_BONUS_BASE = 1.15F;
-	private static final float ANGER_BONUS_PER_LEVEL = 0.20F;
-	private static final float INVISIBLE_AIR_FACTOR = 2.0F;
-	private static final int ANGER_DURATION = 10 * 20;
-
+	
 	@Redirect(method = "attack", require = 1,
 			at = @At(value = "INVOKE",
 					target = "Lnet/minecraft/world/entity/Entity;hurtOrSimulate(Lnet/minecraft/world/damagesource/DamageSource;F)Z"))
@@ -57,14 +53,15 @@ public abstract class WeaponAttackMixin {
 			return 1.0F;
 		}
 		if (living.hasEffect(wrath)) {
-			return ANGER_BONUS_BASE + ANGER_BONUS_PER_LEVEL * level;
+			return (float) (Tunables.provocationAngerBonusBase() + Tunables.provocationAngerBonusPerLevel() * level);
 		}
-		living.addEffect(new MobEffectInstance(wrath, ANGER_DURATION, 0));
-		return PROVOKED_DAMAGE_FACTOR;
+		living.addEffect(new MobEffectInstance(wrath,
+					tunablesAngerTicks(), 0));
+		return (float) Tunables.provocationProvokedDamageFactor();
 	}
 
 	private static float invisibleAirFactor(ItemStack stack) {
-		return levelOf(stack, InvisibleAirEnchantment.ID) > 0 ? INVISIBLE_AIR_FACTOR : 1.0F;
+		return levelOf(stack, InvisibleAirEnchantment.ID) > 0 ? (float) Tunables.invisibleAirDamageFactor() : 1.0F;
 	}
 
 	private static int levelOf(ItemStack stack, String id) {
@@ -75,6 +72,10 @@ public abstract class WeaponAttackMixin {
 			}
 		}
 		return 0;
+	}
+
+	private static int tunablesAngerTicks() {
+		return Tunables.secondsToTicks(Tunables.provocationAngerSeconds());
 	}
 
 	private static Holder<MobEffect> wrathEffect(Player self) {

@@ -2,6 +2,7 @@
 
 package com.practicalenchantments.enchantment.armor;
 
+import com.practicalenchantments.config.Tunables;
 import com.practicalenchantments.PracticalEnchantments;
 import com.practicalenchantments.content.AmuletSupport;
 import com.practicalenchantments.enchantment.support.DeathSaveSupport;
@@ -18,7 +19,6 @@ import net.minecraft.world.item.enchantment.Enchantment;
 
 public final class DemonicPactEnchantment {
 	public static final String ID = PracticalEnchantments.MOD_ID + ":demonic_pact";
-	private static final long COOLDOWN_TICKS = 1200L;
 	private static final ConcurrentHashMap<UUID, Long> LAST_TRIGGER = new ConcurrentHashMap<>();
 	private static Holder<Enchantment> HOLDER;
 
@@ -45,16 +45,16 @@ public final class DemonicPactEnchantment {
 
 		long now = player.level().getGameTime();
 		Long last = LAST_TRIGGER.get(player.getUUID());
-		if (last != null && now - last < COOLDOWN_TICKS) {
+		if (last != null && now - last < Tunables.secondsToTicks(Tunables.demonicPactCooldownSeconds())) {
 			return false;
 		}
 
-		int cost = 64 - 8 * (level - 1);
+		int cost = Tunables.demonicPactCost(level);
 		if (countEmeralds(player) < cost) {
 			return false;
 		}
 		consumeEmeralds(player, cost);
-		int darknessTicks = (20 - 4 * (level - 1)) * 20;
+		int darknessTicks = Tunables.demonicPactDarknessTicks(level);
 		DeathSaveSupport.performResurrection(player, darknessTicks);
 		LAST_TRIGGER.put(player.getUUID(), now);
 		return true;

@@ -2,6 +2,7 @@
 
 package com.practicalenchantments.mixin;
 
+import com.practicalenchantments.config.Tunables;
 import com.practicalenchantments.config.VanillaTweaks;
 import com.practicalenchantments.enchantment.weapon.SwiftArrowEnchantment;
 import com.practicalenchantments.support.EnchantIds;
@@ -17,8 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(AbstractArrow.class)
 public abstract class AbstractArrowShootMixin {
 	private static final String QUICK_CHARGE = "minecraft:quick_charge";
-	private static final double FULL_DRAW_SPEED = 3.0D;
-
+	
 	@Inject(method = "shoot", at = @At("RETURN"), require = 1)
 	private void practicalenchantments$shootSpeed(double x, double y, double z, float velocity, float inaccuracy,
 												  CallbackInfo ci) {
@@ -35,7 +35,7 @@ public abstract class AbstractArrowShootMixin {
 		if (bow && VanillaTweaks.quickChargeBow()) {
 			int quickCharge = EnchantIds.levelOf(weapon, QUICK_CHARGE);
 			if (quickCharge > 0) {
-				factor *= 1.0D / (1.0D - 0.25D * quickCharge);
+				factor *= 1.0D / Math.max(1.0E-3D, 1.0D - Tunables.quickChargeOnBowSpeedPerLevel() * quickCharge);
 			}
 		}
 		if (factor <= 1.0D) {
@@ -47,8 +47,8 @@ public abstract class AbstractArrowShootMixin {
 			return;
 		}
 		double target = speed * factor;
-		if (bow && target > FULL_DRAW_SPEED) {
-			target = FULL_DRAW_SPEED;
+		if (bow && target > Tunables.swiftArrowBowSpeedCap()) {
+					target = Tunables.swiftArrowBowSpeedCap();
 		}
 		if (target > speed) {
 			self.setDeltaMovement(motion.scale(target / speed));

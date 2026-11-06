@@ -2,6 +2,7 @@
 
 package com.practicalenchantments.enchantment.weapon;
 
+import com.practicalenchantments.config.Tunables;
 import com.practicalenchantments.PracticalEnchantments;
 import java.util.Map;
 import java.util.UUID;
@@ -17,9 +18,7 @@ public final class HeavyBlowEnchantment {
 	public static Holder<Enchantment> HOLDER;
 	private static final Map<UUID, Boolean> LAST_HIT = new ConcurrentHashMap<>();
 	private static final Map<UUID, Integer> LAST_HIT_TICK = new ConcurrentHashMap<>();
-	private static final float HIT_FACTOR = 0.9F;
-	private static final float MISS_FACTOR = 1.6F;
-
+	
 	private HeavyBlowEnchantment() {
 	}
 
@@ -44,11 +43,14 @@ public final class HeavyBlowEnchantment {
 		if (previous != null && previous == player.tickCount) {
 			return;
 		}
-		player.getMainHandItem().hurtAndBreak(1, player, EquipmentSlot.MAINHAND);
+		for (int i = 0; i < Tunables.heavyBlowExtraDurabilityPerHit(); i++) {
+			player.getMainHandItem().hurtAndBreak(1, player, EquipmentSlot.MAINHAND);
+		}
 	}
 
 	public static float cooldownFactor(Player player) {
 		Boolean hit = LAST_HIT.get(player.getUUID());
-		return Boolean.TRUE.equals(hit) ? HIT_FACTOR : MISS_FACTOR;
+		return Boolean.TRUE.equals(hit) ? (float) Tunables.heavyBlowHitCooldownFactor()
+				: (float) Tunables.heavyBlowMissCooldownFactor();
 	}
 }
