@@ -1,3 +1,19 @@
+### 1.8.0 (2026-11-07)
+
+- Requires MerlinLib 1.1.0 or newer.
+- Shipped for 1.20.1 (Forge) and 26.3 (NeoForge, Fabric).
+- Every enchantment parameter is now a setting: 117 of them, grouped as vanilla tweak toggles, armour,
+  weapons, tools, effects and linked enchantments, and sorted by enchantment inside each group.
+- Changing a value does not change any default: out of the box the mod behaves exactly as in 1.7.0.
+- On NeoForge the settings use the loader's own configuration screen; with Cloth Config, Jupiter or
+  MezzConfig installed the same settings can be edited from their screens on every loader.
+- Settings that are needed while the game is still starting (bleed and rot layer timing, the wrath
+  potion duration) are read from the config file before registration, so editing them takes effect on
+  the next launch instead of the one after.
+- Settings that the client also uses for prediction (Heavy Blow attack cooldown, Repeating Crossbow
+  charge time, Swift Arrow speed, Invisible Air damage, Aerial Haste mining speed) must hold the same
+  value on client and server; NeoForge syncs them, Fabric and Forge read the local file.
+
 ### 1.7.0 (2026-11-04)
 
 - Requires MerlinLib 1.1.0 or newer.
