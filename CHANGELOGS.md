@@ -1,7 +1,7 @@
 ### 1.8.0 (2026-11-07)
 
 - Requires MerlinLib 1.1.0 or newer.
-- Shipped for 1.20.1 (Forge) and 26.3 (NeoForge, Fabric).
+- Shipped for 1.20.1 (Forge), 1.21.1 (NeoForge), 26.1 - 26.2 (NeoForge, Fabric) and 26.3 (NeoForge, Fabric).
 - Every enchantment parameter is now a setting: 117 of them, grouped as vanilla tweak toggles, armour,
   weapons, tools, effects and linked enchantments, and sorted by enchantment inside each group.
 - Changing a value does not change any default: out of the box the mod behaves exactly as in 1.7.0.
