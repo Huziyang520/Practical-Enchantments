@@ -2,6 +2,7 @@
 
 package com.practicalenchantments.enchantment.support;
 
+import com.practicalenchantments.config.Tunables;
 import com.practicalenchantments.PracticalEnchantments;
 import java.util.ArrayList;
 import java.util.List;
@@ -66,9 +67,12 @@ public final class DeathSaveSupport {
 		player.setHealth(1.0F);
 		player.removeEffect(MobEffects.REGENERATION);
 		player.removeEffect(MobEffects.ABSORPTION);
-		player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 900, 1));
-		player.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 100, 1));
-		player.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 800, 0));
+		player.addEffect(new MobEffectInstance(MobEffects.REGENERATION,
+					Tunables.secondsToTicks(Tunables.deathSaveRegenSeconds()), Tunables.deathSaveRegenAmplifier()));
+		player.addEffect(new MobEffectInstance(MobEffects.ABSORPTION,
+					Tunables.secondsToTicks(Tunables.deathSaveAbsorptionSeconds()), Tunables.deathSaveAbsorptionAmplifier()));
+		player.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE,
+					Tunables.secondsToTicks(Tunables.deathSaveFireResistanceSeconds()), 0));
 		if (darknessTicks > 0) {
 			player.addEffect(new MobEffectInstance(MobEffects.DARKNESS, darknessTicks, 0));
 		}

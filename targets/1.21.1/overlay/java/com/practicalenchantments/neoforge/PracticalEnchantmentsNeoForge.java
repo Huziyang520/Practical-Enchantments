@@ -23,6 +23,7 @@ import net.neoforged.neoforge.event.village.VillagerTradesEvent;
 @Mod(PracticalEnchantments.MOD_ID)
 public final class PracticalEnchantmentsNeoForge {
 	public PracticalEnchantmentsNeoForge(IEventBus modEventBus, ModContainer container) {
+		NeoConfig.preload();
 		PeContent.register(modEventBus);
 		PracticalEnchantments.bootstrap();
 		container.registerConfig(NeoConfig.type(), NeoConfig.SPEC);

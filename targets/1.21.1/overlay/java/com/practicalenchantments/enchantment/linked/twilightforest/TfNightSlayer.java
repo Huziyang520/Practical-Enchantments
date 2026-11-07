@@ -2,6 +2,7 @@
 
 package com.practicalenchantments.enchantment.linked.twilightforest;
 
+import com.practicalenchantments.config.Tunables;
 import com.huziyang520.merlinlib.api.LootInjectionBuilder;
 import com.huziyang520.merlinlib.api.MerlinApi;
 import com.huziyang520.merlinlib.content.Acquisition;
@@ -18,8 +19,6 @@ import net.minecraft.world.item.enchantment.Enchantment;
 public final class TfNightSlayer {
 	public static final String PATH = "tf_night_slayer";
 	public static final String ID = PracticalEnchantments.MOD_ID + ":" + PATH;
-	private static final long NIGHT_START = 13000L;
-	private static final long NIGHT_END = 23000L;
 	private static final long DAY_LENGTH = 24000L;
 
 	private static final String[] LOOT_TABLES = {
@@ -69,11 +68,12 @@ public final class TfNightSlayer {
 		if (!isNight(event.level())) {
 			return;
 		}
-		event.damage().add(2.0F + 1.5F * (ctx.level() - 1));
+		event.damage().add((float) (Tunables.tfNightSlayerDamageBase()
+						+ Tunables.tfNightSlayerDamagePerLevel() * (ctx.level() - 1)));
 	}
 
 	private static boolean isNight(ServerLevel level) {
 		long time = level.getDayTime() % DAY_LENGTH;
-		return time >= NIGHT_START && time <= NIGHT_END;
+		return time >= Tunables.tfNightSlayerNightStart() && time <= Tunables.tfNightSlayerNightEnd();
 	}
 }

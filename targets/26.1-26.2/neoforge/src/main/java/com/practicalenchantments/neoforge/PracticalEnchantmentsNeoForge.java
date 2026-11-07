@@ -21,6 +21,7 @@ import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 @Mod(PracticalEnchantments.MOD_ID)
 public final class PracticalEnchantmentsNeoForge {
 	public PracticalEnchantmentsNeoForge(IEventBus modEventBus, ModContainer container) {
+		NeoConfig.preload();
 		PracticalEnchantments.bootstrap();
 		container.registerConfig(NeoConfig.type(), NeoConfig.SPEC);
 		modEventBus.addListener(ModConfigEvent.Loading.class, event -> NeoConfig.apply());

@@ -2,6 +2,7 @@
 
 package com.practicalenchantments.enchantment.armor;
 
+import com.practicalenchantments.config.Tunables;
 import com.huziyang520.merlinlib.api.EntityCounter;
 import com.huziyang520.merlinlib.event.EnchantmentEventRegistrar;
 import com.huziyang520.merlinlib.event.GlobalEvents;
@@ -19,12 +20,9 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.ItemStack;
 
 public final class BrightEnchantment {
-	private static final int DURABILITY_INTERVAL = 550;
 	public static final String ID = PracticalEnchantments.MOD_ID + ":bright";
 	private static Holder<Enchantment> HOLDER;
-	private static final int NIGHT_VISION_DURATION = 400;
-	private static final int REFRESH_INTERVAL = 20;
-
+	
 	private static final ResourceLocation NV_GRANTED =
 		ResourceLocation.fromNamespaceAndPath(PracticalEnchantments.MOD_ID, "bright_nv_granted");
 
@@ -44,15 +42,16 @@ public final class BrightEnchantment {
 		if (hasBright) {
 			if (current == null) {
 				player.addEffect(new MobEffectInstance(
-					MobEffects.NIGHT_VISION, NIGHT_VISION_DURATION, 0, true, false));
-			} else if (isOurs(current) && event.tickCount() % REFRESH_INTERVAL == 0) {
+					MobEffects.NIGHT_VISION, Tunables.secondsToTicks(Tunables.brightNightVisionSeconds()), 0, true, false));
+			} else if (isOurs(current) && event.tickCount() % Tunables.secondsToTicks(Tunables.brightRefreshSeconds()) == 0) {
 				player.addEffect(new MobEffectInstance(
-					MobEffects.NIGHT_VISION, NIGHT_VISION_DURATION, 0, true, false));
+					MobEffects.NIGHT_VISION, Tunables.secondsToTicks(Tunables.brightNightVisionSeconds()), 0, true, false));
 			}
 			EntityCounter.set(player, NV_GRANTED, 1);
 			long timeOfDay = player.level().getGameTime() % 24000;
-			if (timeOfDay >= 13000 && timeOfDay <= 23000 && event.tickCount() % DURABILITY_INTERVAL == 0
-					&& !helmet.isEmpty()) {
+			boolean night = timeOfDay >= Tunables.brightNightStart() && timeOfDay <= Tunables.brightNightEnd();
+			if ((night || !Tunables.brightDurabilityOnlyAtNight())
+					&& event.tickCount() % Tunables.brightDurabilityIntervalTicks() == 0 && !helmet.isEmpty()) {
 				helmet.hurtAndBreak(1, player, EquipmentSlot.HEAD);
 			}
 		} else {
@@ -66,6 +65,6 @@ public final class BrightEnchantment {
 	private static boolean isOurs(MobEffectInstance instance) {
 		return !instance.isInfiniteDuration()
 			&& instance.getAmplifier() == 0
-			&& instance.getDuration() <= NIGHT_VISION_DURATION;
+			&& instance.getDuration() <= Tunables.secondsToTicks(Tunables.brightNightVisionSeconds());
 	}
 }

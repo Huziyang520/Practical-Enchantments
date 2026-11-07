@@ -2,6 +2,7 @@
 
 package com.practicalenchantments.enchantment.weapon;
 
+import com.practicalenchantments.config.Tunables;
 import com.huziyang520.merlinlib.event.BuiltInEvents;
 import com.huziyang520.merlinlib.event.EnchantmentContext;
 import com.huziyang520.merlinlib.event.EnchantmentEventRegistrar;
@@ -23,9 +24,7 @@ import net.minecraft.world.level.block.Block;
 
 public final class BeheadingEnchantment {
 	public static final String ID = PracticalEnchantments.MOD_ID + ":beheading";
-	private static final float BONUS_PER_LEVEL = 0.025F;
-	private static final float WITHER_SKELETON_BASE = 0.025F;
-
+	
 	private BeheadingEnchantment() {
 	}
 
@@ -43,8 +42,8 @@ public final class BeheadingEnchantment {
 		if (head == null) {
 			return;
 		}
-		float base = victim instanceof WitherSkeleton ? WITHER_SKELETON_BASE : 0.0F;
-		float chance = base + BONUS_PER_LEVEL * ctx.level();
+		float base = victim instanceof WitherSkeleton ? (float) Tunables.beheadingWitherSkeletonBase() : 0.0F;
+		float chance = base + (float) Tunables.beheadingChancePerLevel() * ctx.level();
 		if (event.killer().getRandom().nextFloat() < chance) {
 			Block.popResource(event.level(), victim.blockPosition(), new ItemStack(head));
 		}

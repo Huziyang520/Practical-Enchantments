@@ -2,6 +2,7 @@
 
 package com.practicalenchantments.content;
 
+import com.practicalenchantments.config.Tunables;
 import com.huziyang520.merlinlib.api.MerlinApi;
 import com.huziyang520.merlinlib.effect.LayeredEffect;
 import com.huziyang520.merlinlib.effect.MerlinMobEffect;
@@ -29,15 +30,12 @@ import net.minecraft.world.level.block.Blocks;
 public final class RotContent {
 	public static final String NAMESPACE = "practical_enchantments";
 	public static final ResourceLocation EFFECT_ID = ResourceLocation.fromNamespaceAndPath(NAMESPACE, "rot");
-	public static final int LAYER_TICKS = 500;
-	public static final int DAMAGE_INTERVAL = 12;
-	public static final float DAMAGE_PER_LAYER = 0.25F;
 	public static final int COLOR = 0x4C8C2B;
 	private static final EquipmentSlot[] ARMOR = {
 			EquipmentSlot.FEET, EquipmentSlot.LEGS, EquipmentSlot.CHEST, EquipmentSlot.HEAD
 	};
 
-	private static final LayeredEffect LAYERS = new LayeredEffect(LAYER_TICKS, 999);
+	private static LayeredEffect LAYERS;
 	private static MerlinMobEffect effect;
 
 	private RotContent() {
@@ -49,7 +47,8 @@ public final class RotContent {
 				.color(COLOR)
 				.onTick(RotContent::onTick)
 				.submit();
-		LayeredEffect.register(EFFECT_ID.toString(), LAYERS);
+		LAYERS = new LayeredEffect(Tunables.rotLayerTicks(), 999);
+				LayeredEffect.register(EFFECT_ID.toString(), LAYERS);
 		LAYERS.bindDisplay(BuiltInRegistries.MOB_EFFECT.wrapAsHolder(effect));
 	}
 
@@ -80,11 +79,11 @@ public final class RotContent {
 			scheduleDisplay(level, entity, holder);
 			return false;
 		}
-		if (entity.tickCount % DAMAGE_INTERVAL == 0) {
+		if (entity.tickCount % Tunables.rotDamageIntervalTicks() == 0) {
 			// 每层各自结算：各自的伤害、各自的护甲磨损，磨损量再按当前层数叠加一次
 			for (int layer = 0; layer < layers && !entity.isDeadOrDying(); layer++) {
 				if (entity.getHealth() > 1.0F) {
-					hurt(level, entity, DAMAGE_PER_LAYER);
+					hurt(level, entity, (float) Tunables.rotDamagePerLayer());
 				}
 				wearArmor(entity, layers);
 			}
@@ -96,7 +95,7 @@ public final class RotContent {
 	}
 
 	private static void wearArmor(LivingEntity entity, int layers) {
-		int extra = layers / 10;
+		int extra = layers * Tunables.rotArmorWearPer10Layers() / 10;
 		int bonus = entity.getRandom().nextFloat() * 10.0F < (layers % 10) ? 1 : 0;
 		int total = extra + bonus;
 		if (total <= 0) {
@@ -138,7 +137,7 @@ public final class RotContent {
 		int want = Math.max(1, Math.min(255, instance.getAmplifier() + 1));
 		int longest = LAYERS.longest(entity);
 		boolean freshCast = layers <= 0
-				? instance.getDuration() > LAYER_TICKS || instance.getAmplifier() > 0
+				? instance.getDuration() > Tunables.rotLayerTicks() || instance.getAmplifier() > 0
 				: instance.getDuration() > longest + 5;
 		if (!freshCast) {
 			return layers;

@@ -2,6 +2,7 @@
 
 package com.practicalenchantments.mixin;
 
+import com.practicalenchantments.config.Tunables;
 import com.practicalenchantments.content.WrathContent;
 import com.practicalenchantments.enchantment.weapon.HeavyBlowEnchantment;
 import com.practicalenchantments.enchantment.weapon.InvisibleAirEnchantment;
@@ -23,11 +24,6 @@ import org.spongepowered.asm.mixin.Mixin;
 
 @Mixin(Player.class)
 public abstract class WeaponAttackMixin {
-	private static final float PROVOKED_DAMAGE_FACTOR = 0.10F;
-	private static final float ANGER_BONUS_BASE = 1.15F;
-	private static final float ANGER_BONUS_PER_LEVEL = 0.20F;
-	private static final float INVISIBLE_AIR_FACTOR = 2.0F;
-	private static final int ANGER_DURATION = 10 * 20;
 
 	@Redirect(method = "attack", require = 1,
 			at = @At(value = "INVOKE",
@@ -57,14 +53,15 @@ public abstract class WeaponAttackMixin {
 			return 1.0F;
 		}
 		if (living.hasEffect(wrath)) {
-			return ANGER_BONUS_BASE + ANGER_BONUS_PER_LEVEL * level;
+			return (float) (Tunables.provocationAngerBonusBase() + Tunables.provocationAngerBonusPerLevel() * level);
 		}
-		living.addEffect(new MobEffectInstance(wrath, ANGER_DURATION, 0));
-		return PROVOKED_DAMAGE_FACTOR;
+		living.addEffect(new MobEffectInstance(wrath,
+			Tunables.secondsToTicks(Tunables.provocationAngerSeconds()), 0));
+		return (float) Tunables.provocationProvokedDamageFactor();
 	}
 
 	private static float invisibleAirFactor(ItemStack stack) {
-		return levelOf(stack, InvisibleAirEnchantment.ID) > 0 ? INVISIBLE_AIR_FACTOR : 1.0F;
+		return levelOf(stack, InvisibleAirEnchantment.ID) > 0 ? (float) Tunables.invisibleAirDamageFactor() : 1.0F;
 	}
 
 	private static int levelOf(ItemStack stack, String id) {

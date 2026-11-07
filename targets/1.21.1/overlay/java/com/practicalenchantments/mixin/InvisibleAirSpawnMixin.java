@@ -2,6 +2,7 @@
 
 package com.practicalenchantments.mixin;
 
+import com.practicalenchantments.config.Tunables;
 import com.practicalenchantments.enchantment.weapon.InvisibleAirEnchantment;
 import com.practicalenchantments.PracticalEnchantments;
 import net.minecraft.core.Holder;
@@ -19,8 +20,7 @@ import org.spongepowered.asm.mixin.Mixin;
 
 @Mixin(Mob.class)
 public abstract class InvisibleAirSpawnMixin {
-	private static final float SPAWN_CHANCE = 0.02F;
-
+	
 	@Inject(method = "enchantSpawnedWeapon", at = @At("TAIL"), require = 1)
 	private void practicalenchantments$grantInvisibleAir(ServerLevelAccessor level, RandomSource random,
 			DifficultyInstance difficulty, CallbackInfo info) {
@@ -29,7 +29,7 @@ public abstract class InvisibleAirSpawnMixin {
 		if (weapon.isEmpty() || !weapon.is(ItemTags.SWORDS) || !weapon.getEnchantments().isEmpty()) {
 			return;
 		}
-		if (random.nextFloat() >= SPAWN_CHANCE) {
+		if (random.nextFloat() >= (float) Tunables.invisibleAirMobSpawnChance()) {
 			return;
 		}
 		Holder<Enchantment> holder = InvisibleAirEnchantment.holder(level.registryAccess());

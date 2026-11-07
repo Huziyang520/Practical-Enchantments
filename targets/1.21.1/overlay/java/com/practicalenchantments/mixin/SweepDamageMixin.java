@@ -2,6 +2,7 @@
 
 package com.practicalenchantments.mixin;
 
+import com.practicalenchantments.config.Tunables;
 import com.practicalenchantments.enchantment.weapon.InvisibleAirEnchantment;
 import com.practicalenchantments.PracticalEnchantments;
 import net.minecraft.world.damagesource.DamageSource;
@@ -18,6 +19,6 @@ public abstract class SweepDamageMixin {
 					target = "Lnet/minecraft/world/entity/LivingEntity;hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z"))
 	private boolean practicalenchantments$doubleSweepDamage(LivingEntity victim, DamageSource source, float amount) {
 		Player self = (Player) (Object) this;
-		return victim.hurt(source, InvisibleAirEnchantment.hasInMainHand(self) ? amount * 2.0F : amount);
+		return victim.hurt(source, InvisibleAirEnchantment.hasInMainHand(self) ? amount * (float) Tunables.invisibleAirSweepFactor() : amount);
 	}
 }
