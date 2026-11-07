@@ -2,7 +2,9 @@
 
 package com.practicalenchantments.config;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import me.shedaniel.clothconfig2.api.AbstractConfigListEntry;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
@@ -24,8 +26,27 @@ public final class ClothScreen {
 		for (String section : ConfigSchema.sections()) {
 			ConfigCategory category = builder.getOrCreateCategory(
 					Component.translatable(ConfigSchema.langKey(section)));
+			String group = null;
+			List<AbstractConfigListEntry> children = new ArrayList<>();
 			for (ConfigOption option : ConfigSchema.in(section)) {
-				category.addEntry(entry(entries, option, pending));
+				String groupKey = option.parent();
+				if (!groupKey.equals(group)) {
+					if (group != null) {
+						category.addEntry(subCategory(entries, section + "." + group, children));
+						children = new ArrayList<>();
+					}
+					group = groupKey;
+				}
+				children.add(entry(entries, option, pending));
+			}
+			if (group != null) {
+				if (group.isEmpty()) {
+					for (AbstractConfigListEntry child : children) {
+						category.addEntry(child);
+					}
+				} else {
+					category.addEntry(subCategory(entries, section + "." + group, children));
+				}
 			}
 		}
 		builder.setSavingRunnable(() -> {
@@ -37,6 +58,14 @@ public final class ClothScreen {
 			ForgeConfig.write(values);
 		});
 		return builder.build();
+	}
+
+
+	@SuppressWarnings({"rawtypes", "unchecked"})
+	private static AbstractConfigListEntry subCategory(ConfigEntryBuilder entries, String path,
+			List<AbstractConfigListEntry> children) {
+		Component label = Component.translatable(ConfigSchema.langKey(path));
+		return entries.startSubCategory(label, children).build();
 	}
 
 	private static AbstractConfigListEntry<?> entry(ConfigEntryBuilder entries, ConfigOption option,
