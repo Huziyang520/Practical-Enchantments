@@ -15,6 +15,7 @@
     "IncinerateDropMixin",
     "HeavyBlowCritMixin",
     "HeavyBlowCooldownMixin",
+    "HeavyBlowHitMixin",
     "WeaponAttackMixin",
     "InvisibleAirSpawnMixin",
     "AmuletPenaltyMixin",

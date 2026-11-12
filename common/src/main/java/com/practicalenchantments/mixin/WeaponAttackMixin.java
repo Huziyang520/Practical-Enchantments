@@ -10,7 +10,6 @@ import com.practicalenchantments.enchantment.weapon.InvisibleAirEnchantment;
 import com.practicalenchantments.enchantment.weapon.ProvocationEnchantment;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
@@ -18,29 +17,40 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Player.class)
 public abstract class WeaponAttackMixin {
-	
-	@Redirect(method = "attack", require = 1,
+	@Unique
+	private Entity practicalenchantments$attackTarget;
+
+	@Inject(method = "attack", at = @At("HEAD"), require = 1)
+	private void practicalenchantments$beginSwing(Entity target, CallbackInfo info) {
+		practicalenchantments$attackTarget = target;
+		Player self = (Player) (Object) this;
+		if (HeavyBlowEnchantment.has(self)) {
+			HeavyBlowEnchantment.markSwing(self, false);
+		}
+	}
+
+	// 只改伤害参数、不改写调用点描述符，否则同一调用点上其它模组的 @ModifyArg 会注入失败。
+	@ModifyArg(method = "attack", require = 1, index = 1,
 			at = @At(value = "INVOKE",
 					target = "Lnet/minecraft/world/entity/Entity;hurtOrSimulate(Lnet/minecraft/world/damagesource/DamageSource;F)Z"))
-	private boolean practicalenchantments$weaponHit(Entity target, DamageSource source, float amount) {
+	private float practicalenchantments$weaponHit(float amount) {
 		Player self = (Player) (Object) this;
-		// 打尸体只会把 NeoForge 的死亡断言点炸，直接当作没命中
+		Entity target = practicalenchantments$attackTarget;
+		// 打尸体不缩放伤害，也不触发挑衅；后半段的结算交还原版。
 		if (!target.isAlive() || target instanceof LivingEntity living && living.isDeadOrDying()) {
-			return false;
+			return amount;
 		}
 		ItemStack stack = self.getMainHandItem();
-		float scaled = amount * provocationFactor(self, target, stack) * invisibleAirFactor(stack);
 		SweepWindow.begin(self, target);
-		boolean hit = target.hurtOrSimulate(source, scaled);
-		if (HeavyBlowEnchantment.has(self)) {
-			HeavyBlowEnchantment.markSwing(self, hit);
-		}
-		return hit;
+		return amount * provocationFactor(self, target, stack) * invisibleAirFactor(stack);
 	}
 
 	private static float provocationFactor(Player self, Entity target, ItemStack stack) {

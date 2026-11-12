@@ -5,20 +5,19 @@ package com.practicalenchantments.mixin;
 import com.practicalenchantments.config.Tunables;
 import com.practicalenchantments.enchantment.weapon.InvisibleAirEnchantment;
 import com.practicalenchantments.PracticalEnchantments;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.Mixin;
 
 @Mixin(Player.class)
 public abstract class SweepDamageMixin {
-	@Redirect(method = "attack", require = 1,
+	// 只改横扫那一下的伤害参数，不动调用点描述符。
+	@ModifyArg(method = "attack", require = 1, index = 1,
 			at = @At(value = "INVOKE",
 					target = "Lnet/minecraft/world/entity/LivingEntity;hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z"))
-	private boolean practicalenchantments$doubleSweepDamage(LivingEntity victim, DamageSource source, float amount) {
+	private float practicalenchantments$doubleSweepDamage(float amount) {
 		Player self = (Player) (Object) this;
-		return victim.hurt(source, InvisibleAirEnchantment.hasInMainHand(self) ? amount * (float) Tunables.invisibleAirSweepFactor() : amount);
+		return InvisibleAirEnchantment.hasInMainHand(self) ? amount * (float) Tunables.invisibleAirSweepFactor() : amount;
 	}
 }

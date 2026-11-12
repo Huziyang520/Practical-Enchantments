@@ -15,6 +15,7 @@
     "GodwoodLootMixin",
     "IncinerateDropMixin",
     "HeavyBlowCooldownMixin",
+    "HeavyBlowHitMixin",
     "WeaponAttackMixin",
     "InvisibleAirSpawnMixin",
     "AmuletPenaltyMixin",

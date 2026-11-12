@@ -97,6 +97,7 @@ def overlaidJava = [
 		'com/practicalenchantments/mixin/GodwoodLootMixin.java',
 		'com/practicalenchantments/mixin/HuntingArrowMixin.java',
 		'com/practicalenchantments/mixin/HeavyBlowCooldownMixin.java',
+		'com/practicalenchantments/mixin/HeavyBlowHitMixin.java',
 		'com/practicalenchantments/mixin/IncinerateDropMixin.java',
 		'com/practicalenchantments/mixin/InvisibleAirSpawnMixin.java',
 		'com/practicalenchantments/mixin/PlayerGetDestroySpeedMixin.java',
@@ -184,7 +185,8 @@ sourceSets {
 dependencies {
 	// MerlinLib 1.21.1：先构建 MerlinLib/master/targets/1.21.1，再构建本目标。
 	// 1.21.1 跑在 Mojang 官方名上，库 jar 可直接当依赖用，不需要重映射。
-	compileOnly files("../../../../MerlinLib/master/targets/1.21.1/build/libs/merlinlib-${merlinlib_version}-neoforge-1.21.1.jar")
+	// 编译取本地实际产物（merlinlib_jar_version），发布依赖下界仍是 merlinlib_version，两者不联动。
+	compileOnly files("../../../../MerlinLib/master/targets/1.21.1/build/libs/merlinlib-${merlinlib_jar_version}-neoforge-1.21.1.jar")
 
 	compileOnly 'org.spongepowered:mixin:0.8.7'
 	compileOnly 'com.google.code.findbugs:jsr305:3.0.2'
