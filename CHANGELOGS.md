@@ -1,3 +1,10 @@
+### 1.8.1 (2026-11-12)
+
+- Requires MerlinLib 1.1.0 or newer.
+- Provocation, Invisible Air and Heavy Blow no longer replace the vanilla attack damage call, so they
+  work alongside mods that hook the same call (Botania among them).
+- Fixed the Repeating Crossbow charge time settings having no effect on 26.1 - 26.2.
+
 ### 1.8.0 (2026-11-07)
 
 - Requires MerlinLib 1.1.0 or newer.
