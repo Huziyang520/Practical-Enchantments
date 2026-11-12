@@ -11,7 +11,6 @@ import com.practicalenchantments.enchantment.ProvocationEnchantment;
 import java.util.Map;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
@@ -21,25 +20,36 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Player.class)
 public abstract class WeaponAttackMixin {
-	
-	@Redirect(method = "attack", require = 1,
+	@Unique
+	private Entity practicalenchantments$attackTarget;
+
+	@Inject(method = "attack", at = @At("HEAD"), require = 1)
+	private void practicalenchantments$beginSwing(Entity target, CallbackInfo info) {
+		practicalenchantments$attackTarget = target;
+		Player self = (Player) (Object) this;
+		if (HeavyBlowEnchantment.has(self)) {
+			HeavyBlowEnchantment.markSwing(self, false);
+		}
+	}
+
+	// 只改伤害参数、不改写调用点描述符，否则同一调用点上其它模组的 @ModifyArg 会注入失败。
+	@ModifyArg(method = "attack", require = 1, index = 1,
 			at = @At(value = "INVOKE",
 					target = "Lnet/minecraft/world/entity/Entity;hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z"))
-	private boolean practicalenchantments$weaponHit(Entity target, DamageSource source, float amount) {
+	private float practicalenchantments$weaponHit(float amount) {
 		Player self = (Player) (Object) this;
+		Entity target = practicalenchantments$attackTarget;
 		ItemStack stack = self.getMainHandItem();
-		float scaled = amount * provocationFactor(target, stack) * invisibleAirFactor(stack);
 		SweepWindow.begin(self, target);
-		boolean hit = target.hurt(source, scaled);
-		if (HeavyBlowEnchantment.has(self)) {
-			HeavyBlowEnchantment.markSwing(self, hit);
-		}
-		return hit;
+		return amount * provocationFactor(target, stack) * invisibleAirFactor(stack);
 	}
 
 	private static float provocationFactor(Entity target, ItemStack stack) {

@@ -18,6 +18,7 @@
     "WeaponAttackMixin",
     "SweepDamageMixin",
     "HeavyBlowCooldownMixin",
+    "HeavyBlowHitMixin",
     "InvisibleAirSpawnMixin",
     "AmuletPenaltyMixin",
     "AmuletUpgradeKeepMixin",
