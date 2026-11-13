@@ -39,7 +39,7 @@ public final class PracticalEnchantments {
 		WrathContent.register();
 		LinkedEnchantments.registerContent();
 		MerlinLibNotice.registerEarly();
-		MerlinApi.lifecycle().onServerStarting(server -> registerLootInjections());
+		registerLootInjections();
 
 		MerlinApi.lifecycle().onServerStarted(server -> {
 			PracticalConfig.load();
