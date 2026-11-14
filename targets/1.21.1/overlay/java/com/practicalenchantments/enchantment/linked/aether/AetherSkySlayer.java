@@ -45,8 +45,7 @@ public final class AetherSkySlayer {
 		for (String path : LOOT_PATHS) {
 			MerlinApi.loot().register(LootInjectionBuilder.create()
 					.toTables(namespace + ":" + path)
-					.asBook()
-					.withEnchantments(ID)
+					.asRandomBook()
 					.chance(0.12F)
 					.weight(1)
 					.quality(2)

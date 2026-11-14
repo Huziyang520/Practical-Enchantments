@@ -26,8 +26,7 @@ public final class ObsidianWalkerLoot {
 	private static void inject(String table) {
 		MerlinApi.loot().register(LootInjectionBuilder.create()
 			.toTables(table)
-			.asBook()
-			.withEnchantments(ObsidianWalkerEnchantment.ID)
+			.asRandomBook()
 			.chance(CHANCE)
 			.weight(1)
 			.quality(QUALITY_TREASURE));

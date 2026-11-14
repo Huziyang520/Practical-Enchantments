@@ -46,8 +46,7 @@ public final class TfQuench {
 		for (String table : LOOT_TABLES) {
 			MerlinApi.loot().register(LootInjectionBuilder.create()
 					.toTables(table)
-					.asBook()
-					.withEnchantments(ID)
+					.asRandomBook()
 					.chance(0.12F)
 					.weight(1)
 					.quality(2)
