@@ -39,8 +39,7 @@ public final class HuntingArrow {
 		for (String table : LOOT_TABLES) {
 			MerlinApi.loot().register(LootInjectionBuilder.create()
 					.toTables(table)
-					.asBook()
-					.withEnchantments(ID)
+					.asRandomBook()
 					.chance(0.20F)
 					.weight(1)
 					.quality(2)
@@ -48,8 +47,7 @@ public final class HuntingArrow {
 		}
 		MerlinApi.loot().register(LootInjectionBuilder.create()
 				.toTables("twilightforest:entities/snow_queen")
-				.asBook()
-				.withEnchantments(ID)
+				.asRandomBook()
 				.chance(0.65F)
 				.weight(1)
 				.quality(2)
