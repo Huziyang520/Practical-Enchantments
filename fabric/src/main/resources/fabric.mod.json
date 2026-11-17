@@ -40,7 +40,7 @@
       ]
     },
     "recommends": {
-      "forge-config-api-port": "*"
+      "forgeconfigapiport": "*"
     },
     "mixins": [
       "practical_enchantments.mixins.json",
