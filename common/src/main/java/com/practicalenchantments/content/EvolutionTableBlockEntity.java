@@ -217,7 +217,8 @@ public class EvolutionTableBlockEntity extends BlockEntity implements ItemOwner 
 		EvolutionRule rule = MerlinApi.evolution().match(this.items.get(1), level.registryAccess());
 		EvolutionApi evolution = MerlinApi.evolution();
 		RandomSource random = level.getRandom();
-		EvolutionApi.Outcome outcome = rule == null ? EvolutionApi.Outcome.FAILED : evolution.roll(rule, random);
+		EvolutionApi.Outcome outcome = rule == null ? EvolutionApi.Outcome.FAILED
+				: evolution.roll(rule, this.strength() / (float) MAX_STRENGTH, random);
 		boolean applied = switch (outcome) {
 			case EVOLVED -> evolution.applyEvolution(this.items.get(1), rule, level.registryAccess());
 			case TRANSMUTED -> evolution.applyTransmutation(this.items.get(1), this.strength(),
