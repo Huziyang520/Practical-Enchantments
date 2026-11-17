@@ -28,7 +28,7 @@ public class MenuScreensMixin {
 			}
 			AbstractContainerMenu bagMenu = type.create(windowId, minecraft.player.getInventory());
 			if (bagMenu instanceof BookBagMenu bag) {
-				minecraft.setScreen(new com.practicalenchantments.client.BookBagScreen(bag,
+				minecraft.setScreenAndShow(new com.practicalenchantments.client.BookBagScreen(bag,
 						minecraft.player.getInventory(), title));
 				callback.cancel();
 			}
@@ -36,7 +36,7 @@ public class MenuScreensMixin {
 		}
 		AbstractContainerMenu menu = type.create(windowId, minecraft.player.getInventory());
 		if (menu instanceof EvolutionTableMenu evolution) {
-			minecraft.setScreen(new EvolutionTableScreen(evolution, minecraft.player.getInventory(), title));
+			minecraft.setScreenAndShow(new EvolutionTableScreen(evolution, minecraft.player.getInventory(), title));
 			callback.cancel();
 		}
 	}

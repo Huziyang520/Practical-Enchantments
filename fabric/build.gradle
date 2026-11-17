@@ -25,7 +25,8 @@ dependencies {
 	compileOnly("com.terraformersmc:modmenu:${modmenu_version}")
 	compileOnly(files("libs/jupiter-2.4.3-26.2-universal.jar"))
 	// Forge Config API Port：编译期需要它的 ModConfigSpec 与 ConfigurationScreen，运行期不打包。
-	modCompileOnly("maven.modrinth:forge-config-api-port:JpKvrr9J")
+	// 代理环境下 api.modrinth.com 的 TLS 握手会被打断，故用本地 jar（libs/ 不入库，见 fabric/README 说明）。
+	compileOnly(files("libs/forge-config-api-port-26.3.1.jar"))
 	// MerlinLib Fabric
 	implementation "com.huziyang520.merlinlib:merlinlib-fabric-26.3:${merlinlib_version}"
 }

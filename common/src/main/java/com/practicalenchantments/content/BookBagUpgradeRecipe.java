@@ -4,7 +4,6 @@ package com.practicalenchantments.content;
 
 import com.practicalenchantments.PracticalEnchantments;
 import java.util.List;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
@@ -37,7 +36,7 @@ public class BookBagUpgradeRecipe extends CustomRecipe {
 	}
 
 	@Override
-	public ItemStack assemble(CraftingInput input, HolderLookup.Provider registries) {
+	public ItemStack assemble(CraftingInput input) {
 		Match match = this.find(input);
 		if (match == null) {
 			return ItemStack.EMPTY;
