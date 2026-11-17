@@ -13,8 +13,8 @@ import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.common.ModConfigSpec;
 
 public final class FcapConfig {
-	public static final ModConfigSpec SPEC = build();
 	private static final Map<String, ModConfigSpec.ConfigValue<?>> VALUES = new LinkedHashMap<>();
+	public static final ModConfigSpec SPEC = build();
 
 	private FcapConfig() {
 	}
