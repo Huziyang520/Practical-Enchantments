@@ -4,8 +4,12 @@
     "fallback": "\u91cd\u51fb"
   },
   "supported_items": [
-    "#minecraft:swords",
-    "#minecraft:axes"
+    {
+      "tag": "minecraft:swords"
+    },
+    {
+      "tag": "minecraft:axes"
+    }
   ],
   "exclusive_set": "#practical_enchantments:exclusive_set/heavy_blow",
   "weight": 2,
