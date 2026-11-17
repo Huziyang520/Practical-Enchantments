@@ -22,6 +22,8 @@ public class BookBagScreen extends AbstractContainerScreen<BookBagMenu> {
 	private static final int TRACK_COLOR = 0xFF373737;
 	private static final int THUMB_COLOR = 0xFFB4B4B4;
 	private static final int TEXT_COLOR = 0xFF404040;
+	private static final int SLOT_BORDER_COLOR = 0xFF8B8B8B;
+	private static final int SLOT_FILL_COLOR = 0xFF373737;
 	private static final int BUTTON_SCROLL_UP = 0;
 	private static final int BUTTON_SCROLL_DOWN = 1;
 
@@ -35,7 +37,19 @@ public class BookBagScreen extends AbstractContainerScreen<BookBagMenu> {
 		super.extractBackground(graphics, mouseX, mouseY, partialTick);
 		graphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, this.leftPos, this.topPos, 0.0F, 0.0F,
 				this.imageWidth, this.imageHeight, 256, 256);
+		this.drawSlots(graphics);
 		this.drawScrollBar(graphics);
+	}
+
+	private void drawSlots(GuiGraphicsExtractor graphics) {
+		for (int row = 0; row < BookBagMenu.VISIBLE_ROWS; row++) {
+			for (int column = 0; column < 9; column++) {
+				int x = this.leftPos + BookBagMenu.GRID_X + column * 18;
+				int y = this.topPos + BookBagMenu.GRID_Y + row * 18;
+				graphics.fill(x, y, x + 18, y + 18, SLOT_BORDER_COLOR);
+				graphics.fill(x + 1, y + 1, x + 17, y + 17, SLOT_FILL_COLOR);
+			}
+		}
 	}
 
 	private void drawScrollBar(GuiGraphicsExtractor graphics) {

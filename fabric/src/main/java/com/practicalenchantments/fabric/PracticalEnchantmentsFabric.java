@@ -19,6 +19,7 @@ public final class PracticalEnchantmentsFabric implements ModInitializer {
 		FabricVanillaTweaks.load();
 		FcapConfig.install();
 		FcapConfig.apply();
+		PeFabricMenus.install();
 		PracticalEnchantments.bootstrap();
 
 		CreativeModeTabEvents.modifyOutputEvent(PeContent.tabKey()).register(output -> {

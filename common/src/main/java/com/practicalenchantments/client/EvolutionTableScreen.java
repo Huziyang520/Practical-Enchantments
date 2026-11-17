@@ -45,9 +45,6 @@ public class EvolutionTableScreen extends AbstractContainerScreen<EvolutionTable
 		if (this.menu.lapisCost() > 0) {
 			graphics.text(this.font, Component.translatable("gui." + PracticalEnchantments.MOD_ID + ".evolution.cost",
 					this.menu.lapisCost()), x, y + 20, TEXT_COLOR);
-		} else {
-			graphics.text(this.font, Component.translatable("gui." + PracticalEnchantments.MOD_ID + ".evolution.idle"),
-					x, y + 20, WARN_COLOR);
 		}
 	}
 }

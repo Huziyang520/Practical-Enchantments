@@ -22,9 +22,9 @@ public class BookBagMenu extends AbstractContainerMenu {
 	public static final int DATA_TOTAL_ROWS = 1;
 	public static final int DATA_CAPACITY = 2;
 	private static final int DATA_COUNT = 3;
-	private static final int GRID_X = 8;
-	private static final int GRID_Y = 33;
-	private static final int INVENTORY_X = 15;
+	public static final int GRID_X = 8;
+	public static final int GRID_Y = 33;
+	private static final int INVENTORY_X = 8;
 	private static final int INVENTORY_Y = 153;
 	private static final int HOTBAR_Y = 211;
 	private static final int BUTTON_SCROLL_UP = 0;
