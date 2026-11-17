@@ -10,6 +10,7 @@ public final class PracticalEnchantmentsFabricClient implements ClientModInitial
 	@Override
 	public void onInitializeClient() {
 		PeFabricScreens.install();
+		FcapConfigClient.install();
 		MezzConfigBridge.install();
 		TweaksScreens.install();
 	}
