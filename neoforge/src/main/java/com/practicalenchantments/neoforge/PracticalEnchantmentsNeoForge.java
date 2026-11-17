@@ -3,6 +3,12 @@
 package com.practicalenchantments.neoforge;
 
 import com.practicalenchantments.PracticalEnchantments;
+import com.huziyang520.merlinlib.platform.Services;
+import com.practicalenchantments.content.EvolutionTableMenu;
+import com.practicalenchantments.content.PeMenus;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.inventory.MenuType;
+import net.neoforged.neoforge.common.extensions.IMenuTypeExtension;
 import com.practicalenchantments.enchantment.weapon.LifeStealEnchantment;
 import com.practicalenchantments.neoforge.config.NeoConfig;
 import net.neoforged.bus.api.IEventBus;
@@ -21,6 +27,7 @@ public final class PracticalEnchantmentsNeoForge {
 	public PracticalEnchantmentsNeoForge(IEventBus modEventBus, ModContainer container) {
 		NeoConfig.preload();
 		PracticalEnchantments.bootstrap();
+		registerMenus();
 		container.registerConfig(NeoConfig.type(), NeoConfig.SPEC);
 		modEventBus.addListener(ModConfigEvent.Loading.class, event -> NeoConfig.apply());
 		modEventBus.addListener(ModConfigEvent.Reloading.class, event -> NeoConfig.apply());
@@ -32,6 +39,13 @@ public final class PracticalEnchantmentsNeoForge {
 			LifeStealEnchantment.onAfterDamage(
 				event.getEntity(), event.getSource(), event.getOriginalDamage(),
 				event.getBlockedDamage(), event.getBlockedDamage() > 0));
+	}
+
+	private static void registerMenus() {
+		MenuType<EvolutionTableMenu> evolutionTable = IMenuTypeExtension.create(
+				(windowId, inventory, data) -> new EvolutionTableMenu(windowId, inventory));
+		Services.REGISTRATIONS.register(BuiltInRegistries.MENU, PeContent.EVOLUTION_TABLE, () -> evolutionTable);
+		PeMenus.setEvolutionTable(evolutionTable);
 	}
 
 	private void onBuildCreativeTab(BuildCreativeModeTabContentsEvent event) {

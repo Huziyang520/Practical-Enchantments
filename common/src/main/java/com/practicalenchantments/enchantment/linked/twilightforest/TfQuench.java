@@ -40,6 +40,7 @@ public final class TfQuench {
 				.anvilCost(4)
 				.slots("mainhand")
 				.supportedItems("#minecraft:enchantable/mining")
+				.exclusiveSet("#practical_enchantments:exclusive_set/tf_quench")
 				.cost(20, 0, 50, 0)
 				.acquisition(Acquisition.TREASURE_ONLY)
 				.submit();

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "L": "minecraft:lapis_block",
+    "B": "minecraft:chiseled_bookshelf",
+    "E": "minecraft:enchanting_table"
+  },
+  "pattern": [
+    "LBL",
+    "BEB",
+    "LBL"
+  ],
+  "result": {
+    "id": "practical_enchantments:evolution_table"
+  }
+}

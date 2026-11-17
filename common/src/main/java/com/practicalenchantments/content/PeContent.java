@@ -5,6 +5,7 @@ package com.practicalenchantments.content;
 import com.huziyang520.merlinlib.platform.Services;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -15,11 +16,13 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public final class PeContent {
 	private static final String NAMESPACE = "practical_enchantments";
 	public static final Identifier FLAWED_OBSIDIAN = id("flawed_obsidian");
+	public static final Identifier EVOLUTION_TABLE = id("evolution_table");
 	public static final Identifier IRON_AMULET = id("iron_amulet");
 	public static final Identifier GOLDEN_AMULET = id("golden_amulet");
 	public static final Identifier DIAMOND_AMULET = id("diamond_amulet");
@@ -40,6 +43,11 @@ public final class PeContent {
 		registered = true;
 		Services.REGISTRATIONS.register(BuiltInRegistries.BLOCK, FLAWED_OBSIDIAN, PeContent::createBlock);
 		Services.REGISTRATIONS.register(BuiltInRegistries.ITEM, FLAWED_OBSIDIAN, PeContent::createBlockItem);
+		Services.REGISTRATIONS.register(BuiltInRegistries.BLOCK, EVOLUTION_TABLE, PeContent::createEvolutionTable);
+		Services.REGISTRATIONS.register(BuiltInRegistries.ITEM, EVOLUTION_TABLE,
+				() -> createBlockItem(EVOLUTION_TABLE));
+		Services.REGISTRATIONS.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, EVOLUTION_TABLE,
+				PeContent::createEvolutionTableEntity);
 		for (Identifier amulet : AMULETS) {
 			Services.REGISTRATIONS.register(BuiltInRegistries.ITEM, amulet, () -> new Item(itemProperties(amulet).stacksTo(1)));
 		}
@@ -91,6 +99,28 @@ public final class PeContent {
 		return item;
 	}
 
+	private static Block createEvolutionTable() {
+		ResourceKey<Block> key = ResourceKey.create(Registries.BLOCK, EVOLUTION_TABLE);
+		return new EvolutionTableBlock(BlockBehaviour.Properties.of()
+				.setId(key)
+				.strength(2.5F)
+				.requiresCorrectToolForDrops()
+				.lightLevel(state -> state.getValue(EvolutionTableBlock.WORKING) ? 7 : 0));
+	}
+
+	private static Item createBlockItem(Identifier id) {
+		Block block = block(id);
+		BlockItem item = new BlockItem(block, itemProperties(id));
+		item.registerBlocks(Item.BY_BLOCK, item);
+		return item;
+	}
+
+	private static BlockEntityType<EvolutionTableBlockEntity> createEvolutionTableEntity() {
+		EvolutionTableBlockEntity.TYPE = new BlockEntityType<>(EvolutionTableBlockEntity::new,
+				Set.of(block(EVOLUTION_TABLE)));
+		return EvolutionTableBlockEntity.TYPE;
+	}
+
 	private static Item.Properties itemProperties(Identifier id) {
 		return new Item.Properties().setId(ResourceKey.create(Registries.ITEM, id));
 	}
@@ -102,6 +132,7 @@ public final class PeContent {
 	public static List<ItemStack> tabEntries() {
 		List<ItemStack> stacks = new ArrayList<>();
 		stacks.add(new ItemStack(item(FLAWED_OBSIDIAN)));
+		stacks.add(new ItemStack(item(EVOLUTION_TABLE)));
 		for (Identifier amulet : AMULETS) {
 			stacks.add(new ItemStack(item(amulet)));
 		}

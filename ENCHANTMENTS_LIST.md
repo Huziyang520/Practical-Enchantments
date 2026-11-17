@@ -77,7 +77,8 @@
 | Godwood Aura | `aether_godwood` | Weapons, tools | single | Aether loot | — |
 | Sky Slayer | `aether_sky_slayer` | Bows | Ⅰ–Ⅴ | Aether loot | — |
 | Provocation | `provocation` | Swords, axes, spears | Ⅰ–Ⅲ | trade · loot | — |
-| Heavy Blow | `heavy_blow` | Swords, axes, spears | single | trade · loot | Sweeping Edge |
+| Heavy Blow | `heavy_blow` | Swords, axes | single | trade · loot | Sweeping Edge |
+| Zeus and Poseidon | `zeus_poseidon` | Tridents | single | evolution table only | Channeling |
 | Invisible Air | `invisible_air` | Swords | single | mob drop | — |
 | Obsidian Walker | `obsidian_walker` | Boots | single | End city, bastion treasure | Frost Walker, Depth Strider |
 
@@ -344,11 +345,20 @@
 
 ### Heavy Blow (`practical_enchantments:heavy_blow`)
 
-- **Applies to:** swords, axes and spears · **Levels:** single
+- **Applies to:** swords and axes · **Levels:** single
 - **Obtained by:** librarian trades, village weaponsmith 10%, pillager outpost 8%, dungeon 6%, bastion treasure 5% · **Conflicts with:** Sweeping Edge
 - **Effect:** every swing lands a critical hit. A swing that connects shortens the attack cooldown to
   **90%**; one that misses lengthens it to **160%**. Every landing hit costs one extra point of durability.
 - **In-game description:** Swing with full force and always land a critical hit
+
+### Zeus and Poseidon (`practical_enchantments:zeus_poseidon`)
+
+- **Applies to:** tridents · **Levels:** single
+- **Obtained by:** only by evolving Channeling at the Evolution Enchanting Table · **Conflicts with:** Channeling
+- **Effect:** a thrown trident that hits a mob calls down a lightning bolt immediately; the weather no longer
+  has to be a thunderstorm, only the target needs to see the sky. Five strikes within 90 seconds turn the
+  weather into a 5 minute thunderstorm; that weather change has a 20 minute cooldown, while the strikes
+  themselves keep working during it.
 
 ### Invisible Air (`practical_enchantments:invisible_air`)
 

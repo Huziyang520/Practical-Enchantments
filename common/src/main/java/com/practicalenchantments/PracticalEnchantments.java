@@ -8,8 +8,10 @@ import com.huziyang520.merlinlib.api.MerlinApi;
 import com.huziyang520.merlinlib.event.EnchantmentEventRegistrar;
 import com.practicalenchantments.config.PracticalConfig;
 import com.practicalenchantments.content.AmuletScanSource;
+import com.practicalenchantments.content.AmuletLoot;
 import com.practicalenchantments.content.BleedContent;
 import com.practicalenchantments.content.PeContent;
+import com.practicalenchantments.content.PeEvolution;
 import com.practicalenchantments.content.RotContent;
 import com.practicalenchantments.content.WrathContent;
 import com.practicalenchantments.enchantment.armor.AerialHasteEnchantment;
@@ -39,6 +41,7 @@ import com.practicalenchantments.enchantment.weapon.SoulSiphonEnchantment;
 import com.practicalenchantments.enchantment.weapon.TraumaEnchantment;
 import com.practicalenchantments.enchantment.weapon.VenomEnchantment;
 import com.practicalenchantments.enchantment.weapon.WitherAspectEnchantment;
+import com.practicalenchantments.enchantment.weapon.ZeusPoseidonEnchantment;
 import com.practicalenchantments.notice.MerlinLibNotice;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
@@ -69,6 +72,8 @@ public final class PracticalEnchantments {
 		AmuletScanSource.register();
 		LinkedEnchantments.registerContent();
 		WrathContent.register();
+		PeEvolution.register();
+		AmuletLoot.register();
 		registerLootInjections();
 
 		MerlinApi.lifecycle().onServerStarted(server -> {
@@ -242,6 +247,7 @@ public final class PracticalEnchantments {
 		DemonicPactEnchantment.register(registries);
 		UndyingDropEnchantment.register(registries);
 		LinkedEnchantments.registerCallbacks(registrar, registries);
+		ZeusPoseidonEnchantment.registerCallbacks(registrar, registries);
 	}
 
 	private static void registerLoot(int quality, float chance, String lootTable) {
