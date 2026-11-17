@@ -40,9 +40,7 @@
       ]
     },
     "recommends": {
-      "cloth-config": "*",
-      "jupiter": "*",
-      "mezz_config": "*"
+      "forge-config-api-port": "*"
     },
     "mixins": [
       "practical_enchantments.mixins.json",

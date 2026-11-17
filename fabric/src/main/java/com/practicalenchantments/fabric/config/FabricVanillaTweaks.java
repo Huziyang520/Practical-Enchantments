@@ -37,9 +37,6 @@ public final class FabricVanillaTweaks {
 		values.putAll(changed);
 		write(values);
 		apply(values);
-		for (Map.Entry<String, String> entry : changed.entrySet()) {
-			MezzConfigBridge.push(entry.getKey(), entry.getValue());
-		}
 	}
 
 	/** 当前生效值（供界面回显）。 */
