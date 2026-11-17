@@ -127,6 +127,14 @@ public class EvolutionTableBlockEntity extends BlockEntity implements ItemOwner 
 		return this.data.get(DATA_STRENGTH);
 	}
 
+	public int shelves() {
+		return this.data.get(DATA_SHELVES);
+	}
+
+	public int books() {
+		return this.data.get(DATA_BOOKS);
+	}
+
 	public boolean isWorking() {
 		return this.workTotal > 0;
 	}
@@ -183,6 +191,7 @@ public class EvolutionTableBlockEntity extends BlockEntity implements ItemOwner 
 		}
 		shelves = Math.min(shelves, MAX_SHELVES);
 		books = Math.min(books, MAX_BOOKS);
+		boolean changed = shelves != this.data.get(DATA_SHELVES) || books != this.data.get(DATA_BOOKS);
 		this.data.set(DATA_SHELVES, shelves);
 		this.data.set(DATA_BOOKS, books);
 		this.data.set(DATA_STRENGTH, Math.min(2 * shelves, books));
@@ -190,6 +199,9 @@ public class EvolutionTableBlockEntity extends BlockEntity implements ItemOwner 
 				? MerlinApi.evolution().match(this.items.get(1), level.registryAccess())
 				: null;
 		this.data.set(DATA_COST, rule == null ? 0 : rule.lapisCost());
+		if (changed) {
+			this.sync();
+		}
 	}
 
 	private boolean canStart(ServerLevel level) {
@@ -252,6 +264,10 @@ public class EvolutionTableBlockEntity extends BlockEntity implements ItemOwner 
 		ContainerHelper.saveAllItems(output, this.items, true);
 		output.putInt("work_ticks", this.workTicks);
 		output.putInt("work_total", this.workTotal);
+		output.putInt("shelves", this.data.get(DATA_SHELVES));
+		output.putInt("books", this.data.get(DATA_BOOKS));
+		output.putInt("strength", this.data.get(DATA_STRENGTH));
+		output.putInt("cost", this.data.get(DATA_COST));
 	}
 
 	@Override
@@ -262,6 +278,10 @@ public class EvolutionTableBlockEntity extends BlockEntity implements ItemOwner 
 		this.lapisView.setItem(0, this.items.get(0));
 		this.workTicks = input.getIntOr("work_ticks", 0);
 		this.workTotal = input.getIntOr("work_total", 0);
+		this.data.set(DATA_SHELVES, input.getIntOr("shelves", 0));
+		this.data.set(DATA_BOOKS, input.getIntOr("books", 0));
+		this.data.set(DATA_STRENGTH, input.getIntOr("strength", 0));
+		this.data.set(DATA_COST, input.getIntOr("cost", 0));
 		this.scanCooldown = 0;
 	}
 

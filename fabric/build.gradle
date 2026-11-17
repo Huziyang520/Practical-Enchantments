@@ -17,6 +17,7 @@ repositories {
 
 dependencies {
 	minecraft("com.mojang:minecraft:${minecraft_version}")
+	compileOnly files("libs/Jade-mc26.3-Fabric-26.3.5.jar")
 	implementation("net.fabricmc:fabric-loader:${fabric_loader_version}")
 	implementation("net.fabricmc.fabric-api:fabric-api:${fabric_version}")
 	// 可选前置（compileOnly，都不进 jar）：Cloth Config 与 Jupiter 提供配置界面，Mod Menu 提供入口按钮。

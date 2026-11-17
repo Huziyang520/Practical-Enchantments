@@ -32,6 +32,9 @@
       "main": [
         "com.practicalenchantments.fabric.PracticalEnchantmentsFabric"
       ],
+      "jade": [
+        "com.practicalenchantments.compat.jade.PeJadePlugin"
+      ],
       "client": [
         "com.practicalenchantments.fabric.client.PracticalEnchantmentsFabricClient"
       ],

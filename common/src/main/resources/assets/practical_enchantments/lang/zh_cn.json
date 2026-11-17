@@ -651,5 +651,9 @@
   "practical_enchantments.configuration.wrath": "嗔怒",
   "practical_enchantments.configuration.wrath.description": "嗔怒的配置项。",
   "practical_enchantments.configuration.wrath.tooltip": "点开编辑嗔怒的全部参数。",
-  "practical_enchantments.notice.merlinlib": "Practical Enchantments：由于一些原因，原前置模组 EnchantLib 已停更，自 1.3.0 版本起，本模组仅需以 MerlinLib 为前置；本模组的任何问题，欢迎在你能想到的任何地方反馈给作者；若你对新的附魔/魔咒有好的创意，欢迎告诉作者。该提示可在 MerlinLib 的配置界面关闭。"
+  "practical_enchantments.notice.merlinlib": "Practical Enchantments：由于一些原因，原前置模组 EnchantLib 已停更，自 1.3.0 版本起，本模组仅需以 MerlinLib 为前置；本模组的任何问题，欢迎在你能想到的任何地方反馈给作者；若你对新的附魔/魔咒有好的创意，欢迎告诉作者。该提示可在 MerlinLib 的配置界面关闭。",
+  "jade.practical_enchantments.evolution_table.power": "附魔能力：%s/%s",
+  "jade.practical_enchantments.evolution_table.shelves": "有效书架 %s · 附魔书 %s",
+  "jade.practical_enchantments.evolution_table.item": "台面：%s",
+  "jade.practical_enchantments.evolution_table.working": "正在进化…"
 }

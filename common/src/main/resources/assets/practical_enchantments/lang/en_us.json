@@ -651,5 +651,9 @@
   "practical_enchantments.configuration.wrath": "Wrath",
   "practical_enchantments.configuration.wrath.description": "Wrath settings.",
   "practical_enchantments.configuration.wrath.tooltip": "Open the Wrath settings.",
-  "practical_enchantments.notice.merlinlib": "Practical Enchantments: the original dependency EnchantLib is no longer maintained, so since 1.3.0 MerlinLib is the only dependency this mod needs. Any problem with this mod can be reported to the author anywhere you can think of; ideas for new enchantments are always welcome. This notice can be switched off in the MerlinLib configuration screen."
+  "practical_enchantments.notice.merlinlib": "Practical Enchantments: the original dependency EnchantLib is no longer maintained, so since 1.3.0 MerlinLib is the only dependency this mod needs. Any problem with this mod can be reported to the author anywhere you can think of; ideas for new enchantments are always welcome. This notice can be switched off in the MerlinLib configuration screen.",
+  "jade.practical_enchantments.evolution_table.power": "Enchanting power: %s/%s",
+  "jade.practical_enchantments.evolution_table.shelves": "Shelves %s · Books %s",
+  "jade.practical_enchantments.evolution_table.item": "On table: %s",
+  "jade.practical_enchantments.evolution_table.working": "Evolving..."
 }
