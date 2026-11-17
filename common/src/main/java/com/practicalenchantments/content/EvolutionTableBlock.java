@@ -72,13 +72,16 @@ public class EvolutionTableBlock extends Block implements EntityBlock {
 			return InteractionResult.PASS;
 		}
 		ItemStack held = player.getMainHandItem();
-		if (!held.isEmpty() && !table.hasDisplayed()) {
+		boolean openOnly = player.isShiftKeyDown();
+		if (!openOnly && !held.isEmpty() && !table.hasDisplayed()) {
 			if (!level.isClientSide()) {
-				table.placeDisplayed(player, held);
+				if (!table.placeDisplayed(player, held)) {
+					return InteractionResult.PASS;
+				}
 			}
 			return InteractionResult.SUCCESS;
 		}
-		if (held.isEmpty() && table.hasDisplayed()) {
+		if (!openOnly && held.isEmpty() && table.hasDisplayed()) {
 			if (!level.isClientSide()) {
 				ItemStack taken = table.takeDisplayed();
 				if (!taken.isEmpty()) {

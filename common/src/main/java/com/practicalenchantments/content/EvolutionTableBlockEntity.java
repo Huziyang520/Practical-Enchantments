@@ -179,14 +179,28 @@ public class EvolutionTableBlockEntity extends BlockEntity implements ItemOwner 
 			if (!EnchantingTableBlock.isValidBookShelf(level, origin, offset)) {
 				continue;
 			}
-			shelves++;
 			if (level.getBlockState(target).is(Blocks.CHISELED_BOOKSHELF)
 					&& level.getBlockEntity(target) instanceof ChiseledBookShelfBlockEntity shelf) {
+				int enchanted = 0;
+				int stored = 0;
 				for (int slot = 0; slot < ChiseledBookShelfBlockEntity.MAX_BOOKS_IN_STORAGE; slot++) {
-					if (shelf.getItem(slot).is(Items.ENCHANTED_BOOK)) {
-						books++;
+					ItemStack book = shelf.getItem(slot);
+					if (book.isEmpty()) {
+						continue;
+					}
+					stored++;
+					if (book.is(Items.ENCHANTED_BOOK)) {
+						enchanted++;
 					}
 				}
+				// 空的雕纹书架与原版附魔台一致，不提供能量
+				if (stored == 0) {
+					continue;
+				}
+				shelves++;
+				books += enchanted;
+			} else {
+				shelves++;
 			}
 		}
 		shelves = Math.min(shelves, MAX_SHELVES);

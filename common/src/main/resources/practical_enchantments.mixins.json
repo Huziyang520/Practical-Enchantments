@@ -28,7 +28,8 @@
     "HideSkinFreezeMixin",
     "EnchantmentVanillaTweakMixin",
     "ZeusNameMixin",
-    "BookBagSmithingKeepMixin"
+    "BookBagSmithingKeepMixin",
+    "BookBagCraftKeepMixin"
   ],
   "injectors": {
     "defaultRequire": 1
