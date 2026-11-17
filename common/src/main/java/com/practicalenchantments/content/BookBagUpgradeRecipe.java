@@ -1,4 +1,4 @@
-// 书袋升级配方：8 个同种材料围住一个书袋，产物继承原袋的全部内容。
+// 书袋升级配方：8 个同种材料围住一个书袋，产物继承原袋的全部内容。下界合金一档走锻造台。
 
 package com.practicalenchantments.content;
 
@@ -19,13 +19,11 @@ import org.jspecify.annotations.Nullable;
 public class BookBagUpgradeRecipe extends CustomRecipe {
 	public static final BookBagUpgradeRecipe INSTANCE = new BookBagUpgradeRecipe();
 	private static final List<Item> MATERIALS =
-			List.of(Items.IRON_INGOT, Items.GOLD_INGOT, Items.DIAMOND, Items.NETHERITE_INGOT);
+			List.of(Items.IRON_INGOT, Items.GOLD_INGOT, Items.DIAMOND);
 	private static final List<Identifier> TARGETS = List.of(
-			PeContent.BOOK_BAG_IRON, PeContent.BOOK_BAG_GOLD,
-			PeContent.BOOK_BAG_DIAMOND, PeContent.BOOK_BAG_NETHERITE);
+			PeContent.BOOK_BAG_IRON, PeContent.BOOK_BAG_GOLD, PeContent.BOOK_BAG_DIAMOND);
 	private static final List<Identifier> SOURCES = List.of(
-			PeContent.BOOK_BAG_LEATHER, PeContent.BOOK_BAG_IRON,
-			PeContent.BOOK_BAG_GOLD, PeContent.BOOK_BAG_DIAMOND);
+			PeContent.BOOK_BAG_LEATHER, PeContent.BOOK_BAG_IRON, PeContent.BOOK_BAG_GOLD);
 
 	public BookBagUpgradeRecipe() {
 	}
