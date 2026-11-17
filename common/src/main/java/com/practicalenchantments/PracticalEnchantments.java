@@ -10,6 +10,7 @@ import com.practicalenchantments.config.PracticalConfig;
 import com.practicalenchantments.content.AmuletScanSource;
 import com.practicalenchantments.content.AmuletLoot;
 import com.practicalenchantments.content.BleedContent;
+import com.practicalenchantments.content.BookBagLoot;
 import com.practicalenchantments.content.PeContent;
 import com.practicalenchantments.content.PeEvolution;
 import com.practicalenchantments.content.RotContent;
@@ -74,6 +75,7 @@ public final class PracticalEnchantments {
 		WrathContent.register();
 		PeEvolution.register();
 		AmuletLoot.register();
+		BookBagLoot.register();
 		registerLootInjections();
 
 		MerlinApi.lifecycle().onServerStarted(server -> {

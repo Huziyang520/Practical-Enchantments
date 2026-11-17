@@ -8,6 +8,8 @@ import org.jspecify.annotations.Nullable;
 public final class PeMenus {
 	@Nullable
 	private static MenuType<EvolutionTableMenu> evolutionTable;
+	@Nullable
+	private static MenuType<BookBagMenu> bookBag;
 
 	private PeMenus() {
 	}
@@ -19,5 +21,14 @@ public final class PeMenus {
 	@Nullable
 	public static MenuType<EvolutionTableMenu> evolutionTable() {
 		return evolutionTable;
+	}
+
+	public static void setBookBag(MenuType<BookBagMenu> type) {
+		bookBag = type;
+	}
+
+	@Nullable
+	public static MenuType<BookBagMenu> bookBag() {
+		return bookBag;
 	}
 }

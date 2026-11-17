@@ -9,6 +9,7 @@ import net.fabricmc.api.ClientModInitializer;
 public final class PracticalEnchantmentsFabricClient implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
+		PeFabricScreens.install();
 		MezzConfigBridge.install();
 		TweaksScreens.install();
 	}

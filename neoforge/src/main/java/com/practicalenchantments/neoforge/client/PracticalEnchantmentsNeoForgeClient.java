@@ -3,6 +3,7 @@
 package com.practicalenchantments.neoforge.client;
 
 import com.practicalenchantments.PracticalEnchantments;
+import com.practicalenchantments.client.BookBagScreen;
 import com.practicalenchantments.client.EvolutionTableRenderer;
 import com.practicalenchantments.client.EvolutionTableScreen;
 import com.practicalenchantments.content.EvolutionTableBlockEntity;
@@ -20,6 +21,9 @@ public final class PracticalEnchantmentsNeoForgeClient {
 		modEventBus.addListener(RegisterMenuScreensEvent.class, event -> {
 			if (PeMenus.evolutionTable() != null) {
 				event.register(PeMenus.evolutionTable(), EvolutionTableScreen::new);
+			}
+			if (PeMenus.bookBag() != null) {
+				event.register(PeMenus.bookBag(), BookBagScreen::new);
 			}
 		});
 		modEventBus.addListener(EntityRenderersEvent.RegisterRenderers.class, event -> {

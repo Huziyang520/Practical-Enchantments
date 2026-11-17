@@ -4,6 +4,7 @@ package com.practicalenchantments.neoforge;
 
 import com.practicalenchantments.PracticalEnchantments;
 import com.huziyang520.merlinlib.platform.Services;
+import com.practicalenchantments.content.BookBagMenu;
 import com.practicalenchantments.content.EvolutionTableMenu;
 import com.practicalenchantments.content.PeMenus;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -46,6 +47,10 @@ public final class PracticalEnchantmentsNeoForge {
 				(windowId, inventory, data) -> new EvolutionTableMenu(windowId, inventory));
 		Services.REGISTRATIONS.register(BuiltInRegistries.MENU, PeContent.EVOLUTION_TABLE, () -> evolutionTable);
 		PeMenus.setEvolutionTable(evolutionTable);
+		MenuType<BookBagMenu> bookBag = IMenuTypeExtension.create(
+				(windowId, inventory, data) -> new BookBagMenu(windowId, inventory));
+		Services.REGISTRATIONS.register(BuiltInRegistries.MENU, PeContent.BOOK_BAG_LEATHER, () -> bookBag);
+		PeMenus.setBookBag(bookBag);
 	}
 
 	private void onBuildCreativeTab(BuildCreativeModeTabContentsEvent event) {

@@ -23,6 +23,15 @@ public final class PeContent {
 	private static final String NAMESPACE = "practical_enchantments";
 	public static final Identifier FLAWED_OBSIDIAN = id("flawed_obsidian");
 	public static final Identifier EVOLUTION_TABLE = id("evolution_table");
+	public static final Identifier BOOK_BAG_LEATHER = id("book_bag_leather");
+	public static final Identifier BOOK_BAG_IRON = id("book_bag_iron");
+	public static final Identifier BOOK_BAG_GOLD = id("book_bag_gold");
+	public static final Identifier BOOK_BAG_DIAMOND = id("book_bag_diamond");
+	public static final Identifier BOOK_BAG_NETHERITE = id("book_bag_netherite");
+	private static final Identifier[] BOOK_BAGS = {
+			BOOK_BAG_LEATHER, BOOK_BAG_IRON, BOOK_BAG_GOLD, BOOK_BAG_DIAMOND, BOOK_BAG_NETHERITE};
+	private static final int[] BOOK_BAG_CAPACITY = {27, 54, 81, 135, 216};
+	private static final int[] BOOK_BAG_LOOT_BOOKS = {2, 3, 4, 5, 6};
 	public static final Identifier IRON_AMULET = id("iron_amulet");
 	public static final Identifier GOLDEN_AMULET = id("golden_amulet");
 	public static final Identifier DIAMOND_AMULET = id("diamond_amulet");
@@ -48,10 +57,18 @@ public final class PeContent {
 				() -> createBlockItem(EVOLUTION_TABLE));
 		Services.REGISTRATIONS.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, EVOLUTION_TABLE,
 				PeContent::createEvolutionTableEntity);
+		for (int index = 0; index < BOOK_BAGS.length; index++) {
+			Identifier bag = BOOK_BAGS[index];
+			int capacity = BOOK_BAG_CAPACITY[index];
+			int lootBooks = BOOK_BAG_LOOT_BOOKS[index];
+			Services.REGISTRATIONS.register(BuiltInRegistries.ITEM, bag,
+					() -> new BookBagItem(itemProperties(bag).stacksTo(1), capacity, lootBooks));
+		}
 		for (Identifier amulet : AMULETS) {
 			Services.REGISTRATIONS.register(BuiltInRegistries.ITEM, amulet, () -> new Item(itemProperties(amulet).stacksTo(1)));
 		}
 		Services.REGISTRATIONS.register(BuiltInRegistries.CREATIVE_MODE_TAB, TAB, PeContent::createTab);
+		PeRecipes.register();
 	}
 
 	public static Block block(Identifier id) {
@@ -133,6 +150,9 @@ public final class PeContent {
 		List<ItemStack> stacks = new ArrayList<>();
 		stacks.add(new ItemStack(item(FLAWED_OBSIDIAN)));
 		stacks.add(new ItemStack(item(EVOLUTION_TABLE)));
+		for (Identifier bag : BOOK_BAGS) {
+			stacks.add(new ItemStack(item(bag)));
+		}
 		for (Identifier amulet : AMULETS) {
 			stacks.add(new ItemStack(item(amulet)));
 		}
