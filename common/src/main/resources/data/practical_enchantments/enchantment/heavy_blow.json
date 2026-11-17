@@ -3,14 +3,7 @@
     "translate": "enchantment.practical_enchantments.heavy_blow",
     "fallback": "\u91cd\u51fb"
   },
-  "supported_items": [
-    {
-      "tag": "minecraft:swords"
-    },
-    {
-      "tag": "minecraft:axes"
-    }
-  ],
+  "supported_items": "#practical_enchantments:heavy_blow_weapons",
   "exclusive_set": "#practical_enchantments:exclusive_set/heavy_blow",
   "weight": 2,
   "max_level": 1,
