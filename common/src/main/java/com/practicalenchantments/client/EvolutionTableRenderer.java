@@ -25,6 +25,7 @@ public class EvolutionTableRenderer implements BlockEntityRenderer<EvolutionTabl
 	private static final float BASE_HEIGHT = 1.05F;
 	private static final float BOB_HEIGHT = 0.04F;
 	private static final float DEGREES_PER_TICK = 1.5F;
+	private static final float WORKING_SPIN = 6.0F;
 	private final ItemModelResolver itemModelResolver;
 
 	public EvolutionTableRenderer(BlockEntityRendererProvider.Context context) {
@@ -53,7 +54,8 @@ public class EvolutionTableRenderer implements BlockEntityRenderer<EvolutionTabl
 		this.itemModelResolver.updateForTopItem(state.item, displayed, ItemDisplayContext.GROUND, level, blockEntity,
 				(int) blockEntity.getBlockPos().asLong());
 		float time = level.getGameTime() + partialTicks;
-		state.rotation = time * DEGREES_PER_TICK;
+		state.working = blockEntity.isWorking();
+		state.rotation = time * (state.working ? DEGREES_PER_TICK * WORKING_SPIN : DEGREES_PER_TICK);
 		state.bob = (float) Math.sin(time * 0.1F) * BOB_HEIGHT;
 	}
 
@@ -74,6 +76,7 @@ public class EvolutionTableRenderer implements BlockEntityRenderer<EvolutionTabl
 	public static class State extends BlockEntityRenderState {
 		public final ItemStackRenderState item = new ItemStackRenderState();
 		public boolean hasItem;
+		public boolean working;
 		public float rotation;
 		public float bob;
 	}

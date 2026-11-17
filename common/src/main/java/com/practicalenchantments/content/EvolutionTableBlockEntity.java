@@ -91,9 +91,13 @@ public class EvolutionTableBlockEntity extends BlockEntity implements ItemOwner 
 		if (held.isEmpty() || this.hasDisplayed() || this.workTotal > 0) {
 			return false;
 		}
+		if (!held.is(Items.ENCHANTED_BOOK) && !held.has(net.minecraft.core.component.DataComponents.ENCHANTABLE)) {
+			return false;
+		}
 		this.items.set(1, held.copyWithCount(1));
 		held.shrink(1);
 		this.setChanged();
+		this.sync();
 		return true;
 	}
 
@@ -104,6 +108,7 @@ public class EvolutionTableBlockEntity extends BlockEntity implements ItemOwner 
 		ItemStack taken = this.items.get(1);
 		this.items.set(1, ItemStack.EMPTY);
 		this.setChanged();
+		this.sync();
 		return taken;
 	}
 
@@ -120,6 +125,16 @@ public class EvolutionTableBlockEntity extends BlockEntity implements ItemOwner 
 
 	public int strength() {
 		return this.data.get(DATA_STRENGTH);
+	}
+
+	public boolean isWorking() {
+		return this.workTotal > 0;
+	}
+
+	private void sync() {
+		if (this.level != null) {
+			this.level.sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 3);
+		}
 	}
 
 	public void serverTick() {
