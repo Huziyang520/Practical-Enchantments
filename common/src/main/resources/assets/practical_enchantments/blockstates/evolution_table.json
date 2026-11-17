@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "working=false": {
+      "model": "practical_enchantments:block/evolution_table"
+    },
+    "working=true": {
+      "model": "practical_enchantments:block/evolution_table_active"
+    }
+  }
+}
