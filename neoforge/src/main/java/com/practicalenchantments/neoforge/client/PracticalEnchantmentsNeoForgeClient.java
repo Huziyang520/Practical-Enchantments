@@ -8,6 +8,8 @@ import com.practicalenchantments.client.EvolutionTableRenderer;
 import com.practicalenchantments.client.EvolutionTableScreen;
 import com.practicalenchantments.content.EvolutionTableBlockEntity;
 import com.practicalenchantments.content.PeMenus;
+import com.practicalenchantments.network.BagSearchPayload;
+import com.practicalenchantments.network.BagSearchSender;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
@@ -18,6 +20,8 @@ import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 @Mod(value = PracticalEnchantments.MOD_ID, dist = Dist.CLIENT)
 public final class PracticalEnchantmentsNeoForgeClient {
 	public PracticalEnchantmentsNeoForgeClient(IEventBus modEventBus, ModContainer container) {
+		BagSearchSender.install(text ->
+				net.neoforged.neoforge.client.network.ClientPacketDistributor.sendToServer(new BagSearchPayload(text)));
 		modEventBus.addListener(RegisterMenuScreensEvent.class, event -> {
 			if (PeMenus.evolutionTable() != null) {
 				event.register(PeMenus.evolutionTable(), EvolutionTableScreen::new);

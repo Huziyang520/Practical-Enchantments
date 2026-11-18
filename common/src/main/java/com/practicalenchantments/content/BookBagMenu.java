@@ -1,8 +1,10 @@
-// 附魔书袋菜单：可见行数随档位（最多 6 行），滚动由 clickMenuButton 推进，内容整表写回 CONTAINER 组件。
+// 附魔书袋菜单：可见行数随档位，支持按名字过滤（过滤结果由服务端重建并同步）。
 
 package com.practicalenchantments.content;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
@@ -34,7 +36,11 @@ public class BookBagMenu extends AbstractContainerMenu {
 	private final Container window;
 	private final ContainerData data;
 	private final int bagSlots;
+	private final int bagRows;
 	private final int inventoryY;
+	private int[] visible;
+	private int matched;
+	private String query = "";
 
 	public BookBagMenu(int containerId, Inventory inventory) {
 		this(containerId, inventory, inventory.player.getMainHandItem());
@@ -46,12 +52,14 @@ public class BookBagMenu extends AbstractContainerMenu {
 		this.items = BookBagStorage.read(bag);
 		int capacity = Math.max(9, this.items.size());
 		int totalRows = Math.max(1, (capacity + 8) / 9);
-		this.bagSlots = Math.min(totalRows, MAX_ROWS) * 9;
+		this.bagRows = Math.min(totalRows, MAX_ROWS);
+		this.bagSlots = this.bagRows * 9;
 		this.data = new SimpleContainerData(DATA_COUNT);
 		this.data.set(DATA_OFFSET_ROW, 0);
 		this.data.set(DATA_TOTAL_ROWS, totalRows);
 		this.data.set(DATA_CAPACITY, capacity);
-		this.inventoryY = GRID_Y + Math.min(totalRows, MAX_ROWS) * CELL + 12;
+		this.inventoryY = GRID_Y + this.bagRows * CELL + 12;
+		this.rebuildVisible();
 		this.window = inventory.player.level().isClientSide() ? new SimpleContainer(this.bagSlots) : new WindowContainer();
 		for (int index = 0; index < this.bagSlots; index++) {
 			int column = index % 9;
@@ -59,12 +67,12 @@ public class BookBagMenu extends AbstractContainerMenu {
 			this.addSlot(new Slot(this.window, index, GRID_X + column * CELL, GRID_Y + row * CELL) {
 				@Override
 				public boolean mayPlace(ItemStack stack) {
-					return BookBagStorage.mayStore(stack) && BookBagMenu.this.withinCapacity(this.getContainerSlot());
+					return BookBagStorage.mayStore(stack) && BookBagMenu.this.visibleIndex(this.getContainerSlot()) >= 0;
 				}
 
 				@Override
 				public boolean mayPickup(Player player) {
-					return BookBagMenu.this.withinCapacity(this.getContainerSlot());
+					return BookBagMenu.this.visibleIndex(this.getContainerSlot()) >= 0;
 				}
 			});
 		}
@@ -80,8 +88,52 @@ public class BookBagMenu extends AbstractContainerMenu {
 		this.addDataSlots(this.data);
 	}
 
+	public void setQuery(String text) {
+		String next = text == null ? "" : text.trim();
+		if (next.equals(this.query)) {
+			return;
+		}
+		this.query = next;
+		this.data.set(DATA_OFFSET_ROW, 0);
+		this.rebuildVisible();
+		this.broadcastChanges();
+	}
+
+	public String query() {
+		return this.query;
+	}
+
+	private void rebuildVisible() {
+		List<Integer> found = new ArrayList<>();
+		String needle = this.query.toLowerCase(Locale.ROOT);
+		for (int index = 0; index < this.capacity(); index++) {
+			if (needle.isEmpty()) {
+				found.add(index);
+				continue;
+			}
+			if (index >= this.items.size()) {
+				continue;
+			}
+			ItemStack stack = this.items.get(index);
+			if (!stack.isEmpty() && stack.getHoverName().getString().toLowerCase(Locale.ROOT).contains(needle)) {
+				found.add(index);
+			}
+		}
+		this.visible = new int[found.size()];
+		for (int index = 0; index < found.size(); index++) {
+			this.visible[index] = found.get(index);
+		}
+		this.matched = found.size();
+		this.data.set(DATA_TOTAL_ROWS, Math.max(1, (this.matched + 8) / 9));
+	}
+
+	private int visibleIndex(int slot) {
+		int index = this.offsetRow() * 9 + slot;
+		return index >= 0 && index < this.matched ? this.visible[index] : -1;
+	}
+
 	public int visibleRows() {
-		return Math.min(this.totalRows(), MAX_ROWS);
+		return this.bagRows;
 	}
 
 	public int inventoryY() {
@@ -89,7 +141,7 @@ public class BookBagMenu extends AbstractContainerMenu {
 	}
 
 	public int panelHeight() {
-		return PANEL_HEADER + visibleRows() * CELL + PANEL_FOOTER;
+		return PANEL_HEADER + this.bagRows * CELL + PANEL_FOOTER;
 	}
 
 	public int offsetRow() {
@@ -104,15 +156,19 @@ public class BookBagMenu extends AbstractContainerMenu {
 		return this.data.get(DATA_CAPACITY);
 	}
 
+	public int visibleSlotCount() {
+		return this.matched;
+	}
+
 	public boolean canScroll() {
-		return this.totalRows() > visibleRows();
+		return this.totalRows() > this.visibleRows();
 	}
 
 	public void requestScroll(int deltaRows) {
 		if (!this.canScroll()) {
 			return;
 		}
-		int target = clampOffset(this.offsetRow() + deltaRows);
+		int target = Math.max(0, Math.min(this.totalRows() - this.visibleRows(), this.offsetRow() + deltaRows));
 		this.data.set(DATA_OFFSET_ROW, target);
 		if (this.window instanceof WindowContainer container) {
 			container.setOffsetRow(target);
@@ -133,14 +189,6 @@ public class BookBagMenu extends AbstractContainerMenu {
 		return false;
 	}
 
-	private int clampOffset(int row) {
-		return Math.max(0, Math.min(this.totalRows() - visibleRows(), row));
-	}
-
-	private boolean withinCapacity(int slotIndex) {
-		return this.offsetRow() * 9 + slotIndex < this.capacity();
-	}
-
 	@Override
 	public boolean stillValid(Player player) {
 		return BookBagStorage.isBag(this.bag) && player.getMainHandItem() == this.bag;
@@ -148,6 +196,9 @@ public class BookBagMenu extends AbstractContainerMenu {
 
 	@Override
 	public ItemStack quickMoveStack(Player player, int index) {
+		if (!this.query.isEmpty()) {
+			return ItemStack.EMPTY;
+		}
 		ItemStack moved = ItemStack.EMPTY;
 		Slot slot = this.slots.get(index);
 		if (slot != null && slot.hasItem()) {
@@ -189,10 +240,6 @@ public class BookBagMenu extends AbstractContainerMenu {
 			this.offsetRow = row;
 		}
 
-		private int absolute(int slot) {
-			return this.offsetRow * 9 + slot;
-		}
-
 		@Override
 		public int getContainerSize() {
 			return BookBagMenu.this.bagSlots;
@@ -210,8 +257,8 @@ public class BookBagMenu extends AbstractContainerMenu {
 
 		@Override
 		public ItemStack getItem(int slot) {
-			int absolute = absolute(slot);
-			if (absolute >= BookBagMenu.this.capacity() || absolute >= BookBagMenu.this.items.size()) {
+			int absolute = BookBagMenu.this.visibleIndex(slot);
+			if (absolute < 0 || absolute >= BookBagMenu.this.items.size()) {
 				return ItemStack.EMPTY;
 			}
 			return BookBagMenu.this.items.get(absolute);
@@ -219,8 +266,8 @@ public class BookBagMenu extends AbstractContainerMenu {
 
 		@Override
 		public ItemStack removeItem(int slot, int amount) {
-			int absolute = absolute(slot);
-			if (absolute >= BookBagMenu.this.items.size()) {
+			int absolute = BookBagMenu.this.visibleIndex(slot);
+			if (absolute < 0 || absolute >= BookBagMenu.this.items.size()) {
 				return ItemStack.EMPTY;
 			}
 			ItemStack removed = net.minecraft.world.ContainerHelper.removeItem(BookBagMenu.this.items, absolute, amount);
@@ -230,8 +277,8 @@ public class BookBagMenu extends AbstractContainerMenu {
 
 		@Override
 		public ItemStack removeItemNoUpdate(int slot) {
-			int absolute = absolute(slot);
-			if (absolute >= BookBagMenu.this.items.size()) {
+			int absolute = BookBagMenu.this.visibleIndex(slot);
+			if (absolute < 0 || absolute >= BookBagMenu.this.items.size()) {
 				return ItemStack.EMPTY;
 			}
 			ItemStack removed = BookBagMenu.this.items.get(absolute);
@@ -241,8 +288,8 @@ public class BookBagMenu extends AbstractContainerMenu {
 
 		@Override
 		public void setItem(int slot, ItemStack stack) {
-			int absolute = absolute(slot);
-			if (absolute >= BookBagMenu.this.capacity() || absolute >= BookBagMenu.this.items.size()) {
+			int absolute = BookBagMenu.this.visibleIndex(slot);
+			if (absolute < 0 || absolute >= BookBagMenu.this.items.size()) {
 				return;
 			}
 			BookBagMenu.this.items.set(absolute, stack);
@@ -252,6 +299,7 @@ public class BookBagMenu extends AbstractContainerMenu {
 		@Override
 		public void setChanged() {
 			BookBagStorage.write(BookBagMenu.this.bag, BookBagMenu.this.items);
+			BookBagMenu.this.rebuildVisible();
 		}
 
 		@Override

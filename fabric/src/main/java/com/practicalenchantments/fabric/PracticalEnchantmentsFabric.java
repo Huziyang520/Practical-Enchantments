@@ -8,7 +8,11 @@ import com.practicalenchantments.fabric.config.FabricVanillaTweaks;
 import com.practicalenchantments.fabric.config.FcapConfig;
 import net.fabricmc.api.ModInitializer;
 import com.practicalenchantments.content.PeContent;
+import com.practicalenchantments.content.BookBagMenu;
+import com.practicalenchantments.network.BagSearchPayload;
 import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
+import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
@@ -25,6 +29,13 @@ public final class PracticalEnchantmentsFabric implements ModInitializer {
 		CreativeModeTabEvents.modifyOutputEvent(PeContent.tabKey()).register(output -> {
 			for (ItemStack stack : PeContent.tabEntries()) {
 				output.accept(stack, CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+			}
+		});
+
+		PayloadTypeRegistry.serverboundPlay().register(BagSearchPayload.TYPE, BagSearchPayload.STREAM_CODEC);
+		ServerPlayNetworking.registerGlobalReceiver(BagSearchPayload.TYPE, (payload, context) -> {
+			if (context.player().containerMenu instanceof BookBagMenu menu) {
+				menu.setQuery(payload.query());
 			}
 		});
 

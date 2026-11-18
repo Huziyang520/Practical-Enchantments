@@ -5,7 +5,9 @@ package com.practicalenchantments.client;
 import com.practicalenchantments.PracticalEnchantments;
 import com.practicalenchantments.content.BookBagMenu;
 import com.practicalenchantments.content.BookBagStorage;
+import com.practicalenchantments.network.BagSearchSender;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
@@ -31,10 +33,28 @@ public class BookBagScreen extends AbstractContainerScreen<BookBagMenu> {
 	private static final int TEXT_COLOR = 0xFF404040;
 	private static final int BUTTON_SCROLL_UP = 0;
 	private static final int BUTTON_SCROLL_DOWN = 1;
+	private static final int SEARCH_X = 8;
+	private static final int SEARCH_Y = 17;
+	private static final int SEARCH_WIDTH = 174;
+	private static final int SEARCH_HEIGHT = 12;
+
+	private EditBox search;
 
 	public BookBagScreen(BookBagMenu menu, Inventory inventory, Component title) {
 		super(menu, inventory, title, PANEL_WIDTH, menu.panelHeight());
 		this.inventoryLabelY = menu.inventoryY() - 11;
+	}
+
+	@Override
+	protected void init() {
+		super.init();
+		String previous = this.search == null ? "" : this.search.getValue();
+		this.search = new EditBox(this.font, this.leftPos + SEARCH_X, this.topPos + SEARCH_Y,
+				SEARCH_WIDTH, SEARCH_HEIGHT, Component.translatable("gui." + PracticalEnchantments.MOD_ID + ".bag.search"));
+		this.search.setMaxLength(64);
+		this.search.setValue(previous);
+		this.search.setResponder(BagSearchSender::send);
+		this.addRenderableWidget(this.search);
 	}
 
 	@Override

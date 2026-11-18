@@ -17,10 +17,12 @@ import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.config.ModConfigEvent;
 import com.practicalenchantments.content.PeContent;
+import com.practicalenchantments.network.BagSearchPayload;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 
 @Mod(PracticalEnchantments.MOD_ID)
@@ -35,6 +37,7 @@ public final class PracticalEnchantmentsNeoForge {
 		NeoConfig.apply();
 
 		modEventBus.addListener(this::onBuildCreativeTab);
+		modEventBus.addListener(this::onRegisterPayloads);
 
 		NeoForge.EVENT_BUS.addListener(LivingDamageEvent.Post.class, event ->
 			LifeStealEnchantment.onAfterDamage(
@@ -51,6 +54,15 @@ public final class PracticalEnchantmentsNeoForge {
 				(windowId, inventory, data) -> new BookBagMenu(windowId, inventory));
 		Services.REGISTRATIONS.register(BuiltInRegistries.MENU, PeContent.BOOK_BAG_LEATHER, () -> bookBag);
 		PeMenus.setBookBag(bookBag);
+	}
+
+	private void onRegisterPayloads(RegisterPayloadHandlersEvent event) {
+		event.registrar("1").playToServer(BagSearchPayload.TYPE, BagSearchPayload.STREAM_CODEC,
+				(payload, context) -> {
+					if (context.player().containerMenu instanceof BookBagMenu menu) {
+						menu.setQuery(payload.query());
+					}
+				});
 	}
 
 	private void onBuildCreativeTab(BuildCreativeModeTabContentsEvent event) {

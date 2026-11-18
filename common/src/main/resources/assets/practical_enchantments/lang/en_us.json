@@ -655,5 +655,6 @@
   "jade.practical_enchantments.evolution_table.power": "Enchanting power: %s/%s",
   "jade.practical_enchantments.evolution_table.shelves": "Shelves %s · Books %s",
   "jade.practical_enchantments.evolution_table.item": "On table: %s",
-  "jade.practical_enchantments.evolution_table.working": "Evolving..."
+  "jade.practical_enchantments.evolution_table.working": "Evolving...",
+  "gui.practical_enchantments.bag.search": "Search enchanted books…"
 }

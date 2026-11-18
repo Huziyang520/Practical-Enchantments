@@ -655,5 +655,6 @@
   "jade.practical_enchantments.evolution_table.power": "附魔能力：%s/%s",
   "jade.practical_enchantments.evolution_table.shelves": "有效书架 %s · 附魔书 %s",
   "jade.practical_enchantments.evolution_table.item": "台面：%s",
-  "jade.practical_enchantments.evolution_table.working": "正在进化…"
+  "jade.practical_enchantments.evolution_table.working": "正在进化…",
+  "gui.practical_enchantments.bag.search": "搜索附魔书…"
 }
