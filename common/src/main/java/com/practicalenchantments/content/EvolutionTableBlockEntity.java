@@ -7,7 +7,9 @@ import com.huziyang520.merlinlib.api.EvolutionApi;
 import com.huziyang520.merlinlib.api.EvolutionRule;
 import com.huziyang520.merlinlib.api.MerlinApi;
 import com.practicalenchantments.PracticalEnchantments;
+import com.practicalenchantments.config.Tunables;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
@@ -15,6 +17,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Container;
+import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.ItemOwner;
@@ -34,7 +37,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 
-public class EvolutionTableBlockEntity extends BlockEntity implements ItemOwner, Container {
+public class EvolutionTableBlockEntity extends BlockEntity implements ItemOwner, WorldlyContainer {
 	public static final int MAX_SHELVES = 15;
 	public static final int MAX_BOOKS = 30;
 	public static final int MAX_STRENGTH = 30;
@@ -129,6 +132,21 @@ public class EvolutionTableBlockEntity extends BlockEntity implements ItemOwner,
 			return stack.is(Items.LAPIS_LAZULI);
 		}
 		return !this.hasDisplayed() && this.workTotal <= 0 && this.canDisplay(stack);
+	}
+
+	@Override
+	public int[] getSlotsForFace(Direction side) {
+		return new int[]{0, 1};
+	}
+
+	@Override
+	public boolean canPlaceItemThroughFace(int slot, ItemStack stack, Direction side) {
+		return slot == 0 && this.canPlaceItem(0, stack);
+	}
+
+	@Override
+	public boolean canTakeItemThroughFace(int slot, ItemStack stack, Direction side) {
+		return true;
 	}
 
 	@Override
@@ -250,7 +268,7 @@ public class EvolutionTableBlockEntity extends BlockEntity implements ItemOwner,
 	}
 
 	private void absorbDropped(ServerLevel level) {
-		if (this.hasDisplayed() || this.workTotal > 0) {
+		if (!Tunables.evolutionTableAbsorbDrops() || this.hasDisplayed() || this.workTotal > 0) {
 			return;
 		}
 		BlockPos pos = this.getBlockPos();
@@ -327,7 +345,7 @@ public class EvolutionTableBlockEntity extends BlockEntity implements ItemOwner,
 	}
 
 	private boolean canStart(ServerLevel level) {
-		if (!this.hasDisplayed() || this.strength() < 1) {
+		if (!Tunables.evolutionTableEnabled() || !this.hasDisplayed() || this.strength() < 1) {
 			return false;
 		}
 		EvolutionRule rule = MerlinApi.evolution().match(this.items.get(1), level.registryAccess());

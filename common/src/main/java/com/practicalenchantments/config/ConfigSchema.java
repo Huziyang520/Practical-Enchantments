@@ -15,6 +15,7 @@ public final class ConfigSchema {
 	public static final String SECTION_TOOL = "tool";
 	public static final String SECTION_EFFECT = "effect";
 	public static final String SECTION_LINKED = "linked";
+	public static final String SECTION_EVOLUTION = "evolution_table";
 
 	private static final List<ConfigOption> ALL = List.of(
 			ConfigOption.bool("vanilla_tweaks", "infinity_crossbow", false),
@@ -133,7 +134,21 @@ public final class ConfigSchema {
 			ConfigOption.decimal("linked", "tf_night_slayer.damage_base", 2.0, 0, 10),
 			ConfigOption.decimal("linked", "tf_night_slayer.damage_per_level", 1.5, 0, 10),
 			ConfigOption.integer("linked", "tf_night_slayer.night_start", 13000, 0, 24000),
-			ConfigOption.integer("linked", "tf_night_slayer.night_end", 23000, 0, 24000)
+			ConfigOption.integer("linked", "tf_night_slayer.night_end", 23000, 0, 24000),
+			ConfigOption.bool("weapon", "zeus_poseidon.require_sky", true),
+			ConfigOption.integer("weapon", "zeus_poseidon.storm_strikes", 5, 1, 20),
+			ConfigOption.integer("weapon", "zeus_poseidon.storm_window_seconds", 90, 5, 600),
+			ConfigOption.integer("weapon", "zeus_poseidon.storm_duration_seconds", 300, 10, 3600),
+			ConfigOption.integer("weapon", "zeus_poseidon.storm_cooldown_seconds", 12000, 0, 86400),
+			ConfigOption.bool("evolution_table", "enabled", true),
+			ConfigOption.bool("evolution_table", "absorb_drops", true),
+			ConfigOption.integer("evolution_table", "base_success_percent", 75, 0, 100),
+			ConfigOption.integer("evolution_table", "base_transmute_percent", 5, 0, 100),
+			ConfigOption.integer("evolution_table", "lapis_cost_base", 8, 0, 64),
+			ConfigOption.integer("evolution_table", "lapis_cost_step", 4, 0, 64),
+			ConfigOption.integer("evolution_table", "lapis_cost_cap", 64, 1, 64),
+			ConfigOption.integer("evolution_table", "ticks_per_lapis", 20, 1, 200),
+			ConfigOption.integer("evolution_table", "duration_cap_ticks", 320, 20, 72000)
 	);
 
 	private static final Map<String, ConfigOption> BY_KEY;

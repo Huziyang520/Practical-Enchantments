@@ -21,8 +21,8 @@ import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
 
 public class EvolutionTableRenderer implements BlockEntityRenderer<EvolutionTableBlockEntity, EvolutionTableRenderer.State> {
-	private static final float SCALE = 0.65F;
-	private static final float BASE_HEIGHT = 0.8F;
+	private static final float SCALE = 0.85F;
+	private static final float BASE_HEIGHT = 0.95F;
 	private static final float BOB_HEIGHT = 0.04F;
 	private static final float DEGREES_PER_TICK = 1.5F;
 	private static final float WORKING_SPIN = 6.0F;

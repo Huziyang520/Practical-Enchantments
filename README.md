@@ -24,6 +24,7 @@
 | **Disguise** | Mob heads | Wearing a mob's head stops that kind of mob from attacking you on its own. |
 | **Cat Charm** | Helmets | Creepers and phantoms keep their distance from you. |
 | **Demonic Pact** | Chestplates | On lethal damage, pays emeralds to cheat death like a Totem of Undying, at the cost of Darkness. |
+| **Zeus & Poseidon** | Tridents | Every hit calls down lightning, no storm needed; enough strikes in a row turn the weather itself into a thunderstorm. |
 
 ### 💠 Items
 
@@ -31,6 +32,15 @@
 |---|---|
 | **Iron / Golden / Diamond / Netherite Amulet** | Worn in a trinket slot or held in the offhand. Armour enchantments work from an amulet, and upgrading keeps every enchantment already on it. |
 | **Flawed Obsidian** | The block Obsidian Walker leaves on lava. It cracks through three stages and melts back into lava; breaking it turns it into lava too. |
+| **Leather / Iron / Golden / Diamond / Netherite Book Bag** | Holds 27 / 54 / 81 / 135 / 216 enchanted books. The search box filters by enchantment name. |
+| **Evolution Table** | Place an item or enchanted book carrying an evolvable enchantment on top, add lapis lazuli, and it evolves. Evolved enchantments are drawn with an animated rainbow name. |
+
+### 🔮 The Evolution Table
+
+- Right-click the table with an evolvable item or enchanted book to place it on top; right-click empty-handed to take it back.
+- Right-click anything else to open the table and load lapis lazuli. It starts on its own once an item and enough lapis are present.
+- Every attempt costs the lapis and may **evolve**, **transmute** into another enchantment, or **fail**.
+- Success chance depends on the source enchantment and on the table's enchanting power, which comes from bookshelves and chiseled bookshelves holding enchanted books (empty chiseled bookshelves do not count). Full power is reached only with the full shelf setup.
 
 ### 🔧 Development Status
 
@@ -75,6 +85,7 @@ Other versions are not planned.
 | **伪装** | 各类生物头颅 | 戴上头颅后，对应的生物不再主动攻击你。 |
 | **猫咪护符** | 头盔 | 苦力怕与幻翼会主动远离你。 |
 | **恶魔交易** | 胸甲 | 受到致命伤害时消耗绿宝石免死（类似不死图腾），并附带黑暗效果作为代价。 |
+| **宙斯与波塞冬** | 三叉戟 | 每次命中都召来闪电，不需要雷雨；短时间内连续召雷会把天气变成雷暴。 |
 
 ### 💠 物品
 
@@ -82,6 +93,15 @@ Other versions are not planned.
 |---|---|
 | **铁 / 金 / 钻石 / 下界合金护身符** | 装备在饰品栏或副手。护甲类附魔在护身符上同样生效，升级时已有附魔全部保留。 |
 | **有瑕疵的黑曜石** | 龙晶行者踩过熔岩后留下的方块。它会分三阶裂开，最后熔回熔岩源；自己挖掉也会变回熔岩。 |
+| **皮革 / 铁 / 金 / 钻石 / 下界合金附魔书袋** | 分别存放 27 / 54 / 81 / 135 / 216 本附魔书，搜索框按附魔名筛选。 |
+| **进化附魔台** | 把带可进化附魔的物品或附魔书放上台面，放入青金石即可开始进化。进化出的附魔名称是流动的彩虹色。 |
+
+### 🔮 进化附魔台
+
+- 手持可进化的物品或附魔书右键台面即可放上去；空手右键可以取回。掉在台面上的同类物品会被自动吸附。
+- 右键其他情况会打开界面，放入青金石。物品与青金石都到位后会自动开始。
+- 每次进化都会消耗青金石，结果是**进化成功**、**转化为其他附魔**或**失败**三种之一。
+- 成功率取决于原附魔与台子的附魔能力。附魔能力来自书架，以及放着附魔书的雕纹书架（空雕纹书架不算）。只有摆满整套书架才能达到满值。
 
 ### 🔧 开发情况
 

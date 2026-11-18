@@ -6,21 +6,32 @@ package com.practicalenchantments.content;
 import com.huziyang520.merlinlib.api.EvolutionRule;
 import com.huziyang520.merlinlib.api.MerlinApi;
 import com.practicalenchantments.PracticalEnchantments;
+import com.practicalenchantments.config.Tunables;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.enchantment.Enchantment;
 
 public final class PeEvolution {
+	/** 引雷只到 1 级；以后新增规则时把对应附魔的最高等级写在这里。 */
+	private static final int CHANNELING_MAX_LEVEL = 1;
 	public static final Identifier CHANNELING = Identifier.withDefaultNamespace("channeling");
 	public static final Identifier ZEUS_POSEIDON =
 			Identifier.fromNamespaceAndPath(PracticalEnchantments.MOD_ID, "zeus_poseidon");
 	public static final int MAX_COST = 64;
 	public static final int MAX_TICKS = 320;
-	public static final EvolutionRule CHANNELING_TO_ZEUS_POSEIDON =
-			new EvolutionRule(CHANNELING, ZEUS_POSEIDON, 0.75F, 0.05F, 12, 240);
+	public static final EvolutionRule CHANNELING_TO_ZEUS_POSEIDON = channelingRule();
 	private static boolean registered;
 
 	private PeEvolution() {
+	}
+
+	private static EvolutionRule channelingRule() {
+		int cost = Math.min(Tunables.evolutionLapisCostCap(),
+				Tunables.evolutionLapisCostBase() + Tunables.evolutionLapisCostStep() * CHANNELING_MAX_LEVEL);
+		int ticks = Math.min(Tunables.evolutionDurationCapTicks(), Tunables.evolutionTicksPerLapis() * cost);
+		return new EvolutionRule(CHANNELING, ZEUS_POSEIDON,
+				Tunables.evolutionBaseSuccessPercent() / 100.0F,
+				Tunables.evolutionBaseTransmutePercent() / 100.0F, cost, ticks);
 	}
 
 	public static void register() {

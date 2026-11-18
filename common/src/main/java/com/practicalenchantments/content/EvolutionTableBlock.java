@@ -22,7 +22,10 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -30,16 +33,23 @@ import org.jspecify.annotations.Nullable;
 
 public class EvolutionTableBlock extends Block implements EntityBlock {
 	public static final BooleanProperty WORKING = BooleanProperty.create("working");
+	public static final EnumProperty<net.minecraft.core.Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
 	private static final VoxelShape SHAPE = Block.column(16.0, 0.0, 12.0);
 
 	public EvolutionTableBlock(Properties properties) {
 		super(properties);
-		registerDefaultState(stateDefinition.any().setValue(WORKING, false));
+		registerDefaultState(stateDefinition.any().setValue(WORKING, false)
+				.setValue(FACING, net.minecraft.core.Direction.NORTH));
 	}
 
 	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-		builder.add(WORKING);
+		builder.add(WORKING, FACING);
+	}
+
+	@Override
+	public @Nullable BlockState getStateForPlacement(BlockPlaceContext context) {
+		return defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
 	}
 
 	@Override
