@@ -1,5 +1,7 @@
 # Practical Enchantments
 
+![Practical Enchantments](https://raw.githubusercontent.com/Huziyang520/Practical-Enchantments/master/promo.png)
+
 **English** | [简体中文](#简体中文)
 
 ---
