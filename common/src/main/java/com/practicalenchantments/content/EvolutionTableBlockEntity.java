@@ -146,7 +146,8 @@ public class EvolutionTableBlockEntity extends BlockEntity implements ItemOwner,
 
 	@Override
 	public boolean canTakeItemThroughFace(int slot, ItemStack stack, Direction side) {
-		return true;
+		// 进化进行中不允许外部抽走台面物品，否则青金石白扣、物品进管道。
+		return slot != 1 || this.workTotal <= 0;
 	}
 
 	@Override
