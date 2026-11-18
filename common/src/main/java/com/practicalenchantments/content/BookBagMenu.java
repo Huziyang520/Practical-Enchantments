@@ -115,7 +115,7 @@ public class BookBagMenu extends AbstractContainerMenu {
 				continue;
 			}
 			ItemStack stack = this.items.get(index);
-			if (!stack.isEmpty() && stack.getHoverName().getString().toLowerCase(Locale.ROOT).contains(needle)) {
+			if (!stack.isEmpty() && matches(stack, needle)) {
 				found.add(index);
 			}
 		}
@@ -125,6 +125,24 @@ public class BookBagMenu extends AbstractContainerMenu {
 		}
 		this.matched = found.size();
 		this.data.set(DATA_TOTAL_ROWS, Math.max(1, (this.matched + 8) / 9));
+	}
+
+	private static boolean matches(ItemStack stack, String needle) {
+		if (stack.getHoverName().getString().toLowerCase(Locale.ROOT).contains(needle)) {
+			return true;
+		}
+		net.minecraft.world.item.enchantment.ItemEnchantments enchantments =
+				net.minecraft.world.item.enchantment.EnchantmentHelper.getEnchantmentsForCrafting(stack);
+		for (net.minecraft.core.Holder<net.minecraft.world.item.enchantment.Enchantment> enchantment
+				: enchantments.keySet()) {
+			if (enchantment.value().description().getString().toLowerCase(Locale.ROOT).contains(needle)) {
+				return true;
+			}
+			if (enchantment.unwrapKey().map(key -> key.identifier().toString().contains(needle)).orElse(false)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private int visibleIndex(int slot) {

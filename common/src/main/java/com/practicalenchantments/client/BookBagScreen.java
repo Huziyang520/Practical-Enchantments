@@ -27,6 +27,8 @@ public class BookBagScreen extends AbstractContainerScreen<BookBagMenu> {
 	private static final int TRACK_WIDTH = 8;
 	private static final int ERASE_X = 176;
 	private static final int ERASE_WIDTH = 11;
+	private static final int LEFT_ERASE_X = 6;
+	private static final int LEFT_ERASE_WIDTH = 8;
 	private static final int PANEL_COLOR = 0xFFC6C6C6;
 	private static final int TRACK_COLOR = 0xFF373737;
 	private static final int THUMB_COLOR = 0xFFC6C6C6;
@@ -52,6 +54,7 @@ public class BookBagScreen extends AbstractContainerScreen<BookBagMenu> {
 		this.search = new EditBox(this.font, this.leftPos + SEARCH_X, this.topPos + SEARCH_Y,
 				SEARCH_WIDTH, SEARCH_HEIGHT, Component.translatable("gui." + PracticalEnchantments.MOD_ID + ".bag.search"));
 		this.search.setMaxLength(64);
+		this.search.setBordered(false);
 		this.search.setValue(previous);
 		this.search.setResponder(BagSearchSender::send);
 		this.addRenderableWidget(this.search);
@@ -68,6 +71,8 @@ public class BookBagScreen extends AbstractContainerScreen<BookBagMenu> {
 		blit(graphics, 0, BookBagMenu.PANEL_HEADER + rows * BookBagMenu.CELL, FOOTER_V, BookBagMenu.PANEL_FOOTER);
 		int gridTop = BookBagMenu.GRID_Y - 1;
 		int gridBottom = gridTop + rows * BookBagMenu.CELL;
+		graphics.fill(this.leftPos + LEFT_ERASE_X, this.topPos + gridTop,
+				this.leftPos + LEFT_ERASE_X + LEFT_ERASE_WIDTH, this.topPos + gridBottom, PANEL_COLOR);
 		graphics.fill(this.leftPos + ERASE_X, this.topPos + gridTop, this.leftPos + ERASE_X + ERASE_WIDTH,
 				this.topPos + gridBottom, PANEL_COLOR);
 		this.drawCells(graphics, rows);
@@ -102,7 +107,8 @@ public class BookBagScreen extends AbstractContainerScreen<BookBagMenu> {
 		int travel = height - thumbHeight;
 		int maxOffset = Math.max(1, totalRows - rows);
 		int thumbY = this.topPos + top + travel * this.menu.offsetRow() / maxOffset;
-		graphics.fill(x + 1, thumbY, x + TRACK_WIDTH - 1, thumbY + thumbHeight, THUMB_COLOR);
+		int thumbBottom = Math.min(this.topPos + bottom, thumbY + thumbHeight);
+		graphics.fill(x + 1, thumbY, x + TRACK_WIDTH - 1, thumbBottom, THUMB_COLOR);
 	}
 
 	@Override

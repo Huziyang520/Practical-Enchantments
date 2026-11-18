@@ -65,6 +65,10 @@ public final class PracticalEnchantments {
 	private PracticalEnchantments() {
 	}
 
+	public static void info(String message, Object... arguments) {
+		LOGGER.info(message, arguments);
+	}
+
 	public static void bootstrap() {
 		MerlinLibNotice.registerEarly();
 		PeContent.register();

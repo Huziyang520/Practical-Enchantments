@@ -14,6 +14,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -31,6 +32,9 @@ public final class PeContent {
 	private static final Identifier[] BOOK_BAGS = {
 			BOOK_BAG_LEATHER, BOOK_BAG_IRON, BOOK_BAG_GOLD, BOOK_BAG_DIAMOND, BOOK_BAG_NETHERITE};
 	private static final int[] BOOK_BAG_CAPACITY = {27, 54, 81, 135, 216};
+	private static final Rarity[] BOOK_BAG_RARITY = {
+			Rarity.COMMON, Rarity.UNCOMMON, Rarity.UNCOMMON, Rarity.RARE, Rarity.EPIC};
+	private static final Rarity[] AMULET_RARITY = {Rarity.COMMON, Rarity.UNCOMMON, Rarity.RARE, Rarity.EPIC};
 	private static final int[] BOOK_BAG_LOOT_BOOKS = {2, 3, 4, 5, 6};
 	public static final Identifier IRON_AMULET = id("iron_amulet");
 	public static final Identifier GOLDEN_AMULET = id("golden_amulet");
@@ -61,11 +65,15 @@ public final class PeContent {
 			Identifier bag = BOOK_BAGS[index];
 			int capacity = BOOK_BAG_CAPACITY[index];
 			int lootBooks = BOOK_BAG_LOOT_BOOKS[index];
+			Rarity rarity = BOOK_BAG_RARITY[index];
 			Services.REGISTRATIONS.register(BuiltInRegistries.ITEM, bag,
-					() -> new BookBagItem(itemProperties(bag).stacksTo(1), capacity, lootBooks));
+					() -> new BookBagItem(itemProperties(bag).stacksTo(1).rarity(rarity), capacity, lootBooks));
 		}
-		for (Identifier amulet : AMULETS) {
-			Services.REGISTRATIONS.register(BuiltInRegistries.ITEM, amulet, () -> new Item(itemProperties(amulet).stacksTo(1)));
+		for (int index = 0; index < AMULETS.size(); index++) {
+			Identifier amulet = AMULETS.get(index);
+			Rarity rarity = AMULET_RARITY[index];
+			Services.REGISTRATIONS.register(BuiltInRegistries.ITEM, amulet,
+					() -> new Item(itemProperties(amulet).stacksTo(1).rarity(rarity)));
 		}
 		Services.REGISTRATIONS.register(BuiltInRegistries.CREATIVE_MODE_TAB, TAB, PeContent::createTab);
 		PeRecipes.register();

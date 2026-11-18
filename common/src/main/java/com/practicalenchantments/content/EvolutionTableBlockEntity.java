@@ -6,6 +6,7 @@ package com.practicalenchantments.content;
 import com.huziyang520.merlinlib.api.EvolutionApi;
 import com.huziyang520.merlinlib.api.EvolutionRule;
 import com.huziyang520.merlinlib.api.MerlinApi;
+import com.practicalenchantments.PracticalEnchantments;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.particles.ParticleTypes;
@@ -33,7 +34,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 
-public class EvolutionTableBlockEntity extends BlockEntity implements ItemOwner {
+public class EvolutionTableBlockEntity extends BlockEntity implements ItemOwner, Container {
 	public static final int MAX_SHELVES = 15;
 	public static final int MAX_BOOKS = 30;
 	public static final int MAX_STRENGTH = 30;
@@ -73,6 +74,74 @@ public class EvolutionTableBlockEntity extends BlockEntity implements ItemOwner 
 	@Override
 	public float getVisualRotationYInDegrees() {
 		return 0.0F;
+	}
+
+	@Override
+	public int getContainerSize() {
+		return 2;
+	}
+
+	@Override
+	public boolean isEmpty() {
+		return this.lapisView.getItem(0).isEmpty() && this.items.get(1).isEmpty();
+	}
+
+	@Override
+	public ItemStack getItem(int slot) {
+		return slot == 0 ? this.lapisView.getItem(0) : this.items.get(1);
+	}
+
+	@Override
+	public ItemStack removeItem(int slot, int amount) {
+		ItemStack removed = slot == 0 ? this.lapisView.removeItem(0, amount) : this.items.get(1).split(amount);
+		if (slot != 0) {
+			this.sync();
+		}
+		this.setChanged();
+		return removed;
+	}
+
+	@Override
+	public ItemStack removeItemNoUpdate(int slot) {
+		ItemStack removed = slot == 0 ? this.lapisView.removeItemNoUpdate(0) : this.items.get(1);
+		if (slot != 0) {
+			this.items.set(1, ItemStack.EMPTY);
+			this.sync();
+		}
+		this.setChanged();
+		return removed;
+	}
+
+	@Override
+	public void setItem(int slot, ItemStack stack) {
+		if (slot == 0) {
+			this.lapisView.setItem(0, stack);
+		} else {
+			this.items.set(1, stack.copyWithCount(Math.min(stack.getCount(), 1)));
+			this.sync();
+		}
+		this.setChanged();
+	}
+
+	@Override
+	public boolean canPlaceItem(int slot, ItemStack stack) {
+		if (slot == 0) {
+			return stack.is(Items.LAPIS_LAZULI);
+		}
+		return !this.hasDisplayed() && this.workTotal <= 0 && this.canDisplay(stack);
+	}
+
+	@Override
+	public boolean stillValid(Player player) {
+		return true;
+	}
+
+	@Override
+	public void clearContent() {
+		this.lapisView.clearContent();
+		this.items.set(1, ItemStack.EMPTY);
+		this.sync();
+		this.setChanged();
 	}
 
 	public ContainerData data() {
@@ -250,6 +319,8 @@ public class EvolutionTableBlockEntity extends BlockEntity implements ItemOwner 
 				: null;
 		this.data.set(DATA_COST, rule == null ? 0 : rule.lapisCost());
 		if (changed) {
+			PracticalEnchantments.info("[PracticalEnchantments] evolution table at {}: {} shelf(s), {} book(s), strength {}",
+					this.getBlockPos(), shelves, books, this.data.get(DATA_STRENGTH));
 			this.setChanged();
 			this.sync();
 		}
