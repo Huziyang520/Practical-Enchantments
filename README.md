@@ -1,6 +1,6 @@
 # Practical Enchantments
 
-![Practical Enchantments](https://raw.githubusercontent.com/Huziyang520/Practical-Enchantments/master/promo.png)
+![Practical Enchantments](https://raw.githubusercontent.com/Huziyang520/Practical-Enchantments/master/promo/banner.png)
 
 **English** | [简体中文](#简体中文)
 
@@ -10,8 +10,8 @@
 
 **Practical Enchantments** adds a collection of useful and fun enchantments that you can actually feel in play.
 
-📖 **Full enchantment list:** [English](https://github.com/Huziyang520/Practical-Enchantments/blob/master/ENCHANTMENTS_LIST.md) · [中文](https://github.com/Huziyang520/Practical-Enchantments/blob/master/ENCHANTMENTS_LIST_CN.md)
-📖 **Full effect and potion list:** [English](https://github.com/Huziyang520/Practical-Enchantments/blob/master/EFFECTS_LIST.md) · [中文](https://github.com/Huziyang520/Practical-Enchantments/blob/master/EFFECTS_LIST_CN.md)
+📖 **Full enchantment list:** [English](https://github.com/Huziyang520/Practical-Enchantments/blob/master/docs/ENCHANTMENTS_LIST.md) · [中文](https://github.com/Huziyang520/Practical-Enchantments/blob/master/docs/ENCHANTMENTS_LIST_CN.md)
+📖 **Full effect and potion list:** [English](https://github.com/Huziyang520/Practical-Enchantments/blob/master/docs/EFFECTS_LIST.md) · [中文](https://github.com/Huziyang520/Practical-Enchantments/blob/master/docs/EFFECTS_LIST_CN.md)
 
 ### ✨ Featured Enchantments
 
@@ -29,6 +29,8 @@
 | **Zeus & Poseidon** | Tridents | Every hit calls down lightning, no storm needed; enough strikes in a row turn the weather itself into a thunderstorm. |
 
 ### 💠 Items
+
+![Amulets and book bags](https://raw.githubusercontent.com/Huziyang520/Practical-Enchantments/master/promo/items.png)
 
 | Item | What it does |
 |---|---|
@@ -71,8 +73,8 @@ Other versions are not planned.
 
 **实用附魔（Practical Enchantments）** 添加了一系列实用或有趣的附魔，优化你的游戏体验。
 
-📖 **完整附魔清单：** [中文](https://github.com/Huziyang520/Practical-Enchantments/blob/master/ENCHANTMENTS_LIST_CN.md) · [English](https://github.com/Huziyang520/Practical-Enchantments/blob/master/ENCHANTMENTS_LIST.md)
-📖 **完整效果与药水清单：** [中文](https://github.com/Huziyang520/Practical-Enchantments/blob/master/EFFECTS_LIST_CN.md) · [English](https://github.com/Huziyang520/Practical-Enchantments/blob/master/EFFECTS_LIST.md)
+📖 **完整附魔清单：** [中文](https://github.com/Huziyang520/Practical-Enchantments/blob/master/docs/ENCHANTMENTS_LIST_CN.md) · [English](https://github.com/Huziyang520/Practical-Enchantments/blob/master/docs/ENCHANTMENTS_LIST.md)
+📖 **完整效果与药水清单：** [中文](https://github.com/Huziyang520/Practical-Enchantments/blob/master/docs/EFFECTS_LIST_CN.md) · [English](https://github.com/Huziyang520/Practical-Enchantments/blob/master/docs/EFFECTS_LIST.md)
 
 ### ✨ 部分附魔一览
 
@@ -90,6 +92,8 @@ Other versions are not planned.
 | **宙斯与波塞冬** | 三叉戟 | 每次命中都召来闪电，不需要雷雨；短时间内连续召雷会把天气变成雷暴。 |
 
 ### 💠 物品
+
+![护身符与附魔书袋](https://raw.githubusercontent.com/Huziyang520/Practical-Enchantments/master/promo/items.png)
 
 | 物品 | 作用 |
 |---|---|
