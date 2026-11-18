@@ -6,8 +6,7 @@
   "client": [
     "InvisibleAirFirstPersonMixin",
     "InvisibleAirItemInHandMixin",
-    "InvisibleAirArmPoseMixin",
-    "MenuScreensInvoker"
+    "InvisibleAirArmPoseMixin"
   ],
   "injectors": {
     "defaultRequire": 1

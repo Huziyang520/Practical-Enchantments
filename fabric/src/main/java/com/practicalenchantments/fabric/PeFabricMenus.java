@@ -1,4 +1,4 @@
-// 菜单类型注册：MenuType 的构造器私有，Fabric 用官方 ExtendedMenuType 建。
+// 菜单类型注册：Fabric 用普通 MenuType，打开方仍是 SimpleMenuProvider（私有构造器由 access widener 打开）。
 
 package com.practicalenchantments.fabric;
 
@@ -6,11 +6,9 @@ import com.practicalenchantments.content.BookBagMenu;
 import com.practicalenchantments.content.EvolutionTableMenu;
 import com.practicalenchantments.content.PeContent;
 import com.practicalenchantments.content.PeMenus;
-import net.fabricmc.fabric.api.menu.v1.ExtendedMenuType;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.util.Unit;
+import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.inventory.MenuType;
 import org.jspecify.annotations.Nullable;
 
@@ -27,14 +25,10 @@ public final class PeFabricMenus {
 		if (evolutionTable != null) {
 			return;
 		}
-		evolutionTable = new ExtendedMenuType<EvolutionTableMenu, Unit>(
-				(id, inventory, data) -> new EvolutionTableMenu(id, inventory),
-				StreamCodec.unit(Unit.INSTANCE));
+		evolutionTable = new MenuType<>(EvolutionTableMenu::new, FeatureFlags.VANILLA_SET);
 		Registry.register(BuiltInRegistries.MENU, PeContent.EVOLUTION_TABLE, evolutionTable);
 		PeMenus.setEvolutionTable(evolutionTable);
-		bookBag = new ExtendedMenuType<BookBagMenu, Unit>(
-				(id, inventory, data) -> new BookBagMenu(id, inventory),
-				StreamCodec.unit(Unit.INSTANCE));
+		bookBag = new MenuType<>(BookBagMenu::new, FeatureFlags.VANILLA_SET);
 		Registry.register(BuiltInRegistries.MENU, PeContent.BOOK_BAG_LEATHER, bookBag);
 		PeMenus.setBookBag(bookBag);
 	}

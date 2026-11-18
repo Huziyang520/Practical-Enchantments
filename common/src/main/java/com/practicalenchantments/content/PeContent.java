@@ -111,7 +111,7 @@ public final class PeContent {
 
 	private static Item createBlockItem() {
 		Block block = block(FLAWED_OBSIDIAN);
-		BlockItem item = new BlockItem(block, itemProperties(FLAWED_OBSIDIAN));
+		BlockItem item = new BlockItem(block, blockItemProperties(FLAWED_OBSIDIAN));
 		item.registerBlocks(Item.BY_BLOCK, item);
 		return item;
 	}
@@ -127,7 +127,7 @@ public final class PeContent {
 
 	private static Item createBlockItem(Identifier id) {
 		Block block = block(id);
-		BlockItem item = new BlockItem(block, itemProperties(id));
+		BlockItem item = new BlockItem(block, blockItemProperties(id));
 		item.registerBlocks(Item.BY_BLOCK, item);
 		return item;
 	}
@@ -140,6 +140,10 @@ public final class PeContent {
 
 	private static Item.Properties itemProperties(Identifier id) {
 		return new Item.Properties().setId(ResourceKey.create(Registries.ITEM, id));
+	}
+
+	private static Item.Properties blockItemProperties(Identifier id) {
+		return itemProperties(id).useBlockDescriptionPrefix();
 	}
 
 	public static ResourceKey<CreativeModeTab> tabKey() {
