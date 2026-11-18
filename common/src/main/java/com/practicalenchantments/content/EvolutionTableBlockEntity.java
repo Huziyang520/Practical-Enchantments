@@ -381,6 +381,16 @@ public class EvolutionTableBlockEntity extends BlockEntity implements ItemOwner,
 	}
 
 	@Override
+	public net.minecraft.network.protocol.Packet<net.minecraft.network.protocol.game.ClientGamePacketListener> getUpdatePacket() {
+		return net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket.create(this);
+	}
+
+	@Override
+	public net.minecraft.nbt.CompoundTag getUpdateTag(net.minecraft.core.HolderLookup.Provider registries) {
+		return this.saveCustomOnly(registries);
+	}
+
+	@Override
 	protected void saveAdditional(ValueOutput output) {
 		super.saveAdditional(output);
 		ContainerHelper.saveAllItems(output, this.items, true);
