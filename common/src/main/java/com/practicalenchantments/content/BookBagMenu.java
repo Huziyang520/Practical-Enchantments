@@ -21,11 +21,11 @@ public class BookBagMenu extends AbstractContainerMenu {
 	public static final int DATA_TOTAL_ROWS = 1;
 	public static final int DATA_CAPACITY = 2;
 	private static final int DATA_COUNT = 3;
-	public static final int GRID_X = 14;
-	public static final int GRID_Y = 32;
-	public static final int INVENTORY_X = 14;
-	public static final int INVENTORY_Y = 152;
-	public static final int HOTBAR_Y = 210;
+	public static final int GRID_X = 15;
+	public static final int GRID_Y = 33;
+	public static final int CELL = 18;
+	public static final int PANEL_HEADER = 32;
+	public static final int PANEL_FOOTER = 96;
 	private static final int BUTTON_SCROLL_UP = 0;
 	private static final int BUTTON_SCROLL_DOWN = 1;
 
@@ -34,6 +34,7 @@ public class BookBagMenu extends AbstractContainerMenu {
 	private final Container window;
 	private final ContainerData data;
 	private final int bagSlots;
+	private final int inventoryY;
 
 	public BookBagMenu(int containerId, Inventory inventory) {
 		this(containerId, inventory, inventory.player.getMainHandItem());
@@ -50,11 +51,12 @@ public class BookBagMenu extends AbstractContainerMenu {
 		this.data.set(DATA_OFFSET_ROW, 0);
 		this.data.set(DATA_TOTAL_ROWS, totalRows);
 		this.data.set(DATA_CAPACITY, capacity);
+		this.inventoryY = GRID_Y + Math.min(totalRows, MAX_ROWS) * CELL + 12;
 		this.window = inventory.player.level().isClientSide() ? new SimpleContainer(this.bagSlots) : new WindowContainer();
 		for (int index = 0; index < this.bagSlots; index++) {
 			int column = index % 9;
 			int row = index / 9;
-			this.addSlot(new Slot(this.window, index, GRID_X + column * 18, GRID_Y + row * 18) {
+			this.addSlot(new Slot(this.window, index, GRID_X + column * CELL, GRID_Y + row * CELL) {
 				@Override
 				public boolean mayPlace(ItemStack stack) {
 					return BookBagStorage.mayStore(stack) && BookBagMenu.this.withinCapacity(this.getContainerSlot());
@@ -68,18 +70,26 @@ public class BookBagMenu extends AbstractContainerMenu {
 		}
 		for (int row = 0; row < 3; row++) {
 			for (int column = 0; column < 9; column++) {
-				this.addSlot(new Slot(inventory, column + row * 9 + 9, INVENTORY_X + column * 18,
-						INVENTORY_Y + row * 18));
+				this.addSlot(new Slot(inventory, column + row * 9 + 9, GRID_X + column * CELL,
+						this.inventoryY + row * CELL));
 			}
 		}
 		for (int column = 0; column < 9; column++) {
-			this.addSlot(new Slot(inventory, column, INVENTORY_X + column * 18, HOTBAR_Y));
+			this.addSlot(new Slot(inventory, column, GRID_X + column * CELL, this.inventoryY + 58));
 		}
 		this.addDataSlots(this.data);
 	}
 
 	public int visibleRows() {
 		return Math.min(this.totalRows(), MAX_ROWS);
+	}
+
+	public int inventoryY() {
+		return this.inventoryY;
+	}
+
+	public int panelHeight() {
+		return PANEL_HEADER + visibleRows() * CELL + PANEL_FOOTER;
 	}
 
 	public int offsetRow() {

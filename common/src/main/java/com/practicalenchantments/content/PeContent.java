@@ -122,6 +122,7 @@ public final class PeContent {
 				.setId(key)
 				.strength(2.5F)
 				.requiresCorrectToolForDrops()
+				.noOcclusion()
 				.lightLevel(state -> state.getValue(EvolutionTableBlock.WORKING) ? 7 : 0));
 	}
 

@@ -48,6 +48,11 @@ public class EvolutionTableBlock extends Block implements EntityBlock {
 	}
 
 	@Override
+	protected boolean useShapeForLightOcclusion(BlockState state) {
+		return true;
+	}
+
+	@Override
 	public @Nullable BlockEntity newBlockEntity(BlockPos worldPosition, BlockState blockState) {
 		return new EvolutionTableBlockEntity(worldPosition, blockState);
 	}
