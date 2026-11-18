@@ -141,6 +141,7 @@ public class EvolutionTableBlockEntity extends BlockEntity implements ItemOwner 
 
 	private void sync() {
 		if (this.level != null) {
+			this.setChanged();
 			this.level.sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 3);
 		}
 	}
@@ -176,11 +177,16 @@ public class EvolutionTableBlockEntity extends BlockEntity implements ItemOwner 
 		BlockPos origin = this.getBlockPos();
 		for (BlockPos offset : EnchantingTableBlock.BOOKSHELF_OFFSETS) {
 			BlockPos target = origin.offset(offset);
-			if (!EnchantingTableBlock.isValidBookShelf(level, origin, offset)) {
+			BlockState targetState = level.getBlockState(target);
+			boolean chiseled = targetState.is(Blocks.CHISELED_BOOKSHELF);
+			if (!chiseled && !targetState.is(Blocks.BOOKSHELF)) {
 				continue;
 			}
-			if (level.getBlockState(target).is(Blocks.CHISELED_BOOKSHELF)
-					&& level.getBlockEntity(target) instanceof ChiseledBookShelfBlockEntity shelf) {
+			BlockPos middle = origin.offset(offset.getX() / 2, offset.getY(), offset.getZ() / 2);
+			if (!level.isEmptyBlock(middle)) {
+				continue;
+			}
+			if (chiseled && level.getBlockEntity(target) instanceof ChiseledBookShelfBlockEntity shelf) {
 				int enchanted = 0;
 				int stored = 0;
 				for (int slot = 0; slot < ChiseledBookShelfBlockEntity.MAX_BOOKS_IN_STORAGE; slot++) {
@@ -193,7 +199,6 @@ public class EvolutionTableBlockEntity extends BlockEntity implements ItemOwner 
 						enchanted++;
 					}
 				}
-				// 空的雕纹书架与原版附魔台一致，不提供能量
 				if (stored == 0) {
 					continue;
 				}
@@ -214,6 +219,7 @@ public class EvolutionTableBlockEntity extends BlockEntity implements ItemOwner 
 				: null;
 		this.data.set(DATA_COST, rule == null ? 0 : rule.lapisCost());
 		if (changed) {
+			this.setChanged();
 			this.sync();
 		}
 	}
