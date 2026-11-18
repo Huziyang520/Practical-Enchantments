@@ -87,11 +87,19 @@ public class EvolutionTableBlockEntity extends BlockEntity implements ItemOwner 
 		return !this.items.get(1).isEmpty();
 	}
 
-	public boolean placeDisplayed(Player player, ItemStack held) {
-		if (held.isEmpty() || this.hasDisplayed() || this.workTotal > 0) {
+	public boolean canDisplay(ItemStack stack) {
+		if (stack.isEmpty() || this.level == null) {
 			return false;
 		}
-		if (!held.is(Items.ENCHANTED_BOOK) && !held.has(net.minecraft.core.component.DataComponents.ENCHANTABLE)) {
+		if (!stack.is(Items.ENCHANTED_BOOK)
+				&& !stack.has(net.minecraft.core.component.DataComponents.ENCHANTABLE)) {
+			return false;
+		}
+		return MerlinApi.evolution().match(stack, this.level.registryAccess()) != null;
+	}
+
+	public boolean placeDisplayed(Player player, ItemStack held) {
+		if (this.hasDisplayed() || this.workTotal > 0 || !this.canDisplay(held)) {
 			return false;
 		}
 		this.items.set(1, held.copyWithCount(1));
@@ -162,12 +170,35 @@ public class EvolutionTableBlockEntity extends BlockEntity implements ItemOwner 
 			}
 			return;
 		}
+		this.absorbDropped(serverLevel);
 		if (--this.scanCooldown <= 0) {
 			this.scanCooldown = SCAN_INTERVAL;
 			this.rescan(serverLevel);
 		}
 		if (this.canStart(serverLevel)) {
 			this.start(serverLevel);
+		}
+	}
+
+	private void absorbDropped(ServerLevel level) {
+		if (this.hasDisplayed() || this.workTotal > 0) {
+			return;
+		}
+		BlockPos pos = this.getBlockPos();
+		net.minecraft.world.phys.AABB area = new net.minecraft.world.phys.AABB(
+				pos.getX() + 0.05, pos.getY() + 0.7, pos.getZ() + 0.05,
+				pos.getX() + 0.95, pos.getY() + 1.05, pos.getZ() + 0.95);
+		for (ItemEntity entity : level.getEntitiesOfClass(ItemEntity.class, area)) {
+			ItemStack stack = entity.getItem();
+			if (!this.canDisplay(stack) || !this.placeDisplayed(null, stack)) {
+				continue;
+			}
+			if (stack.isEmpty()) {
+				entity.discard();
+			} else {
+				entity.setItem(stack);
+			}
+			return;
 		}
 	}
 
@@ -253,7 +284,7 @@ public class EvolutionTableBlockEntity extends BlockEntity implements ItemOwner 
 				: evolution.roll(rule, this.strength() / (float) MAX_STRENGTH, random);
 		boolean applied = switch (outcome) {
 			case EVOLVED -> evolution.applyEvolution(this.items.get(1), rule, level.registryAccess());
-			case TRANSMUTED -> evolution.applyTransmutation(this.items.get(1), this.strength(),
+			case TRANSMUTED -> evolution.applyTransmutation(this.items.get(1), rule, this.strength(),
 					level.registryAccess(), random);
 			case FAILED -> false;
 		};

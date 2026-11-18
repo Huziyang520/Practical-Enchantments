@@ -656,5 +656,6 @@
   "jade.practical_enchantments.evolution_table.shelves": "Shelves %s · Books %s",
   "jade.practical_enchantments.evolution_table.item": "On table: %s",
   "jade.practical_enchantments.evolution_table.working": "Evolving...",
-  "gui.practical_enchantments.bag.search": "Search enchanted books…"
+  "gui.practical_enchantments.bag.search": "Search enchanted books…",
+  "enchantment.practical_enchantments.zeus_poseidon.desc": "Can trigger a lightning strike at any time"
 }

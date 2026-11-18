@@ -27,7 +27,7 @@
     "HideSkinPowderSnowMixin",
     "HideSkinFreezeMixin",
     "EnchantmentVanillaTweakMixin",
-    "ZeusNameMixin",
+    "EvolvedNameMixin",
     "BookBagSmithingKeepMixin",
     "BookBagCraftKeepMixin"
   ],
