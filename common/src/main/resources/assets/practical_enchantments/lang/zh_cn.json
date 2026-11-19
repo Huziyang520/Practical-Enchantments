@@ -683,5 +683,10 @@
   "practical_enchantments.configuration.weapon.zeus_poseidon.storm_duration_seconds.tooltip": "自然天气恢复前的强制雷暴时长。",
   "practical_enchantments.configuration.weapon.zeus_poseidon.storm_cooldown_seconds": "雷暴冷却（秒）",
   "practical_enchantments.configuration.weapon.zeus_poseidon.storm_cooldown_seconds.tooltip": "每次引发雷暴后的冷却时间。",
-  "practical_enchantments.configuration.weapon.zeus_poseidon": "宙斯与波塞冬"
+  "practical_enchantments.configuration.weapon.zeus_poseidon": "宙斯与波塞冬",
+  "jade.practical_enchantments.evolution_table.power": "附魔能力：%s/%s",
+  "jade.practical_enchantments.evolution_table.shelves": "有效书架 %s · 附魔书 %s",
+  "jade.practical_enchantments.evolution_table.item": "台面：%s",
+  "jade.practical_enchantments.evolution_table.working": "正在进化…",
+  "config.jade.plugin_practical_enchantments.evolution_table": "进化附魔台"
 }

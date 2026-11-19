@@ -683,5 +683,10 @@
   "practical_enchantments.configuration.weapon.zeus_poseidon.storm_duration_seconds.tooltip": "Forced thunderstorm length before weather resumes normally.",
   "practical_enchantments.configuration.weapon.zeus_poseidon.storm_cooldown_seconds": "Storm cooldown (seconds)",
   "practical_enchantments.configuration.weapon.zeus_poseidon.storm_cooldown_seconds.tooltip": "Cooldown after a storm is triggered.",
-  "practical_enchantments.configuration.weapon.zeus_poseidon": "Zeus & Poseidon"
+  "practical_enchantments.configuration.weapon.zeus_poseidon": "Zeus & Poseidon",
+  "jade.practical_enchantments.evolution_table.power": "Enchanting power: %s/%s",
+  "jade.practical_enchantments.evolution_table.shelves": "Shelves %s · Books %s",
+  "jade.practical_enchantments.evolution_table.item": "On table: %s",
+  "jade.practical_enchantments.evolution_table.working": "Evolving...",
+  "config.jade.plugin_practical_enchantments.evolution_table": "Evolution Table"
 }
