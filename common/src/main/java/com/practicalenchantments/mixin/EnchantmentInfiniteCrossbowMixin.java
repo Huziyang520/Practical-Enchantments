@@ -2,8 +2,8 @@
 
 package com.practicalenchantments.mixin;
 
+import com.huziyang520.merlinlib.api.MerlinApi;
 import com.practicalenchantments.config.VanillaTweaks;
-import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -21,9 +21,7 @@ public abstract class EnchantmentInfiniteCrossbowMixin {
 		if (!VanillaTweaks.infinityCrossbow() || !(stack.getItem() instanceof CrossbowItem)) {
 			return;
 		}
-		Enchantment self = (Enchantment) (Object) this;
-		if (self.description().getContents() instanceof TranslatableContents contents
-				&& INFINITY_KEY.equals(contents.getKey())) {
+		if (MerlinApi.enchantmentText().matches((Enchantment) (Object) this, INFINITY_KEY)) {
 			cir.setReturnValue(true);
 		}
 	}

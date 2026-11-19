@@ -2,8 +2,9 @@
 
 package com.practicalenchantments.enchantment.linked;
 
+import com.huziyang520.merlinlib.api.CompatApi;
+import com.huziyang520.merlinlib.api.MerlinApi;
 import com.huziyang520.merlinlib.event.EnchantmentEventRegistrar;
-import com.huziyang520.merlinlib.platform.Services;
 import com.practicalenchantments.PracticalEnchantments;
 import com.practicalenchantments.enchantment.linked.aether.AetherGodwood;
 import com.practicalenchantments.enchantment.linked.aether.AetherSkySlayer;
@@ -26,10 +27,10 @@ public final class LinkedEnchantments {
 	}
 
 	public static void registerContent() {
-		twilightForest = Services.PLATFORM.isModLoaded(TWILIGHT_FOREST);
-		boolean aetherTwo = Services.PLATFORM.isModLoaded(AETHER_II);
-		aether = aetherTwo || Services.PLATFORM.isModLoaded(AETHER);
-		aetherNamespace = aetherTwo ? AETHER_II : AETHER;
+		CompatApi compat = MerlinApi.compat();
+		twilightForest = compat.loaded(TWILIGHT_FOREST);
+		aetherNamespace = compat.firstLoaded(AETHER_II, AETHER);
+		aether = aetherNamespace != null;
 
 		if (twilightForest) {
 			TfQuench.registerContent();
@@ -57,10 +58,6 @@ public final class LinkedEnchantments {
 	}
 
 	private static void register(String modName, Runnable registration) {
-		try {
-			registration.run();
-		} catch (RuntimeException failure) {
-			LOGGER.error("[PracticalEnchantments] 联动附魔（{}）未能在注册表里找到，本次已跳过", modName, failure);
-		}
+		MerlinApi.compat().guarded("联动附魔（" + modName + "）", registration);
 	}
 }

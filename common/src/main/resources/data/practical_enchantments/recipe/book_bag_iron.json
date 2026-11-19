@@ -6,9 +6,9 @@
     "B": "practical_enchantments:book_bag_leather"
   },
   "pattern": [
-    "MMM",
+    " M ",
     "MBM",
-    "MMM"
+    " M "
   ],
   "result": {
     "id": "practical_enchantments:book_bag_iron"

@@ -7,6 +7,7 @@ import com.practicalenchantments.content.BookBagMenu;
 import com.practicalenchantments.content.BookBagStorage;
 import com.practicalenchantments.network.BagSearchSender;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.RenderPipelines;
@@ -123,6 +124,16 @@ public class BookBagScreen extends AbstractContainerScreen<BookBagMenu> {
 				used, this.menu.capacity());
 		graphics.text(this.font, count, this.leftPos + this.imageWidth - 8 - this.font.width(count),
 				this.topPos + 6, TEXT_COLOR);
+	}
+
+	@Override
+	public boolean keyPressed(KeyEvent event) {
+		// 搜索框有焦点时，E 是输入字符而不是关界面的快捷键。
+		if (this.search != null && this.search.isFocused() && this.minecraft != null
+				&& this.minecraft.options.keyInventory.matches(event)) {
+			return false;
+		}
+		return super.keyPressed(event);
 	}
 
 	@Override

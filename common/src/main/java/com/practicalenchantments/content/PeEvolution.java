@@ -44,6 +44,14 @@ public final class PeEvolution {
 				ZEUS_POSEIDON,
 				Identifier.fromNamespaceAndPath(PracticalEnchantments.MOD_ID, "undying_drop"),
 				Identifier.fromNamespaceAndPath(PracticalEnchantments.MOD_ID, "gentle_descent"));
+		for (EvolutionRule rule : MerlinApi.evolution().rules()) {
+			MerlinApi.enchantmentText().style(nameKey(rule.to()), MerlinApi.text()::rainbow);
+		}
+	}
+
+	/** 附魔名与描述共用同一套 lang 键：enchantment.<namespace>.<path>。 */
+	private static String nameKey(Identifier id) {
+		return "enchantment." + id.getNamespace() + "." + id.getPath();
 	}
 
 	public static boolean isEvolved(Holder<Enchantment> holder) {

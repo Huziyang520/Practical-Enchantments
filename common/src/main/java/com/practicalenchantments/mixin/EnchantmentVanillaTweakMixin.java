@@ -2,10 +2,10 @@
 
 package com.practicalenchantments.mixin;
 
+import com.huziyang520.merlinlib.api.MerlinApi;
 import com.practicalenchantments.PracticalEnchantments;
 import com.practicalenchantments.config.VanillaTweaks;
 import com.practicalenchantments.enchantment.armor.HideSkinEnchantment;
-import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ShieldItem;
@@ -25,10 +25,10 @@ public abstract class EnchantmentVanillaTweakMixin {
 	@Inject(method = "canEnchant", at = @At("HEAD"), cancellable = true, require = 1)
 	private void practicalenchantments$canEnchant(ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
 		Enchantment self = (Enchantment) (Object) this;
-		if (!(self.description().getContents() instanceof TranslatableContents contents)) {
+		String key = MerlinApi.enchantmentText().key(self);
+		if (key == null) {
 			return;
 		}
-		String key = contents.getKey();
 		if (HIDE_SKIN_KEY.equals(key)) {
 			if (HideSkinEnchantment.excluded(stack)) {
 				cir.setReturnValue(false);

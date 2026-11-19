@@ -3,6 +3,7 @@
 
 package com.practicalenchantments.content;
 
+import com.huziyang520.merlinlib.api.EnchantingPowerApi;
 import com.huziyang520.merlinlib.api.EvolutionApi;
 import com.huziyang520.merlinlib.api.EvolutionRule;
 import com.huziyang520.merlinlib.api.MerlinApi;
@@ -28,11 +29,8 @@ import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.EnchantingTableBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.entity.ChiseledBookShelfBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
@@ -238,6 +236,13 @@ public class EvolutionTableBlockEntity extends BlockEntity implements ItemOwner,
 		return this.workTotal > 0;
 	}
 
+	/** 服务端只同步开工那一刻的 work_ticks，之后的推进得客户端自己走，否则转速一直停在起点。 */
+	public void clientTick() {
+		if (this.workTotal > 0 && this.workTicks < this.workTotal) {
+			this.workTicks++;
+		}
+	}
+
 	public float progress(float partialTicks) {
 		if (this.workTotal <= 0) {
 			return 0.0F;
@@ -311,48 +316,14 @@ public class EvolutionTableBlockEntity extends BlockEntity implements ItemOwner,
 	}
 
 	private void rescan(Level level) {
-		int shelves = 0;
-		int books = 0;
-		BlockPos origin = this.getBlockPos();
-		for (BlockPos offset : EnchantingTableBlock.BOOKSHELF_OFFSETS) {
-			BlockPos target = origin.offset(offset);
-			BlockState targetState = level.getBlockState(target);
-			boolean chiseled = targetState.is(Blocks.CHISELED_BOOKSHELF);
-			if (!chiseled && !targetState.is(Blocks.BOOKSHELF)) {
-				continue;
-			}
-			BlockPos middle = origin.offset(offset.getX() / 2, offset.getY(), offset.getZ() / 2);
-			if (!level.isEmptyBlock(middle)) {
-				continue;
-			}
-			if (chiseled && level.getBlockEntity(target) instanceof ChiseledBookShelfBlockEntity shelf) {
-				int enchanted = 0;
-				int stored = 0;
-				for (int slot = 0; slot < ChiseledBookShelfBlockEntity.MAX_BOOKS_IN_STORAGE; slot++) {
-					ItemStack book = shelf.getItem(slot);
-					if (book.isEmpty()) {
-						continue;
-					}
-					stored++;
-					if (book.is(Items.ENCHANTED_BOOK)) {
-						enchanted++;
-					}
-				}
-				if (stored == 0) {
-					continue;
-				}
-				shelves++;
-				books += enchanted;
-			} else {
-				shelves++;
-			}
-		}
-		shelves = Math.min(shelves, MAX_SHELVES);
-		books = Math.min(books, MAX_BOOKS);
+		EnchantingPowerApi.Power power = MerlinApi.enchantingPower()
+				.scan(level, this.getBlockPos(), MAX_SHELVES, MAX_BOOKS);
+		int shelves = power.shelves();
+		int books = power.books();
 		boolean changed = shelves != this.data.get(DATA_SHELVES) || books != this.data.get(DATA_BOOKS);
 		this.data.set(DATA_SHELVES, shelves);
 		this.data.set(DATA_BOOKS, books);
-		this.data.set(DATA_STRENGTH, Math.min(2 * shelves, books));
+		this.data.set(DATA_STRENGTH, power.strength());
 		EvolutionRule rule = this.hasDisplayed()
 				? MerlinApi.evolution().match(this.items.get(1), level.registryAccess())
 				: null;

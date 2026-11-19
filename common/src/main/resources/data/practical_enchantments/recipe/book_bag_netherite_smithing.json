@@ -1,7 +1,7 @@
 {
   "type": "minecraft:smithing_transform",
   "base": "practical_enchantments:book_bag_diamond",
-  "addition": "minecraft:netherite_ingot",
+  "addition": "minecraft:netherite_scrap",
   "template": "minecraft:netherite_upgrade_smithing_template",
   "result": {
     "id": "practical_enchantments:book_bag_netherite"

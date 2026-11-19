@@ -7,9 +7,9 @@
     "C": "#practical_enchantments:book_bag_core"
   },
   "pattern": [
-    "LLL",
+    " S ",
     "LCL",
-    "LSL"
+    " L "
   ],
   "result": {
     "id": "practical_enchantments:book_bag_leather"

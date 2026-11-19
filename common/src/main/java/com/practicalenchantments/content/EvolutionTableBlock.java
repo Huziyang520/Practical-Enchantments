@@ -70,12 +70,13 @@ public class EvolutionTableBlock extends Block implements EntityBlock {
 	@Override
 	public <T extends BlockEntity> @Nullable BlockEntityTicker<T> getTicker(Level level, BlockState blockState,
 			BlockEntityType<T> type) {
-		if (level.isClientSide()) {
-			return null;
-		}
 		return (tickLevel, pos, state, blockEntity) -> {
 			if (blockEntity instanceof EvolutionTableBlockEntity table) {
-				table.serverTick();
+				if (tickLevel.isClientSide()) {
+					table.clientTick();
+				} else {
+					table.serverTick();
+				}
 			}
 		};
 	}
