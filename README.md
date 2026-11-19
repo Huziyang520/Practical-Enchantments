@@ -4,6 +4,8 @@
 
 **English** | [简体中文](#简体中文)
 
+![Amulets, book bags and the bag interface](https://raw.githubusercontent.com/Huziyang520/Practical-Enchantments/master/promo/items.png)
+
 ---
 
 ## English
@@ -29,8 +31,6 @@
 | **Zeus & Poseidon** | Tridents | Every hit calls down lightning, no storm needed; enough strikes in a row turn the weather itself into a thunderstorm. |
 
 ### 💠 Items
-
-![Amulets and book bags](https://raw.githubusercontent.com/Huziyang520/Practical-Enchantments/master/promo/items.png)
 
 | Item | What it does |
 |---|---|
@@ -92,9 +92,6 @@ Other versions are not planned.
 | **宙斯与波塞冬** | 三叉戟 | 每次命中都召来闪电，不需要雷雨；短时间内连续召雷会把天气变成雷暴。 |
 
 ### 💠 物品
-
-![护身符与附魔书袋](https://raw.githubusercontent.com/Huziyang520/Practical-Enchantments/master/promo/items.png)
-
 | 物品 | 作用 |
 |---|---|
 | **铁 / 金 / 钻石 / 下界合金护身符** | 装备在饰品栏或副手。护甲类附魔在护身符上同样生效，升级时已有附魔全部保留。 |
