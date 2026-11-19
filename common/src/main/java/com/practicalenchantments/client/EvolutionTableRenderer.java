@@ -25,7 +25,7 @@ public class EvolutionTableRenderer implements BlockEntityRenderer<EvolutionTabl
 	private static final float BASE_HEIGHT = 0.95F;
 	private static final float BOB_HEIGHT = 0.04F;
 	private static final float DEGREES_PER_TICK = 1.5F;
-	private static final float WORKING_SPIN = 24.0F;
+	private static final float WORKING_SPIN = 48.0F;
 	// 首尾各 18% 进度用来加速/减速，避免开关瞬间转速突变。
 	private static final float SPIN_EASE_EDGE = 0.12F;
 	private final ItemModelResolver itemModelResolver;

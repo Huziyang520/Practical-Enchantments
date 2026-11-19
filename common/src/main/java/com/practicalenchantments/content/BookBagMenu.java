@@ -90,24 +90,28 @@ public class BookBagMenu extends AbstractContainerMenu {
 		this.addDataSlots(this.data);
 	}
 
-	/** 正在打开的书袋本体不可拿起：只有 mayPickup 拦住才算「点了没反应」。 */
+	/** 正在打开的书袋本体不可拿起：判据用物品类型，客户端槽位里是同步副本，比引用永远不相等。 */
 	private Slot playerSlot(Inventory inventory, int index, int x, int y) {
 		return new Slot(inventory, index, x, y) {
 			@Override
 			public boolean mayPickup(Player player) {
-				return this.getItem() != BookBagMenu.this.bag;
+				return !BookBagMenu.this.isOpenBag(this.getItem());
 			}
 
 			@Override
 			public boolean mayPlace(ItemStack stack) {
-				return this.getItem() != BookBagMenu.this.bag;
+				return !BookBagMenu.this.isOpenBag(this.getItem());
 			}
 		};
 	}
 
+	private boolean isOpenBag(ItemStack stack) {
+		return !stack.isEmpty() && !this.bag.isEmpty() && stack.is(this.bag.getItem());
+	}
+
 	@Override
 	public void clicked(int slotId, int button, ContainerInput input, Player player) {
-		if (slotId >= 0 && slotId < this.slots.size() && this.slots.get(slotId).getItem() == this.bag) {
+		if (slotId >= 0 && slotId < this.slots.size() && this.isOpenBag(this.slots.get(slotId).getItem())) {
 			return;
 		}
 		super.clicked(slotId, button, input, player);
