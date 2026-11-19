@@ -80,14 +80,29 @@ public class BookBagMenu extends AbstractContainerMenu {
 		}
 		for (int row = 0; row < 3; row++) {
 			for (int column = 0; column < 9; column++) {
-				this.addSlot(new Slot(inventory, column + row * 9 + 9, GRID_X + column * CELL,
+				this.addSlot(playerSlot(inventory, column + row * 9 + 9, GRID_X + column * CELL,
 						this.inventoryY + row * CELL));
 			}
 		}
 		for (int column = 0; column < 9; column++) {
-			this.addSlot(new Slot(inventory, column, GRID_X + column * CELL, this.inventoryY + 58));
+			this.addSlot(playerSlot(inventory, column, GRID_X + column * CELL, this.inventoryY + 58));
 		}
 		this.addDataSlots(this.data);
+	}
+
+	/** 正在打开的书袋本体不可拿起：只有 mayPickup 拦住才算「点了没反应」。 */
+	private Slot playerSlot(Inventory inventory, int index, int x, int y) {
+		return new Slot(inventory, index, x, y) {
+			@Override
+			public boolean mayPickup(Player player) {
+				return this.getItem() != BookBagMenu.this.bag;
+			}
+
+			@Override
+			public boolean mayPlace(ItemStack stack) {
+				return this.getItem() != BookBagMenu.this.bag;
+			}
+		};
 	}
 
 	@Override
