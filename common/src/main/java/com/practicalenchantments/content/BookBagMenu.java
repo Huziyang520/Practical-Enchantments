@@ -13,8 +13,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.inventory.ContainerInput;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import com.practicalenchantments.support.PinyinSearch;
 import org.jspecify.annotations.Nullable;
 
 public class BookBagMenu extends AbstractContainerMenu {
@@ -88,6 +90,14 @@ public class BookBagMenu extends AbstractContainerMenu {
 		this.addDataSlots(this.data);
 	}
 
+	@Override
+	public void clicked(int slotId, int button, ContainerInput input, Player player) {
+		if (slotId >= 0 && slotId < this.slots.size() && this.slots.get(slotId).getItem() == this.bag) {
+			return;
+		}
+		super.clicked(slotId, button, input, player);
+	}
+
 	public void setQuery(String text) {
 		String next = text == null ? "" : text.trim();
 		if (next.equals(this.query)) {
@@ -105,7 +115,7 @@ public class BookBagMenu extends AbstractContainerMenu {
 
 	private void rebuildVisible() {
 		List<Integer> found = new ArrayList<>();
-		String needle = this.query.toLowerCase(Locale.ROOT);
+		String needle = this.query;
 		for (int index = 0; index < this.capacity(); index++) {
 			if (needle.isEmpty()) {
 				found.add(index);
@@ -128,14 +138,14 @@ public class BookBagMenu extends AbstractContainerMenu {
 	}
 
 	private static boolean matches(ItemStack stack, String needle) {
-		if (stack.getHoverName().getString().toLowerCase(Locale.ROOT).contains(needle)) {
+		if (PinyinSearch.matches(stack.getHoverName().getString(), needle)) {
 			return true;
 		}
 		net.minecraft.world.item.enchantment.ItemEnchantments enchantments =
 				net.minecraft.world.item.enchantment.EnchantmentHelper.getEnchantmentsForCrafting(stack);
 		for (net.minecraft.core.Holder<net.minecraft.world.item.enchantment.Enchantment> enchantment
 				: enchantments.keySet()) {
-			if (enchantment.value().description().getString().toLowerCase(Locale.ROOT).contains(needle)) {
+			if (PinyinSearch.matches(enchantment.value().description().getString(), needle)) {
 				return true;
 			}
 			if (enchantment.unwrapKey().map(key -> key.identifier().toString().contains(needle)).orElse(false)) {

@@ -36,9 +36,9 @@ public class BookBagScreen extends AbstractContainerScreen<BookBagMenu> {
 	private static final int BUTTON_SCROLL_UP = 0;
 	private static final int BUTTON_SCROLL_DOWN = 1;
 	private static final int SEARCH_X = 8;
-	private static final int SEARCH_Y = 17;
+	private static final int SEARCH_Y = 15;
 	private static final int SEARCH_WIDTH = 174;
-	private static final int SEARCH_HEIGHT = 12;
+	private static final int SEARCH_HEIGHT = 14;
 
 	private EditBox search;
 

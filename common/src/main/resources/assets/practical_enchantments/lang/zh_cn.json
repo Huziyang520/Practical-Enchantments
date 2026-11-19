@@ -652,13 +652,8 @@
   "practical_enchantments.configuration.wrath.description": "嗔怒的配置项。",
   "practical_enchantments.configuration.wrath.tooltip": "点开编辑嗔怒的全部参数。",
   "practical_enchantments.notice.merlinlib": "Practical Enchantments：由于一些原因，原前置模组 EnchantLib 已停更，自 1.3.0 版本起，本模组仅需以 MerlinLib 为前置；本模组的任何问题，欢迎在你能想到的任何地方反馈给作者；若你对新的附魔/魔咒有好的创意，欢迎告诉作者。该提示可在 MerlinLib 的配置界面关闭。",
-  "jade.practical_enchantments.evolution_table.power": "附魔能力：%s/%s",
-  "jade.practical_enchantments.evolution_table.shelves": "有效书架 %s · 附魔书 %s",
-  "jade.practical_enchantments.evolution_table.item": "台面：%s",
-  "jade.practical_enchantments.evolution_table.working": "正在进化…",
   "gui.practical_enchantments.bag.search": "搜索附魔书…",
   "enchantment.practical_enchantments.zeus_poseidon.desc": "可以随时触发引雷效果",
-  "config.jade.plugin_practical_enchantments.evolution_table": "进化附魔台",
   "practical_enchantments.configuration.evolution_table": "进化附魔台",
   "practical_enchantments.configuration.evolution_table.enabled": "启用进化附魔台",
   "practical_enchantments.configuration.evolution_table.enabled.tooltip": "关闭后不能开始进化，台面仍可放物品当展示用。",
@@ -687,5 +682,6 @@
   "practical_enchantments.configuration.weapon.zeus_poseidon.storm_duration_seconds": "雷暴持续时长（秒）",
   "practical_enchantments.configuration.weapon.zeus_poseidon.storm_duration_seconds.tooltip": "自然天气恢复前的强制雷暴时长。",
   "practical_enchantments.configuration.weapon.zeus_poseidon.storm_cooldown_seconds": "雷暴冷却（秒）",
-  "practical_enchantments.configuration.weapon.zeus_poseidon.storm_cooldown_seconds.tooltip": "每次引发雷暴后的冷却时间。"
+  "practical_enchantments.configuration.weapon.zeus_poseidon.storm_cooldown_seconds.tooltip": "每次引发雷暴后的冷却时间。",
+  "practical_enchantments.configuration.weapon.zeus_poseidon": "宙斯与波塞冬"
 }

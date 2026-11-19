@@ -44,7 +44,17 @@ public class BookBagUpgradeRecipe extends CustomRecipe {
 		if (contents != null) {
 			upgraded.set(DataComponents.CONTAINER, contents);
 		}
+		copyComponent(match.bag(), upgraded, DataComponents.ENCHANTMENTS);
+		copyComponent(match.bag(), upgraded, DataComponents.CUSTOM_NAME);
+		copyComponent(match.bag(), upgraded, DataComponents.LORE);
 		return upgraded;
+	}
+
+	private static <T> void copyComponent(ItemStack source, ItemStack target, net.minecraft.core.component.DataComponentType<T> type) {
+		T value = source.get(type);
+		if (value != null) {
+			target.set(type, value);
+		}
 	}
 
 	private @Nullable Match find(CraftingInput input) {
