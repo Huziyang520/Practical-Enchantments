@@ -55,6 +55,9 @@ public class EvolutionTableBlockEntity extends BlockEntity implements ItemOwner,
 	private int scanCooldown;
 	private int workTicks;
 	private int workTotal;
+	// 纯客户端渲染状态：角度必须累加，直接按 time×速度算会在变速瞬间跳角度。
+	private float spinAngle;
+	private float spinLastTime = -1.0F;
 
 	public EvolutionTableBlockEntity(BlockPos worldPosition, BlockState blockState) {
 		super(TYPE, worldPosition, blockState);
@@ -233,6 +236,23 @@ public class EvolutionTableBlockEntity extends BlockEntity implements ItemOwner,
 
 	public boolean isWorking() {
 		return this.workTotal > 0;
+	}
+
+	public float progress(float partialTicks) {
+		if (this.workTotal <= 0) {
+			return 0.0F;
+		}
+		return Math.min(1.0F, (this.workTicks + partialTicks) / (float) this.workTotal);
+	}
+
+	public float advanceSpin(float time, float degreesPerTick) {
+		if (this.spinLastTime < 0.0F) {
+			this.spinLastTime = time;
+		}
+		float delta = Math.min(2.0F, Math.max(0.0F, time - this.spinLastTime));
+		this.spinLastTime = time;
+		this.spinAngle = (this.spinAngle + delta * degreesPerTick) % 360.0F;
+		return this.spinAngle;
 	}
 
 	private void sync() {

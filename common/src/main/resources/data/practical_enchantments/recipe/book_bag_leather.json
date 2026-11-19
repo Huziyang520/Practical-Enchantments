@@ -4,7 +4,7 @@
   "key": {
     "L": "minecraft:leather",
     "S": "minecraft:string",
-    "C": "minecraft:barrel"
+    "C": "#practical_enchantments:book_bag_core"
   },
   "pattern": [
     "LLL",

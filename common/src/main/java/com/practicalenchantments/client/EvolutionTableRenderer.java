@@ -26,6 +26,8 @@ public class EvolutionTableRenderer implements BlockEntityRenderer<EvolutionTabl
 	private static final float BOB_HEIGHT = 0.04F;
 	private static final float DEGREES_PER_TICK = 1.5F;
 	private static final float WORKING_SPIN = 6.0F;
+	// 首尾各 18% 进度用来加速/减速，避免开关瞬间转速突变。
+	private static final float SPIN_EASE_EDGE = 0.18F;
 	private final ItemModelResolver itemModelResolver;
 
 	public EvolutionTableRenderer(BlockEntityRendererProvider.Context context) {
@@ -55,8 +57,17 @@ public class EvolutionTableRenderer implements BlockEntityRenderer<EvolutionTabl
 				(int) blockEntity.getBlockPos().asLong());
 		float time = level.getGameTime() + partialTicks;
 		state.working = blockEntity.isWorking();
-		state.rotation = time * (state.working ? DEGREES_PER_TICK * WORKING_SPIN : DEGREES_PER_TICK);
+		state.rotation = blockEntity.advanceSpin(time, spinSpeed(blockEntity, state.working, partialTicks));
 		state.bob = (float) Math.sin(time * 0.1F) * BOB_HEIGHT;
+	}
+
+	private static float spinSpeed(EvolutionTableBlockEntity blockEntity, boolean working, float partialTicks) {
+		if (!working) {
+			return DEGREES_PER_TICK;
+		}
+		float ramp = Math.min(1.0F, Math.min(blockEntity.progress(partialTicks), 1.0F - blockEntity.progress(partialTicks))
+				/ SPIN_EASE_EDGE);
+		return DEGREES_PER_TICK * (1.0F + (WORKING_SPIN - 1.0F) * (float) Math.sin(ramp * Math.PI * 0.5F));
 	}
 
 	@Override

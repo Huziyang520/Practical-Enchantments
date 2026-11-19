@@ -36,9 +36,10 @@ public class BookBagScreen extends AbstractContainerScreen<BookBagMenu> {
 	private static final int BUTTON_SCROLL_UP = 0;
 	private static final int BUTTON_SCROLL_DOWN = 1;
 	private static final int SEARCH_X = 8;
-	private static final int SEARCH_Y = 15;
+	// 输入框内嵌区是贴图的 16..29 行；无边框 EditBox 直接把文字顶对齐到自身 y，故 y 取 19、高取 8。
+	private static final int SEARCH_Y = 19;
 	private static final int SEARCH_WIDTH = 174;
-	private static final int SEARCH_HEIGHT = 14;
+	private static final int SEARCH_HEIGHT = 8;
 
 	private EditBox search;
 
