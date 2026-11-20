@@ -3,6 +3,13 @@
 package com.practicalenchantments.neoforge;
 
 import com.practicalenchantments.PracticalEnchantments;
+import com.huziyang520.merlinlib.platform.Services;
+import com.practicalenchantments.content.BookBagMenu;
+import com.practicalenchantments.content.EvolutionTableMenu;
+import com.practicalenchantments.content.PeMenus;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.inventory.MenuType;
+import net.neoforged.neoforge.common.extensions.IMenuTypeExtension;
 import com.practicalenchantments.enchantment.weapon.LifeStealEnchantment;
 import com.practicalenchantments.neoforge.config.NeoConfig;
 import net.neoforged.bus.api.IEventBus;
@@ -11,10 +18,12 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.config.ModConfigEvent;
 import com.practicalenchantments.content.PeContent;
 import com.practicalenchantments.content.RangeWrathBrewing;
+import com.practicalenchantments.network.BagSearchPayload;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.event.brewing.RegisterBrewingRecipesEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 
@@ -23,12 +32,14 @@ public final class PracticalEnchantmentsNeoForge {
 	public PracticalEnchantmentsNeoForge(IEventBus modEventBus, ModContainer container) {
 		NeoConfig.preload();
 		PracticalEnchantments.bootstrap();
+		registerMenus();
 		container.registerConfig(NeoConfig.type(), NeoConfig.SPEC);
 		modEventBus.addListener(ModConfigEvent.Loading.class, event -> NeoConfig.apply());
 		modEventBus.addListener(ModConfigEvent.Reloading.class, event -> NeoConfig.apply());
 		NeoConfig.apply();
 
 		modEventBus.addListener(this::onBuildCreativeTab);
+		modEventBus.addListener(this::onRegisterPayloads);
 		NeoForge.EVENT_BUS.addListener(RegisterBrewingRecipesEvent.class, event -> RangeWrathBrewing.apply(event.getBuilder()));
 
 		NeoForge.EVENT_BUS.addListener(LivingDamageEvent.Post.class, event ->
@@ -36,6 +47,27 @@ public final class PracticalEnchantmentsNeoForge {
 				event.getEntity(), event.getSource(), event.getOriginalDamage(),
 				event.getBlockedDamage(), event.getBlockedDamage() > 0));
 	}
+
+	private static void registerMenus() {
+		MenuType<EvolutionTableMenu> evolutionTable = IMenuTypeExtension.create(
+				(windowId, inventory, data) -> new EvolutionTableMenu(windowId, inventory));
+		Services.REGISTRATIONS.register(BuiltInRegistries.MENU, PeContent.EVOLUTION_TABLE, () -> evolutionTable);
+		PeMenus.setEvolutionTable(evolutionTable);
+		MenuType<BookBagMenu> bookBag = IMenuTypeExtension.create(
+				(windowId, inventory, data) -> new BookBagMenu(windowId, inventory));
+		Services.REGISTRATIONS.register(BuiltInRegistries.MENU, PeContent.BOOK_BAG_LEATHER, () -> bookBag);
+		PeMenus.setBookBag(bookBag);
+	}
+
+	private void onRegisterPayloads(RegisterPayloadHandlersEvent event) {
+		event.registrar("1").playToServer(BagSearchPayload.TYPE, BagSearchPayload.STREAM_CODEC,
+				(payload, context) -> {
+					if (context.player().containerMenu instanceof BookBagMenu menu) {
+						menu.setQuery(payload.query());
+					}
+				});
+	}
+
 	private void onBuildCreativeTab(BuildCreativeModeTabContentsEvent event) {
 		if (!PeContent.tabKey().equals(event.getTabKey())) {
 			return;

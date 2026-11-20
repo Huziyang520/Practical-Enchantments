@@ -6,10 +6,14 @@ import com.practicalenchantments.PracticalEnchantments;
 import com.practicalenchantments.enchantment.weapon.LifeStealEnchantment;
 import com.practicalenchantments.fabric.config.FabricVanillaTweaks;
 import com.practicalenchantments.fabric.config.FcapConfig;
-import com.practicalenchantments.content.PeContent;
 import net.fabricmc.api.ModInitializer;
+import com.practicalenchantments.content.PeContent;
+import com.practicalenchantments.content.BookBagMenu;
 import com.practicalenchantments.content.RangeWrathBrewing;
+import com.practicalenchantments.network.BagSearchPayload;
 import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
+import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.registry.FabricPotionBrewingBuilder;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.minecraft.world.item.CreativeModeTab;
@@ -21,6 +25,7 @@ public final class PracticalEnchantmentsFabric implements ModInitializer {
 		FabricVanillaTweaks.load();
 		FcapConfig.install();
 		FcapConfig.apply();
+		PeFabricMenus.install();
 		PracticalEnchantments.bootstrap();
 
 		CreativeModeTabEvents.modifyOutputEvent(PeContent.tabKey()).register(output -> {
@@ -30,6 +35,13 @@ public final class PracticalEnchantmentsFabric implements ModInitializer {
 		});
 
 		FabricPotionBrewingBuilder.BUILD.register(builder -> RangeWrathBrewing.apply(builder));
+
+		PayloadTypeRegistry.serverboundPlay().register(BagSearchPayload.TYPE, BagSearchPayload.STREAM_CODEC);
+		ServerPlayNetworking.registerGlobalReceiver(BagSearchPayload.TYPE, (payload, context) -> {
+			if (context.player().containerMenu instanceof BookBagMenu menu) {
+				menu.setQuery(payload.query());
+			}
+		});
 
 		ServerLivingEntityEvents.AFTER_DAMAGE.register((entity, source, amount, blockedDamage, blocked) ->
 			LifeStealEnchantment.onAfterDamage(entity, source, amount, blockedDamage, blocked));

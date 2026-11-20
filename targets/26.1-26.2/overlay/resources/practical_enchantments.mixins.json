@@ -12,6 +12,8 @@
     "PlayerInfinityAmmoMixin",
     "GodwoodLootMixin",
     "IncinerateDropMixin",
+    "BookBagCraftKeepMixin",
+    "BookBagSmithingKeepMixin",
     "CubeMobSplitMixin",
     "SlimeSplitMixin",
     "HeavyBlowCritMixin",
