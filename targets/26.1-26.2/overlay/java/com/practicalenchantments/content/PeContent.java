@@ -146,18 +146,25 @@ public final class PeContent {
 		return EvolutionTableBlockEntity.TYPE;
 	}
 
-	// 26.1.2 的 BlockEntityType 构造器仍是 private，且 BlockEntitySupplier 也不可见：
-	// 用反射走一次构造，工厂用 Proxy 实现，避免为了一个方块实体去开 access transformer。
+	// 该版本的 BlockEntityType 有两个 2 参构造器：(supplier, Set<Block>) 与 (supplier, Block...)；
+	// 必须按参数类型挑，按数量挑会拿到变长数组那个，运行期直接 ClassCastException。
 	@SuppressWarnings("unchecked")
-	private static BlockEntityType<EvolutionTableBlockEntity> createBlockEntityType(Set<Block> blocks) {
+	private static BlockEntityType<EvolutionTableBlockEntity> createBlockEntityType(java.util.Set<Block> blocks) {
 		try {
-			java.lang.reflect.Constructor<?> target = null;
+			java.lang.reflect.Constructor<?> withSet = null;
+			java.lang.reflect.Constructor<?> withArray = null;
 			for (java.lang.reflect.Constructor<?> candidate : BlockEntityType.class.getDeclaredConstructors()) {
-				if (candidate.getParameterCount() == 2) {
-					target = candidate;
-					break;
+				Class<?>[] types = candidate.getParameterTypes();
+				if (types.length != 2) {
+					continue;
+				}
+				if (types[1] == java.util.Set.class) {
+					withSet = candidate;
+				} else if (types[1].isArray() && types[1].getComponentType() == Block.class) {
+					withArray = candidate;
 				}
 			}
+			java.lang.reflect.Constructor<?> target = withSet != null ? withSet : withArray;
 			if (target == null) {
 				throw new IllegalStateException("no BlockEntityType constructor");
 			}
@@ -169,7 +176,8 @@ public final class PeContent {
 							? new EvolutionTableBlockEntity((net.minecraft.core.BlockPos) args[0],
 									(net.minecraft.world.level.block.state.BlockState) args[1])
 							: null);
-			return (BlockEntityType<EvolutionTableBlockEntity>) target.newInstance(supplier, blocks);
+			Object second = withSet != null ? blocks : blocks.toArray(new Block[0]);
+			return (BlockEntityType<EvolutionTableBlockEntity>) target.newInstance(supplier, second);
 		} catch (ReflectiveOperationException failure) {
 			throw new IllegalStateException("failed to build the evolution table block entity type", failure);
 		}
