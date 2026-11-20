@@ -5,6 +5,7 @@ package com.practicalenchantments.fabric;
 import com.practicalenchantments.PracticalEnchantments;
 import com.practicalenchantments.enchantment.weapon.LifeStealEnchantment;
 import com.practicalenchantments.fabric.config.FabricVanillaTweaks;
+import com.practicalenchantments.fabric.config.FcapConfig;
 import com.practicalenchantments.content.PeContent;
 import net.fabricmc.api.ModInitializer;
 import com.practicalenchantments.content.RangeWrathBrewing;
@@ -18,6 +19,8 @@ public final class PracticalEnchantmentsFabric implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		FabricVanillaTweaks.load();
+		FcapConfig.install();
+		FcapConfig.apply();
 		PracticalEnchantments.bootstrap();
 
 		CreativeModeTabEvents.modifyOutputEvent(PeContent.tabKey()).register(output -> {

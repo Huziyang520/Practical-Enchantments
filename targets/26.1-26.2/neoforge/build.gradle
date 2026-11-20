@@ -41,6 +41,8 @@ neoForge {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
+	// 可选前置 Jade：缺它只是没有提示
+	compileOnly files("libs/Jade-mc26.1-Fabric-26.1.11.jar")
 	// MerlinLib NeoForge
 	implementation "com.huziyang520.merlinlib:merlinlib-neoforge-26.1-26.2:${merlinlib_version}"
 }

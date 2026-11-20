@@ -16,7 +16,12 @@ def overlaidJava = [
 		'com/practicalenchantments/enchantment/support/DeathSaveSupport.java',
 		'com/practicalenchantments/enchantment/support/TridentPullSupport.java',
 		'com/practicalenchantments/enchantment/weapon/PenetrationEnchantment.java',
-		'com/practicalenchantments/mixin/CubeMobSplitMixin.java'
+		'com/practicalenchantments/mixin/CubeMobSplitMixin.java',
+		'com/practicalenchantments/client/EvolutionTableRenderer.java',
+		'com/practicalenchantments/content/BookBagStorage.java',
+		'com/practicalenchantments/content/EvolutionTableBlock.java',
+		'com/practicalenchantments/content/PeContent.java',
+		'com/practicalenchantments/enchantment/weapon/ZeusPoseidonEnchantment.java',
 ]
 def sharedJava = layout.buildDirectory.dir('shared/java')
 def sharedResources = layout.buildDirectory.dir('shared/resources')
@@ -50,6 +55,8 @@ sourceSets {
 }
 
 dependencies {
+	// 可选前置 Jade：jar 放在 fabric/libs，缺它只是没有提示
+	compileOnly files("libs/Jade-mc26.1-Fabric-26.1.11.jar")
 	// MerlinLib common (compiled against; its implementation comes from the composite build)
 	compileOnly "com.huziyang520.merlinlib:merlinlib-common-26.1-26.2:${merlinlib_version}"
 	// Fabric and NeoForge both bundle Fabric Mixin, so it is safe to use it in common

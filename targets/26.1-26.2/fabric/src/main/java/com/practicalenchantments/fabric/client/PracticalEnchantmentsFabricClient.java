@@ -1,15 +1,12 @@
-// Fabric 客户端入口：只在客户端装配配置界面，专用服务器不加载本类。
+// Fabric 客户端入口：配置按钮走 Forge Config API Port，专用服务器不加载本类。
 
 package com.practicalenchantments.fabric.client;
 
-import com.practicalenchantments.fabric.config.MezzConfigBridge;
-import com.practicalenchantments.fabric.config.TweaksScreens;
 import net.fabricmc.api.ClientModInitializer;
 
 public final class PracticalEnchantmentsFabricClient implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
-		MezzConfigBridge.install();
-		TweaksScreens.install();
+		FcapConfigClient.install();
 	}
 }
