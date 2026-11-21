@@ -22,6 +22,18 @@ public class EvolutionTableScreen extends AbstractContainerScreen<EvolutionTable
 	}
 
 	@Override
+	public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+		super.render(graphics, mouseX, mouseY, partialTick);
+		// 同上：显式画一次物品提示，不依赖外部调用链。
+		this.renderTooltip(graphics, mouseX, mouseY);
+	}
+
+	@Override
+	public void renderBackground(GuiGraphics graphics) {
+		graphics.fillGradient(0, 0, this.width, this.height, 0xC0101010, 0xD0101010);
+	}
+
+	@Override
 	protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
 		graphics.blit(TEXTURE, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
 	}

@@ -63,6 +63,19 @@ public class BookBagScreen extends AbstractContainerScreen<BookBagMenu> {
 	}
 
 	@Override
+	public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+		super.render(graphics, mouseX, mouseY, partialTick);
+		// 有些 UI 前置会接管屏幕的提示绘制，这里显式补一次，保证悬停物品一定有提示。
+		this.renderTooltip(graphics, mouseX, mouseY);
+	}
+
+	@Override
+	public void renderBackground(GuiGraphics graphics) {
+		// 遮罩自己铺：不调 super，避免被接管原版背景的前置吞掉。
+		graphics.fillGradient(0, 0, this.width, this.height, 0xC0101010, 0xD0101010);
+	}
+
+	@Override
 	protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
 		int rows = this.menu.visibleRows();
 		blit(graphics, 0, 0, 0, BookBagMenu.PANEL_HEADER);
@@ -114,15 +127,6 @@ public class BookBagScreen extends AbstractContainerScreen<BookBagMenu> {
 	@Override
 	protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
 		super.renderLabels(graphics, mouseX, mouseY);
-		int used = 0;
-		if (this.minecraft != null && this.minecraft.player != null) {
-			used = BookBagStorage.usedSlots(this.minecraft.player.getMainHandItem());
-		}
-		Component count = Component.translatable("gui." + PracticalEnchantments.MOD_ID + ".bag.count",
-				used, this.menu.capacity());
-		// renderLabels 的坐标系已经平移过 leftPos/topPos，这里只能写 GUI 内相对坐标。
-		graphics.drawString(this.font, count,
-				this.imageWidth - 8 - this.font.width(count), 6, TEXT_COLOR, false);
 	}
 
 	@Override
