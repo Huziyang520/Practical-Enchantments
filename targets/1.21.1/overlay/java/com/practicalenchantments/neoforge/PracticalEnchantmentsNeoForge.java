@@ -27,21 +27,20 @@ import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.player.CriticalHitEvent;
 import net.neoforged.neoforge.event.village.VillagerTradesEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
-import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 @Mod(PracticalEnchantments.MOD_ID)
 public final class PracticalEnchantmentsNeoForge {
 	private static final DeferredRegister<MenuType<?>> MENUS =
 			DeferredRegister.create(Registries.MENU, PracticalEnchantments.MOD_ID);
-	private static final DeferredHolder<MenuType<?>, MenuType<EvolutionTableMenu>> EVOLUTION_TABLE_MENU =
-			MENUS.register("evolution_table", () -> IMenuTypeExtension.create(
-					(windowId, inventory, data) -> new EvolutionTableMenu(windowId, inventory)));
-	private static final DeferredHolder<MenuType<?>, MenuType<BookBagMenu>> BOOK_BAG_MENU =
-			MENUS.register("book_bag_leather", () -> IMenuTypeExtension.create(
-					(windowId, inventory, data) -> new BookBagMenu(windowId, inventory)));
+	private static final MenuType<EvolutionTableMenu> EVOLUTION_TABLE_MENU_TYPE = IMenuTypeExtension.create(
+			(windowId, inventory, data) -> new EvolutionTableMenu(windowId, inventory));
+	private static final MenuType<BookBagMenu> BOOK_BAG_MENU_TYPE = IMenuTypeExtension.create(
+			(windowId, inventory, data) -> new BookBagMenu(windowId, inventory));
 
 	public PracticalEnchantmentsNeoForge(IEventBus modEventBus, ModContainer container) {
+		MENUS.register("evolution_table", () -> EVOLUTION_TABLE_MENU_TYPE);
+		MENUS.register("book_bag_leather", () -> BOOK_BAG_MENU_TYPE);
 		NeoConfig.preload();
 		PeContent.register(modEventBus);
 		MENUS.register(modEventBus);
@@ -52,8 +51,12 @@ public final class PracticalEnchantmentsNeoForge {
 		modEventBus.addListener(this::onRegisterPayloads);
 		NeoConfig.apply();
 
-		PeMenus.setEvolutionTable(EVOLUTION_TABLE_MENU.get());
-		PeMenus.setBookBag(BOOK_BAG_MENU.get());
+		// 注册事件还没跑，DeferredHolder 此时没有绑定值；菜单类型在构造期就建好，
+		// 登记时直接返回同一个实例（与基线一致）。
+		MenuType<EvolutionTableMenu> evolutionTable = EVOLUTION_TABLE_MENU_TYPE;
+		MenuType<BookBagMenu> bookBag = BOOK_BAG_MENU_TYPE;
+		PeMenus.setEvolutionTable(evolutionTable);
+		PeMenus.setBookBag(bookBag);
 
 		NeoForge.EVENT_BUS.addListener(CriticalHitEvent.class, event -> {
 			if (event.getEntity() instanceof Player player && HeavyBlowEnchantment.has(player)) {
