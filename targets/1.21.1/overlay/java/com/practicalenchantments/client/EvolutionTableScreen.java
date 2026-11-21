@@ -21,6 +21,13 @@ public class EvolutionTableScreen extends AbstractContainerScreen<EvolutionTable
 		this.inventoryLabelY = 72;
 	}
 
+	// 1.21.1 的 AbstractContainerScreen 不画悬停提示，每个容器界面自己收尾。
+	@Override
+	public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+		super.render(graphics, mouseX, mouseY, partialTick);
+		this.renderTooltip(graphics, mouseX, mouseY);
+	}
+
 	@Override
 	protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
 		graphics.blit(TEXTURE, this.leftPos, this.topPos, 0.0F, 0.0F,
