@@ -116,6 +116,14 @@ public class BookBagScreen extends AbstractContainerScreen<BookBagMenu> {
 	@Override
 	protected void extractLabels(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
 		super.extractLabels(graphics, mouseX, mouseY);
+		Component count = Component.translatable("gui." + PracticalEnchantments.MOD_ID + ".bag.count",
+				this.usedSlots(), this.menu.capacity());
+		graphics.text(this.font, count, this.imageWidth - 8 - this.font.width(count), 6, TEXT_COLOR);
+	}
+
+	private int usedSlots() {
+		return this.minecraft == null || this.minecraft.player == null ? 0
+				: BookBagStorage.usedSlots(this.minecraft.player.getMainHandItem());
 	}
 
 	@Override
