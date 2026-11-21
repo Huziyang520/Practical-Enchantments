@@ -62,17 +62,12 @@ public class BookBagScreen extends AbstractContainerScreen<BookBagMenu> {
 		this.addRenderableWidget(this.search);
 	}
 
+	// 与原版 ContainerScreen 相同：容器界面要自己画背景遮罩，并在最后画悬停提示。
 	@Override
 	public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+		this.renderBackground(graphics);
 		super.render(graphics, mouseX, mouseY, partialTick);
-		// 有些 UI 前置会接管屏幕的提示绘制，这里显式补一次，保证悬停物品一定有提示。
 		this.renderTooltip(graphics, mouseX, mouseY);
-	}
-
-	@Override
-	public void renderBackground(GuiGraphics graphics) {
-		// 遮罩自己铺：不调 super，避免被接管原版背景的前置吞掉。
-		graphics.fillGradient(0, 0, this.width, this.height, 0xC0101010, 0xD0101010);
 	}
 
 	@Override
@@ -127,6 +122,15 @@ public class BookBagScreen extends AbstractContainerScreen<BookBagMenu> {
 	@Override
 	protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
 		super.renderLabels(graphics, mouseX, mouseY);
+		Component count = Component.translatable("gui." + PracticalEnchantments.MOD_ID + ".bag.count",
+				this.usedSlots(), this.menu.capacity());
+		// renderLabels 的坐标系已平移过 leftPos/topPos，这里写 GUI 内相对坐标。
+		graphics.drawString(this.font, count, this.imageWidth - 8 - this.font.width(count), 6, TEXT_COLOR, false);
+	}
+
+	private int usedSlots() {
+		return this.minecraft == null || this.minecraft.player == null ? 0
+				: BookBagStorage.usedSlots(this.minecraft.player.getMainHandItem());
 	}
 
 	@Override

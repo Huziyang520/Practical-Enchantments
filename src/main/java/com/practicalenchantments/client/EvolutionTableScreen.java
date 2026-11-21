@@ -21,16 +21,12 @@ public class EvolutionTableScreen extends AbstractContainerScreen<EvolutionTable
 		this.inventoryLabelY = 72;
 	}
 
+	// 与原版 ContainerScreen 相同：容器界面要自己画背景遮罩，并在最后画悬停提示。
 	@Override
 	public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+		this.renderBackground(graphics);
 		super.render(graphics, mouseX, mouseY, partialTick);
-		// 同上：显式画一次物品提示，不依赖外部调用链。
 		this.renderTooltip(graphics, mouseX, mouseY);
-	}
-
-	@Override
-	public void renderBackground(GuiGraphics graphics) {
-		graphics.fillGradient(0, 0, this.width, this.height, 0xC0101010, 0xD0101010);
 	}
 
 	@Override
