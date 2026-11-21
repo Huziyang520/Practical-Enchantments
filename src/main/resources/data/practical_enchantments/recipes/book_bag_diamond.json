@@ -2,8 +2,12 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "M": "minecraft:diamond",
-    "B": "practical_enchantments:book_bag_gold"
+    "M": {
+      "item": "minecraft:diamond"
+    },
+    "B": {
+      "item": "practical_enchantments:book_bag_gold"
+    }
   },
   "pattern": [
     " M ",

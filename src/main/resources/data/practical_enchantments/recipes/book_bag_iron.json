@@ -2,8 +2,12 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "M": "minecraft:iron_ingot",
-    "B": "practical_enchantments:book_bag_leather"
+    "M": {
+      "item": "minecraft:iron_ingot"
+    },
+    "B": {
+      "item": "practical_enchantments:book_bag_leather"
+    }
   },
   "pattern": [
     " M ",

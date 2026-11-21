@@ -1,7 +1,9 @@
-// 可选配置界面的接线：有 Cloth Config 用 Cloth，没有再用 Jupiter，都没有就只留 toml。
+// 配置界面的接线：装了 Neo Configuration Screen Port 就把 mod 列表的配置按钮交给它，
+// 没有则退回 Jupiter；两者都没有时只留 toml。
 
 package com.practicalenchantments.config;
 
+import com.practicalenchantments.PracticalEnchantments;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraftforge.client.ConfigScreenHandler;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -9,8 +11,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public final class ConfigUi {
-	private static final Logger LOGGER = LoggerFactory.getLogger("practical_enchantments");
-	private static final String CLOTH_API = "me.shedaniel.clothconfig2.api.ConfigBuilder";
+	private static final Logger LOGGER = LoggerFactory.getLogger(PracticalEnchantments.MOD_ID);
+	private static final String PORT_REGISTRATION =
+			"com.huziyang.neoconfigurationscreenport.forge.ConfigScreenRegistration";
 	private static final String JUPITER_API = "com.iafenvoy.jupiter.ConfigManager";
 	private static Object container;
 
@@ -18,13 +21,13 @@ public final class ConfigUi {
 	}
 
 	public static void install() {
-		if (clothPresent()) {
-			LOGGER.info("[PracticalEnchantments] 找到 Cloth Config：配置界面走 Cloth，值写入 "
-					+ "practical_enchantments-server.toml");
-			registerScreen();
+		if (present(PORT_REGISTRATION)) {
+			registerWithPort();
+			LOGGER.info("[PracticalEnchantments] 找到 Neo Configuration Screen Port：配置界面由它渲染，"
+					+ "值写入 practical_enchantments-server.toml");
 			return;
 		}
-		if (jupiterPresent()) {
+		if (present(JUPITER_API)) {
 			container = JupiterSupport.createContainer();
 			JupiterSupport.register(container);
 			LOGGER.info("[PracticalEnchantments] 找到 Jupiter：三项开关列在 Jupiter 的配置列表里，值写入 "
@@ -32,32 +35,30 @@ public final class ConfigUi {
 			registerScreen();
 			return;
 		}
-		LOGGER.info("[PracticalEnchantments] 既没有 Cloth Config 也没有 Jupiter：只读 "
+		LOGGER.info("[PracticalEnchantments] 既没有配置界面移植也没有 Jupiter：只读 "
 				+ "practical_enchantments-server.toml，mod 列表里没有配置界面");
 	}
 
 	public static Screen create(Screen parent) {
-		if (clothPresent()) {
-			return ClothScreen.create(parent);
-		}
-		if (jupiterPresent() && container != null) {
+		if (container != null) {
 			return JupiterSupport.createScreen(parent, container);
 		}
 		return null;
+	}
+
+	private static void registerWithPort() {
+		try {
+			Class<?> registration = Class.forName(PORT_REGISTRATION);
+			registration.getMethod("register", String.class).invoke(null, PracticalEnchantments.MOD_ID);
+		} catch (ReflectiveOperationException | LinkageError failure) {
+			LOGGER.warn("[PracticalEnchantments] 配置界面移植接管失败", failure);
+		}
 	}
 
 	private static void registerScreen() {
 		ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class,
 				() -> new ConfigScreenHandler.ConfigScreenFactory(
 						(minecraft, parent) -> create(parent)));
-	}
-
-	private static boolean clothPresent() {
-		return present(CLOTH_API);
-	}
-
-	private static boolean jupiterPresent() {
-		return present(JUPITER_API);
 	}
 
 	private static boolean present(String className) {

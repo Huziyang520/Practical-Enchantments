@@ -120,8 +120,9 @@ public class BookBagScreen extends AbstractContainerScreen<BookBagMenu> {
 		}
 		Component count = Component.translatable("gui." + PracticalEnchantments.MOD_ID + ".bag.count",
 				used, this.menu.capacity());
+		// renderLabels 的坐标系已经平移过 leftPos/topPos，这里只能写 GUI 内相对坐标。
 		graphics.drawString(this.font, count,
-				this.leftPos + this.imageWidth - 8 - this.font.width(count), this.topPos + 6, TEXT_COLOR);
+				this.imageWidth - 8 - this.font.width(count), 6, TEXT_COLOR, false);
 	}
 
 	@Override

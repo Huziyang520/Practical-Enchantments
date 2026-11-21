@@ -2,9 +2,15 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "L": "minecraft:lapis_block",
-    "B": "minecraft:amethyst_block",
-    "E": "minecraft:enchanting_table"
+    "L": {
+      "item": "minecraft:lapis_block"
+    },
+    "B": {
+      "item": "minecraft:amethyst_block"
+    },
+    "E": {
+      "item": "minecraft:enchanting_table"
+    }
   },
   "pattern": [
     "LBL",
