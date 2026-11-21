@@ -2,10 +2,21 @@
 
 package com.practicalenchantments;
 
+import com.huziyang520.merlinlib.platform.Services;
 import com.practicalenchantments.config.ConfigUi;
 import com.practicalenchantments.config.ForgeConfig;
 import com.practicalenchantments.config.MezzConfigBridge;
+import com.practicalenchantments.content.AmuletLoot;
+import com.practicalenchantments.content.BookBagLoot;
+import com.practicalenchantments.content.BookBagMenu;
+import com.practicalenchantments.content.EvolutionTableMenu;
+import com.practicalenchantments.content.PeContent;
+import com.practicalenchantments.content.PeMenus;
 import com.practicalenchantments.content.WrathBrewing;
+import com.practicalenchantments.network.PeNetwork;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.flag.FeatureFlags;
+import net.minecraft.world.inventory.MenuType;
 import com.practicalenchantments.enchantment.HeavyBlowEnchantment;
 import com.practicalenchantments.enchantment.LifeStealEnchantment;
 import com.practicalenchantments.support.InvisibleAirMobGear;
@@ -30,6 +41,8 @@ public class PracticalEnchantmentsForge {
 	public PracticalEnchantmentsForge() {
 		ForgeConfig.preload();
 		PracticalEnchantments.bootstrap();
+		registerMenus();
+		PeNetwork.register();
 		ModLoadingContext.get().registerConfig(ForgeConfig.type(), ForgeConfig.SPEC);
 
 		FMLJavaModLoadingContext.get().getModEventBus()
@@ -45,7 +58,21 @@ public class PracticalEnchantmentsForge {
 	}
 
 	public void onCommonSetup(FMLCommonSetupEvent event) {
-		event.enqueueWork(WrathBrewing::register);
+		event.enqueueWork(() -> {
+			WrathBrewing.register();
+			// 物品由 DeferredRegister 在注册事件里创建，战利品注入必须等这一步之后才能取到物品。
+			AmuletLoot.register();
+			BookBagLoot.register();
+		});
+	}
+
+	private static void registerMenus() {
+		MenuType<EvolutionTableMenu> evolutionTable = new MenuType<>(EvolutionTableMenu::new, FeatureFlags.VANILLA_SET);
+		Services.REGISTRATIONS.register(BuiltInRegistries.MENU, PeContent.EVOLUTION_TABLE, () -> evolutionTable);
+		PeMenus.setEvolutionTable(evolutionTable);
+		MenuType<BookBagMenu> bookBag = new MenuType<>(BookBagMenu::new, FeatureFlags.VANILLA_SET);
+		Services.REGISTRATIONS.register(BuiltInRegistries.MENU, PeContent.BOOK_BAG_LEATHER, () -> bookBag);
+		PeMenus.setBookBag(bookBag);
 	}
 
 	@SubscribeEvent

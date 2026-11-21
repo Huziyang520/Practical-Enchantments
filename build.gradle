@@ -91,6 +91,9 @@ dependencies {
     // only built when the mod is installed and nothing of either may be bundled.
     compileOnly files('libs/cloth-config-forge-11.1.136.jar')
     compileOnly files('libs/jupiter-2.3.7-1.20.1-forge.jar')
+    // JEI 与 Jade 只在编译期取本地 jar，运行期缺失时这些类不会被加载。
+    compileOnly files('libs/jei-1.20.1-forge-15.74.0.234.jar')
+    compileOnly files('libs/Jade-1.20.1-Forge-11.13.3.jar')
 }
 
 // ---------------------------------------------------------------------------------------------

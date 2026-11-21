@@ -39,6 +39,9 @@ public final class ExclusiveSets {
 	public static final JsonArray HEAVY_BLOW = array(
 		"minecraft:sweeping_edge");
 
+	public static final JsonArray ZEUS_POSEIDON = array(
+			"minecraft:channeling");
+
 	public static final JsonArray BOOTS = array(
 		"minecraft:depth_strider",
 		"minecraft:frost_walker");

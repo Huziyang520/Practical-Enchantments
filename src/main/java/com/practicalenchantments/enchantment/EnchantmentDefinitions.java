@@ -54,6 +54,7 @@ public final class EnchantmentDefinitions {
 	public static final ResourceLocation UNDYING_DROP = id("undying_drop");
 	public static final ResourceLocation VENOM = id("venom");
 	public static final ResourceLocation WITHER_ASPECT = id("wither_aspect");
+	public static final ResourceLocation ZEUS_POSEIDON = id("zeus_poseidon");
 	private static final String AMULETS = "#practical_enchantments:amulets";
 
 	private EnchantmentDefinitions() {
@@ -90,6 +91,7 @@ public final class EnchantmentDefinitions {
 		undyingDrop();
 		venom();
 		witherAspect();
+		zeusPoseidon();
 	}
 
 	private static JsonArray armorItems(String tag) {
@@ -547,6 +549,23 @@ public final class EnchantmentDefinitions {
 			.supportedItems("#minecraft:enchantable/sharp_weapon")
 			.acquisition(TRADE_ONLY)
 			.category(EnchantmentCategory.WEAPON)
+			.submit();
+	}
+
+	/** 只从进化附魔台获得：不进附魔台、不进图书管理员交易、与引雷互斥。 */
+	private static void zeusPoseidon() {
+		MerlinApi.enchantments()
+			.register(ZEUS_POSEIDON)
+			.translationKey(key("zeus_poseidon"))
+			.weight(1)
+			.maxLevel(1)
+			.cost(25, 0, 50, 0)
+			.anvilCost(8)
+			.slots("mainhand")
+			.supportedItems("#minecraft:enchantable/trident")
+			.exclusiveSet(ExclusiveSets.ZEUS_POSEIDON.deepCopy())
+			.acquisition(NEITHER)
+			.category(EnchantmentCategory.TRIDENT)
 			.submit();
 	}
 

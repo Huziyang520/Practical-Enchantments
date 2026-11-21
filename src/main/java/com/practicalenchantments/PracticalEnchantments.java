@@ -8,6 +8,7 @@ import com.huziyang520.merlinlib.api.MerlinApi;
 import com.huziyang520.merlinlib.event.EnchantmentEventRegistrar;
 import com.practicalenchantments.config.PracticalConfig;
 import com.practicalenchantments.content.AmuletScanSource;
+import com.practicalenchantments.content.PeEvolution;
 import com.practicalenchantments.content.BleedContent;
 import com.practicalenchantments.content.RotContent;
 import com.practicalenchantments.content.PeContent;
@@ -20,6 +21,7 @@ import net.minecraft.world.item.enchantment.Enchantment;
 
 public final class PracticalEnchantments {
 	public static final String MOD_ID = "practical_enchantments";
+	private static final org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(MOD_ID);
 	private static final int QUALITY_COMMON = 0;
 	private static final int QUALITY_RARE = 1;
 	private static final int QUALITY_TREASURE = 2;
@@ -30,6 +32,10 @@ public final class PracticalEnchantments {
 	private PracticalEnchantments() {
 	}
 
+	public static void info(String message, Object... arguments) {
+		LOGGER.info(message, arguments);
+	}
+
 	public static void bootstrap() {
 		registerEnchantments();
 		PeContent.register();
@@ -38,6 +44,7 @@ public final class PracticalEnchantments {
 		AmuletScanSource.register();
 		WrathContent.register();
 		LinkedEnchantments.registerContent();
+		PeEvolution.register();
 		MerlinLibNotice.registerEarly();
 		registerLootInjections();
 
@@ -207,6 +214,7 @@ public final class PracticalEnchantments {
 		SoulSiphonEnchantment.registerCallbacks(registrar);
 		PenetrationEnchantment.registerCallbacks(registrar);
 		ObsidianWalkerEnchantment.registerCallbacks(registrar);
+		ZeusPoseidonEnchantment.registerCallbacks(registrar);
 		LinkedEnchantments.registerCallbacks(registrar);
 	}
 

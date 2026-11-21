@@ -1,0 +1,417 @@
+// 进化附魔台方块实体：青金石槽、台面物品、书架/附魔书计数与进化倒计时。
+// 台面物品与青金石槽一起存进 NBT，退出重进不会丢。
+
+package com.practicalenchantments.content;
+
+import com.huziyang520.merlinlib.api.EnchantingPowerApi;
+import com.huziyang520.merlinlib.api.EvolutionApi;
+import com.huziyang520.merlinlib.api.EvolutionRule;
+import com.huziyang520.merlinlib.api.MerlinApi;
+import com.practicalenchantments.PracticalEnchantments;
+import com.practicalenchantments.config.Tunables;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.Container;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
+import org.jetbrains.annotations.Nullable;
+
+public class EvolutionTableBlockEntity extends BlockEntity implements WorldlyContainer {
+	public static final int MAX_SHELVES = 15;
+	public static final int MAX_BOOKS = 30;
+	public static final int MAX_STRENGTH = 30;
+	public static final int DATA_SHELVES = 0;
+	public static final int DATA_BOOKS = 1;
+	public static final int DATA_STRENGTH = 2;
+	public static final int DATA_COST = 3;
+	public static final int DATA_COUNT = 4;
+	private static final int SCAN_INTERVAL = 20;
+	public static BlockEntityType<EvolutionTableBlockEntity> TYPE;
+
+	private final NonNullList<ItemStack> items = NonNullList.withSize(2, ItemStack.EMPTY);
+	private final SimpleContainer lapisView = new SimpleContainer(1);
+	private final ContainerData data = new SimpleContainerData(DATA_COUNT);
+	private int scanCooldown;
+	private int workTicks;
+	private int workTotal;
+	// 纯客户端渲染状态：角度必须累加，直接按 time×速度算会在变速瞬间跳角度。
+	private float spinAngle;
+	private float spinLastTime = -1.0F;
+
+	public EvolutionTableBlockEntity(BlockPos pos, BlockState state) {
+		super(TYPE, pos, state);
+	}
+
+	public Container lapisContainer() {
+		return this.lapisView;
+	}
+
+	@Override
+	public int getContainerSize() {
+		return 2;
+	}
+
+	@Override
+	public boolean isEmpty() {
+		return this.lapisView.getItem(0).isEmpty() && this.items.get(1).isEmpty();
+	}
+
+	@Override
+	public ItemStack getItem(int slot) {
+		return slot == 0 ? this.lapisView.getItem(0) : this.items.get(1);
+	}
+
+	@Override
+	public ItemStack removeItem(int slot, int amount) {
+		ItemStack removed = slot == 0 ? this.lapisView.removeItem(0, amount) : this.items.get(1).split(amount);
+		if (slot != 0) {
+			this.sync();
+		}
+		this.setChanged();
+		return removed;
+	}
+
+	@Override
+	public ItemStack removeItemNoUpdate(int slot) {
+		ItemStack removed = slot == 0 ? this.lapisView.removeItemNoUpdate(0) : this.items.get(1);
+		if (slot != 0) {
+			this.items.set(1, ItemStack.EMPTY);
+			this.sync();
+		}
+		this.setChanged();
+		return removed;
+	}
+
+	@Override
+	public void setItem(int slot, ItemStack stack) {
+		if (slot == 0) {
+			this.lapisView.setItem(0, stack);
+		} else {
+			this.items.set(1, stack.copyWithCount(Math.min(stack.getCount(), 1)));
+			this.sync();
+		}
+		this.setChanged();
+	}
+
+	@Override
+	public boolean canPlaceItem(int slot, ItemStack stack) {
+		if (slot == 0) {
+			return stack.is(Items.LAPIS_LAZULI);
+		}
+		return !this.hasDisplayed() && this.workTotal <= 0 && this.canDisplay(stack);
+	}
+
+	@Override
+	public int[] getSlotsForFace(Direction side) {
+		return new int[]{0, 1};
+	}
+
+	@Override
+	public boolean canPlaceItemThroughFace(int slot, ItemStack stack, @Nullable Direction side) {
+		return slot == 0 && this.canPlaceItem(0, stack);
+	}
+
+	@Override
+	public boolean canTakeItemThroughFace(int slot, ItemStack stack, Direction side) {
+		// 进化进行中不允许外部抽走台面物品，否则青金石白扣、物品进管道。
+		return slot != 1 || this.workTotal <= 0;
+	}
+
+	@Override
+	public boolean stillValid(Player player) {
+		return true;
+	}
+
+	@Override
+	public void clearContent() {
+		this.lapisView.clearContent();
+		this.items.set(1, ItemStack.EMPTY);
+		this.sync();
+		this.setChanged();
+	}
+
+	public ContainerData data() {
+		return this.data;
+	}
+
+	public ItemStack displayed() {
+		return this.items.get(1);
+	}
+
+	public boolean hasDisplayed() {
+		return !this.items.get(1).isEmpty();
+	}
+
+	public boolean canDisplay(ItemStack stack) {
+		if (stack.isEmpty() || this.level == null) {
+			return false;
+		}
+		if (!stack.is(Items.ENCHANTED_BOOK) && !stack.isEnchantable()) {
+			return false;
+		}
+		return MerlinApi.evolution().match(stack) != null;
+	}
+
+	public boolean placeDisplayed(@Nullable Player player, ItemStack held) {
+		if (this.hasDisplayed() || this.workTotal > 0 || !this.canDisplay(held)) {
+			return false;
+		}
+		this.items.set(1, held.copyWithCount(1));
+		held.shrink(1);
+		this.setChanged();
+		this.sync();
+		return true;
+	}
+
+	public ItemStack takeDisplayed() {
+		if (!this.hasDisplayed() || this.workTotal > 0) {
+			return ItemStack.EMPTY;
+		}
+		ItemStack taken = this.items.get(1);
+		this.items.set(1, ItemStack.EMPTY);
+		this.setChanged();
+		this.sync();
+		return taken;
+	}
+
+	public void dropContents(Level level, BlockPos pos) {
+		for (ItemStack stack : this.items) {
+			if (!stack.isEmpty()) {
+				ItemEntity entity = new ItemEntity(level, pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, stack);
+				level.addFreshEntity(entity);
+			}
+		}
+		this.items.clear();
+		this.lapisView.clearContent();
+	}
+
+	public int strength() {
+		return this.data.get(DATA_STRENGTH);
+	}
+
+	public int shelves() {
+		return this.data.get(DATA_SHELVES);
+	}
+
+	public int books() {
+		return this.data.get(DATA_BOOKS);
+	}
+
+	public boolean isWorking() {
+		return this.workTotal > 0;
+	}
+
+	/** 服务端只同步开工那一刻的 work_ticks，之后的推进得客户端自己走，否则转速一直停在起点。 */
+	public void clientTick() {
+		if (this.workTotal > 0 && this.workTicks < this.workTotal) {
+			this.workTicks++;
+		}
+	}
+
+	public float progress(float partialTicks) {
+		if (this.workTotal <= 0) {
+			return 0.0F;
+		}
+		return Math.min(1.0F, (this.workTicks + partialTicks) / (float) this.workTotal);
+	}
+
+	public float advanceSpin(float time, float degreesPerTick) {
+		if (this.spinLastTime < 0.0F) {
+			this.spinLastTime = time;
+		}
+		float delta = Math.min(2.0F, Math.max(0.0F, time - this.spinLastTime));
+		this.spinLastTime = time;
+		this.spinAngle = (this.spinAngle + delta * degreesPerTick) % 360.0F;
+		return this.spinAngle;
+	}
+
+	private void sync() {
+		if (this.level != null) {
+			this.setChanged();
+			this.level.sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 3);
+		}
+	}
+
+	public void serverTick() {
+		if (!(this.level instanceof ServerLevel serverLevel)) {
+			return;
+		}
+		if (this.workTotal > 0) {
+			this.workTicks++;
+			if (this.workTicks % 4 == 0) {
+				serverLevel.sendParticles(ParticleTypes.ENCHANT, this.getBlockPos().getX() + 0.5,
+						this.getBlockPos().getY() + 1.1, this.getBlockPos().getZ() + 0.5,
+						3, 0.2, 0.2, 0.2, 0.02);
+			}
+			if (this.workTicks >= this.workTotal) {
+				this.finish(serverLevel);
+			}
+			return;
+		}
+		this.absorbDropped(serverLevel);
+		if (--this.scanCooldown <= 0) {
+			this.scanCooldown = SCAN_INTERVAL;
+			this.rescan(serverLevel);
+		}
+		if (this.canStart(serverLevel)) {
+			this.start(serverLevel);
+		}
+	}
+
+	private void absorbDropped(ServerLevel level) {
+		if (!Tunables.evolutionTableAbsorbDrops() || this.hasDisplayed() || this.workTotal > 0) {
+			return;
+		}
+		BlockPos pos = this.getBlockPos();
+		AABB area = new AABB(
+				pos.getX() + 0.05, pos.getY() + 0.7, pos.getZ() + 0.05,
+				pos.getX() + 0.95, pos.getY() + 1.05, pos.getZ() + 0.95);
+		for (ItemEntity entity : level.getEntitiesOfClass(ItemEntity.class, area)) {
+			ItemStack stack = entity.getItem();
+			if (!this.canDisplay(stack) || !this.placeDisplayed(null, stack)) {
+				continue;
+			}
+			if (stack.isEmpty()) {
+				entity.discard();
+			} else {
+				entity.setItem(stack);
+			}
+			return;
+		}
+	}
+
+	private void rescan(Level level) {
+		EnchantingPowerApi.Power power = MerlinApi.enchantingPower()
+				.scan(level, this.getBlockPos(), MAX_SHELVES, MAX_BOOKS);
+		int shelves = power.shelves();
+		int books = power.books();
+		boolean changed = shelves != this.data.get(DATA_SHELVES) || books != this.data.get(DATA_BOOKS);
+		this.data.set(DATA_SHELVES, shelves);
+		this.data.set(DATA_BOOKS, books);
+		this.data.set(DATA_STRENGTH, power.strength());
+		EvolutionRule rule = this.hasDisplayed() ? MerlinApi.evolution().match(this.items.get(1)) : null;
+		this.data.set(DATA_COST, rule == null ? 0 : rule.lapisCost());
+		if (changed) {
+			PracticalEnchantments.info("[PracticalEnchantments] evolution table at {}: {} shelf(s), {} book(s), strength {}",
+					this.getBlockPos(), shelves, books, this.data.get(DATA_STRENGTH));
+			this.setChanged();
+			this.sync();
+		}
+	}
+
+	private boolean canStart(ServerLevel level) {
+		if (!Tunables.evolutionTableEnabled() || !this.hasDisplayed() || this.strength() < 1) {
+			return false;
+		}
+		EvolutionRule rule = MerlinApi.evolution().match(this.items.get(1));
+		return rule != null && this.lapisView.getItem(0).getCount() >= rule.lapisCost();
+	}
+
+	private void start(ServerLevel level) {
+		EvolutionRule rule = MerlinApi.evolution().match(this.items.get(1));
+		if (rule == null) {
+			return;
+		}
+		this.lapisView.removeItem(0, rule.lapisCost());
+		this.workTicks = 0;
+		this.workTotal = rule.ticks();
+		this.setWorking(true);
+		level.playSound(null, this.getBlockPos(), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.BLOCKS, 1.0F, 1.0F);
+		level.sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 3);
+	}
+
+	private void finish(ServerLevel level) {
+		EvolutionRule rule = MerlinApi.evolution().match(this.items.get(1));
+		EvolutionApi evolution = MerlinApi.evolution();
+		RandomSource random = level.getRandom();
+		EvolutionApi.Outcome outcome = rule == null ? EvolutionApi.Outcome.FAILED
+				: evolution.roll(rule, this.strength() / (float) MAX_STRENGTH, random);
+		boolean applied = switch (outcome) {
+			case EVOLVED -> evolution.applyEvolution(this.items.get(1), rule);
+			case TRANSMUTED -> evolution.applyTransmutation(this.items.get(1), rule, this.strength(), random);
+			case FAILED -> false;
+		};
+		if (outcome != EvolutionApi.Outcome.FAILED && applied) {
+			level.playSound(null, this.getBlockPos(), SoundEvents.PLAYER_LEVELUP, SoundSource.BLOCKS, 1.0F, 1.2F);
+		} else {
+			level.playSound(null, this.getBlockPos(), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.BLOCKS, 0.6F, 0.6F);
+		}
+		this.workTotal = 0;
+		this.workTicks = 0;
+		this.setWorking(false);
+		this.setChanged();
+	}
+
+	private void setWorking(boolean working) {
+		if (this.level == null) {
+			return;
+		}
+		BlockState state = this.getBlockState();
+		if (state.getValue(EvolutionTableBlock.WORKING) != working) {
+			this.level.setBlock(this.getBlockPos(), state.setValue(EvolutionTableBlock.WORKING, working), 3);
+		}
+	}
+
+	@Override
+	public ClientboundBlockEntityDataPacket getUpdatePacket() {
+		return ClientboundBlockEntityDataPacket.create(this);
+	}
+
+	@Override
+	public CompoundTag getUpdateTag() {
+		return this.saveWithoutMetadata();
+	}
+
+	@Override
+	protected void saveAdditional(CompoundTag tag) {
+		super.saveAdditional(tag);
+		ContainerHelper.saveAllItems(tag, this.items, true);
+		tag.putInt("work_ticks", this.workTicks);
+		tag.putInt("work_total", this.workTotal);
+		tag.putInt("shelves", this.data.get(DATA_SHELVES));
+		tag.putInt("books", this.data.get(DATA_BOOKS));
+		tag.putInt("strength", this.data.get(DATA_STRENGTH));
+		tag.putInt("cost", this.data.get(DATA_COST));
+	}
+
+	@Override
+	public void load(CompoundTag tag) {
+		super.load(tag);
+		this.items.clear();
+		ContainerHelper.loadAllItems(tag, this.items);
+		this.lapisView.setItem(0, this.items.get(0));
+		this.workTicks = tag.getInt("work_ticks");
+		this.workTotal = tag.getInt("work_total");
+		this.data.set(DATA_SHELVES, tag.getInt("shelves"));
+		this.data.set(DATA_BOOKS, tag.getInt("books"));
+		this.data.set(DATA_STRENGTH, tag.getInt("strength"));
+		this.data.set(DATA_COST, tag.getInt("cost"));
+		this.scanCooldown = 0;
+	}
+
+	@Override
+	public void setChanged() {
+		super.setChanged();
+		this.items.set(0, this.lapisView.getItem(0));
+	}
+}

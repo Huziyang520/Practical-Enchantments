@@ -126,6 +126,20 @@ public final class Tunables {
 	private static volatile double tfNightSlayerDamagePerLevel;
 	private static volatile int tfNightSlayerNightStart;
 	private static volatile int tfNightSlayerNightEnd;
+	private static volatile boolean evolutionTableEnabled;
+	private static volatile boolean evolutionTableAbsorbDrops;
+	private static volatile int evolutionBaseSuccessPercent;
+	private static volatile int evolutionBaseTransmutePercent;
+	private static volatile int evolutionLapisCostBase;
+	private static volatile int evolutionLapisCostStep;
+	private static volatile int evolutionLapisCostCap;
+	private static volatile int evolutionTicksPerLapis;
+	private static volatile int evolutionDurationCapTicks;
+	private static volatile boolean zeusRequireSky;
+	private static volatile int zeusStormStrikes;
+	private static volatile int zeusStormWindowSeconds;
+	private static volatile int zeusStormDurationSeconds;
+	private static volatile int zeusStormCooldownSeconds;
 
 	static {
 		applyAll(key -> null);
@@ -252,6 +266,20 @@ public final class Tunables {
 		tfNightSlayerDamagePerLevel = decimal(source, "linked.tf_night_slayer.damage_per_level");
 		tfNightSlayerNightStart = integer(source, "linked.tf_night_slayer.night_start");
 		tfNightSlayerNightEnd = integer(source, "linked.tf_night_slayer.night_end");
+		evolutionTableEnabled = bool(source, "evolution_table.enabled");
+		evolutionTableAbsorbDrops = bool(source, "evolution_table.absorb_drops");
+		evolutionBaseSuccessPercent = integer(source, "evolution_table.base_success_percent");
+		evolutionBaseTransmutePercent = integer(source, "evolution_table.base_transmute_percent");
+		evolutionLapisCostBase = integer(source, "evolution_table.lapis_cost_base");
+		evolutionLapisCostStep = integer(source, "evolution_table.lapis_cost_step");
+		evolutionLapisCostCap = integer(source, "evolution_table.lapis_cost_cap");
+		evolutionTicksPerLapis = integer(source, "evolution_table.ticks_per_lapis");
+		evolutionDurationCapTicks = integer(source, "evolution_table.duration_cap_ticks");
+		zeusRequireSky = bool(source, "weapon.zeus_poseidon.require_sky");
+		zeusStormStrikes = integer(source, "weapon.zeus_poseidon.storm_strikes");
+		zeusStormWindowSeconds = integer(source, "weapon.zeus_poseidon.storm_window_seconds");
+		zeusStormDurationSeconds = integer(source, "weapon.zeus_poseidon.storm_duration_seconds");
+		zeusStormCooldownSeconds = integer(source, "weapon.zeus_poseidon.storm_cooldown_seconds");
 		// 低血线必须低于中血线：配反了就把低血线压到中线以下
 		if (executeLowHpThreshold >= executeMidHpThreshold) {
 			executeLowHpThreshold = Math.max(0.0D, executeMidHpThreshold - 0.01D);
@@ -314,6 +342,62 @@ public final class Tunables {
 	/** 有瑕疵的黑曜石下一段裂纹的延迟（tick）。 */
 	public static int flawedObsidianDelay(int randomBound) {
 		return flawedObsidianDelayBaseTicks + (flawedObsidianDelayRandomTicks > 0 ? randomBound : 0);
+	}
+
+	public static boolean evolutionTableEnabled() {
+		return evolutionTableEnabled;
+	}
+
+	public static boolean evolutionTableAbsorbDrops() {
+		return evolutionTableAbsorbDrops;
+	}
+
+	public static int evolutionBaseSuccessPercent() {
+		return evolutionBaseSuccessPercent;
+	}
+
+	public static int evolutionBaseTransmutePercent() {
+		return evolutionBaseTransmutePercent;
+	}
+
+	public static int evolutionLapisCostBase() {
+		return evolutionLapisCostBase;
+	}
+
+	public static int evolutionLapisCostStep() {
+		return evolutionLapisCostStep;
+	}
+
+	public static int evolutionLapisCostCap() {
+		return evolutionLapisCostCap;
+	}
+
+	public static int evolutionTicksPerLapis() {
+		return evolutionTicksPerLapis;
+	}
+
+	public static int evolutionDurationCapTicks() {
+		return evolutionDurationCapTicks;
+	}
+
+	public static boolean zeusRequireSky() {
+		return zeusRequireSky;
+	}
+
+	public static int zeusStormStrikes() {
+		return zeusStormStrikes;
+	}
+
+	public static int zeusStormWindowSeconds() {
+		return zeusStormWindowSeconds;
+	}
+
+	public static int zeusStormDurationSeconds() {
+		return zeusStormDurationSeconds;
+	}
+
+	public static int zeusStormCooldownSeconds() {
+		return zeusStormCooldownSeconds;
 	}
 
 	private static boolean bool(ValueSource source, String key) {
