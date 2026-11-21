@@ -114,13 +114,6 @@ public class BookBagScreen extends AbstractContainerScreen<BookBagMenu> {
 	@Override
 	protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
 		super.renderLabels(graphics, mouseX, mouseY);
-		int used = 0;
-		if (this.minecraft != null && this.minecraft.player != null) {
-			used = BookBagStorage.usedSlots(this.minecraft.player.getMainHandItem());
-		}
-		Component count = Component.translatable("gui." + PracticalEnchantments.MOD_ID + ".bag.count",
-				used, this.menu.capacity());
-		graphics.drawString(this.font, count, this.imageWidth - 8 - this.font.width(count), 6, TEXT_COLOR, false);
 	}
 
 	@Override
