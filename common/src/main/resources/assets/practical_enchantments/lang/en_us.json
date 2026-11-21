@@ -691,9 +691,9 @@
   "config.jade.plugin_practical_enchantments.evolution_table": "Evolution Table",
   "practical_enchantments.configuration.zeus_poseidon": "Zeus & Poseidon",
   "practical_enchantments.jei.evolution": "Evolution Table",
-  "practical_enchantments.jei.evolution.evolve": "Evolution chance (base) %s%%",
-  "practical_enchantments.jei.evolution.transmute": "Transmutation chance (base) %s%%",
-  "practical_enchantments.jei.evolution.fail": "Failure chance (base) %s%%",
+  "practical_enchantments.jei.evolution.evolve": "Base success rate %s%%",
+  "practical_enchantments.jei.evolution.transmute": "Base transmutation rate %s%%",
+  "practical_enchantments.jei.evolution.fail": "Base failure rate %s%%",
   "practical_enchantments.jei.evolution.transmuted": "Transmutation: a random enchantment the item supports",
-  "practical_enchantments.jei.evolution.note": "Actual chance = base x power/30, power caps at 30 (15 bookshelves + enchanted books on chiseled bookshelves)"
+  "practical_enchantments.jei.evolution.time": "Duration %s s"
 }

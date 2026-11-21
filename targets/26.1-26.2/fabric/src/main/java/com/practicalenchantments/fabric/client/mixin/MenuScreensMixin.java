@@ -26,11 +26,11 @@ public abstract class MenuScreensMixin {
 		}
 		if (type == PeFabricMenus.evolutionTable()) {
 			EvolutionTableMenu menu = new EvolutionTableMenu(windowId, minecraft.player.getInventory());
-			minecraft.setScreen(new EvolutionTableScreen(menu, minecraft.player.getInventory(), title));
+			minecraft.setScreenAndShow(new EvolutionTableScreen(menu, minecraft.player.getInventory(), title));
 			callback.cancel();
 		} else if (type == PeFabricMenus.bookBag()) {
 			BookBagMenu menu = new BookBagMenu(windowId, minecraft.player.getInventory());
-			minecraft.setScreen(new BookBagScreen(menu, minecraft.player.getInventory(), title));
+			minecraft.setScreenAndShow(new BookBagScreen(menu, minecraft.player.getInventory(), title));
 			callback.cancel();
 		}
 	}
