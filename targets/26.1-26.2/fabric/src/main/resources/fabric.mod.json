@@ -37,15 +37,20 @@
       ],
       "modmenu": [
         "com.practicalenchantments.fabric.client.ModMenuIntegration"
+      ],
+      "jei_mod_plugin": [
+        "com.practicalenchantments.compat.jei.PeJeiPlugin"
+      ],
+      "jade": [
+        "com.practicalenchantments.compat.jade.PeJadePlugin"
       ]
     },
     "recommends": {
-      "cloth-config": "*",
-      "jupiter": "*",
-      "mezz_config": "*"
+      "forgeconfigapiport": "*"
     },
     "mixins": [
       "practical_enchantments.mixins.json",
       "practical_enchantments.client.mixins.json"
-    ]
+    ],
+    "accessWidener": "practical_enchantments.accesswidener"
   }

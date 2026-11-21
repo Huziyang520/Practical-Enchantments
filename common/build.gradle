@@ -13,6 +13,8 @@ neoForge {
 }
 
 dependencies {
+	// JEI：仅编译期，运行期缺失也不影响其它功能
+	compileOnly files("libs/jei.jar")
 	// MerlinLib common (compiled against; its implementation comes from the composite build)
 	compileOnly "com.huziyang520.merlinlib:merlinlib-common-26.3:${merlinlib_version}"
 	// Fabric and NeoForge both bundle Fabric Mixin, so it is safe to use it in common

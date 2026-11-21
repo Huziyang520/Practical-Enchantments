@@ -38,6 +38,9 @@
     "modmenu": [
       "com.practicalenchantments.fabric.client.ModMenuIntegration"
     ],
+    "jei_mod_plugin": [
+      "com.practicalenchantments.compat.jei.PeJeiPlugin"
+    ],
     "jade": [
       "com.practicalenchantments.compat.jade.PeJadePlugin"
     ]

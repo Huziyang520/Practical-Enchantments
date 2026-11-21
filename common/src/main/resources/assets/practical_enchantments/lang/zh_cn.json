@@ -689,5 +689,11 @@
   "jade.practical_enchantments.evolution_table.item": "台面：%s",
   "jade.practical_enchantments.evolution_table.working": "正在进化…",
   "config.jade.plugin_practical_enchantments.evolution_table": "进化附魔台",
-  "practical_enchantments.configuration.zeus_poseidon": "宙斯与波塞冬"
+  "practical_enchantments.configuration.zeus_poseidon": "宙斯与波塞冬",
+  "practical_enchantments.jei.evolution": "进化附魔台",
+  "practical_enchantments.jei.evolution.evolve": "进化率（基准）%s%%",
+  "practical_enchantments.jei.evolution.transmute": "转化率（基准）%s%%",
+  "practical_enchantments.jei.evolution.fail": "失败率（基准）%s%%",
+  "practical_enchantments.jei.evolution.transmuted": "转化结果：随机一个该物品可用的附魔",
+  "practical_enchantments.jei.evolution.note": "实际概率 = 基准 × 能力/30，能力上限 30（15 个书架 + 雕纹书架上的附魔书）"
 }

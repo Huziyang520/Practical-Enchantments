@@ -41,6 +41,8 @@ neoForge {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
+	// JEI：仅编译期，运行期缺失也不影响其它功能
+	compileOnly files("../common/libs/jei.jar")
 	// 可选前置 Jade：缺它只是没有提示
 	compileOnly files("libs/Jade-mc26.1-Fabric-26.1.11.jar")
 	// MerlinLib NeoForge
