@@ -14,6 +14,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.Item;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.registries.DeferredItem;
 
@@ -54,13 +55,13 @@ public final class AmuletSupport {
 	}
 
 	public static float penaltyFactor(ItemStack stack) {
-		if (stack.is(PeContent.NETHERITE_AMULET.get())) {
+		if (stack.is(PeContent.item(PeContent.NETHERITE_AMULET))) {
 			return (float) Tunables.amuletPenaltyNetherite();
 		}
-		if (stack.is(PeContent.DIAMOND_AMULET.get())) {
+		if (stack.is(PeContent.item(PeContent.DIAMOND_AMULET))) {
 			return (float) Tunables.amuletPenaltyDiamond();
 		}
-		if (stack.is(PeContent.GOLDEN_AMULET.get())) {
+		if (stack.is(PeContent.item(PeContent.GOLDEN_AMULET))) {
 			return (float) Tunables.amuletPenaltyGolden();
 		}
 		return (float) Tunables.amuletPenaltyIron();
@@ -70,13 +71,13 @@ public final class AmuletSupport {
 		if (!isAmulet(stack)) {
 			return Integer.MAX_VALUE;
 		}
-		if (stack.is(PeContent.NETHERITE_AMULET.get())) {
+		if (stack.is(PeContent.item(PeContent.NETHERITE_AMULET))) {
 			return Tunables.amuletRepairCapNetherite();
 		}
-		if (stack.is(PeContent.DIAMOND_AMULET.get())) {
+		if (stack.is(PeContent.item(PeContent.DIAMOND_AMULET))) {
 			return Tunables.amuletRepairCapDiamond();
 		}
-		if (stack.is(PeContent.GOLDEN_AMULET.get())) {
+		if (stack.is(PeContent.item(PeContent.GOLDEN_AMULET))) {
 			return Tunables.amuletRepairCapGolden();
 		}
 		return Tunables.amuletRepairCapIron();
@@ -88,8 +89,8 @@ public final class AmuletSupport {
 			return cached;
 		}
 		Set<Item> built = new HashSet<>();
-		for (DeferredItem<Item> amulet : PeContent.AMULETS) {
-			Item item = amulet.get();
+		for (ResourceLocation amulet : PeContent.amulets()) {
+			Item item = PeContent.item(amulet);
 			if (item != null) {
 				built.add(item);
 			}

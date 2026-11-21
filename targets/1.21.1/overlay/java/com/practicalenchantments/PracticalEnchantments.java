@@ -9,7 +9,11 @@ import com.huziyang520.merlinlib.platform.Services;
 import com.huziyang520.merlinlib.event.EnchantmentEventRegistrar;
 import com.practicalenchantments.config.PracticalConfig;
 import com.practicalenchantments.content.AmuletScanSource;
+import com.practicalenchantments.content.AmuletLoot;
 import com.practicalenchantments.content.BleedContent;
+import com.practicalenchantments.content.BookBagLoot;
+import com.practicalenchantments.content.PeContent;
+import com.practicalenchantments.content.PeEvolution;
 import com.practicalenchantments.content.RotContent;
 import com.practicalenchantments.content.WrathContent;
 import com.practicalenchantments.enchantment.armor.AerialHasteEnchantment;
@@ -21,7 +25,6 @@ import com.practicalenchantments.enchantment.armor.ObsidianWalkerEnchantment;
 import com.practicalenchantments.enchantment.armor.ObsidianWalkerLoot;
 import com.practicalenchantments.enchantment.armor.UndyingDropEnchantment;
 import com.practicalenchantments.enchantment.linked.LinkedEnchantments;
-import com.practicalenchantments.enchantment.linked.twilightforest.HuntingArrow;
 import com.practicalenchantments.enchantment.support.AiRules;
 import com.practicalenchantments.enchantment.tool.DestructionEnchantment;
 import com.practicalenchantments.enchantment.tool.LumberjackEnchantment;
@@ -29,8 +32,8 @@ import com.practicalenchantments.enchantment.weapon.BeheadingEnchantment;
 import com.practicalenchantments.enchantment.weapon.ExecuteEnchantment;
 import com.practicalenchantments.enchantment.weapon.FrenzyEnchantment;
 import com.practicalenchantments.enchantment.weapon.HeavyBlowEnchantment;
-import com.practicalenchantments.enchantment.weapon.IncinerateEnchantment;
 import com.practicalenchantments.enchantment.weapon.InvisibleAirEnchantment;
+import com.practicalenchantments.enchantment.weapon.IncinerateEnchantment;
 import com.practicalenchantments.enchantment.weapon.LifeStealEnchantment;
 import com.practicalenchantments.enchantment.weapon.PenetrationEnchantment;
 import com.practicalenchantments.enchantment.weapon.PowerfulEnchantment;
@@ -40,16 +43,20 @@ import com.practicalenchantments.enchantment.weapon.SoulSiphonEnchantment;
 import com.practicalenchantments.enchantment.weapon.TraumaEnchantment;
 import com.practicalenchantments.enchantment.weapon.VenomEnchantment;
 import com.practicalenchantments.enchantment.weapon.WitherAspectEnchantment;
+import com.practicalenchantments.enchantment.weapon.ZeusPoseidonEnchantment;
 import com.practicalenchantments.notice.MerlinLibNotice;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.enchantment.Enchantment;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class PracticalEnchantments {
 	public static final String MOD_ID = "practical_enchantments";
+	private static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 	private static final int QUALITY_COMMON = 0;
 	private static final int QUALITY_RARE = 1;
 	private static final int QUALITY_TREASURE = 2;
@@ -59,17 +66,25 @@ public final class PracticalEnchantments {
 	private PracticalEnchantments() {
 	}
 
+	public static void info(String message, Object... arguments) {
+		LOGGER.info(message, arguments);
+	}
+
 	public static void bootstrap() {
 		MerlinLibNotice.registerEarly();
+		PeContent.register();
 		BleedContent.register();
 		RotContent.register();
 		AmuletScanSource.register();
 		LinkedEnchantments.registerContent();
 		if (Services.PLATFORM.isModLoaded(LinkedEnchantments.TWILIGHT_FOREST)) {
-			HuntingArrow.registerContent();
+			com.practicalenchantments.enchantment.linked.twilightforest.HuntingArrow.registerContent();
 		}
 		WrathContent.register();
-		MerlinApi.lifecycle().onServerStarting(server -> registerLootInjections());
+		PeEvolution.register();
+		AmuletLoot.register();
+		BookBagLoot.register();
+		registerLootInjections();
 
 		MerlinApi.lifecycle().onServerStarted(server -> {
 			PracticalConfig.load();
@@ -83,7 +98,15 @@ public final class PracticalEnchantments {
 		if (lootRegistered) {
 			return;
 		}
+		try {
+			registerAllLoot();
+			lootRegistered = true;
+		} catch (RuntimeException error) {
+			LOGGER.error("[PracticalEnchantments] 战利品注入注册失败，下次开服会重试", error);
+		}
+	}
 
+	private static void registerAllLoot() {
 		registerLoot(QUALITY_TREASURE, 0.12F, "minecraft:chests/woodland_mansion");
 		registerLoot(QUALITY_TREASURE, 0.10F, "minecraft:chests/bastion_treasure");
 		registerLoot(QUALITY_TREASURE, 0.10F, "minecraft:chests/stronghold_library");
@@ -136,7 +159,6 @@ public final class PracticalEnchantments {
 		registerLoot(QUALITY_COMMON, 0.10F, "minecraft:chests/shipwreck_supply");
 		registerLoot(QUALITY_COMMON, 0.06F, "minecraft:chests/simple_dungeon");
 		registerLoot(QUALITY_COMMON, 0.06F, "minecraft:chests/abandoned_mineshaft");
-		lootRegistered = true;
 		registerLoot(QUALITY_TREASURE, 0.10F, LootTables.ANCIENT_CITY);
 		registerLoot(QUALITY_RARE, 0.08F, LootTables.VILLAGE_TOOLSMITH);
 		registerLoot(QUALITY_RARE, 0.06F, LootTables.ABANDONED_MINESHAFT);
@@ -203,6 +225,7 @@ public final class PracticalEnchantments {
 		registerLoot(QUALITY_TREASURE, 0.12F, LootTables.NETHER_BRIDGE);
 		registerLoot(QUALITY_TREASURE, 0.12F, LootTables.BASTION_TREASURE);
 		registerLoot(QUALITY_TREASURE, 0.12F, LootTables.PILLAGER_OUTPOST);
+		registerLoot(QUALITY_TREASURE, 0.15F, "minecraft:chests/abandoned_camp_common_chest");
 		ObsidianWalkerLoot.register();
 	}
 
@@ -234,6 +257,7 @@ public final class PracticalEnchantments {
 		DemonicPactEnchantment.register(registries);
 		UndyingDropEnchantment.register(registries);
 		LinkedEnchantments.registerCallbacks(registrar, registries);
+		ZeusPoseidonEnchantment.registerCallbacks(registrar, registries);
 	}
 
 	private static void registerLoot(int quality, float chance, String lootTable) {

@@ -30,17 +30,29 @@ public abstract class MenuScreensMixin {
 		if (type != PeMenus.evolutionTable() && type != PeMenus.bookBag()) {
 			return;
 		}
+		practicalenchantments$trace(type, windowId);
 		AbstractContainerMenu created = type.create(windowId, minecraft.player.getInventory());
 		if (created instanceof EvolutionTableMenu menu && type == PeMenus.evolutionTable()) {
 			EvolutionTableScreen screen = new EvolutionTableScreen(menu, minecraft.player.getInventory(), title);
 			minecraft.player.containerMenu = screen.getMenu();
-			minecraft.setScreenAndShow(screen);
+			minecraft.gui.setScreen(screen);
 			callback.cancel();
 		} else if (created instanceof BookBagMenu menu) {
 			BookBagScreen screen = new BookBagScreen(menu, minecraft.player.getInventory(), title);
 			minecraft.player.containerMenu = screen.getMenu();
-			minecraft.setScreenAndShow(screen);
+			minecraft.gui.setScreen(screen);
 			callback.cancel();
 		}
+	}
+
+	// 临时诊断：确认客户端是否在重复创建界面（重复创建会导致遮罩层闪烁）。
+	private static int practicalenchantments$creates;
+
+	private static void practicalenchantments$trace(MenuType<?> type, int windowId) {
+		practicalenchantments$creates++;
+		com.practicalenchantments.PracticalEnchantments.info("[PE-DIAG] MenuScreens.create #{} type={} window={} screen={}",
+				practicalenchantments$creates, net.minecraft.core.registries.BuiltInRegistries.MENU.getKey(type), windowId,
+				net.minecraft.client.Minecraft.getInstance().gui.screen() == null ? "null"
+						: net.minecraft.client.Minecraft.getInstance().gui.screen().getClass().getSimpleName());
 	}
 }

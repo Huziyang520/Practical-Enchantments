@@ -27,7 +27,9 @@
     "HideSkinPowderSnowMixin",
     "HideSkinFreezeMixin",
     "EnchantmentVanillaTweakMixin",
-    "HuntingArrowMixin"
+    "HuntingArrowMixin",
+    "BookBagCraftKeepMixin",
+    "BookBagSmithingKeepMixin"
   ],
   "client": [],
   "server": [],

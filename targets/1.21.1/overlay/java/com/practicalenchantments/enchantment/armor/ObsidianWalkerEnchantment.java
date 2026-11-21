@@ -56,7 +56,7 @@ public final class ObsidianWalkerEnchantment {
 		}
 		ServerLevel level = event.level();
 		BlockPos feet = entity.blockPosition();
-		BlockState solidified = PeContent.FLAWED_OBSIDIAN.get().defaultBlockState();
+		BlockState solidified = PeContent.block(PeContent.FLAWED_OBSIDIAN).defaultBlockState();
 		if (!solidifyLayer(level, feet.getY(), feet, solidified)) {
 			solidifyLayer(level, feet.getY() - 1, feet, solidified);
 		}

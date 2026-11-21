@@ -34,12 +34,12 @@ public abstract class MenuScreensMixin {
 		if (created instanceof EvolutionTableMenu menu && type == PeMenus.evolutionTable()) {
 			EvolutionTableScreen screen = new EvolutionTableScreen(menu, minecraft.player.getInventory(), title);
 			minecraft.player.containerMenu = screen.getMenu();
-			minecraft.setScreenAndShow(screen);
+			minecraft.setScreen(screen);
 			callback.cancel();
 		} else if (created instanceof BookBagMenu menu) {
 			BookBagScreen screen = new BookBagScreen(menu, minecraft.player.getInventory(), title);
 			minecraft.player.containerMenu = screen.getMenu();
-			minecraft.setScreenAndShow(screen);
+			minecraft.setScreen(screen);
 			callback.cancel();
 		}
 	}
