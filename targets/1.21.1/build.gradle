@@ -89,6 +89,8 @@ def overlaidJava = [
 		'com/practicalenchantments/support/EnchantIds.java',
 		'com/practicalenchantments/support/Particles.java',
 		'com/practicalenchantments/mixin/AmuletUpgradeKeepMixin.java',
+		'com/practicalenchantments/mixin/BookBagCraftKeepMixin.java',
+		'com/practicalenchantments/mixin/BookBagSmithingKeepMixin.java',
 		'com/practicalenchantments/mixin/AbstractArrowShootMixin.java',
 		'com/practicalenchantments/mixin/CrossbowRepeatingMixin.java',
 		'com/practicalenchantments/mixin/CatMagnetTamingMixin.java',
