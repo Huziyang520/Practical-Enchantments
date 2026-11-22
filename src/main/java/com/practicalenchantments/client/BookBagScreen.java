@@ -136,10 +136,24 @@ public class BookBagScreen extends AbstractContainerScreen<BookBagMenu> {
 	@Override
 	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
 		if (this.search != null && this.search.isFocused()) {
-			super.keyPressed(keyCode, scanCode, modifiers);
+			if (keyCode == 256) {
+				return super.keyPressed(keyCode, scanCode, modifiers);
+			}
+			if (this.getFocused() != null) {
+				this.getFocused().keyPressed(keyCode, scanCode, modifiers);
+			}
 			return true;
 		}
 		return super.keyPressed(keyCode, scanCode, modifiers);
+	}
+
+	@Override
+	public boolean mouseClicked(double mouseX, double mouseY, int button) {
+		boolean handled = super.mouseClicked(mouseX, mouseY, button);
+		if (this.search != null && this.search.isFocused() && !this.search.isMouseOver(mouseX, mouseY)) {
+			this.setFocused(null);
+		}
+		return handled;
 	}
 
 	@Override
