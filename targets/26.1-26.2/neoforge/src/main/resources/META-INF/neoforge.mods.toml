@@ -7,7 +7,8 @@ version="${version}"
 displayName="${mod_name}"
 authors="${mod_author}"
 # 26.3 把方形小图标与宽横幅拆开：列表读 iconFile，详情面板的宽横幅读 bannerFile。
-# 本模组只有 128×128 方形图标，故只声明 iconFile（用 logoFile 会记一条 deprecated 警告）。
+# 26.1.2 只读 logoFile，26.2+ 只读 iconFile；一个包要覆盖两个版本就得都写。
+logoFile="icon.png"
 iconFile="icon.png"
 displayURL="https://www.curseforge.com/minecraft/mc-mods/practical-enchantments"
 issueTrackerURL="https://github.com/Huziyang520/Practical-Enchantments/issues"

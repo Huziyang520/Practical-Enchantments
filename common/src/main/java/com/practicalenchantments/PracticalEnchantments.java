@@ -31,7 +31,6 @@ import com.practicalenchantments.enchantment.weapon.BeheadingEnchantment;
 import com.practicalenchantments.enchantment.weapon.ExecuteEnchantment;
 import com.practicalenchantments.enchantment.weapon.FrenzyEnchantment;
 import com.practicalenchantments.enchantment.weapon.HeavyBlowEnchantment;
-import com.practicalenchantments.enchantment.weapon.InvisibleAirEnchantment;
 import com.practicalenchantments.enchantment.weapon.IncinerateEnchantment;
 import com.practicalenchantments.enchantment.weapon.LifeStealEnchantment;
 import com.practicalenchantments.enchantment.weapon.PenetrationEnchantment;
@@ -248,7 +247,6 @@ public final class PracticalEnchantments {
 		SoulSiphonEnchantment.registerCallbacks(registrar, registries);
 		PenetrationEnchantment.registerCallbacks(registrar, registries);
 		ObsidianWalkerEnchantment.registerCallbacks(registrar, registries);
-		InvisibleAirEnchantment.registerCallbacks(registrar, registries);
 		HeavyBlowEnchantment.registerCallbacks(registries);
 		DemonicPactEnchantment.register(registries);
 		UndyingDropEnchantment.register(registries);

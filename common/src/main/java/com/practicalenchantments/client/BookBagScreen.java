@@ -118,7 +118,7 @@ public class BookBagScreen extends AbstractContainerScreen<BookBagMenu> {
 		super.extractLabels(graphics, mouseX, mouseY);
 		Component count = Component.translatable("gui." + PracticalEnchantments.MOD_ID + ".bag.count",
 				this.usedSlots(), this.menu.capacity());
-		graphics.text(this.font, count, this.imageWidth - 8 - this.font.width(count), 6, TEXT_COLOR);
+		graphics.text(this.font, count, this.imageWidth - 8 - this.font.width(count), 6, TEXT_COLOR, false);
 	}
 
 	private int usedSlots() {
@@ -128,10 +128,9 @@ public class BookBagScreen extends AbstractContainerScreen<BookBagMenu> {
 
 	@Override
 	public boolean keyPressed(KeyEvent event) {
-		// 搜索框有焦点时，E 是输入字符而不是关界面的快捷键。
-		if (this.search != null && this.search.isFocused() && this.minecraft != null
-				&& this.minecraft.options.keyInventory.matches(event)) {
-			return false;
+		if (this.search != null && this.search.isFocused()) {
+			super.keyPressed(event);
+			return true;
 		}
 		return super.keyPressed(event);
 	}

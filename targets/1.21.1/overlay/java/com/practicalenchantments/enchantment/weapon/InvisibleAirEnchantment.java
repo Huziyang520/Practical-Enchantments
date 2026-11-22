@@ -2,7 +2,6 @@
 
 package com.practicalenchantments.enchantment.weapon;
 
-import com.huziyang520.merlinlib.event.EnchantmentEventRegistrar;
 import com.practicalenchantments.PracticalEnchantments;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
@@ -13,13 +12,8 @@ import net.minecraft.world.item.enchantment.Enchantment;
 
 public final class InvisibleAirEnchantment {
 	public static final String ID = PracticalEnchantments.MOD_ID + ":invisible_air";
-	private static Holder<Enchantment> holder;
 
 	private InvisibleAirEnchantment() {
-	}
-
-	public static void registerCallbacks(EnchantmentEventRegistrar registrar, HolderLookup.Provider registries) {
-		holder = PracticalEnchantments.resolveEnchantment(registries, ID);
 	}
 
 	public static boolean hasInMainHand(Player player) {
@@ -33,10 +27,6 @@ public final class InvisibleAirEnchantment {
 	}
 
 	public static Holder<Enchantment> holder(HolderLookup.Provider registries) {
-		Holder<Enchantment> cached = holder;
-		if (cached != null) {
-			return cached;
-		}
 		return registries.lookupOrThrow(net.minecraft.core.registries.Registries.ENCHANTMENT)
 				.get(ResourceKey.create(net.minecraft.core.registries.Registries.ENCHANTMENT,
 						ResourceLocation.parse(ID)))

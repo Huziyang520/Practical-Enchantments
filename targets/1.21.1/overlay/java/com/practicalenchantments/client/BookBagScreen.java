@@ -133,10 +133,9 @@ public class BookBagScreen extends AbstractContainerScreen<BookBagMenu> {
 
 	@Override
 	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-		// 搜索框有焦点时，E 是输入字符而不是关界面的快捷键。
-		if (this.search != null && this.search.isFocused() && this.minecraft != null
-				&& this.minecraft.options.keyInventory.matches(keyCode, scanCode)) {
-			return false;
+		if (this.search != null && this.search.isFocused()) {
+			super.keyPressed(keyCode, scanCode, modifiers);
+			return true;
 		}
 		return super.keyPressed(keyCode, scanCode, modifiers);
 	}

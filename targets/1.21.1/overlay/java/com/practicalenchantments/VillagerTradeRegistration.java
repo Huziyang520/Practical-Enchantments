@@ -41,12 +41,12 @@ public final class VillagerTradeRegistration {
 		if (profession == VillagerProfession.ARMORER) {
 			Holder<Enchantment> bright = resolve(enchantments, BrightEnchantment.ID);
 			if (bright != null) {
-				addTrade(event, ARMORER_LEVEL, new BrightHelmetTrade(bright));
+				addTrade(event, ARMORER_LEVEL, new BrightHelmetTrade(BrightEnchantment.ID));
 			}
 		} else if (profession == VillagerProfession.LIBRARIAN) {
 			Holder<Enchantment> disguise = resolve(enchantments, "practical_enchantments:disguise");
 			if (disguise != null) {
-				addTrade(event, LIBRARIAN_LEVEL, new DisguiseBookTrade(disguise));
+				addTrade(event, LIBRARIAN_LEVEL, new DisguiseBookTrade("practical_enchantments:disguise"));
 			}
 		}
 	}
@@ -68,32 +68,41 @@ public final class VillagerTradeRegistration {
 	}
 
 	private static final class BrightHelmetTrade implements VillagerTrades.ItemListing {
-		private final Holder<Enchantment> enchantment;
+		private final String enchantmentId;
 
-		private BrightHelmetTrade(Holder<Enchantment> enchantment) {
-			this.enchantment = enchantment;
+		private BrightHelmetTrade(String enchantmentId) {
+			this.enchantmentId = enchantmentId;
 		}
 
 		@Override
 		public MerchantOffer getOffer(Entity trader, RandomSource random) {
 			ItemStack helmet = new ItemStack(Items.DIAMOND_HELMET);
-			helmet.enchant(this.enchantment, 1);
+			Holder<Enchantment> enchantment = resolve(
+					trader.level().registryAccess().lookupOrThrow(Registries.ENCHANTMENT), this.enchantmentId);
+			if (enchantment != null) {
+				helmet.enchant(enchantment, 1);
+			}
 			ItemCost cost = new ItemCost(Items.EMERALD, 18);
 			return new MerchantOffer(cost, helmet, 3, 10, 0.2F);
 		}
 	}
 
 	private static final class DisguiseBookTrade implements VillagerTrades.ItemListing {
-		private final Holder<Enchantment> enchantment;
+		private final String enchantmentId;
 
-		private DisguiseBookTrade(Holder<Enchantment> enchantment) {
-			this.enchantment = enchantment;
+		private DisguiseBookTrade(String enchantmentId) {
+			this.enchantmentId = enchantmentId;
 		}
 
 		@Override
 		public MerchantOffer getOffer(Entity trader, RandomSource random) {
+			Holder<Enchantment> enchantment = resolve(
+					trader.level().registryAccess().lookupOrThrow(Registries.ENCHANTMENT), this.enchantmentId);
+			if (enchantment == null) {
+				return null;
+			}
 			ItemStack book = EnchantedBookItem.createForEnchantment(
-				new EnchantmentInstance(this.enchantment, 1));
+				new EnchantmentInstance(enchantment, 1));
 
 			ItemCost cost = new ItemCost(Items.EMERALD, 24);
 			return new MerchantOffer(cost, book, 3, 15, 0.2F);

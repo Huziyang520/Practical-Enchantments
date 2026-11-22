@@ -115,14 +115,6 @@ public class EvolutionTableBlock extends Block implements EntityBlock {
 	}
 
 	@Override
-	protected void affectNeighborsAfterRemoval(BlockState state, net.minecraft.server.level.ServerLevel level,
-			BlockPos pos, boolean movedByPiston) {
-		if (level.getBlockEntity(pos) instanceof EvolutionTableBlockEntity table) {
-			table.dropContents(level, pos);
-		}
-	}
-
-	@Override
 	public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
 		if (!state.getValue(WORKING)) {
 			return;

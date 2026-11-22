@@ -209,6 +209,14 @@ public class EvolutionTableBlockEntity extends BlockEntity implements ItemOwner,
 		return taken;
 	}
 
+	@Override
+	public void preRemoveSideEffects(BlockPos pos, BlockState state) {
+		if (this.level != null) {
+			this.dropContents(this.level, pos);
+		}
+		super.preRemoveSideEffects(pos, state);
+	}
+
 	public void dropContents(Level level, BlockPos pos) {
 		for (ItemStack stack : this.items) {
 			if (!stack.isEmpty()) {
