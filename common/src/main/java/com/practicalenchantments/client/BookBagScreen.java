@@ -129,10 +129,25 @@ public class BookBagScreen extends AbstractContainerScreen<BookBagMenu> {
 	@Override
 	public boolean keyPressed(KeyEvent event) {
 		if (this.search != null && this.search.isFocused()) {
-			super.keyPressed(event);
+			if (event.isEscape()) {
+				return super.keyPressed(event);
+			}
+			if (this.getFocused() != null) {
+				this.getFocused().keyPressed(event);
+			}
 			return true;
 		}
 		return super.keyPressed(event);
+	}
+
+	@Override
+	public boolean mouseClicked(net.minecraft.client.input.MouseButtonEvent event, boolean doubleClick) {
+		boolean handled = super.mouseClicked(event, doubleClick);
+		if (this.search != null && this.search.isFocused()
+				&& !this.search.isMouseOver(event.x(), event.y())) {
+			this.setFocused(null);
+		}
+		return handled;
 	}
 
 	@Override
