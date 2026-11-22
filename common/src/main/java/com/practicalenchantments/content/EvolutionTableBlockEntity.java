@@ -218,7 +218,8 @@ public class EvolutionTableBlockEntity extends BlockEntity implements ItemOwner,
 	}
 
 	public void dropContents(Level level, BlockPos pos) {
-		for (ItemStack stack : this.items) {
+		for (int slot = 0; slot < this.getContainerSize(); slot++) {
+			ItemStack stack = this.getItem(slot);
 			if (!stack.isEmpty()) {
 				ItemEntity entity = new ItemEntity(level, pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, stack);
 				level.addFreshEntity(entity);
@@ -411,6 +412,7 @@ public class EvolutionTableBlockEntity extends BlockEntity implements ItemOwner,
 	@Override
 	protected void saveAdditional(ValueOutput output) {
 		super.saveAdditional(output);
+		this.items.set(0, this.lapisView.getItem(0));
 		ContainerHelper.saveAllItems(output, this.items, true);
 		output.putInt("work_ticks", this.workTicks);
 		output.putInt("work_total", this.workTotal);

@@ -248,12 +248,11 @@ public class BookBagMenu extends AbstractContainerMenu {
 			return ItemStack.EMPTY;
 		}
 		ItemStack stack = slot.getItem();
-		ItemStack moved = stack.copy();
-		if (index < this.bagSlots) {
-			if (!this.moveItemStackTo(stack, this.bagSlots, this.slots.size(), true)) {
+		if (index >= this.bagSlots) {
+			if (!this.insertIntoBag(stack)) {
 				return ItemStack.EMPTY;
 			}
-		} else if (!this.insertIntoBag(stack)) {
+		} else if (!this.moveItemStackTo(stack, this.bagSlots, this.slots.size(), true)) {
 			return ItemStack.EMPTY;
 		}
 		if (stack.isEmpty()) {
@@ -261,7 +260,7 @@ public class BookBagMenu extends AbstractContainerMenu {
 		} else {
 			slot.setChanged();
 		}
-		return moved;
+		return ItemStack.EMPTY;
 	}
 
 	private boolean insertIntoBag(ItemStack stack) {
