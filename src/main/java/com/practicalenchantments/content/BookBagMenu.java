@@ -248,32 +248,60 @@ public class BookBagMenu extends AbstractContainerMenu {
 
 	@Override
 	public ItemStack quickMoveStack(Player player, int index) {
-		if (!this.query.isEmpty()) {
+		Slot slot = this.slots.get(index);
+		if (slot == null || !slot.hasItem()) {
 			return ItemStack.EMPTY;
 		}
-		ItemStack moved = ItemStack.EMPTY;
-		Slot slot = this.slots.get(index);
-		if (slot != null && slot.hasItem()) {
-			ItemStack stack = slot.getItem();
-			moved = stack.copy();
-			if (index < this.bagSlots) {
-				if (!this.moveItemStackTo(stack, this.bagSlots, this.slots.size(), true)) {
-					return ItemStack.EMPTY;
-				}
-			} else if (BookBagStorage.mayStore(stack)) {
-				if (!this.moveItemStackTo(stack, 0, this.bagSlots, false)) {
-					return ItemStack.EMPTY;
-				}
-			} else {
+		ItemStack stack = slot.getItem();
+		ItemStack moved = stack.copy();
+		if (index < this.bagSlots) {
+			if (!this.moveItemStackTo(stack, this.bagSlots, this.slots.size(), true)) {
 				return ItemStack.EMPTY;
 			}
-			if (stack.isEmpty()) {
-				slot.setByPlayer(ItemStack.EMPTY);
-			} else {
-				slot.setChanged();
-			}
+		} else if (!this.insertIntoBag(stack)) {
+			return ItemStack.EMPTY;
+		}
+		if (stack.isEmpty()) {
+			slot.setByPlayer(ItemStack.EMPTY);
+		} else {
+			slot.setChanged();
 		}
 		return moved;
+	}
+
+	private boolean insertIntoBag(ItemStack stack) {
+		if (!BookBagStorage.mayStore(stack)) {
+			return false;
+		}
+		boolean changed = false;
+		int size = this.items.size();
+		for (int index = 0; index < size && !stack.isEmpty(); index++) {
+			ItemStack existing = this.items.get(index);
+			if (existing.isEmpty() || !ItemStack.isSameItemSameTags(existing, stack)) {
+				continue;
+			}
+			int room = existing.getMaxStackSize() - existing.getCount();
+			if (room <= 0) {
+				continue;
+			}
+			int amount = Math.min(room, stack.getCount());
+			existing.grow(amount);
+			stack.shrink(amount);
+			changed = true;
+		}
+		for (int index = 0; index < size && !stack.isEmpty(); index++) {
+			if (!this.items.get(index).isEmpty()) {
+				continue;
+			}
+			this.items.set(index, stack.copy());
+			stack.setCount(0);
+			changed = true;
+		}
+		if (changed) {
+			BookBagStorage.write(this.bag, this.items);
+			this.rebuildVisible();
+		}
+		return changed;
 	}
 
 	@Override

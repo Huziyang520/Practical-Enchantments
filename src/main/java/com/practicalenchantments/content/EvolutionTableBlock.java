@@ -116,12 +116,20 @@ public class EvolutionTableBlock extends Block implements EntityBlock {
 	}
 
 	@Override
-	public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
-		if (!state.is(newState.getBlock())
-				&& level.getBlockEntity(pos) instanceof EvolutionTableBlockEntity table) {
+	public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+		if (!level.isClientSide() && level.getBlockEntity(pos) instanceof EvolutionTableBlockEntity table) {
 			table.dropContents(level, pos);
 		}
-		super.onRemove(state, level, pos, newState, movedByPiston);
+		super.playerWillDestroy(level, pos, state, player);
+	}
+
+	@Override
+	public void onBlockExploded(BlockState state, Level level, BlockPos pos,
+			net.minecraft.world.level.Explosion explosion) {
+		if (!level.isClientSide() && level.getBlockEntity(pos) instanceof EvolutionTableBlockEntity table) {
+			table.dropContents(level, pos);
+		}
+		super.onBlockExploded(state, level, pos, explosion);
 	}
 
 	@Override
