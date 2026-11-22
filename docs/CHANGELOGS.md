@@ -1,3 +1,16 @@
+### 1.9.0 (2026-11-21)
+
+- Requires MerlinLib 1.3.1 or newer.
+- Shipped for 1.20.1 (Forge), 26.1 - 26.2 (NeoForge, Fabric) and 26.3 (NeoForge, Fabric).
+- The book bag screen shows how many of its 27 slots are filled.
+- The book bag and the evolution table draw the vanilla container backdrop again: the world behind them is dimmed, and hovering an item shows its tooltip.
+- The book bag search box can be clicked and typed into.
+- Enchantment names keep their flowing colour, and mods that look enchantment names up by their text - Enchantment Descriptions among them - find them every time instead of only intermittently.
+- The evolution table spins the item it is working on, and its recipes appear in JEI and its contents in Jade.
+- The iron, gold and diamond book bags use a cross-shaped recipe, and the netherite amulet is made on a smithing table.
+- On 1.20.1 the settings screen is the NeoForge configuration screen (Neo Configuration Screen Port); Cloth Config is no longer used or required.
+- On 26.1 - 26.2 the book bag, the evolution table and the enchantment colours open and behave as they do on 26.3.
+
 ### 1.8.1 (2026-11-12)
 
 - Requires MerlinLib 1.1.0 or newer.
