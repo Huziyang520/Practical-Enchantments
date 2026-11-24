@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "practical_enchantments:arrowfall",
+    "minecraft:multishot",
+    "practical_enchantments:repeating_crossbow"
+  ]
+}

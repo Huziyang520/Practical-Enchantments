@@ -12,6 +12,9 @@ public final class KillMarks {
 	private static final int MAX_ENTRIES = 512;
 	private static final Map<UUID, Long> INCINERATED = new ConcurrentHashMap<>();
 	private static final Map<UUID, Long> DOUBLED = new ConcurrentHashMap<>();
+	private static final Map<UUID, Long> VERDICT_PENDING = new ConcurrentHashMap<>();
+	private static final Map<UUID, Long> VERDICT_CLAIMED = new ConcurrentHashMap<>();
+	private static final Map<UUID, Long> MUTUAL_FIRED = new ConcurrentHashMap<>();
 
 	private KillMarks() {
 	}
@@ -35,6 +38,43 @@ public final class KillMarks {
 
 	public static boolean consumeDoubled(LivingEntity victim) {
 		return consume(DOUBLED, victim);
+	}
+
+	public static void markVerdictPending(LivingEntity victim) {
+		mark(VERDICT_PENDING, victim);
+	}
+
+	public static boolean isVerdictPending(LivingEntity victim) {
+		return isActive(VERDICT_PENDING, victim);
+	}
+
+	public static void clearVerdictPending(LivingEntity victim) {
+		VERDICT_PENDING.remove(victim.getUUID());
+	}
+
+	public static void markVerdictClaimed(LivingEntity victim) {
+		mark(VERDICT_CLAIMED, victim);
+	}
+
+	public static boolean isVerdictClaimed(LivingEntity victim) {
+		return isActive(VERDICT_CLAIMED, victim);
+	}
+
+	public static void markMutualFired(UUID victim) {
+		if (MUTUAL_FIRED.size() > MAX_ENTRIES) {
+			MUTUAL_FIRED.clear();
+		}
+		MUTUAL_FIRED.put(victim, System.currentTimeMillis() + LIFETIME_MILLIS);
+	}
+
+	public static boolean consumeMutualFired(UUID victim) {
+		Long expiry = MUTUAL_FIRED.remove(victim);
+		return expiry != null && expiry >= System.currentTimeMillis();
+	}
+
+	private static boolean isActive(Map<UUID, Long> marks, LivingEntity victim) {
+		Long expiry = marks.get(victim.getUUID());
+		return expiry != null && expiry >= System.currentTimeMillis();
 	}
 
 	private static void mark(Map<UUID, Long> marks, LivingEntity victim) {

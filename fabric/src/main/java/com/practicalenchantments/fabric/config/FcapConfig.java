@@ -48,7 +48,7 @@ public final class FcapConfig {
 	private static ModConfigSpec build() {
 		ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
 		for (String section : ConfigSchema.sections()) {
-			builder.push(section);
+			builder.translation(ConfigSchema.langKey(section)).push(section);
 			String open = null;
 			for (ConfigOption option : ConfigSchema.in(section)) {
 				String parent = option.parent();
@@ -57,7 +57,7 @@ public final class FcapConfig {
 						builder.pop();
 					}
 					if (!parent.isEmpty()) {
-						builder.push(parent);
+						builder.translation(ConfigSchema.langKey(section + "." + parent)).push(parent);
 					}
 					open = parent;
 				}

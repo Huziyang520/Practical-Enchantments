@@ -2,6 +2,10 @@
   "replace": false,
   "values": [
     "practical_enchantments:demonic_pact",
-    "practical_enchantments:undying_drop"
+    "practical_enchantments:mutual_destruction",
+    {
+      "id": "co_create_enchantments:undying_drop",
+      "required": false
+    }
   ]
 }

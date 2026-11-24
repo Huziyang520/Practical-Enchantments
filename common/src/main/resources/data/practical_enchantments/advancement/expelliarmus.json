@@ -1,0 +1,32 @@
+{
+  "parent": "practical_enchantments:root",
+  "display": {
+    "icon": {
+      "id": "minecraft:iron_sword"
+    },
+    "title": {
+      "translate": "advancements.practical_enchantments.expelliarmus.title"
+    },
+    "description": {
+      "translate": "advancements.practical_enchantments.expelliarmus.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "code": {
+      "trigger": "merlinlib:custom",
+      "conditions": {
+        "condition": "practical_enchantments:disarm_drop"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "code"
+    ]
+  ],
+  "sends_telemetry_event": false
+}

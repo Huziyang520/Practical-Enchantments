@@ -28,7 +28,16 @@
     "HideSkinFreezeMixin",
     "EnchantmentVanillaTweakMixin",
     "BookBagSmithingKeepMixin",
-    "BookBagCraftKeepMixin"
+    "BookBagCraftKeepMixin",
+    "MixinItemEntityPickup",
+    "MixinVillagerReputation",
+    "MixinVillagerHurtBy",
+    "MixinServerLevelLightning",
+    "MixinLivingEntityDeath",
+    "MixinArrowfallProjectileHit",
+    "MixinScavengerDrop",
+    "MixinScavengerAddEntity",
+    "MixinArrowAdvancement"
   ],
   "injectors": {
     "defaultRequire": 1

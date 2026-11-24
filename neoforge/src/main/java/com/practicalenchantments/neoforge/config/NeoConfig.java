@@ -25,7 +25,7 @@ public final class NeoConfig {
 	static {
 		ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
 		for (String section : ConfigSchema.sections()) {
-			builder.push(section);
+			builder.translation(langKey(section)).push(section);
 			String open = null;
 			for (ConfigOption option : ConfigSchema.in(section)) {
 				String parent = option.parent();
@@ -34,7 +34,7 @@ public final class NeoConfig {
 						builder.pop();
 					}
 					if (!parent.isEmpty()) {
-						builder.push(parent);
+						builder.translation(langKey(section + "." + parent)).push(parent);
 					}
 					open = parent;
 				}

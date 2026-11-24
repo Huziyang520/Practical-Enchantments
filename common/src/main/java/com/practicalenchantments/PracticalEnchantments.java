@@ -6,42 +6,57 @@ import com.huziyang520.merlinlib.api.LootInjectionBuilder;
 import com.huziyang520.merlinlib.api.LootTables;
 import com.huziyang520.merlinlib.api.MerlinApi;
 import com.huziyang520.merlinlib.event.EnchantmentEventRegistrar;
+import com.practicalenchantments.advancement.PeAdvancementTriggers;
 import com.practicalenchantments.config.PracticalConfig;
+import com.practicalenchantments.PeServerRuntime;
 import com.practicalenchantments.content.AmuletScanSource;
 import com.practicalenchantments.content.AmuletLoot;
 import com.practicalenchantments.content.BleedContent;
 import com.practicalenchantments.content.BookBagLoot;
+import com.practicalenchantments.content.DizzinessContent;
+import com.practicalenchantments.content.PanicContent;
 import com.practicalenchantments.content.PeContent;
 import com.practicalenchantments.content.PeEvolution;
 import com.practicalenchantments.content.RotContent;
 import com.practicalenchantments.content.WrathContent;
 import com.practicalenchantments.enchantment.armor.AerialHasteEnchantment;
 import com.practicalenchantments.enchantment.armor.BrightEnchantment;
-import com.practicalenchantments.enchantment.armor.ChineseEnchantment;
 import com.practicalenchantments.enchantment.armor.DemonicPactEnchantment;
-import com.practicalenchantments.enchantment.armor.GentleDescentEnchantment;
+import com.practicalenchantments.enchantment.armor.FlightEnchantment;
+import com.practicalenchantments.enchantment.armor.IntimidationEnchantment;
+import com.practicalenchantments.enchantment.armor.LightningRodEnchantment;
+import com.practicalenchantments.enchantment.armor.MutualDestructionEnchantment;
 import com.practicalenchantments.enchantment.armor.ObsidianWalkerEnchantment;
 import com.practicalenchantments.enchantment.armor.ObsidianWalkerLoot;
-import com.practicalenchantments.enchantment.armor.UndyingDropEnchantment;
+import com.practicalenchantments.enchantment.armor.WildfireEnchantment;
 import com.practicalenchantments.enchantment.linked.LinkedEnchantments;
 import com.practicalenchantments.enchantment.support.AiRules;
 import com.practicalenchantments.enchantment.tool.DestructionEnchantment;
 import com.practicalenchantments.enchantment.tool.LumberjackEnchantment;
+import com.practicalenchantments.enchantment.weapon.ArrowfallEnchantment;
 import com.practicalenchantments.enchantment.weapon.BeheadingEnchantment;
+import com.practicalenchantments.enchantment.weapon.BenevolentStrikeEnchantment;
+import com.practicalenchantments.enchantment.weapon.DisarmEnchantment;
 import com.practicalenchantments.enchantment.weapon.ExecuteEnchantment;
 import com.practicalenchantments.enchantment.weapon.FrenzyEnchantment;
 import com.practicalenchantments.enchantment.weapon.HeavyBlowEnchantment;
 import com.practicalenchantments.enchantment.weapon.IncinerateEnchantment;
 import com.practicalenchantments.enchantment.weapon.LifeStealEnchantment;
 import com.practicalenchantments.enchantment.weapon.PenetrationEnchantment;
+import com.practicalenchantments.enchantment.weapon.PointBlankEnchantment;
 import com.practicalenchantments.enchantment.weapon.PowerfulEnchantment;
 import com.practicalenchantments.enchantment.weapon.ProvocationEnchantment;
+import com.practicalenchantments.enchantment.weapon.RighteousCleaveEnchantment;
+import com.practicalenchantments.enchantment.weapon.ScavengerEnchantment;
 import com.practicalenchantments.enchantment.weapon.SmashingEnchantment;
+import com.practicalenchantments.enchantment.weapon.SniperEnchantment;
 import com.practicalenchantments.enchantment.weapon.SoulSiphonEnchantment;
 import com.practicalenchantments.enchantment.weapon.TraumaEnchantment;
 import com.practicalenchantments.enchantment.weapon.VenomEnchantment;
+import com.practicalenchantments.enchantment.weapon.VerdictEnchantment;
 import com.practicalenchantments.enchantment.weapon.WitherAspectEnchantment;
 import com.practicalenchantments.enchantment.weapon.ZeusPoseidonEnchantment;
+import com.practicalenchantments.migration.PeLegacyMigration;
 import com.practicalenchantments.notice.MerlinLibNotice;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
@@ -73,6 +88,8 @@ public final class PracticalEnchantments {
 		PeContent.register();
 		BleedContent.register();
 		RotContent.register();
+		PanicContent.register();
+		DizzinessContent.register();
 		AmuletScanSource.register();
 		LinkedEnchantments.registerContent();
 		WrathContent.register();
@@ -86,7 +103,11 @@ public final class PracticalEnchantments {
 			MerlinLibNotice.register();
 			registerEventCallbacks(server.registryAccess());
 			AiRules.register(server.registryAccess());
+			PeServerRuntime.install();
+			PeLegacyMigration.onServerStarted(server);
 		});
+		MerlinApi.lifecycle().onPlayerJoin(PeLegacyMigration::onPlayerJoin);
+		MerlinApi.lifecycle().onPlayerJoin(PeAdvancementTriggers::onPlayerJoin);
 	}
 
 	public static void registerLootInjections() {
@@ -221,7 +242,62 @@ public final class PracticalEnchantments {
 		registerLoot(QUALITY_TREASURE, 0.12F, LootTables.BASTION_TREASURE);
 		registerLoot(QUALITY_TREASURE, 0.12F, LootTables.PILLAGER_OUTPOST);
 		registerLoot(QUALITY_TREASURE, 0.15F, "minecraft:chests/abandoned_camp_common_chest");
+		registerTwoPointZeroLoot();
 		ObsidianWalkerLoot.register();
+	}
+
+	private static void registerTwoPointZeroLoot() {
+		registerTargeted("eye_of_judgment", LootTables.END_CITY_TREASURE, 0.04F, 1, QUALITY_TREASURE);
+		registerTargeted("eye_of_judgment", LootTables.ANCIENT_CITY, 0.05F, 1, QUALITY_TREASURE);
+		registerTargeted("eye_of_judgment", LootTables.BASTION_TREASURE, 0.04F, 1, QUALITY_TREASURE);
+		registerTargeted("eye_of_judgment", LootTables.BURIED_TREASURE, 0.03F, 1, QUALITY_TREASURE);
+
+		registerTargeted("verdict", LootTables.END_CITY_TREASURE, 0.05F, 1, QUALITY_TREASURE);
+		registerTargeted("verdict", LootTables.ANCIENT_CITY, 0.06F, 1, QUALITY_TREASURE);
+		registerTargeted("verdict", LootTables.WOODLAND_MANSION, 0.06F, 1, QUALITY_TREASURE);
+		registerTargeted("verdict", LootTables.PILLAGER_OUTPOST, 0.05F, 1, QUALITY_TREASURE);
+		registerTargeted("verdict", LootTables.BASTION_TREASURE, 0.05F, 1, QUALITY_TREASURE);
+		registerTargeted("verdict", LootTables.BURIED_TREASURE, 0.04F, 1, QUALITY_TREASURE);
+
+		registerTargeted("arrowfall", LootTables.END_CITY_TREASURE, 0.04F, 2, QUALITY_TREASURE);
+		registerTargeted("arrowfall", LootTables.ANCIENT_CITY, 0.04F, 2, QUALITY_TREASURE);
+		registerTargeted("arrowfall", LootTables.WOODLAND_MANSION, 0.03F, 2, QUALITY_TREASURE);
+
+		registerTargeted("mutual_destruction", LootTables.SIMPLE_DUNGEON, 0.08F, 1, QUALITY_COMMON);
+		registerTargeted("mutual_destruction", LootTables.ABANDONED_MINESHAFT, 0.06F, 1, QUALITY_COMMON);
+		registerTargeted("mutual_destruction", LootTables.VILLAGE_WEAPONSMITH, 0.06F, 1, QUALITY_COMMON);
+
+		registerTargeted("wildfire", LootTables.NETHER_BRIDGE, 0.05F, 1, QUALITY_COMMON);
+		registerTargeted("wildfire", LootTables.BASTION_TREASURE, 0.04F, 1, QUALITY_COMMON);
+
+		registerTargeted("benevolent_strike", LootTables.VILLAGE_WEAPONSMITH, 0.06F, 1, QUALITY_COMMON);
+		registerTargeted("benevolent_strike", LootTables.PILLAGER_OUTPOST, 0.05F, 1, QUALITY_COMMON);
+		registerTargeted("righteous_cleave", LootTables.VILLAGE_WEAPONSMITH, 0.06F, 1, QUALITY_COMMON);
+		registerTargeted("righteous_cleave", LootTables.PILLAGER_OUTPOST, 0.05F, 1, QUALITY_COMMON);
+
+		registerTargeted("intimidation", LootTables.WOODLAND_MANSION, 0.06F, 1, QUALITY_TREASURE);
+		registerTargeted("intimidation", LootTables.PILLAGER_OUTPOST, 0.05F, 1, QUALITY_TREASURE);
+		registerTargeted("intimidation", LootTables.ANCIENT_CITY, 0.05F, 1, QUALITY_TREASURE);
+		registerTargeted("intimidation", LootTables.END_CITY_TREASURE, 0.05F, 1, QUALITY_TREASURE);
+
+		registerTargeted("lightning_rod", LootTables.END_CITY_TREASURE, 0.05F, 1, QUALITY_TREASURE);
+
+		registerTargeted("scavenger", LootTables.PILLAGER_OUTPOST, 0.04F, 4, QUALITY_COMMON);
+		registerTargeted("scavenger", LootTables.VILLAGE_FLETCHER, 0.04F, 4, QUALITY_COMMON);
+
+		registerTargeted("disarm", LootTables.ANCIENT_CITY, 0.06F, 1, QUALITY_TREASURE);
+		registerTargeted("disarm", LootTables.END_CITY_TREASURE, 0.05F, 1, QUALITY_TREASURE);
+		registerTargeted("disarm", LootTables.BASTION_TREASURE, 0.05F, 1, QUALITY_TREASURE);
+	}
+
+	private static void registerTargeted(String enchantment, String lootTable, float chance, int weight, int quality) {
+		MerlinApi.loot().register(LootInjectionBuilder.create()
+				.toTables(lootTable)
+				.asBook()
+				.withEnchantments(PracticalEnchantments.MOD_ID + ":" + enchantment)
+				.chance(chance)
+				.weight(weight)
+				.quality(quality));
 	}
 
 	public static void registerEventCallbacks(HolderLookup.Provider registries) {
@@ -230,7 +306,7 @@ public final class PracticalEnchantments {
 		}
 		callbacksRegistered = true;
 		EnchantmentEventRegistrar registrar = EnchantmentEventRegistrar.INSTANCE;
-		ChineseEnchantment.registerCallbacks(registrar, registries);
+		FlightEnchantment.registerCallbacks(registrar, registries);
 		LumberjackEnchantment.registerCallbacks(registrar, registries);
 		PowerfulEnchantment.registerCallbacks(registrar, registries);
 		BrightEnchantment.registerCallbacks(registrar, registries);
@@ -242,16 +318,26 @@ public final class PracticalEnchantments {
 		TraumaEnchantment.registerCallbacks(registrar, registries);
 		WitherAspectEnchantment.registerCallbacks(registrar, registries);
 		FrenzyEnchantment.registerCallbacks(registrar, registries);
-		GentleDescentEnchantment.registerCallbacks(registrar, registries);
 		ExecuteEnchantment.registerCallbacks(registrar, registries);
 		SoulSiphonEnchantment.registerCallbacks(registrar, registries);
 		PenetrationEnchantment.registerCallbacks(registrar, registries);
 		ObsidianWalkerEnchantment.registerCallbacks(registrar, registries);
 		HeavyBlowEnchantment.registerCallbacks(registries);
 		DemonicPactEnchantment.register(registries);
-		UndyingDropEnchantment.register(registries);
 		LinkedEnchantments.registerCallbacks(registrar, registries);
 		ZeusPoseidonEnchantment.registerCallbacks(registrar, registries);
+		VerdictEnchantment.registerCallbacks(registrar, registries);
+		PointBlankEnchantment.registerCallbacks(registrar, registries);
+		SniperEnchantment.registerCallbacks(registrar, registries);
+		ArrowfallEnchantment.registerCallbacks(registrar, registries);
+		MutualDestructionEnchantment.registerCallbacks(registrar, registries);
+		WildfireEnchantment.registerCallbacks(registrar, registries);
+		BenevolentStrikeEnchantment.registerCallbacks(registrar, registries);
+		RighteousCleaveEnchantment.registerCallbacks(registrar, registries);
+		IntimidationEnchantment.registerCallbacks(registrar, registries);
+		LightningRodEnchantment.registerCallbacks(registrar, registries);
+		ScavengerEnchantment.registerCallbacks(registrar, registries);
+		DisarmEnchantment.registerCallbacks(registrar, registries);
 	}
 
 	private static void registerLoot(int quality, float chance, String lootTable) {

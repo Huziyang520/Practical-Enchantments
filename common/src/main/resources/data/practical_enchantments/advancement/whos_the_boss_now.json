@@ -1,0 +1,32 @@
+{
+  "parent": "practical_enchantments:root",
+  "display": {
+    "icon": {
+      "id": "minecraft:iron_block"
+    },
+    "title": {
+      "translate": "advancements.practical_enchantments.whos_the_boss_now.title"
+    },
+    "description": {
+      "translate": "advancements.practical_enchantments.whos_the_boss_now.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "code": {
+      "trigger": "merlinlib:custom",
+      "conditions": {
+        "condition": "practical_enchantments:intimidate_iron_golem"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "code"
+    ]
+  ],
+  "sends_telemetry_event": false
+}

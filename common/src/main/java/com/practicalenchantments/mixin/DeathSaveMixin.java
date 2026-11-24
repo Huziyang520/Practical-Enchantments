@@ -1,9 +1,8 @@
-// 免死类附魔：恶魔交易 / 掉落不死亡。
+// 恶魔交易：致命伤时拦截死亡。
 
 package com.practicalenchantments.mixin;
 
 import com.practicalenchantments.enchantment.armor.DemonicPactEnchantment;
-import com.practicalenchantments.enchantment.armor.UndyingDropEnchantment;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import org.spongepowered.asm.mixin.Mixin;
@@ -17,8 +16,7 @@ public abstract class DeathSaveMixin {
 	private void practicalenchantments$deathSave(DamageSource source, CallbackInfo ci) {
 		ServerPlayer player = (ServerPlayer) (Object) this;
 
-		if (DemonicPactEnchantment.trySave(player, source)
-			|| UndyingDropEnchantment.trySave(player, source)) {
+		if (DemonicPactEnchantment.trySave(player, source)) {
 			ci.cancel();
 		}
 	}

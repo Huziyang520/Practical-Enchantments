@@ -3,11 +3,12 @@
 package com.practicalenchantments.enchantment.weapon;
 
 import com.practicalenchantments.config.Tunables;
-import com.huziyang520.merlinlib.api.MerlinApi;
 import com.huziyang520.merlinlib.event.BuiltInEvents;
 import com.huziyang520.merlinlib.event.EnchantmentContext;
 import com.huziyang520.merlinlib.event.EnchantmentEventRegistrar;
 import com.practicalenchantments.PracticalEnchantments;
+import com.practicalenchantments.enchantment.support.HeadDrops;
+import com.practicalenchantments.enchantment.support.KillMarks;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.server.level.ServerPlayer;
@@ -18,7 +19,6 @@ import net.minecraft.world.entity.monster.skeleton.Skeleton;
 import net.minecraft.world.entity.monster.skeleton.WitherSkeleton;
 import net.minecraft.world.entity.monster.zombie.Zombie;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 
@@ -38,14 +38,17 @@ public final class BeheadingEnchantment {
 			return;
 		}
 		LivingEntity victim = event.victim();
-		Item head = headFor(victim);
+		if (KillMarks.isVerdictClaimed(victim) || KillMarks.isVerdictPending(victim)) {
+			return;
+		}
+		Item head = HeadDrops.headFor(victim);
 		if (head == null) {
 			return;
 		}
 		float base = victim instanceof WitherSkeleton ? (float) Tunables.beheadingWitherSkeletonBase() : 0.0F;
 		float chance = base + (float) Tunables.beheadingChancePerLevel() * ctx.level();
 		if (event.killer().getRandom().nextFloat() < chance) {
-			MerlinApi.drops().dropAtDeath(event.level(), victim.position(), new ItemStack(head), victim);
+			HeadDrops.drop(event.level(), victim, (ServerPlayer) event.killer());
 		}
 	}
 

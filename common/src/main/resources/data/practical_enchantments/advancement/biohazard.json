@@ -1,0 +1,32 @@
+{
+  "parent": "practical_enchantments:root",
+  "display": {
+    "icon": {
+      "id": "minecraft:villager_spawn_egg"
+    },
+    "title": {
+      "translate": "advancements.practical_enchantments.biohazard.title"
+    },
+    "description": {
+      "translate": "advancements.practical_enchantments.biohazard.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": true
+  },
+  "criteria": {
+    "code": {
+      "trigger": "merlinlib:custom",
+      "conditions": {
+        "condition": "practical_enchantments:mutual_destruction_villager"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "code"
+    ]
+  ],
+  "sends_telemetry_event": false
+}

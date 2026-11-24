@@ -2,9 +2,11 @@
 
 package com.practicalenchantments.fabric.client;
 
+import com.practicalenchantments.client.PeClientBootstrap;
 import com.practicalenchantments.network.BagSearchPayload;
 import com.practicalenchantments.network.BagSearchSender;
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 
 public final class PracticalEnchantmentsFabricClient implements ClientModInitializer {
@@ -13,5 +15,6 @@ public final class PracticalEnchantmentsFabricClient implements ClientModInitial
 		BagSearchSender.install(text -> ClientPlayNetworking.send(new BagSearchPayload(text)));
 		PeFabricScreens.install();
 		FcapConfigClient.install();
+		ClientTickEvents.END_CLIENT_TICK.register(client -> PeClientBootstrap.tick());
 	}
 }

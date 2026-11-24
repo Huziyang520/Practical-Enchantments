@@ -50,10 +50,10 @@ public final class AmuletSupport {
 		return Math.max(curiosAmuletLevel(entity, enchantment), trinketsAmuletLevel(entity, enchantment));
 	}
 
-	public static int wornLevel(Player player, Holder<Enchantment> enchantment) {
-		int best = amuletLevel(player, enchantment);
+	public static int wornLevel(LivingEntity entity, Holder<Enchantment> enchantment) {
+		int best = amuletLevel(entity, enchantment);
 		for (EquipmentSlot slot : WORN_SLOTS) {
-			best = Math.max(best, player.getItemBySlot(slot).getEnchantments().getLevel(enchantment));
+			best = Math.max(best, entity.getItemBySlot(slot).getEnchantments().getLevel(enchantment));
 		}
 		return best;
 	}

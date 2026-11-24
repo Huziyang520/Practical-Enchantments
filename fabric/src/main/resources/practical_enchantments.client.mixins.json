@@ -7,7 +7,8 @@
     "MenuScreensMixin",
     "InvisibleAirFirstPersonMixin",
     "InvisibleAirItemInHandMixin",
-    "InvisibleAirArmPoseMixin"
+    "InvisibleAirArmPoseMixin",
+    "DizzinessInputMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -1,0 +1,26 @@
+{
+  "description": {
+    "translate": "enchantment.practical_enchantments.arrowfall",
+    "fallback": "落矢"
+  },
+  "supported_items": [
+    "minecraft:bow",
+    "minecraft:crossbow"
+  ],
+  "weight": 2,
+  "max_level": 5,
+  "min_cost": {
+    "base": 15,
+    "per_level_above_first": 10
+  },
+  "max_cost": {
+    "base": 50,
+    "per_level_above_first": 15
+  },
+  "anvil_cost": 4,
+  "slots": [
+    "mainhand"
+  ],
+  "effects": {},
+  "exclusive_set": "#practical_enchantments:exclusive_set/arrow_area"
+}

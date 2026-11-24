@@ -1,0 +1,22 @@
+{
+  "description": {
+    "translate": "enchantment.practical_enchantments.eye_of_judgment",
+    "fallback": "审判之眼"
+  },
+  "supported_items": "#practical_enchantments:enchantable/head_armor",
+  "weight": 1,
+  "max_level": 5,
+  "min_cost": {
+    "base": 0,
+    "per_level_above_first": 0
+  },
+  "max_cost": {
+    "base": 0,
+    "per_level_above_first": 0
+  },
+  "anvil_cost": 4,
+  "slots": [
+    "head"
+  ],
+  "effects": {}
+}

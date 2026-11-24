@@ -1,0 +1,23 @@
+{
+  "description": {
+    "translate": "enchantment.practical_enchantments.wildfire",
+    "fallback": "燎原"
+  },
+  "supported_items": "#minecraft:enchantable/foot_armor",
+  "weight": 1,
+  "max_level": 1,
+  "min_cost": {
+    "base": 0,
+    "per_level_above_first": 0
+  },
+  "max_cost": {
+    "base": 0,
+    "per_level_above_first": 0
+  },
+  "anvil_cost": 2,
+  "slots": [
+    "feet"
+  ],
+  "effects": {},
+  "exclusive_set": "#minecraft:exclusive_set/boots"
+}

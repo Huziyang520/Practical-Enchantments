@@ -1,0 +1,32 @@
+{
+  "parent": "practical_enchantments:root",
+  "display": {
+    "icon": {
+      "id": "minecraft:spectral_arrow"
+    },
+    "title": {
+      "translate": "advancements.practical_enchantments.now_thats_smite.title"
+    },
+    "description": {
+      "translate": "advancements.practical_enchantments.now_thats_smite.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "code": {
+      "trigger": "merlinlib:custom",
+      "conditions": {
+        "condition": "practical_enchantments:healing_arrow_undead"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "code"
+    ]
+  ],
+  "sends_telemetry_event": false
+}

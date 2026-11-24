@@ -1,0 +1,35 @@
+{
+  "parent": "practical_enchantments:root",
+  "display": {
+    "icon": {
+      "id": "minecraft:spider_eye"
+    },
+    "title": {
+      "translate": "advancements.practical_enchantments.built_different.title"
+    },
+    "description": {
+      "translate": "advancements.practical_enchantments.built_different.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": true
+  },
+  "criteria": {
+    "code": {
+      "trigger": "merlinlib:custom",
+      "conditions": {
+        "condition": "practical_enchantments:rot_100",
+        "value": {
+          "min": 100
+        }
+      }
+    }
+  },
+  "requirements": [
+    [
+      "code"
+    ]
+  ],
+  "sends_telemetry_event": false
+}

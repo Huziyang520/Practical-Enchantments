@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:brewing",
+  "input": {
+    "item": "minecraft:potion",
+    "components": {
+      "minecraft:potion_contents": {
+        "potion": "practical_enchantments:dizziness"
+      }
+    }
+  },
+  "reagent": {
+    "item": "minecraft:arrow"
+  },
+  "output": {
+    "id": "minecraft:tipped_arrow",
+    "components": {
+      "minecraft:potion_contents": {
+        "potion": "practical_enchantments:dizziness"
+      },
+      "minecraft:potion_duration_scale": 0.1333
+    },
+    "count": 8
+  }
+}

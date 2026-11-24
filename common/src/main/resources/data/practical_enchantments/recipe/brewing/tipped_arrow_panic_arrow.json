@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:brewing",
+  "input": {
+    "item": "minecraft:potion",
+    "components": {
+      "minecraft:potion_contents": {
+        "potion": "practical_enchantments:panic"
+      }
+    }
+  },
+  "reagent": {
+    "item": "minecraft:arrow"
+  },
+  "output": {
+    "id": "minecraft:tipped_arrow",
+    "components": {
+      "minecraft:potion_contents": {
+        "potion": "practical_enchantments:panic"
+      },
+      "minecraft:potion_duration_scale": 0.1111
+    },
+    "count": 8
+  }
+}

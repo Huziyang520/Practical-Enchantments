@@ -1,7 +1,7 @@
 {
   "description": {
     "translate": "enchantment.practical_enchantments.chinese",
-    "fallback": "中国人"
+    "fallback": "飞行"
   },
   "supported_items": "#practical_enchantments:enchantable/chest_armor",
   "weight": 1,
@@ -14,7 +14,7 @@
     "base": 0,
     "per_level_above_first": 0
   },
-  "anvil_cost": 0,
+  "anvil_cost": 4,
   "slots": [
     "chest"
   ],

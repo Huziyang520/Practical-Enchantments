@@ -21,16 +21,11 @@ public final class Tunables {
 	private static volatile boolean brightDurabilityOnlyAtNight;
 	private static volatile int brightNightStart;
 	private static volatile int brightNightEnd;
-	private static volatile int gentleDescentSeconds;
-	private static volatile int gentleDescentRefreshSeconds;
-	private static volatile boolean gentleDescentCancelOnSneak;
 	private static volatile int demonicPactCooldownSeconds;
 	private static volatile int demonicPactEmeraldCostBase;
 	private static volatile int demonicPactEmeraldCostStep;
 	private static volatile int demonicPactDarknessBaseSeconds;
 	private static volatile int demonicPactDarknessStep;
-	private static volatile int undyingDropDarknessBaseSeconds;
-	private static volatile int undyingDropDarknessStep;
 	private static volatile int deathSaveRegenSeconds;
 	private static volatile int deathSaveRegenAmplifier;
 	private static volatile int deathSaveAbsorptionSeconds;
@@ -39,8 +34,6 @@ public final class Tunables {
 	private static volatile int obsidianWalkerRadius;
 	private static volatile int obsidianWalkerIntervalTicks;
 	private static volatile double aerialHasteSpeedFactor;
-	private static volatile int chineseAirborneDurabilityBase;
-	private static volatile int chineseDamageStep;
 	private static volatile boolean hideSkinExcludeLeather;
 	private static volatile double amuletPenaltyIron;
 	private static volatile double amuletPenaltyGolden;
@@ -140,6 +133,63 @@ public final class Tunables {
 	private static volatile int zeusStormWindowSeconds;
 	private static volatile int zeusStormDurationSeconds;
 	private static volatile int zeusStormCooldownSeconds;
+	private static volatile int eyeOfJudgmentRadiusBase;
+	private static volatile int eyeOfJudgmentRadiusPerLevel;
+	private static volatile int eyeOfJudgmentScanIntervalTicks;
+	private static volatile int eyeOfJudgmentMaxTargets;
+	private static volatile double mutualDestructionExplosionPower;
+	private static volatile boolean mutualDestructionFire;
+	private static volatile boolean mutualDestructionBlockDestruction;
+	private static volatile boolean mutualDestructionKnockback;
+	private static volatile int wildfireIntervalTicks;
+	private static volatile int wildfireLifetimeTicks;
+	private static volatile double wildfireIgniteSeconds;
+	private static volatile boolean wildfireBurnBlocks;
+	private static volatile double wildfireMinMoveDistance;
+	private static volatile boolean intimidationPreventReputationLoss;
+	private static volatile boolean intimidationPreventGolemAnger;
+	private static volatile int lightningRodRadius;
+	private static volatile boolean lightningRodRequireSky;
+	private static volatile boolean lightningRodPriorityOverRod;
+	private static volatile int flightAirborneDurabilityBase;
+	private static volatile int flightDamageStep;
+	private static volatile double verdictChanceBasePercent;
+	private static volatile double verdictChancePerLevelPercent;
+	private static volatile int verdictTriggerHitsBase;
+	private static volatile int verdictTriggerHitsBonusAtLevel;
+	private static volatile double verdictDamage;
+	private static volatile boolean verdictHeadDrop;
+	private static volatile double pointBlankMaxDistance;
+	private static volatile double pointBlankBonusBasePercent;
+	private static volatile double pointBlankBonusPerLevelPercent;
+	private static volatile double sniperMinDistance;
+	private static volatile double sniperBonusBasePercent;
+	private static volatile double sniperBonusPerLevelPercent;
+	private static volatile double sniperBonusPer50BlocksPercent;
+	private static volatile double sniperMaxBonusPercent;
+	private static volatile int arrowfallRadius;
+	private static volatile int arrowfallBaseArrows;
+	private static volatile int arrowfallArrowsPerLevel;
+	private static volatile double arrowfallExtraChanceBasePercent;
+	private static volatile double arrowfallExtraChancePerLevelPercent;
+	private static volatile double arrowfallArrowRainChancePerLevelPercent;
+	private static volatile int arrowfallArrowRainMin;
+	private static volatile int arrowfallArrowRainMax;
+	private static volatile int arrowfallDelayMinTicks;
+	private static volatile int arrowfallDelayMaxTicks;
+	private static volatile double arrowfallDamageFactor;
+	private static volatile int benevolentMaxLayers;
+	private static volatile double benevolentDamageBonusPercent;
+	private static volatile int righteousMaxLayers;
+	private static volatile double righteousDamageBonusPercent;
+	private static volatile double scavengerRadius;
+	private static volatile int scavengerDelayTicks;
+	private static volatile int disarmPanicSecondsBase;
+	private static volatile int disarmPanicSecondsPerLevel;
+	private static volatile double disarmDropChanceBasePercent;
+	private static volatile double disarmDropChancePerLevelPercent;
+	private static volatile double disarmMainhandChancePercent;
+	private static volatile boolean disarmBossImmune;
 
 
 	static {
@@ -162,16 +212,11 @@ public final class Tunables {
 		brightDurabilityOnlyAtNight = bool(source, "armor.bright.durability_only_at_night");
 		brightNightStart = integer(source, "armor.bright.night_start");
 		brightNightEnd = integer(source, "armor.bright.night_end");
-		gentleDescentSeconds = integer(source, "armor.gentle_descent.seconds");
-		gentleDescentRefreshSeconds = integer(source, "armor.gentle_descent.refresh_seconds");
-		gentleDescentCancelOnSneak = bool(source, "armor.gentle_descent.cancel_on_sneak");
 		demonicPactCooldownSeconds = integer(source, "armor.demonic_pact.cooldown_seconds");
 		demonicPactEmeraldCostBase = integer(source, "armor.demonic_pact.emerald_cost_base");
 		demonicPactEmeraldCostStep = integer(source, "armor.demonic_pact.emerald_cost_step");
 		demonicPactDarknessBaseSeconds = integer(source, "armor.demonic_pact.darkness_base_seconds");
 		demonicPactDarknessStep = integer(source, "armor.demonic_pact.darkness_step");
-		undyingDropDarknessBaseSeconds = integer(source, "armor.undying_drop.darkness_base_seconds");
-		undyingDropDarknessStep = integer(source, "armor.undying_drop.darkness_step");
 		deathSaveRegenSeconds = integer(source, "armor.death_save.regen_seconds");
 		deathSaveRegenAmplifier = integer(source, "armor.death_save.regen_amplifier");
 		deathSaveAbsorptionSeconds = integer(source, "armor.death_save.absorption_seconds");
@@ -180,8 +225,8 @@ public final class Tunables {
 		obsidianWalkerRadius = integer(source, "armor.obsidian_walker.radius");
 		obsidianWalkerIntervalTicks = integer(source, "armor.obsidian_walker.interval_ticks");
 		aerialHasteSpeedFactor = decimal(source, "armor.aerial_haste.speed_factor");
-		chineseAirborneDurabilityBase = integer(source, "armor.chinese.airborne_durability_base");
-		chineseDamageStep = integer(source, "armor.chinese.damage_step");
+		flightAirborneDurabilityBase = integer(source, "armor.flight.airborne_durability_base");
+		flightDamageStep = integer(source, "armor.flight.damage_step");
 		hideSkinExcludeLeather = bool(source, "armor.hide_skin.exclude_leather");
 		amuletPenaltyIron = decimal(source, "armor.amulet.penalty_iron");
 		amuletPenaltyGolden = decimal(source, "armor.amulet.penalty_golden");
@@ -281,6 +326,61 @@ public final class Tunables {
 		zeusStormWindowSeconds = integer(source, "weapon.zeus_poseidon.storm_window_seconds");
 		zeusStormDurationSeconds = integer(source, "weapon.zeus_poseidon.storm_duration_seconds");
 		zeusStormCooldownSeconds = integer(source, "weapon.zeus_poseidon.storm_cooldown_seconds");
+		eyeOfJudgmentRadiusBase = integer(source, "armor.eye_of_judgment.radius_base");
+		eyeOfJudgmentRadiusPerLevel = integer(source, "armor.eye_of_judgment.radius_per_level");
+		eyeOfJudgmentScanIntervalTicks = integer(source, "armor.eye_of_judgment.scan_interval_ticks");
+		eyeOfJudgmentMaxTargets = integer(source, "armor.eye_of_judgment.max_targets");
+		mutualDestructionExplosionPower = decimal(source, "armor.mutual_destruction.explosion_power");
+		mutualDestructionFire = bool(source, "armor.mutual_destruction.fire");
+		mutualDestructionBlockDestruction = bool(source, "armor.mutual_destruction.block_destruction");
+		mutualDestructionKnockback = bool(source, "armor.mutual_destruction.knockback");
+		wildfireIntervalTicks = integer(source, "armor.wildfire.interval_ticks");
+		wildfireLifetimeTicks = integer(source, "armor.wildfire.lifetime_ticks");
+		wildfireIgniteSeconds = decimal(source, "armor.wildfire.ignite_seconds");
+		wildfireBurnBlocks = bool(source, "armor.wildfire.burn_blocks");
+		wildfireMinMoveDistance = decimal(source, "armor.wildfire.min_move_distance");
+		intimidationPreventReputationLoss = bool(source, "armor.intimidation.prevent_reputation_loss");
+		intimidationPreventGolemAnger = bool(source, "armor.intimidation.prevent_golem_anger");
+		lightningRodRadius = integer(source, "armor.lightning_rod.radius");
+		lightningRodRequireSky = bool(source, "armor.lightning_rod.require_sky");
+		lightningRodPriorityOverRod = bool(source, "armor.lightning_rod.priority_over_rod");
+		verdictChanceBasePercent = decimal(source, "weapon.verdict.chance_base_percent");
+		verdictChancePerLevelPercent = decimal(source, "weapon.verdict.chance_per_level_percent");
+		verdictTriggerHitsBase = integer(source, "weapon.verdict.trigger_hits_base");
+		verdictTriggerHitsBonusAtLevel = integer(source, "weapon.verdict.trigger_hits_bonus_at_level");
+		verdictDamage = decimal(source, "weapon.verdict.damage");
+		verdictHeadDrop = bool(source, "weapon.verdict.head_drop");
+		pointBlankMaxDistance = decimal(source, "weapon.point_blank.max_distance");
+		pointBlankBonusBasePercent = decimal(source, "weapon.point_blank.bonus_base_percent");
+		pointBlankBonusPerLevelPercent = decimal(source, "weapon.point_blank.bonus_per_level_percent");
+		sniperMinDistance = decimal(source, "weapon.sniper.min_distance");
+		sniperBonusBasePercent = decimal(source, "weapon.sniper.bonus_base_percent");
+		sniperBonusPerLevelPercent = decimal(source, "weapon.sniper.bonus_per_level_percent");
+		sniperBonusPer50BlocksPercent = decimal(source, "weapon.sniper.bonus_per_50_blocks_percent");
+		sniperMaxBonusPercent = decimal(source, "weapon.sniper.max_bonus_percent");
+		arrowfallRadius = integer(source, "weapon.arrowfall.radius");
+		arrowfallBaseArrows = integer(source, "weapon.arrowfall.base_arrows");
+		arrowfallArrowsPerLevel = integer(source, "weapon.arrowfall.arrows_per_level");
+		arrowfallExtraChanceBasePercent = decimal(source, "weapon.arrowfall.extra_chance_base_percent");
+		arrowfallExtraChancePerLevelPercent = decimal(source, "weapon.arrowfall.extra_chance_per_level_percent");
+		arrowfallArrowRainChancePerLevelPercent = decimal(source, "weapon.arrowfall.arrow_rain_chance_per_level_percent");
+		arrowfallArrowRainMin = integer(source, "weapon.arrowfall.arrow_rain_min");
+		arrowfallArrowRainMax = integer(source, "weapon.arrowfall.arrow_rain_max");
+		arrowfallDelayMinTicks = integer(source, "weapon.arrowfall.delay_min_ticks");
+		arrowfallDelayMaxTicks = integer(source, "weapon.arrowfall.delay_max_ticks");
+		arrowfallDamageFactor = decimal(source, "weapon.arrowfall.damage_factor");
+		benevolentMaxLayers = integer(source, "weapon.benevolent_strike.max_layers");
+		benevolentDamageBonusPercent = decimal(source, "weapon.benevolent_strike.damage_bonus_percent");
+		righteousMaxLayers = integer(source, "weapon.righteous_cleave.max_layers");
+		righteousDamageBonusPercent = decimal(source, "weapon.righteous_cleave.damage_bonus_percent");
+		scavengerRadius = decimal(source, "weapon.scavenger.radius");
+		scavengerDelayTicks = integer(source, "weapon.scavenger.delay_ticks");
+		disarmPanicSecondsBase = integer(source, "weapon.disarm.panic_seconds_base");
+		disarmPanicSecondsPerLevel = integer(source, "weapon.disarm.panic_seconds_per_level");
+		disarmDropChanceBasePercent = decimal(source, "weapon.disarm.drop_chance_base_percent");
+		disarmDropChancePerLevelPercent = decimal(source, "weapon.disarm.drop_chance_per_level_percent");
+		disarmMainhandChancePercent = decimal(source, "weapon.disarm.mainhand_chance_percent");
+		disarmBossImmune = bool(source, "weapon.disarm.boss_immune");
 		// 低血线必须低于中血线：配反了就把低血线压到中线以下
 		if (executeLowHpThreshold >= executeMidHpThreshold) {
 			executeLowHpThreshold = Math.max(0.0D, executeMidHpThreshold - 0.01D);
@@ -330,9 +430,9 @@ public final class Tunables {
 		return secondsToTicks(Math.max(0, demonicPactDarknessBaseSeconds - demonicPactDarknessStep * (level - 1)));
 	}
 
-	/** 掉落不死亡按等级折算的黑暗时长（tick）。 */
-	public static int undyingDropDarknessTicks(int level) {
-		return secondsToTicks(Math.max(0, undyingDropDarknessBaseSeconds - undyingDropDarknessStep * (level - 1)));
+	/** 飞行：空中受击时的额外耐久损耗。 */
+	public static int flightAirborneDurability(double damage) {
+		return flightAirborneDurabilityBase * Math.max(1, (int) (damage / Math.max(1, flightDamageStep)));
 	}
 
 	/** 连弩按等级折算的上弦时间缩减百分比，最低 0。 */
@@ -414,15 +514,6 @@ public final class Tunables {
 	public static int brightNightEnd() {
 		return brightNightEnd;
 	}
-	public static int gentleDescentSeconds() {
-		return gentleDescentSeconds;
-	}
-	public static int gentleDescentRefreshSeconds() {
-		return gentleDescentRefreshSeconds;
-	}
-	public static boolean gentleDescentCancelOnSneak() {
-		return gentleDescentCancelOnSneak;
-	}
 	public static int demonicPactCooldownSeconds() {
 		return demonicPactCooldownSeconds;
 	}
@@ -437,12 +528,6 @@ public final class Tunables {
 	}
 	public static int demonicPactDarknessStep() {
 		return demonicPactDarknessStep;
-	}
-	public static int undyingDropDarknessBaseSeconds() {
-		return undyingDropDarknessBaseSeconds;
-	}
-	public static int undyingDropDarknessStep() {
-		return undyingDropDarknessStep;
 	}
 	public static int deathSaveRegenSeconds() {
 		return deathSaveRegenSeconds;
@@ -467,12 +552,6 @@ public final class Tunables {
 	}
 	public static double aerialHasteSpeedFactor() {
 		return aerialHasteSpeedFactor;
-	}
-	public static int chineseAirborneDurabilityBase() {
-		return chineseAirborneDurabilityBase;
-	}
-	public static int chineseDamageStep() {
-		return chineseDamageStep;
 	}
 	public static boolean hideSkinExcludeLeather() {
 		return hideSkinExcludeLeather;
@@ -784,5 +863,190 @@ public final class Tunables {
 
 	public static int zeusStormCooldownSeconds() {
 		return zeusStormCooldownSeconds;
+	}
+
+	public static int eyeOfJudgmentRadius(int level) {
+		return eyeOfJudgmentRadiusBase + eyeOfJudgmentRadiusPerLevel * Math.max(0, level - 1);
+	}
+
+	public static int eyeOfJudgmentScanIntervalTicks() {
+		return eyeOfJudgmentScanIntervalTicks;
+	}
+
+	public static int eyeOfJudgmentMaxTargets() {
+		return eyeOfJudgmentMaxTargets;
+	}
+
+	public static double mutualDestructionExplosionPower() {
+		return mutualDestructionExplosionPower;
+	}
+
+	public static boolean mutualDestructionFire() {
+		return mutualDestructionFire;
+	}
+
+	public static boolean mutualDestructionBlockDestruction() {
+		return mutualDestructionBlockDestruction;
+	}
+
+	public static boolean mutualDestructionKnockback() {
+		return mutualDestructionKnockback;
+	}
+
+	public static int wildfireIntervalTicks() {
+		return wildfireIntervalTicks;
+	}
+
+	public static int wildfireLifetimeTicks() {
+		return wildfireLifetimeTicks;
+	}
+
+	public static double wildfireIgniteSeconds() {
+		return wildfireIgniteSeconds;
+	}
+
+	public static boolean wildfireBurnBlocks() {
+		return wildfireBurnBlocks;
+	}
+
+	public static double wildfireMinMoveDistance() {
+		return wildfireMinMoveDistance;
+	}
+
+	public static boolean intimidationPreventReputationLoss() {
+		return intimidationPreventReputationLoss;
+	}
+
+	public static boolean intimidationPreventGolemAnger() {
+		return intimidationPreventGolemAnger;
+	}
+
+	public static int lightningRodRadius() {
+		return lightningRodRadius;
+	}
+
+	public static boolean lightningRodRequireSky() {
+		return lightningRodRequireSky;
+	}
+
+	public static boolean lightningRodPriorityOverRod() {
+		return lightningRodPriorityOverRod;
+	}
+
+	public static double verdictChancePercent(int level) {
+		return verdictChanceBasePercent + verdictChancePerLevelPercent * Math.max(0, level - 1);
+	}
+
+	public static int verdictTriggerHits(int level) {
+		return verdictTriggerHitsBase + (level >= verdictTriggerHitsBonusAtLevel ? 1 : 0);
+	}
+
+	public static double verdictDamage() {
+		return verdictDamage;
+	}
+
+	public static boolean verdictHeadDrop() {
+		return verdictHeadDrop;
+	}
+
+	public static double pointBlankMaxDistance() {
+		return pointBlankMaxDistance;
+	}
+
+	public static double pointBlankBonusPercent(int level) {
+		return pointBlankBonusBasePercent + pointBlankBonusPerLevelPercent * Math.max(0, level - 1);
+	}
+
+	public static double sniperMinDistance() {
+		return sniperMinDistance;
+	}
+
+	public static double sniperBonusPercent(int level, double distance) {
+		double base = sniperBonusBasePercent + sniperBonusPerLevelPercent * Math.max(0, level - 1);
+		if (distance <= sniperMinDistance) {
+			return 0.0;
+		}
+		double extra = Math.floor((distance - sniperMinDistance) / 50.0) * sniperBonusPer50BlocksPercent;
+		return Math.min(sniperMaxBonusPercent, base + extra);
+	}
+
+	public static int arrowfallRadius() {
+		return arrowfallRadius;
+	}
+
+	public static int arrowfallBaseArrows() {
+		return arrowfallBaseArrows;
+	}
+
+	public static int arrowfallArrowsPerLevel() {
+		return arrowfallArrowsPerLevel;
+	}
+
+	public static double arrowfallExtraChancePercent(int level) {
+		return arrowfallExtraChanceBasePercent + arrowfallExtraChancePerLevelPercent * Math.max(0, level - 1);
+	}
+
+	public static double arrowfallArrowRainChancePercent(int level) {
+		return arrowfallArrowRainChancePerLevelPercent * Math.max(0, level);
+	}
+
+	public static int arrowfallArrowRainMin() {
+		return arrowfallArrowRainMin;
+	}
+
+	public static int arrowfallArrowRainMax() {
+		return arrowfallArrowRainMax;
+	}
+
+	public static int arrowfallDelayMinTicks() {
+		return arrowfallDelayMinTicks;
+	}
+
+	public static int arrowfallDelayMaxTicks() {
+		return arrowfallDelayMaxTicks;
+	}
+
+	public static double arrowfallDamageFactor() {
+		return arrowfallDamageFactor;
+	}
+
+	public static int benevolentMaxLayers() {
+		return benevolentMaxLayers;
+	}
+
+	public static double benevolentDamageBonusPercent() {
+		return benevolentDamageBonusPercent;
+	}
+
+	public static int righteousMaxLayers() {
+		return righteousMaxLayers;
+	}
+
+	public static double righteousDamageBonusPercent() {
+		return righteousDamageBonusPercent;
+	}
+
+	public static double scavengerRadius() {
+		return scavengerRadius;
+	}
+
+	public static int scavengerDelayTicks() {
+		return scavengerDelayTicks;
+	}
+
+	public static int disarmPanicSeconds(int level) {
+		return Math.max(0, disarmPanicSecondsBase + disarmPanicSecondsPerLevel * Math.max(0, level - 1));
+	}
+
+	public static double disarmDropChancePercent(int level) {
+		return disarmDropChanceBasePercent + disarmDropChancePerLevelPercent * Math.max(0, level - 1);
+	}
+
+	public static double disarmMainhandChancePercent() {
+		return disarmMainhandChancePercent;
+	}
+
+	public static boolean disarmBossImmune() {
+		return disarmBossImmune;
 	}
 }

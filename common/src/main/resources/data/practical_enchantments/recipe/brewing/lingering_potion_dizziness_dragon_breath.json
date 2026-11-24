@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:brewing",
+  "input": {
+    "item": "minecraft:potion",
+    "components": {
+      "minecraft:potion_contents": {
+        "potion": "practical_enchantments:dizziness"
+      }
+    }
+  },
+  "reagent": {
+    "item": "minecraft:dragon_breath"
+  },
+  "output": {
+    "id": "minecraft:lingering_potion",
+    "components": {
+      "minecraft:potion_contents": {
+        "potion": "practical_enchantments:dizziness"
+      },
+      "minecraft:potion_duration_scale": 0.2667
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:brewing",
+  "input": {
+    "item": "minecraft:potion",
+    "components": {
+      "minecraft:potion_contents": {
+        "potion": "practical_enchantments:dizziness"
+      }
+    }
+  },
+  "reagent": {
+    "item": "minecraft:warped_fungus"
+  },
+  "output": {
+    "id": "minecraft:potion",
+    "components": {
+      "minecraft:potion_contents": {
+        "potion": "practical_enchantments:dizziness"
+      }
+    }
+  }
+}

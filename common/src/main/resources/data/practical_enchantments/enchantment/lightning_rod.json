@@ -1,0 +1,25 @@
+{
+  "description": {
+    "translate": "enchantment.practical_enchantments.lightning_rod",
+    "fallback": "避雷"
+  },
+  "supported_items": "#practical_enchantments:lightning_rod_supported",
+  "weight": 1,
+  "max_level": 1,
+  "min_cost": {
+    "base": 0,
+    "per_level_above_first": 0
+  },
+  "max_cost": {
+    "base": 0,
+    "per_level_above_first": 0
+  },
+  "anvil_cost": 4,
+  "slots": [
+    "head",
+    "chest",
+    "legs",
+    "feet"
+  ],
+  "effects": {}
+}
