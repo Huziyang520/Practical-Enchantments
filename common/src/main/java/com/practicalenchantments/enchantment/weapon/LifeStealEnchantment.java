@@ -3,7 +3,7 @@
 package com.practicalenchantments.enchantment.weapon;
 
 import com.practicalenchantments.PracticalEnchantments;
-import com.practicalenchantments.enchantment.support.DeathSaveSupport;
+import com.practicalenchantments.support.EnchantmentLevels;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
@@ -20,7 +20,7 @@ public final class LifeStealEnchantment {
 		if (!(source.getEntity() instanceof ServerPlayer player) || amount <= 0.0F) {
 			return;
 		}
-		int level = DeathSaveSupport.getLevel(player.getMainHandItem(), "life_steal");
+		int level = EnchantmentLevels.of(player.getMainHandItem(), "life_steal");
 		if (level <= 0) {
 			return;
 		}

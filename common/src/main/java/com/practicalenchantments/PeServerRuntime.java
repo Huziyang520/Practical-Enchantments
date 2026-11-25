@@ -4,8 +4,8 @@ package com.practicalenchantments;
 
 import com.practicalenchantments.advancement.PeAdvancementTriggers;
 import com.practicalenchantments.enchantment.support.ArrowfallQueue;
-import com.practicalenchantments.enchantment.support.ScavengerCapture;
 import com.practicalenchantments.migration.PeLegacyMigration;
+import com.huziyang520.merlinlib.api.MerlinApi;
 import com.huziyang520.merlinlib.event.GlobalEvents;
 import java.util.HashMap;
 import java.util.Map;
@@ -39,7 +39,7 @@ public final class PeServerRuntime {
 			return;
 		}
 		ArrowfallQueue.tick(level);
-		ScavengerCapture.tick(level);
+		MerlinApi.drops().tickDeathDropMoves(level);
 		if (now % 100L == 0L) {
 			PeAdvancementTriggers.scan(level);
 		}

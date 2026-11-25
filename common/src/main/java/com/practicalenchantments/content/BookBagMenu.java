@@ -4,7 +4,6 @@ package com.practicalenchantments.content;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
@@ -16,7 +15,7 @@ import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.ContainerInput;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import com.practicalenchantments.support.PinyinSearch;
+import com.huziyang520.merlinlib.api.MerlinApi;
 import org.jspecify.annotations.Nullable;
 
 public class BookBagMenu extends AbstractContainerMenu {
@@ -157,14 +156,14 @@ public class BookBagMenu extends AbstractContainerMenu {
 	}
 
 	private static boolean matches(ItemStack stack, String needle) {
-		if (PinyinSearch.matches(stack.getHoverName().getString(), needle)) {
+		if (MerlinApi.text().pinyinMatches(stack.getHoverName().getString(), needle)) {
 			return true;
 		}
 		net.minecraft.world.item.enchantment.ItemEnchantments enchantments =
 				net.minecraft.world.item.enchantment.EnchantmentHelper.getEnchantmentsForCrafting(stack);
 		for (net.minecraft.core.Holder<net.minecraft.world.item.enchantment.Enchantment> enchantment
 				: enchantments.keySet()) {
-			if (PinyinSearch.matches(enchantment.value().description().getString(), needle)) {
+			if (MerlinApi.text().pinyinMatches(enchantment.value().description().getString(), needle)) {
 				return true;
 			}
 			if (enchantment.unwrapKey().map(key -> key.identifier().toString().contains(needle)).orElse(false)) {

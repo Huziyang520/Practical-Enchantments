@@ -2,10 +2,11 @@
 
 package com.practicalenchantments.enchantment.armor;
 
+import com.huziyang520.merlinlib.api.MerlinApi;
+import com.huziyang520.merlinlib.api.PlayerDeathApi;
 import com.practicalenchantments.config.Tunables;
 import com.practicalenchantments.PracticalEnchantments;
 import com.practicalenchantments.content.AmuletSupport;
-import com.practicalenchantments.enchantment.support.DeathSaveSupport;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import net.minecraft.core.Holder;
@@ -55,7 +56,13 @@ public final class DemonicPactEnchantment {
 		}
 		consumeEmeralds(player, cost);
 		int darknessTicks = Tunables.demonicPactDarknessTicks(level);
-		DeathSaveSupport.performResurrection(player, darknessTicks);
+		MerlinApi.playerDeath().resurrect(player, new PlayerDeathApi.ResurrectionOptions(
+				darknessTicks,
+				Tunables.secondsToTicks(Tunables.deathSaveRegenSeconds()),
+				Tunables.deathSaveRegenAmplifier(),
+				Tunables.secondsToTicks(Tunables.deathSaveAbsorptionSeconds()),
+				Tunables.deathSaveAbsorptionAmplifier(),
+				Tunables.secondsToTicks(Tunables.deathSaveFireResistanceSeconds())));
 		LAST_TRIGGER.put(player.getUUID(), now);
 		return true;
 	}

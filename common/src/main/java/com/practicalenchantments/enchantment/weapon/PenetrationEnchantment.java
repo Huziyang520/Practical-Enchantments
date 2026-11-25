@@ -3,12 +3,13 @@
 package com.practicalenchantments.enchantment.weapon;
 
 import com.practicalenchantments.config.Tunables;
+import com.huziyang520.merlinlib.api.MerlinApi;
 import com.huziyang520.merlinlib.event.BuiltInEvents;
 import com.huziyang520.merlinlib.event.EnchantmentContext;
 import com.huziyang520.merlinlib.event.EnchantmentEventRegistrar;
 import com.practicalenchantments.PracticalEnchantments;
-import com.practicalenchantments.enchantment.support.DeathSaveSupport;
 import com.practicalenchantments.enchantment.support.TridentPullSupport;
+import com.practicalenchantments.support.EnchantmentLevels;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.Items;
@@ -30,12 +31,12 @@ public final class PenetrationEnchantment {
 			return;
 		}
 		float extra = (float) (Tunables.penetrationDamageBase() + Tunables.penetrationDamagePerLevel() * (ctx.level() - 1));
-		event.target().damageCooldownTime = 0;
+		MerlinApi.combat().clearInvulnerability(event.target());
 		event.target().hurtServer(event.level(),
 			event.attacker().damageSources().mobAttack(event.attacker()), extra);
 
 		if (Tunables.penetrationPullRequiresLoyalty()
-				&& DeathSaveSupport.getLevelFull(event.weapon(), "minecraft:loyalty") > 0) {
+				&& EnchantmentLevels.ofFull(event.weapon(), "minecraft:loyalty") > 0) {
 			TridentPullSupport.captureMob(event.attacker().getUUID(), event.target());
 		}
 	}

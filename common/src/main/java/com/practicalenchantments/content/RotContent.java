@@ -6,7 +6,6 @@ import com.practicalenchantments.config.Tunables;
 import com.huziyang520.merlinlib.api.MerlinApi;
 import com.huziyang520.merlinlib.effect.LayeredEffect;
 import com.huziyang520.merlinlib.effect.MerlinMobEffect;
-import com.practicalenchantments.support.ImmunityReset;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
@@ -152,7 +151,7 @@ public final class RotContent {
 		if (amount <= 0.0F || entity.isDeadOrDying()) {
 			return;
 		}
-		ImmunityReset.zero(entity);
+		MerlinApi.combat().clearInvulnerability(entity);
 		entity.hurtServer(level, source(level), amount);
 	}
 

@@ -2,6 +2,7 @@
 
 package com.practicalenchantments.enchantment.weapon;
 
+import com.huziyang520.merlinlib.api.MerlinApi;
 import com.huziyang520.merlinlib.event.BuiltInEvents;
 import com.huziyang520.merlinlib.event.EnchantmentContext;
 import com.huziyang520.merlinlib.event.EnchantmentEventRegistrar;
@@ -20,10 +21,10 @@ public final class PointBlankEnchantment {
 	}
 
 	private static void onDamage(BuiltInEvents.ModifyDamageEvent event, EnchantmentContext ctx) {
-		if (!ProjectileRangeSupport.isArrowShot(event.source())) {
+		if (!MerlinApi.combat().isPlayerArrowShot(event.source())) {
 			return;
 		}
-		double distance = ProjectileRangeSupport.horizontalDistance(event.attacker(), event.target());
+		double distance = MerlinApi.combat().horizontalDistance(event.attacker(), event.target());
 		if (distance > Tunables.pointBlankMaxDistance()) {
 			return;
 		}

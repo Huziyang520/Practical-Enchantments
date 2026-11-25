@@ -11,7 +11,6 @@ import com.practicalenchantments.config.Tunables;
 import com.practicalenchantments.enchantment.support.HeadDrops;
 import com.practicalenchantments.enchantment.support.KillMarks;
 import com.practicalenchantments.enchantment.support.VerdictTracker;
-import com.practicalenchantments.support.ImmunityReset;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
@@ -59,7 +58,7 @@ public final class VerdictEnchantment {
 			if (Tunables.verdictHeadDrop()) {
 				KillMarks.markVerdictPending(target);
 			}
-			ImmunityReset.zero(target);
+			MerlinApi.combat().clearInvulnerability(target);
 			target.hurtServer(event.level(), source(event.level(), player), (float) Tunables.verdictDamage());
 			if (!target.isDeadOrDying()) {
 				KillMarks.clearVerdictPending(target);

@@ -2,8 +2,8 @@
 
 package com.practicalenchantments.mixin;
 
+import com.huziyang520.merlinlib.api.MerlinApi;
 import com.practicalenchantments.advancement.PeAdvancementTriggers;
-import com.practicalenchantments.enchantment.weapon.ProjectileRangeSupport;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -26,7 +26,7 @@ public class MixinArrowAdvancement {
 		}
 		LivingEntity victim = (LivingEntity) (Object) this;
 		if (amount >= PeAdvancementTriggers.BIG_BOW_DAMAGE
-				&& ProjectileRangeSupport.horizontalDistance(player, victim)
+				&& MerlinApi.combat().horizontalDistance(player, victim)
 				> PeAdvancementTriggers.BIG_BOW_MIN_DISTANCE) {
 			PeAdvancementTriggers.bigBowHit(player, amount);
 		}

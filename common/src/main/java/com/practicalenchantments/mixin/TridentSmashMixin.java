@@ -2,8 +2,8 @@
 
 package com.practicalenchantments.mixin;
 
-import com.practicalenchantments.enchantment.support.DeathSaveSupport;
 import com.practicalenchantments.enchantment.support.TridentPullSupport;
+import com.practicalenchantments.support.EnchantmentLevels;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
@@ -37,7 +37,7 @@ public abstract class TridentSmashMixin {
 		if (!(trident.level() instanceof ServerLevel level)) {
 			return;
 		}
-		int smashLevel = DeathSaveSupport.getLevel(trident.getWeaponItem(), "smashing");
+		int smashLevel = EnchantmentLevels.of(trident.getWeaponItem(), "smashing");
 		if (smashLevel <= 0) {
 			return;
 		}
@@ -63,8 +63,8 @@ public abstract class TridentSmashMixin {
 		state.spawnAfterBreak(level, pos, virtualPickaxe, true);
 		level.destroyBlock(pos, false);
 
-		if (DeathSaveSupport.getLevelFull(trident.getWeaponItem(), "minecraft:loyalty") > 0
-			&& DeathSaveSupport.getLevel(trident.getWeaponItem(), "penetration") > 0
+		if (EnchantmentLevels.ofFull(trident.getWeaponItem(), "minecraft:loyalty") > 0
+			&& EnchantmentLevels.of(trident.getWeaponItem(), "penetration") > 0
 			&& owner instanceof net.minecraft.world.entity.player.Player player) {
 			TridentPullSupport.startItemPull(player.getUUID());
 		}

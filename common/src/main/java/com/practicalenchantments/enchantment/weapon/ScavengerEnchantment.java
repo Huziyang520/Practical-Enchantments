@@ -2,11 +2,13 @@
 
 package com.practicalenchantments.enchantment.weapon;
 
+import com.huziyang520.merlinlib.api.MerlinApi;
 import com.huziyang520.merlinlib.event.BuiltInEvents;
 import com.huziyang520.merlinlib.event.EnchantmentContext;
 import com.huziyang520.merlinlib.event.EnchantmentEventRegistrar;
 import com.practicalenchantments.PracticalEnchantments;
-import com.practicalenchantments.enchantment.support.ScavengerCapture;
+import com.practicalenchantments.config.Tunables;
+import com.practicalenchantments.enchantment.support.KillMarks;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.server.level.ServerPlayer;
@@ -40,6 +42,11 @@ public final class ScavengerEnchantment {
 		if (weapon.isEmpty() || weapon.getEnchantments().getLevel(HOLDER) <= 0) {
 			return;
 		}
-		ScavengerCapture.onKill(event.victim(), player, event.level());
+		if (KillMarks.isIncinerated(event.victim())) {
+			MerlinApi.drops().cancelDeathDropMove(event.victim());
+			return;
+		}
+		MerlinApi.drops().scheduleDeathDropMove(event.victim(), player, event.level(),
+				Tunables.scavengerDelayTicks(), Tunables.scavengerRadius());
 	}
 }

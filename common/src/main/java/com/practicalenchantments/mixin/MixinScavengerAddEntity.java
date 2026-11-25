@@ -2,7 +2,7 @@
 
 package com.practicalenchantments.mixin;
 
-import com.practicalenchantments.enchantment.support.ScavengerCapture;
+import com.huziyang520.merlinlib.api.MerlinApi;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -16,7 +16,7 @@ public class MixinScavengerAddEntity {
 	@Inject(method = "addFreshEntity", at = @At("HEAD"))
 	private void pe$captureDrops(Entity entity, CallbackInfoReturnable<Boolean> info) {
 		if (entity instanceof ItemEntity item) {
-			ScavengerCapture.capture(item);
+			MerlinApi.drops().captureDeathDrop(item);
 		}
 	}
 }
