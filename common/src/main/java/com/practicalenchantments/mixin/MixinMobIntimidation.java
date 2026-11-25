@@ -29,18 +29,4 @@ public class MixinMobIntimidation {
 			self.setTarget(null);
 		}
 	}
-
-	@Inject(method = "doHurtTarget", at = @At("HEAD"), cancellable = true)
-	private void pe$cancelGolemAttack(net.minecraft.server.level.ServerLevel level,
-									   net.minecraft.world.entity.Entity target,
-									   org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable<Boolean> info) {
-		if (!Tunables.intimidationPreventGolemAnger()) {
-			return;
-		}
-		Mob self = (Mob) (Object) this;
-		if (self instanceof IronGolem && target instanceof ServerPlayer player
-				&& IntimidationEnchantment.protects(player)) {
-			info.setReturnValue(false);
-		}
-	}
 }
