@@ -64,6 +64,8 @@ public final class ArrowfallQueue {
 		if (owner != null) {
 			arrow.setOwner(owner);
 		}
+		// 落矢是虚拟箭雨：不进入任何玩家的拾取流程，避免把箭刷回背包。
+		arrow.pickup = Arrow.Pickup.DISALLOWED;
 		arrow.setBaseDamage(2.0D * Tunables.arrowfallDamageFactor());
 		arrow.setRemainingFireTicks(pending.fireTicks);
 		EntityCounter.set(arrow, GENERATED, 1);

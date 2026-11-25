@@ -6,15 +6,15 @@
       "potions": "practical_enchantments:wrath"
     }
   },
+  "reagent": {
+    "item": "minecraft:redstone"
+  },
   "output": {
+    "id": "minecraft:splash_potion",
     "components": {
       "minecraft:potion_contents": {
         "potion": "practical_enchantments:long_wrath"
       }
-    },
-    "id": "minecraft:splash_potion"
-  },
-  "reagent": {
-    "item": "minecraft:redstone"
+    }
   }
 }

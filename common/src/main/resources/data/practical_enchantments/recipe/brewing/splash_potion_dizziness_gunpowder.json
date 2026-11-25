@@ -2,10 +2,8 @@
   "type": "minecraft:brewing",
   "input": {
     "item": "minecraft:potion",
-    "components": {
-      "minecraft:potion_contents": {
-        "potion": "practical_enchantments:dizziness"
-      }
+    "potion_contents": {
+      "potions": "practical_enchantments:dizziness"
     }
   },
   "reagent": {

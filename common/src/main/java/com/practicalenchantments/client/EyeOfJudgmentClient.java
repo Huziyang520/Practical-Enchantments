@@ -13,19 +13,22 @@ import java.util.UUID;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.Holder;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 
 public final class EyeOfJudgmentClient {
 	private static final Identifier ID = Identifier.fromNamespaceAndPath(
 			PracticalEnchantments.MOD_ID, "eye_of_judgment");
 	private static final Map<UUID, Entity> TRACKED = new HashMap<>();
 	private static final Map<UUID, Boolean> ORIGINAL = new HashMap<>();
+	private static final EquipmentSlot[] WORN_SLOTS = {
+			EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET, EquipmentSlot.OFFHAND};
 	private static ClientLevel lastLevel;
 	private static int counter;
 
@@ -44,10 +47,19 @@ public final class EyeOfJudgmentClient {
 			lastLevel = level;
 		}
 		counter++;
-		if (counter % Math.max(1, Tunables.eyeOfJudgmentScanIntervalTicks()) != 0) {
-			return;
+		if (counter % Math.max(1, Tunables.eyeOfJudgmentScanIntervalTicks()) == 0) {
+			rescan(player, level);
 		}
-		int enchantLevel = level(player, level);
+		// 服务端每 tick 都可能重发实体共享标记；客户端每 tick 重新盖上白色描边。
+		for (Entity entity : TRACKED.values()) {
+			if (entity != null && entity.isAlive() && entity.level() == level) {
+				entity.setGlowingTag(true);
+			}
+		}
+	}
+
+	private static void rescan(Player player, ClientLevel level) {
+		int enchantLevel = level(player);
 		if (enchantLevel <= 0) {
 			clearAll();
 			return;
@@ -65,36 +77,53 @@ public final class EyeOfJudgmentClient {
 			UUID id = entity.getUUID();
 			keep.put(id, entity);
 			if (!TRACKED.containsKey(id)) {
-				ORIGINAL.put(id, entity.hasGlowingTag());
+				ORIGINAL.put(id, entity.isCurrentlyGlowing());
 			}
-			entity.setGlowingTag(true);
 		}
 		for (Map.Entry<UUID, Entity> entry : TRACKED.entrySet()) {
 			if (keep.containsKey(entry.getKey())) {
 				continue;
 			}
-			Entity entity = entry.getValue();
-			if (entity != null && entity.isAlive() && !Boolean.TRUE.equals(ORIGINAL.get(entry.getKey()))) {
-				entity.setGlowingTag(false);
-			}
-			ORIGINAL.remove(entry.getKey());
+			restore(entry.getKey(), entry.getValue());
 		}
 		TRACKED.clear();
 		TRACKED.putAll(keep);
 	}
 
-	private static int level(Player player, ClientLevel level) {
-		Holder<Enchantment> holder = level.registryAccess().lookupOrThrow(Registries.ENCHANTMENT)
-				.get(ResourceKey.create(Registries.ENCHANTMENT, ID)).orElse(null);
-		return holder == null ? 0 : AmuletSupport.wornLevel(player, holder);
+	private static int level(Player player) {
+		int best = 0;
+		for (EquipmentSlot slot : WORN_SLOTS) {
+			best = Math.max(best, level(player.getItemBySlot(slot)));
+		}
+		for (ItemStack stack : AmuletSupport.equippedAmuletStacks(player)) {
+			best = Math.max(best, level(stack));
+		}
+		return best;
+	}
+
+	private static int level(ItemStack stack) {
+		if (stack.isEmpty()) {
+			return 0;
+		}
+		ItemEnchantments enchantments = stack.getEnchantments();
+		for (var entry : enchantments.entrySet()) {
+			if (entry.getKey().unwrapKey().map(key -> key.identifier().equals(ID)).orElse(false)) {
+				return entry.getIntValue();
+			}
+		}
+		return 0;
+	}
+
+	private static void restore(UUID id, Entity entity) {
+		Boolean original = ORIGINAL.remove(id);
+		if (entity != null && entity.isAlive() && !Boolean.TRUE.equals(original)) {
+			entity.setGlowingTag(false);
+		}
 	}
 
 	public static void clearAll() {
 		for (Map.Entry<UUID, Entity> entry : TRACKED.entrySet()) {
-			Entity entity = entry.getValue();
-			if (entity != null && entity.isAlive() && !Boolean.TRUE.equals(ORIGINAL.get(entry.getKey()))) {
-				entity.setGlowingTag(false);
-			}
+			restore(entry.getKey(), entry.getValue());
 		}
 		TRACKED.clear();
 		ORIGINAL.clear();

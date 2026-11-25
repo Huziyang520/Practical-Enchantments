@@ -1,4 +1,4 @@
-// Jade 入口：只注册客户端组件，服务端不需要额外数据。
+// Jade 入口：服务端数据 provider 与客户端组件 provider 分开注册。
 
 package com.practicalenchantments.compat.jade;
 
@@ -19,6 +19,6 @@ public class PeJadePlugin implements IWailaPlugin {
 	@Override
 	public void registerClient(IWailaClientRegistration registration) {
 		registration.registerBlockComponent(EvolutionTableProvider.INSTANCE, EvolutionTableBlock.class);
-		registration.registerEntityComponent(BenevolentMarkProvider.INSTANCE, LivingEntity.class);
+		registration.registerEntityComponent(BenevolentMarkClientProvider.INSTANCE, LivingEntity.class);
 	}
 }

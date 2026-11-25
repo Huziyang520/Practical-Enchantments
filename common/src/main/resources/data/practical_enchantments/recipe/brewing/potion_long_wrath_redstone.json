@@ -3,14 +3,14 @@
   "input": {
     "item": "minecraft:potion",
     "potion_contents": {
-      "potions": "practical_enchantments:long_wrath"
+      "potions": "practical_enchantments:wrath"
     }
   },
   "reagent": {
-    "item": "minecraft:gunpowder"
+    "item": "minecraft:redstone"
   },
   "output": {
-    "id": "minecraft:splash_potion",
+    "id": "minecraft:potion",
     "components": {
       "minecraft:potion_contents": {
         "potion": "practical_enchantments:long_wrath"

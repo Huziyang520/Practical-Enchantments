@@ -1,11 +1,9 @@
 {
   "type": "minecraft:brewing",
   "input": {
-    "item": "minecraft:potion",
-    "components": {
-      "minecraft:potion_contents": {
-        "potion": "practical_enchantments:long_dizziness"
-      }
+    "item": "minecraft:lingering_potion",
+    "potion_contents": {
+      "potions": "practical_enchantments:long_dizziness"
     }
   },
   "reagent": {
@@ -18,7 +16,6 @@
         "potion": "practical_enchantments:long_dizziness"
       },
       "minecraft:potion_duration_scale": 0.1333
-    },
-    "count": 8
+    }
   }
 }

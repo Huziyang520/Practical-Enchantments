@@ -1,20 +1,20 @@
 {
   "type": "minecraft:brewing",
   "input": {
-    "item": "minecraft:splash_potion",
+    "item": "minecraft:potion",
     "potion_contents": {
       "potions": "minecraft:awkward"
     }
   },
+  "reagent": {
+    "item": "minecraft:warped_fungus"
+  },
   "output": {
+    "id": "minecraft:potion",
     "components": {
       "minecraft:potion_contents": {
-        "potion": "practical_enchantments:wrath"
+        "potion": "practical_enchantments:dizziness"
       }
-    },
-    "id": "minecraft:splash_potion"
-  },
-  "reagent": {
-    "item": "minecraft:magma_block"
+    }
   }
 }

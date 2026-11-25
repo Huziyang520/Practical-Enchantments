@@ -3,7 +3,7 @@
     "translate": "enchantment.practical_enchantments.obsidian_walker",
     "fallback": "龙晶行者"
   },
-  "supported_items": "#minecraft:enchantable/foot_armor",
+  "supported_items": "#minecraft:foot_armor",
   "exclusive_set": "#minecraft:exclusive_set/boots",
   "weight": 2,
   "max_level": 1,

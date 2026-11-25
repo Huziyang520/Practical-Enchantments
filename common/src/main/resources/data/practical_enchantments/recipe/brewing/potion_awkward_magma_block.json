@@ -6,15 +6,15 @@
       "potions": "minecraft:awkward"
     }
   },
+  "reagent": {
+    "item": "minecraft:magma_block"
+  },
   "output": {
+    "id": "minecraft:potion",
     "components": {
       "minecraft:potion_contents": {
         "potion": "practical_enchantments:wrath"
       }
-    },
-    "id": "minecraft:potion"
-  },
-  "reagent": {
-    "item": "minecraft:magma_block"
+    }
   }
 }

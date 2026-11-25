@@ -954,7 +954,7 @@ public final class Tunables {
 	}
 
 	public static double pointBlankBonusPercent(int level) {
-		return pointBlankBonusBasePercent + pointBlankBonusPerLevelPercent * Math.max(0, level - 1);
+		return pointBlankBonusBasePercent + pointBlankBonusPerLevelPercent * Math.max(0, level);
 	}
 
 	public static double sniperMinDistance() {
@@ -962,7 +962,7 @@ public final class Tunables {
 	}
 
 	public static double sniperBonusPercent(int level, double distance) {
-		double base = sniperBonusBasePercent + sniperBonusPerLevelPercent * Math.max(0, level - 1);
+		double base = sniperBonusBasePercent + sniperBonusPerLevelPercent * Math.max(0, level);
 		if (distance <= sniperMinDistance) {
 			return 0.0;
 		}
@@ -1035,7 +1035,7 @@ public final class Tunables {
 	}
 
 	public static int disarmPanicSeconds(int level) {
-		return Math.max(0, disarmPanicSecondsBase + disarmPanicSecondsPerLevel * Math.max(0, level - 1));
+		return Math.max(0, disarmPanicSecondsBase + disarmPanicSecondsPerLevel * Math.max(0, level));
 	}
 
 	public static double disarmDropChancePercent(int level) {

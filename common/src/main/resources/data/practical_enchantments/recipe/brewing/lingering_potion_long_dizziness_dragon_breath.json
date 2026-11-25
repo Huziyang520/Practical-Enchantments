@@ -1,11 +1,9 @@
 {
   "type": "minecraft:brewing",
   "input": {
-    "item": "minecraft:potion",
-    "components": {
-      "minecraft:potion_contents": {
-        "potion": "practical_enchantments:long_dizziness"
-      }
+    "item": "minecraft:splash_potion",
+    "potion_contents": {
+      "potions": "practical_enchantments:long_dizziness"
     }
   },
   "reagent": {

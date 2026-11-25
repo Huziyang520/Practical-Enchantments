@@ -24,7 +24,6 @@ public final class PeContent {
 	private static final String NAMESPACE = "practical_enchantments";
 	public static final Identifier FLAWED_OBSIDIAN = id("flawed_obsidian");
 	public static final Identifier EVOLUTION_TABLE = id("evolution_table");
-	public static final Identifier WILDFIRE_TRAIL = id("wildfire_trail");
 	public static final Identifier BOOK_BAG_LEATHER = id("book_bag_leather");
 	public static final Identifier BOOK_BAG_IRON = id("book_bag_iron");
 	public static final Identifier BOOK_BAG_GOLD = id("book_bag_gold");
@@ -62,9 +61,6 @@ public final class PeContent {
 				() -> createBlockItem(EVOLUTION_TABLE));
 		Services.REGISTRATIONS.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, EVOLUTION_TABLE,
 				PeContent::createEvolutionTableEntity);
-		Services.REGISTRATIONS.register(BuiltInRegistries.BLOCK, WILDFIRE_TRAIL, PeContent::createWildfireTrail);
-		Services.REGISTRATIONS.register(BuiltInRegistries.ITEM, WILDFIRE_TRAIL,
-				() -> createBlockItem(WILDFIRE_TRAIL));
 		for (int index = 0; index < BOOK_BAGS.length; index++) {
 			Identifier bag = BOOK_BAGS[index];
 			int capacity = BOOK_BAG_CAPACITY[index];
@@ -145,16 +141,6 @@ public final class PeContent {
 		return item;
 	}
 
-	private static Block createWildfireTrail() {
-		ResourceKey<Block> key = ResourceKey.create(Registries.BLOCK, WILDFIRE_TRAIL);
-		return new WildfireTrailBlock(BlockBehaviour.Properties.of()
-				.setId(key)
-				.noCollision()
-				.noLootTable()
-				.strength(0.0F)
-				.lightLevel(state -> 15));
-	}
-
 	private static BlockEntityType<EvolutionTableBlockEntity> createEvolutionTableEntity() {
 		EvolutionTableBlockEntity.TYPE = new BlockEntityType<>(EvolutionTableBlockEntity::new,
 				Set.of(block(EVOLUTION_TABLE)));
@@ -177,7 +163,6 @@ public final class PeContent {
 		List<ItemStack> stacks = new ArrayList<>();
 		stacks.add(new ItemStack(item(FLAWED_OBSIDIAN)));
 		stacks.add(new ItemStack(item(EVOLUTION_TABLE)));
-		stacks.add(new ItemStack(item(WILDFIRE_TRAIL)));
 		for (Identifier bag : BOOK_BAGS) {
 			stacks.add(new ItemStack(item(bag)));
 		}

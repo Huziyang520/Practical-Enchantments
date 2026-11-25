@@ -3,7 +3,7 @@
     "translate": "enchantment.practical_enchantments.hide_skin",
     "fallback": "覆皮"
   },
-  "supported_items": "#minecraft:enchantable/armor",
+  "supported_items": "#practical_enchantments:enchantable/armor",
   "weight": 10,
   "max_level": 1,
   "min_cost": { "base": 1, "per_level_above_first": 0 },

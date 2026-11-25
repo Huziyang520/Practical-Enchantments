@@ -7,6 +7,7 @@ import com.huziyang520.merlinlib.event.EnchantmentContext;
 import com.huziyang520.merlinlib.event.EnchantmentEventRegistrar;
 import com.practicalenchantments.PracticalEnchantments;
 import com.practicalenchantments.advancement.PeAdvancementTriggers;
+import com.practicalenchantments.config.Tunables;
 import com.practicalenchantments.content.AmuletSupport;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
@@ -33,9 +34,13 @@ public final class IntimidationEnchantment {
 	}
 
 	private static void onAttack(BuiltInEvents.PostAttackEvent event, EnchantmentContext ctx) {
-		if (event.attacker() instanceof ServerPlayer player && event.target() instanceof IronGolem
-				&& ctx.level() > 0) {
-			PeAdvancementTriggers.intimidateIronGolem(player);
+		if (event.attacker() instanceof ServerPlayer player && event.target() instanceof IronGolem golem) {
+			if (Tunables.intimidationPreventGolemAnger() && ctx.level() > 0) {
+				golem.setTarget(null);
+			}
+			if (ctx.level() > 0) {
+				PeAdvancementTriggers.intimidateIronGolem(player);
+			}
 		}
 	}
 }

@@ -3,7 +3,7 @@
     "translate": "enchantment.practical_enchantments.wildfire",
     "fallback": "燎原"
   },
-  "supported_items": "#minecraft:enchantable/foot_armor",
+  "supported_items": "#minecraft:foot_armor",
   "weight": 1,
   "max_level": 1,
   "min_cost": {

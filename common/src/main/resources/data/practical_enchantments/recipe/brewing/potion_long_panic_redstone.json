@@ -2,10 +2,8 @@
   "type": "minecraft:brewing",
   "input": {
     "item": "minecraft:potion",
-    "components": {
-      "minecraft:potion_contents": {
-        "potion": "practical_enchantments:panic"
-      }
+    "potion_contents": {
+      "potions": "practical_enchantments:panic"
     }
   },
   "reagent": {

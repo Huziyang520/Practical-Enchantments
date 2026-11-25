@@ -3,18 +3,18 @@
   "input": {
     "item": "minecraft:potion",
     "potion_contents": {
-      "potions": "practical_enchantments:wrath"
+      "potions": "minecraft:awkward"
     }
   },
+  "reagent": {
+    "item": "minecraft:crimson_fungus"
+  },
   "output": {
+    "id": "minecraft:potion",
     "components": {
       "minecraft:potion_contents": {
-        "potion": "practical_enchantments:long_wrath"
+        "potion": "practical_enchantments:panic"
       }
-    },
-    "id": "minecraft:potion"
-  },
-  "reagent": {
-    "item": "minecraft:redstone"
+    }
   }
 }

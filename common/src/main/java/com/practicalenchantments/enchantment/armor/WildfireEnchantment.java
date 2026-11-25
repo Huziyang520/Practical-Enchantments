@@ -1,4 +1,4 @@
-// 燎原：穿戴者在地面实际水平移动时，在上一个脚部位置留下短命火焰。
+// 燎原：穿戴者在地面实际水平移动时，在上一个脚部位置留下短命的原版火焰。
 
 package com.practicalenchantments.enchantment.armor;
 
@@ -7,19 +7,17 @@ import com.huziyang520.merlinlib.event.EnchantmentContext;
 import com.huziyang520.merlinlib.event.EnchantmentEventRegistrar;
 import com.practicalenchantments.PracticalEnchantments;
 import com.practicalenchantments.config.Tunables;
-import com.practicalenchantments.content.PeContent;
+import com.practicalenchantments.enchantment.support.WildfireTracker;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.level.block.Blocks;
 
 public final class WildfireEnchantment {
 	public static final String ID = PracticalEnchantments.MOD_ID + ":wildfire";
@@ -63,16 +61,11 @@ public final class WildfireEnchantment {
 				|| level.getBlockState(pos.below()).isAir()) {
 			return;
 		}
-		level.setBlockAndUpdate(pos, PeContent.block(PeContent.WILDFIRE_TRAIL).defaultBlockState());
-		if (!Tunables.wildfireBurnBlocks()) {
+		level.setBlockAndUpdate(pos, Blocks.FIRE.defaultBlockState());
+		if (Tunables.wildfireBurnBlocks()) {
 			return;
 		}
-		for (Direction direction : Direction.Plane.HORIZONTAL) {
-			BlockPos neighbor = pos.relative(direction);
-			BlockState state = level.getBlockState(neighbor);
-			if (!state.isAir() && level.getBlockState(neighbor.above()).isAir()) {
-				level.setBlockAndUpdate(neighbor.above(), Blocks.FIRE.defaultBlockState());
-			}
-		}
+		WildfireTracker.mark(level, pos, level.getGameTime() + Tunables.wildfireLifetimeTicks());
+		level.scheduleTick(pos, Blocks.FIRE, 1);
 	}
 }

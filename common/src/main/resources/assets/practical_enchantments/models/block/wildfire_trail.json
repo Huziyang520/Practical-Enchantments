@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:block/fire_floor0",
-  "textures": {
-    "fire": "minecraft:block/fire_0"
-  }
-}

@@ -34,12 +34,16 @@ public final class DisarmEnchantment {
 
 	public static void registerCallbacks(EnchantmentEventRegistrar registrar, HolderLookup.Provider registries) {
 		Holder<Enchantment> holder = PracticalEnchantments.resolveEnchantment(registries, ID);
-		registrar.register(holder, BuiltInEvents.POST_ATTACK, DisarmEnchantment::onAttack);
+		// 在伤害结算前打落武器：否则高伤武器一击必杀，POST_ATTACK 时目标已经死亡、物品也已掉落。
+		registrar.register(holder, BuiltInEvents.MODIFY_DAMAGE, DisarmEnchantment::onDamage);
 	}
 
-	private static void onAttack(BuiltInEvents.PostAttackEvent event, EnchantmentContext ctx) {
+	private static void onDamage(BuiltInEvents.ModifyDamageEvent event, EnchantmentContext ctx) {
 		LivingEntity target = event.target();
 		if (target.isDeadOrDying()) {
+			return;
+		}
+		if (!(event.source().getDirectEntity() instanceof Player)) {
 			return;
 		}
 		int enchantLevel = ctx.level();
