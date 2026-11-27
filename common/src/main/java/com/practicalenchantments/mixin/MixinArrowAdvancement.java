@@ -1,8 +1,7 @@
-// 弓箭进度：单次最终伤害 30 点以上、50 格外，以及治疗箭命中亡灵。
+// 弓箭进度：单次最终伤害达标，以及治疗箭命中亡灵。
 
 package com.practicalenchantments.mixin;
 
-import com.huziyang520.merlinlib.api.MerlinApi;
 import com.practicalenchantments.advancement.PeAdvancementTriggers;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.level.ServerLevel;
@@ -25,9 +24,7 @@ public class MixinArrowAdvancement {
 			return;
 		}
 		LivingEntity victim = (LivingEntity) (Object) this;
-		if (amount >= PeAdvancementTriggers.BIG_BOW_DAMAGE
-				&& MerlinApi.combat().horizontalDistance(player, victim)
-				> PeAdvancementTriggers.BIG_BOW_MIN_DISTANCE) {
+		if (amount >= PeAdvancementTriggers.BIG_BOW_DAMAGE) {
 			PeAdvancementTriggers.bigBowHit(player, amount);
 		}
 		if (victim.isInvertedHealAndHarm() && isHealingArrow(arrow)) {

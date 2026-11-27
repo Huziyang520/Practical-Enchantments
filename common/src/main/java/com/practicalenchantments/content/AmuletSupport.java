@@ -3,6 +3,7 @@
 package com.practicalenchantments.content;
 
 import com.practicalenchantments.config.Tunables;
+import com.practicalenchantments.support.EnchantmentLevels;
 import com.huziyang520.merlinlib.platform.Services;
 import java.util.HashSet;
 import java.util.Optional;
@@ -56,6 +57,28 @@ public final class AmuletSupport {
 			best = Math.max(best, entity.getItemBySlot(slot).getEnchantments().getLevel(enchantment));
 		}
 		return best;
+	}
+
+	/** 按附魔 id 查等级，不受 Holder 实例是否同一份影响。 */
+	public static int wornLevel(LivingEntity entity, String fullId) {
+		int best = 0;
+		for (EquipmentSlot slot : WORN_SLOTS) {
+			best = Math.max(best, EnchantmentLevels.ofFull(entity.getItemBySlot(slot), fullId));
+		}
+		int[] amulet = {0};
+		curiosScan(entity, stack -> {
+			if (isAmulet(stack)) {
+				amulet[0] = Math.max(amulet[0], EnchantmentLevels.ofFull(stack, fullId));
+			}
+			return false;
+		});
+		trinketsScan(entity, stack -> {
+			if (isAmulet(stack)) {
+				amulet[0] = Math.max(amulet[0], EnchantmentLevels.ofFull(stack, fullId));
+			}
+			return false;
+		});
+		return Math.max(best, amulet[0]);
 	}
 
 	public static float penaltyFactor(ItemStack stack) {

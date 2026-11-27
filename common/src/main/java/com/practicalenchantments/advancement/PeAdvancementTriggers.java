@@ -4,6 +4,9 @@ package com.practicalenchantments.advancement;
 
 import com.huziyang520.merlinlib.api.AdvancementApi;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -12,9 +15,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
 
 public final class PeAdvancementTriggers {
-	public static final int BIG_BOW_DAMAGE = 30;
-	public static final double BIG_BOW_MIN_DISTANCE = 50.0D;
+	public static final int BIG_BOW_DAMAGE = 60;
 	public static final int ROT_LAYER_TARGET = 100;
+
+	// 腐毒层数按施加者累计，不按单个目标当前层数（层会随时间掉光）。
+	private static final Map<UUID, Integer> ROT_APPLIED = new ConcurrentHashMap<>();
 
 	private PeAdvancementTriggers() {
 	}
@@ -57,8 +62,16 @@ public final class PeAdvancementTriggers {
 		AdvancementApi.trigger(player, PeAdvancementIds.C_DISARM_DROP);
 	}
 
-	public static void rotApplied(ServerPlayer player, int totalLayers) {
-		AdvancementApi.trigger(player, PeAdvancementIds.C_ROT_100, totalLayers);
+	public static void rotApplied(ServerPlayer player, int layers) {
+		if (layers <= 0) {
+			return;
+		}
+		int total = ROT_APPLIED.merge(player.getUUID(), layers, Integer::sum);
+		if (total < ROT_LAYER_TARGET) {
+			return;
+		}
+		ROT_APPLIED.remove(player.getUUID());
+		AdvancementApi.trigger(player, PeAdvancementIds.C_ROT_100, total);
 	}
 
 	public static void mutualDestructionVillager(ServerPlayer player) {

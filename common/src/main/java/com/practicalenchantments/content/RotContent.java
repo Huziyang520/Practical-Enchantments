@@ -2,6 +2,7 @@
 
 package com.practicalenchantments.content;
 
+import com.practicalenchantments.advancement.PeAdvancementTriggers;
 import com.practicalenchantments.config.Tunables;
 import com.huziyang520.merlinlib.api.MerlinApi;
 import com.huziyang520.merlinlib.effect.LayeredEffect;
@@ -14,6 +15,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
@@ -25,6 +27,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
+import org.jetbrains.annotations.Nullable;
 
 public final class RotContent {
 	public static final String NAMESPACE = "practical_enchantments";
@@ -56,6 +59,11 @@ public final class RotContent {
 	}
 
 	public static void add(LivingEntity target, int count) {
+		add(target, count, null);
+	}
+
+	/** applier 不为空时累计它的施加层数，用于「百毒不侵」进度。 */
+	public static void add(LivingEntity target, int count, @Nullable ServerPlayer applier) {
 		if (effect == null || target == null || count <= 0 || target.level().isClientSide()) {
 			return;
 		}
@@ -63,6 +71,9 @@ public final class RotContent {
 		for (int i = 0; i < count; i++) {
 			LAYERS.push(target);
 			LAYERS.syncDisplay(target, holder);
+		}
+		if (applier != null) {
+			PeAdvancementTriggers.rotApplied(applier, count);
 		}
 	}
 

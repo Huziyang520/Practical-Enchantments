@@ -3,6 +3,7 @@
 package com.practicalenchantments.enchantment.weapon;
 
 import com.practicalenchantments.PracticalEnchantments;
+import com.practicalenchantments.config.Tunables;
 import com.practicalenchantments.support.EnchantmentLevels;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
@@ -10,7 +11,6 @@ import net.minecraft.world.entity.LivingEntity;
 
 public final class LifeStealEnchantment {
 	public static final String ID = PracticalEnchantments.MOD_ID + ":life_steal";
-	private static final float HEAL_PER_LEVEL = 0.04F;
 
 	private LifeStealEnchantment() {
 	}
@@ -24,7 +24,7 @@ public final class LifeStealEnchantment {
 		if (level <= 0) {
 			return;
 		}
-		float heal = amount * HEAL_PER_LEVEL * level;
+		float heal = amount * (float) Tunables.lifeStealHealRatioPerLevel() * level;
 		if (heal > 0.0F) {
 			player.heal(heal);
 		}

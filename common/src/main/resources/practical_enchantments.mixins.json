@@ -27,6 +27,8 @@
     "HideSkinPowderSnowMixin",
     "HideSkinFreezeMixin",
     "EnchantmentVanillaTweakMixin",
+    "ThornsShieldPostAttackMixin",
+    "ThornsShieldSlotMixin",
     "BookBagSmithingKeepMixin",
     "BookBagCraftKeepMixin",
     "MixinItemEntityPickup",

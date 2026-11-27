@@ -8,6 +8,7 @@ import com.huziyang520.merlinlib.event.BuiltInEvents;
 import com.huziyang520.merlinlib.event.EnchantmentContext;
 import com.huziyang520.merlinlib.event.EnchantmentEventRegistrar;
 import com.practicalenchantments.PracticalEnchantments;
+import com.practicalenchantments.advancement.PeAdvancementTriggers;
 import com.practicalenchantments.enchantment.support.TridentPullSupport;
 import com.practicalenchantments.support.EnchantmentLevels;
 import net.minecraft.core.Holder;
@@ -38,6 +39,9 @@ public final class PenetrationEnchantment {
 		if (Tunables.penetrationPullRequiresLoyalty()
 				&& EnchantmentLevels.ofFull(event.weapon(), "minecraft:loyalty") > 0) {
 			TridentPullSupport.captureMob(event.attacker().getUUID(), event.target());
+			if (event.attacker() instanceof net.minecraft.server.level.ServerPlayer player) {
+				PeAdvancementTriggers.tridentPull(player);
+			}
 		}
 	}
 }

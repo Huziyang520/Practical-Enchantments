@@ -1,12 +1,11 @@
-// 飞行附魔 - 胸甲 I 级 效果：装备后解锁创造飞行；空中受击耐久额外损耗；拿下后立即恢复正常
+// 飞行附魔 - 胸甲 I 级 效果：装备后解锁创造飞行；拿下后立即恢复正常。
 
 package com.practicalenchantments.enchantment.armor;
 
 import com.practicalenchantments.PracticalEnchantments;
+import com.practicalenchantments.advancement.PeAdvancementTriggers;
 import com.practicalenchantments.config.Tunables;
 import com.practicalenchantments.content.AmuletSupport;
-import com.practicalenchantments.advancement.PeAdvancementIds;
-import com.huziyang520.merlinlib.api.AdvancementApi;
 import com.huziyang520.merlinlib.api.EntityCounter;
 import com.huziyang520.merlinlib.event.BuiltInEvents;
 import com.huziyang520.merlinlib.event.EnchantmentContext;
@@ -38,18 +37,20 @@ public final class FlightEnchantment {
 
 	private static void onLivingTick(LivingEntityTickEvent event) {
 		if (!(event.entity() instanceof ServerPlayer player)) return;
-		boolean hasFlight = hasFlight(player);
 		var abilities = player.getAbilities();
 		boolean vanillaFlight = player.isCreative() || player.isSpectator();
 
-		if (hasFlight) {
+		if (hasFlight(player)) {
 			if (!abilities.mayfly) {
 				abilities.mayfly = true;
 				player.onUpdateAbilities();
+			}
+			// 每次 tick 都补记账：重登与换维度后玩家实体是新的，旧标记已丢失。
+			if (!vanillaFlight) {
 				EntityCounter.set(player, FLY_GRANTED, 1);
 			}
 			if (abilities.flying && !vanillaFlight) {
-				AdvancementApi.award(player, PeAdvancementIds.CLEARED_FOR_TAKEOFF);
+				PeAdvancementTriggers.survivalFlight(player);
 			}
 		} else if (abilities.mayfly && EntityCounter.get(player, FLY_GRANTED) > 0) {
 			EntityCounter.set(player, FLY_GRANTED, 0);
@@ -72,6 +73,10 @@ public final class FlightEnchantment {
 	}
 
 	private static boolean hasFlight(ServerPlayer player) {
-		return HOLDER != null && AmuletSupport.wornLevel(player, HOLDER) > 0;
+		// 同时按捕获的 Holder 与 id 查等级：数据包重载后 Holder 实例可能已经不是物品里存的那一个。
+		if (HOLDER != null && AmuletSupport.wornLevel(player, HOLDER) > 0) {
+			return true;
+		}
+		return AmuletSupport.wornLevel(player, ID) > 0;
 	}
 }

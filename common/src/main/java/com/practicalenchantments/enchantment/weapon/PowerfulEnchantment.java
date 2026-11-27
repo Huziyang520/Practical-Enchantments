@@ -8,6 +8,7 @@ import com.huziyang520.merlinlib.event.BuiltInEvents;
 import com.huziyang520.merlinlib.event.EnchantmentContext;
 import com.huziyang520.merlinlib.event.EnchantmentEventRegistrar;
 import com.practicalenchantments.PracticalEnchantments;
+import com.practicalenchantments.advancement.PeAdvancementTriggers;
 import com.practicalenchantments.content.BleedContent;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
@@ -33,6 +34,9 @@ public final class PowerfulEnchantment {
 		LivingEntity target = event.target();
 		if (target == null) {
 			return;
+		}
+		if (event.attacker() instanceof net.minecraft.server.level.ServerPlayer player) {
+			PeAdvancementTriggers.powerfulCrossbowHit(player);
 		}
 		int level = ctx.level();
 		push(event, target, level);

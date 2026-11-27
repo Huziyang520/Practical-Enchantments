@@ -8,6 +8,7 @@ import com.huziyang520.merlinlib.event.BuiltInEvents;
 import com.huziyang520.merlinlib.event.EnchantmentContext;
 import com.huziyang520.merlinlib.event.EnchantmentEventRegistrar;
 import com.practicalenchantments.PracticalEnchantments;
+import com.practicalenchantments.advancement.PeAdvancementTriggers;
 import com.practicalenchantments.enchantment.support.KillMarks;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
@@ -29,6 +30,10 @@ public final class IncinerateEnchantment {
 		if (!(event.killer() instanceof ServerPlayer player)) return;
 		LivingEntity victim = event.victim();
 		if (victim instanceof ServerPlayer) return;
+		if (victim instanceof net.minecraft.world.entity.monster.cubemob.Slime
+				|| victim instanceof net.minecraft.world.entity.monster.cubemob.MagmaCube) {
+			PeAdvancementTriggers.incinerateKill(player);
+		}
 		KillMarks.markIncinerated(victim);
 		MerlinApi.drops().suppressDrops(victim);
 		int baseXp = victim.getExperienceReward(event.level(), player);

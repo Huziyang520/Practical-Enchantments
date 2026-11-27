@@ -21,7 +21,7 @@
       "conditions": {
         "condition": "practical_enchantments:big_bow_hit",
         "value": {
-          "min": 30
+          "min": 60
         }
       }
     }

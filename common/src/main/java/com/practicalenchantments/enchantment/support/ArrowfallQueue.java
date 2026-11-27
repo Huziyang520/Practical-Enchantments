@@ -20,6 +20,8 @@ import net.minecraft.world.phys.Vec3;
 public final class ArrowfallQueue {
 	public static final Identifier GENERATED =
 			Identifier.fromNamespaceAndPath(PracticalEnchantments.MOD_ID, "arrowfall_generated");
+	// 竖直向下的初速度；不设速度时箭会静止悬空并横躺。
+	private static final float FALL_SPEED = 1.5F;
 	private static final List<Pending> PENDING = new ArrayList<>();
 
 	private ArrowfallQueue() {
@@ -68,6 +70,7 @@ public final class ArrowfallQueue {
 		arrow.pickup = Arrow.Pickup.DISALLOWED;
 		arrow.setBaseDamage(2.0D * Tunables.arrowfallDamageFactor());
 		arrow.setRemainingFireTicks(pending.fireTicks);
+		arrow.shoot(0.0D, -1.0D, 0.0D, FALL_SPEED, 0.0F);
 		EntityCounter.set(arrow, GENERATED, 1);
 		pending.level.addFreshEntity(arrow);
 	}

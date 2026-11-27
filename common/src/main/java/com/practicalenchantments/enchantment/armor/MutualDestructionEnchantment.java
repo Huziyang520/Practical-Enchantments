@@ -1,4 +1,4 @@
-// 鱼死网破：穿戴者死亡时以尸体为中心爆炸一次，炸死村民记进度。
+// 鱼死网破：穿戴者死亡时以尸体为中心爆炸一次；村民穿戴者炸开时记「生物兵器？」进度。
 
 package com.practicalenchantments.enchantment.armor;
 
@@ -8,7 +8,6 @@ import com.practicalenchantments.advancement.PeAdvancementTriggers;
 import com.practicalenchantments.config.Tunables;
 import com.practicalenchantments.content.AmuletSupport;
 import com.practicalenchantments.enchantment.support.KillMarks;
-import java.util.List;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.server.level.ServerLevel;
@@ -30,22 +29,28 @@ public final class MutualDestructionEnchantment {
 	}
 
 	public static void onDeath(LivingEntity victim, net.minecraft.world.damagesource.DamageSource source) {
-		if (!(victim.level() instanceof ServerLevel level) || HOLDER == null) {
+		if (!(victim.level() instanceof ServerLevel level)) {
 			return;
 		}
 		if (KillMarks.consumeMutualFired(victim.getUUID())) {
 			return;
 		}
-		if (AmuletSupport.wornLevel(victim, HOLDER) <= 0) {
+		if (wornLevel(victim) <= 0) {
 			return;
 		}
 		KillMarks.markMutualFired(victim.getUUID());
-		ServerPlayer player = victim instanceof ServerPlayer serverPlayer ? serverPlayer : null;
-		List<Villager> villagers = level.getEntitiesOfClass(Villager.class, victim.getBoundingBox().inflate(10.0D));
-		level.getServer().execute(() -> explode(level, victim, player, villagers));
+		ServerPlayer killer = source.getEntity() instanceof ServerPlayer player ? player : null;
+		boolean villager = victim instanceof Villager;
+		level.getServer().execute(() -> explode(level, victim, killer, villager));
 	}
 
-	private static void explode(ServerLevel level, LivingEntity victim, ServerPlayer player, List<Villager> villagers) {
+	private static int wornLevel(LivingEntity entity) {
+		int level = HOLDER == null ? 0 : AmuletSupport.wornLevel(entity, HOLDER);
+		// 数据包重载后 Holder 可能已不是物品里存的那份，再按 id 查一次。
+		return level > 0 ? level : AmuletSupport.wornLevel(entity, ID);
+	}
+
+	private static void explode(ServerLevel level, LivingEntity victim, ServerPlayer killer, boolean villager) {
 		if (!level.isLoaded(victim.blockPosition())) {
 			return;
 		}
@@ -53,14 +58,8 @@ public final class MutualDestructionEnchantment {
 				? Level.ExplosionInteraction.MOB : Level.ExplosionInteraction.NONE;
 		level.explode(victim, victim.getX(), victim.getY(), victim.getZ(),
 				(float) Tunables.mutualDestructionExplosionPower(), Tunables.mutualDestructionFire(), interaction);
-		if (player == null) {
-			return;
-		}
-		for (Villager villager : villagers) {
-			if (villager.isDeadOrDying()) {
-				PeAdvancementTriggers.mutualDestructionVillager(player);
-				break;
-			}
+		if (villager && killer != null) {
+			PeAdvancementTriggers.mutualDestructionVillager(killer);
 		}
 	}
 }
