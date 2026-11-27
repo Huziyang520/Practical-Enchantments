@@ -45,6 +45,9 @@
     "MixinScavengerAddEntity",
     "MixinArrowAdvancement"
   ],
+  "client": [
+    "MixinShouldEntityAppearGlowing"
+  ],
   "injectors": {
     "defaultRequire": 1
   }

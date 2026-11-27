@@ -26,7 +26,6 @@ public final class EyeOfJudgmentClient {
 	private static final Identifier ID = Identifier.fromNamespaceAndPath(
 			PracticalEnchantments.MOD_ID, "eye_of_judgment");
 	private static final Map<UUID, Entity> TRACKED = new HashMap<>();
-	private static final Map<UUID, Boolean> ORIGINAL = new HashMap<>();
 	private static final EquipmentSlot[] WORN_SLOTS = {
 			EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET, EquipmentSlot.OFFHAND};
 	private static ClientLevel lastLevel;
@@ -50,12 +49,6 @@ public final class EyeOfJudgmentClient {
 		if (counter % Math.max(1, Tunables.eyeOfJudgmentScanIntervalTicks()) == 0) {
 			rescan(player, level);
 		}
-		// 服务端每 tick 都可能重发实体共享标记；客户端每 tick 重新盖上白色描边。
-		for (Entity entity : TRACKED.values()) {
-			if (entity != null && entity.isAlive() && entity.level() == level) {
-				entity.setGlowingTag(true);
-			}
-		}
 	}
 
 	private static void rescan(Player player, ClientLevel level) {
@@ -74,17 +67,7 @@ public final class EyeOfJudgmentClient {
 		}
 		Map<UUID, Entity> keep = new HashMap<>();
 		for (LivingEntity entity : found) {
-			UUID id = entity.getUUID();
-			keep.put(id, entity);
-			if (!TRACKED.containsKey(id)) {
-				ORIGINAL.put(id, entity.isCurrentlyGlowing());
-			}
-		}
-		for (Map.Entry<UUID, Entity> entry : TRACKED.entrySet()) {
-			if (keep.containsKey(entry.getKey())) {
-				continue;
-			}
-			restore(entry.getKey(), entry.getValue());
+			keep.put(entity.getUUID(), entity);
 		}
 		TRACKED.clear();
 		TRACKED.putAll(keep);
@@ -114,18 +97,11 @@ public final class EyeOfJudgmentClient {
 		return 0;
 	}
 
-	private static void restore(UUID id, Entity entity) {
-		Boolean original = ORIGINAL.remove(id);
-		if (entity != null && entity.isAlive() && !Boolean.TRUE.equals(original)) {
-			entity.setGlowingTag(false);
-		}
+	public static boolean shouldOutline(Entity entity) {
+		return entity != null && TRACKED.containsKey(entity.getUUID());
 	}
 
 	public static void clearAll() {
-		for (Map.Entry<UUID, Entity> entry : TRACKED.entrySet()) {
-			restore(entry.getKey(), entry.getValue());
-		}
 		TRACKED.clear();
-		ORIGINAL.clear();
 	}
 }
