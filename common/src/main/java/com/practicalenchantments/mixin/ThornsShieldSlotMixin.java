@@ -19,6 +19,9 @@ public abstract class ThornsShieldSlotMixin {
 	@Inject(method = "matchingSlot", at = @At("HEAD"), cancellable = true, require = 1)
 	private void practicalenchantments$shieldThornsRequireBlocking(EquipmentSlot slot,
 			CallbackInfoReturnable<Boolean> cir) {
+		if (slot != EquipmentSlot.OFFHAND && slot != EquipmentSlot.MAINHAND) {
+			return;
+		}
 		if (!ThornsShieldSupport.active() || !VanillaTweaks.thornsShield()) {
 			return;
 		}
